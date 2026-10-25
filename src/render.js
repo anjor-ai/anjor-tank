@@ -306,6 +306,17 @@ function caseBody(sec, n = 0) {
   return h + `</section>`;
 }
 
+function cmpSec(c) {
+  const rows = (c.table || []).filter((r) => /\d/.test(r[3]) && /^[+−-]/.test(r[3]));
+  if (!rows.length) return '';
+  const num = (v) => { const m = String(v).replace(',', '').match(/-?\d+(?:\.\d+)?/); return m ? m[0] : ''; };
+  return `<div class="cmp" id="cmp" data-in><p class="label">Drag from baseline to result</p>
+    <div class="cmp__tabs" role="tablist">${rows.map((r, i) => `<button type="button" role="tab" aria-selected="${!i}" data-d="${esc(r[3])}" data-l="${esc(r[0])}" data-b="${/\d/.test(r[1]) ? esc(num(r[1])) : ''}" data-a="${/\d/.test(r[2]) ? esc(num(r[2])) : ''}">${esc(r[0])}</button>`).join('')}</div>
+    <div class="cmp__v"><b id="cmp-v"></b><span id="cmp-l"></span></div>
+    <input id="cmp-r" class="cmp__r" type="range" min="0" max="100" value="100" aria-label="From baseline to result">
+    <div class="cmp__e label"><span>Baseline</span><span>Result</span></div></div>`;
+}
+
 function casePage(c) {
   const i = CASES.indexOf(c), nx = CASES[(i + 1) % CASES.length], g = GLANCE[c.slug];
   const related = [...CASES.filter((x) => x !== c && x.tag === c.tag), ...CASES.filter((x) => x !== c && x.tag !== c.tag)].slice(0, 3);
@@ -323,6 +334,7 @@ function casePage(c) {
   <aside class="toc" aria-label="On this page"><p class="label">On this page</p><ol>${secs.map(([id, t], k) => `<li><a href="#${id}"${k ? '' : ' aria-current="true"'}><i>${pad(k + 1)}</i>${esc(t)}</a></li>`).join('')}</ol><div class="toc__bar"><i id="prog"></i></div></aside>
   <div class="cmain">
     <section class="cs" id="hook" data-sec><blockquote class="hookq" data-in>${esc(c.hook)}</blockquote>
+      ${cmpSec(c)}
       ${c.table ? `<div class="tbl" data-in><table><thead><tr><th>Metric</th><th>Before</th><th>After</th><th>Change</th></tr></thead><tbody>${c.table.map((r) => `<tr>${r.map((x, j) => (j ? `<td${j === 3 ? ' class="chg"' : ''}>${esc(x)}</td>` : `<th scope="row">${esc(x)}</th>`)).join('')}</tr>`).join('')}</tbody></table></div>` : ''}</section>
     ${c.body.map((s, k) => caseBody(s, k + 2)).join('')}
   </div>
@@ -443,6 +455,10 @@ function beyond() {
 <section class="sec sec--tight"><div class="wrap">
   ${sh('What I care about', 'Six obsessions, *no particular order.*', '')}
   <div class="loves">${LOVES.map(([t, d], i) => `<article class="love" data-in><span class="label">${pad(i + 1)}</span><h3 class="h-3">${esc(t)}</h3><p>${esc(d)}</p></article>`).join('')}</div>
+</div></section>
+<section class="sec"><div class="wrap">
+  ${sh('The folders', 'Three modes. *Open one.*', 'Hover a folder, or tap it on a phone. Speed, live and wander are where most of my photos end up.')}
+  <div class="fold">${['Speed', 'Live', 'Wander'].map((g) => { const ph = PHOTOS.filter((x) => x.g === g).slice(0, 4); return `<button type="button" class="fold__f" aria-expanded="false" aria-label="${g}: ${ph.length} photos"><span class="fold__p">${ph.map((x, i) => `<img src="/img/adventure/${x.src}.webp" alt="${esc(ALT[x.src])}" width="${x.w}" height="998" loading="lazy" style="--k:${i}">`).join('')}</span><span class="fold__b"><b>${g}</b><i>${PHOTOS.filter((x) => x.g === g).length} photos</i><em>${esc(ph[0].cap)}</em></span></button>`; }).join('')}</div>
 </div></section>
 <section class="sec"><div class="wrap">
   ${sh('The reel', 'Three modes: *speed, live and wander.*', '')}

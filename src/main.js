@@ -394,8 +394,8 @@ function startPage() {
     filters('#filters', '#cgrid .ccard', (c, f) => f === 'All' || c.dataset.tag === f);
     filters('#pfilters', '#mas .ph', (c, f) => f === 'All' || c.dataset.g === f);
     heroHello();
-    heroField(); sysConsole(); palette(); tilt(); bentoMotion(); reelMotion(); walkMotion();
-    if (!rm) { pageMotion(); sayMotion(); deckMotion(); hetuMotion(); architectMotion(); journeyMotion(); mockMotion(); fanMotion(); }
+    heroField(); sysConsole(); palette(); tilt(); bentoMotion(); reelMotion(); walkMotion(); cmpMotion(); foldMotion();
+    if (!rm) { pageMotion(); sayMotion(); deckMotion(); scrollFx(); hetuMotion(); architectMotion(); journeyMotion(); mockMotion(); fanMotion(); }
     caseMotion(); layersLink(); releaseLog();
     ScrollTrigger.refresh();
   };
@@ -631,6 +631,40 @@ function walkMotion() {
   sec.classList.add('is-live'); pick(0);
   const st = ScrollTrigger.create({ trigger: sec, start: 'top top', end: '+=240%', pin: $('.walk__pin', sec), scrub: 0.4, onUpdate: (s) => pick(Math.min(steps.length - 1, Math.floor(s.progress * steps.length))) });
   steps.forEach((l, i) => l.addEventListener('click', () => gsap.to(window, { scrollTo: st.start + ((i + 0.5) / steps.length) * (st.end - st.start), duration: 0.9, ease: 'power3.inOut' })));
+}
+
+/* ───────────── case page: drag the result in from baseline ───────────── */
+function cmpMotion() {
+  const box = $('#cmp'); if (!box) return;
+  const tabs = $$('.cmp__tabs button', box), v = $('#cmp-v'), l = $('#cmp-l'), r = $('#cmp-r');
+  let cur = tabs[0];
+  const draw = () => {
+    const t = r.value / 100, d = cur.dataset.d, b = parseFloat(cur.dataset.b), a = parseFloat(cur.dataset.a);
+    if (!isNaN(b) && !isNaN(a)) { const dp = (String(cur.dataset.a).split('.')[1] || '').length; v.textContent = `${(b + (a - b) * t).toFixed(dp)}%`; l.textContent = `${cur.dataset.l}, ${cur.dataset.b}% to ${cur.dataset.a}%`; }
+    else { const m = d.match(/^([+−-]?)(\d+(?:\.\d+)?)(.*)$/); if (m) { const dp = (m[2].split('.')[1] || '').length; v.textContent = `${t ? m[1] : ''}${(+m[2] * t).toFixed(dp)}${m[3]}`; } else v.textContent = d; l.textContent = cur.dataset.l; }
+    r.style.setProperty('--p', `${r.value}%`);
+  };
+  tabs.forEach((b) => b.addEventListener('click', () => { cur = b; tabs.forEach((x) => x.setAttribute('aria-selected', x === b)); r.value = 0; draw(); if (!rm) gsap.to(r, { value: 100, duration: 1.2, ease: 'power3.out', onUpdate: draw }); else { r.value = 100; draw(); } }));
+  r.addEventListener('input', draw);
+  r.value = rm ? 100 : 0; draw();
+  if (!rm) ScrollTrigger.create({ trigger: box, start: 'top 80%', once: true, onEnter: () => gsap.to(r, { value: 100, duration: 1.4, ease: 'power3.out', onUpdate: draw }) });
+}
+
+/* ───────────── beyond: folders that open ───────────── */
+function foldMotion() {
+  $$('.fold__f').forEach((f) => f.addEventListener('click', () => { const o = f.classList.toggle('is-open'); f.setAttribute('aria-expanded', o); }));
+}
+
+/* ───────────── scroll depth: hero drifts apart, tiles tip in ───────────── */
+function scrollFx() {
+  if (rm) return;
+  const h = $('.hero__t'), c = $('#sysc');
+  if (h && c) {
+    gsap.to(h, { yPercent: -10, opacity: 0.25, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+    gsap.to(c, { yPercent: -6, scale: 0.94, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+  }
+  $$('.bn__t').forEach((t, i) => gsap.from(t, { rotationX: 14, y: 60, opacity: 0, transformPerspective: 900, transformOrigin: '50% 100%', duration: 1, ease: 'expo.out', clearProps: 'transform,opacity', scrollTrigger: { trigger: t, start: 'top 92%', once: true }, delay: (i % 2) * 0.08 }));
+  $$('.love').forEach((t, i) => gsap.from(t, { rotate: i % 2 ? 3 : -3, x: i % 2 ? 40 : -40, duration: 1, ease: 'expo.out', clearProps: 'transform', scrollTrigger: { trigger: t, start: 'top 92%', once: true } }));
 }
 
 /* ───────────── motion shared by every page ───────────── */
