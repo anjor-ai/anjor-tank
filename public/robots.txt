@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://anjor-tank.vercel.app/sitemap.xml
+Sitemap: https://anjor-portfolio.vercel.app/sitemap.xml
