@@ -2,7 +2,8 @@
    One canonical CASES source supplies case titles, metrics and diagrams. */
 import { CASES, SITE } from './content.js';
 import { wf } from './art.js';
-import { keyboardShowcase, homepageExperience, consultingTeaser, experienceTimeline } from './studio-upgrades.js';
+import { homepageExperience, consultingTeaser, experienceTimeline } from './studio-upgrades.js';
+import { liquidHero } from './liquid-hero.js';
 
 const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const link = (href, label, secondary = false, external = false) =>
@@ -50,16 +51,7 @@ function sectionHead(eyebrow, heading, detail) {
 
 export function studioHome() {
   return `
-  <section class="studio-hero"><div class="wrap studio-hero__grid">
-    <div class="studio-hero__copy" data-studio-reveal>
-      <p class="studio-kicker"><span class="studio-live"></span> Anjor Tank / Product Manager / Mumbai</p>
-      <h1>I build the systems <em>behind the click.</em></h1>
-      <p class="studio-lead">I’m Anjor, a Product Manager at GNC India working across ecommerce, consumer journeys, growth and internal platforms. I turn complex product problems into systems that ship. I also founded MESHHETU.</p>
-      <div class="studio-actions">${link('/work', 'Explore my work')}${link('/contact', 'Get in touch', true)}</div>
-      <p class="studio-under">Commerce / D2C / Consumer journeys / Internal platforms</p>
-    </div>
-    ${keyboardShowcase()}
-  </div></section>
+  ${liquidHero()}
   <section class="studio-proof"><div class="wrap">
     <div class="studio-proof__heading"><p class="studio-kicker">Selected outcomes</p><p>Truemeds product work · 2023–2026</p></div>
     <div class="studio-proof__grid">${highlights.map(([number, label, slug], i) => `<a href="/work/${slug}" class="studio-proof__item" data-studio-reveal><span class="studio-kicker">0${i + 1} / Impact</span><strong>${number}</strong><span>${label}</span><small>Read context ↗</small></a>`).join('')}</div>
@@ -70,16 +62,7 @@ export function studioHome() {
     <div class="studio-features">${CASES.slice(0, 3).map(c => featureCard(c)).join('')}</div>
     <div class="studio-section-cta">${link('/work', 'All work & case studies', true)}</div>
   </div></section>
-  <section class="studio-section studio-lenses"><div class="wrap">
-    ${sectionHead('02 / The product lens', 'I work across the seam.', 'Customer experience and operational reality should be designed together.')}
-    <div class="studio-lens-grid">
-      <article data-studio-reveal><span>01 / CUSTOMER</span><h3>Journeys people feel.</h3><p>Payments, checkout, search and moments that create or erode trust.</p></article>
-      <article data-studio-reveal><span>02 / GROWTH</span><h3>Loops that compound.</h3><p>Offers, referrals, retention and measurement that connects to behaviour.</p></article>
-      <article data-studio-reveal><span>03 / OPERATIONS</span><h3>Systems teams rely on.</h3><p>Catalogue, fulfilment, CRMs and workflows built for actual operators.</p></article>
-    </div>
-  </div></section>
   ${homepageExperience()}
-  ${founder()}
   ${consultingTeaser()}
   <section class="studio-section studio-human"><div class="wrap studio-human__grid">
     <img src="/img/adventure/kart-grid.webp" width="480" height="320" loading="lazy" alt="On a go-kart track">
@@ -127,10 +110,14 @@ export function studioAbout() {
     ${link('/work','See what I’ve shipped',true)}</div>
     <figure class="studio-about-photo"><img src="/img/anjor.webp" width="447" height="721" alt="Anjor Tank outdoors near a mountain lake"><figcaption>Somewhere away from a sprint board.</figcaption></figure>
   </div></section>
-  <section class="studio-section studio-history"><div class="wrap">
-    ${sectionHead('01 / The path','Marketing taught me demand. Product taught me delivery.','Four chapters; one evolving way of thinking.')}
-    ${experienceTimeline(true)}
-    <div class="studio-actions">${link("/experience","View the complete career timeline",true)}</div>
+  <section class="studio-section studio-about-thought"><div class="wrap">
+    ${sectionHead('01 / How I think', 'Systems thinking, without forgetting people.', 'I am most interested in the moments where a product promise meets operational reality.')}
+    <div class="studio-lens-grid">
+      <article data-studio-reveal><span>INQUIRY</span><h3>Follow the signal.</h3><p>Understand the customer, the incentive and the system before deciding what to change.</p></article>
+      <article data-studio-reveal><span>CRAFT</span><h3>Keep the experience human.</h3><p>Even the most complex platform needs simple, legible decisions for the people using it.</p></article>
+      <article data-studio-reveal><span>OWNERSHIP</span><h3>Close the loop.</h3><p>Build the handoff, measure the result and keep improving what ships.</p></article>
+    </div>
+    <div class="studio-section-cta">${link('/experience','Explore the career timeline',true)}</div>
   </div></section>
   ${founder()}
   <section class="studio-section studio-personal"><div class="wrap">

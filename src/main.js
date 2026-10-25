@@ -6,6 +6,7 @@
 import './styles.css';
 import './studio.css';
 import './studio-upgrades.css';
+import './liquid-glass.css';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
@@ -15,6 +16,7 @@ import { CASES, HELLOS, SITE, DOORS } from './content.js';
 import { quick } from './render.js';
 import { setupStudioMotion } from './studio-motion.js';
 import { setupStudioUpgrades } from './studio-upgrades-motion.js';
+import { setupLiquidHero } from './liquid-motion.js';
 import { wordReel, footLaunch, sceneCanvas, warp, makeDots, blit } from './artcv.js';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, SplitText, DrawSVGPlugin);
@@ -403,6 +405,7 @@ function startPage() {
     counters(); asciiCards(); reels(); pickers();
     setupStudioMotion(gsap, ScrollTrigger, rm, fine);
     setupStudioUpgrades(gsap, ScrollTrigger, rm, fine);
+    setupLiquidHero(gsap, ScrollTrigger, rm, fine);
     $$('[data-rl]').forEach(wordReel);
     const fl = $('#foot-launch'); if (fl) footLaunch(fl);
     filters('#filters', '#cgrid .ccard', (c, f) => f === 'All' || c.dataset.tag === f);

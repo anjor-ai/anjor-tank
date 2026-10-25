@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { existsSync, readFileSync } from 'node:fs';
 import { routes, renderRoute } from '../src/render.js';
 
 const pages = routes();
@@ -17,9 +18,13 @@ for (const r of pages) {
   }
 }
 const by = p => renderRoute(pages.find(r => r.path === p));
-assert(by('/').includes('data-keylab') && by('/').includes('home-xp') && by('/').includes('home-consult'));
+assert(by('/').includes('data-keyboard-root') && by('/').includes('home-xp') && by('/').includes('home-consult'));
+assert((by('/').match(/data-liquid-key/g)||[]).length>=6,'Missing keyboard navigation keys');
+assert(existsSync('public/img/keyboard-silver.svg'),'Keyboard asset must exist');
+const art=readFileSync('public/img/keyboard-silver.svg','utf8');
+assert(art.startsWith('<svg') && art.includes('</svg>') && art.includes('MESHHETU'),'Keyboard asset must have artwork and labels');
 assert(by('/experience').includes('xp-timeline__item'));
 assert(by('/hire').includes('track-a__cards') && by('/hire').includes('MESHHETU'));
 assert(by('/about').includes('xp-timeline__item'));
 for (const p of ['/work','/experience','/hire','/about','/contact']) assert(seen.has(p));
-console.log('Smoke test passed: ' + pages.length + ' static routes, keyboard, timeline and Track A consulting.');
+console.log('Smoke test passed: ' + pages.length + ' static routes, full-length SVG keyboard, timeline and Track A consulting.');

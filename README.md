@@ -38,3 +38,12 @@ Preview branches can be deployed by the connected Vercel Git integration. Produc
 - `src/studio-upgrades-motion.js`: pointer-aware keyboard previews, GSAP depth and scroll sequencing with a reduced-motion fallback.
 - Content from LinkedIn and resume is role-scoped. Track A consulting deliverables mirror the `orchestration-intelligence` system source; ROQIVA remains in development.
 - Release process: prepare Git blobs without changing a branch; update the `preview` branch once after checks to avoid many Vercel preview deployments. `main` is unaffected.
+
+## Visual refresh (Liquid Studio, October 2026)
+
+- Centered hero with full-length silver keyboard. Static vector asset: `public/img/keyboard-silver.svg` (fast, sharp at any density).
+- Six linked glass keys are positioned on top of the image in `src/liquid-hero.js` with real keyboard-accessible links and a touch-friendly mobile navigation fallback.
+- `src/liquid-glass.css` provides coherent light/dark pearlescent surfaces, quiet cobalt highlights and frosted panels across all pages.
+- `src/liquid-motion.js` provides GSAP reveal, subtle scroll depth and cursor parallax with reduced-motion fallback.
+- Default theme is light; saved dark-mode choice is respected.
+- Pre-deploy check: `npm run test && npm run build`; update the `preview` git ref once to trigger exactly one preview deployment. Do not push a stream of incremental commits to any Vercel-watched branch.
