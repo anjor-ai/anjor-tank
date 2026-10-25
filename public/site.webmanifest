@@ -1,12 +1,12 @@
 {
   "name": "Anjor Tank",
   "short_name": "Anjor Tank",
-  "description": "I build the decision layer between a commerce company's data and its actions.",
+  "description": "Product manager, product architect and founder of MESHHETU, based in Mumbai.",
   "start_url": "/",
   "scope": "/",
   "display": "browser",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "background_color": "#141413",
+  "theme_color": "#141413",
   "icons": [
     {
       "src": "/icon-192.png",

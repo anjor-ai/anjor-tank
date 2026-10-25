@@ -1,30 +1,45 @@
-import { defineConfig } from 'vite'
-import * as S from './src/site.js'
+import { defineConfig } from 'vite';
+import path from 'node:path';
+import { routes, renderRoute } from './src/render.js';
 
-// Build-time rendering: <!--@name--> markers in index.html are replaced with HTML from src/site.js,
-// so the page ships as real markup (no empty shell, readable without JavaScript, good for crawlers).
-const MARKERS = {
-  proof: S.renderProof,
-  'decision-list': S.renderDecisionList,
-  'decision-body': () => S.renderDecisionBody(S.C.decisions[0]),
-  work: S.renderWork,
-  timeline: S.renderTimeline,
-  edu: S.renderEdu,
-  certs: S.renderCerts,
-  gallery: S.renderGallery,
+/* Every page is generated from src/content.js + src/render.js. There are no per-page HTML files:
+   this plugin hands Vite each page as a virtual .html entry, so the build bundles, hashes and rewrites
+   them like normal pages, and the dev server serves them at their real URLs. */
+function pages() {
+  const root = process.cwd();
+  const table = new Map(routes().map((r) => [path.join(root, r.file), r]));
+  const byUrl = new Map(routes().map((r) => [r.path, r]));
+  return {
+    name: 'site-pages',
+    enforce: 'pre',
+    resolveId(id) { if (table.has(id)) return id; },
+    load(id) { const r = table.get(id); if (r) return renderRoute(r); },
+    configurePreviewServer(server) { // local preview only: Vercel's cleanUrls does this in production
+      server.middlewares.use((req, res, next) => {
+        const [u, q] = (req.url || '/').split('?');
+        if (u !== '/' && !/\.[a-z0-9]+$/i.test(u)) req.url = u.replace(/\/$/, '') + '/index.html' + (q ? '?' + q : '');
+        next();
+      });
+    },
+    configureServer(server) {
+      server.middlewares.use(async (req, res, next) => {
+        const url = (req.url || '/').split('?')[0].replace(/\/$/, '') || '/';
+        const r = byUrl.get(url);
+        if (!r || req.method !== 'GET') return next();
+        const html = await server.transformIndexHtml(req.url, renderRoute(r));
+        res.setHeader('Content-Type', 'text/html'); res.end(html);
+      });
+    },
+  };
 }
-const render = () => ({
-  name: 'render-static-markup',
-  transformIndexHtml: {
-    order: 'pre',
-    handler: (html) => html.replace(/<!--@([\w-]+)-->/g, (m, k) => (MARKERS[k] ? MARKERS[k]() : m)),
-  },
-})
 
 export default defineConfig({
   base: '/',
   publicDir: 'public',
-  plugins: [render()],
+  appType: 'mpa',
+  plugins: [pages()],
   build: {
-    rollupOptions: { input: { main: 'index.html', notfound: '404.html' } }, target: 'es2020', sourcemap: false, outDir: 'dist', chunkSizeWarningLimit: 600 },
-})
+    target: 'es2020', sourcemap: false, outDir: 'dist', chunkSizeWarningLimit: 700,
+    rollupOptions: { input: Object.fromEntries(routes().map((r) => [r.file.replace(/\.html$/, ''), path.join(process.cwd(), r.file)])) },
+  },
+});

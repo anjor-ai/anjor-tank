@@ -1,4 +1,4 @@
-/* Runs before first paint. Sets the theme, and flags JS / reduced motion / first visit on <html>.
+/* Runs before first paint. Sets the theme, and flags JS / reduced motion / first visit / page transition on <html>.
    An external file (not inline) so the CSP can stay at script-src 'self'. */
 (function () {
   var d = document.documentElement, t = 'dark';
@@ -13,5 +13,10 @@
   if (m) m.setAttribute('content', t === 'dark' ? '#141413' : '#ffffff');
   var rm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (rm) d.classList.add('rm');
-  try { if (!rm && !sessionStorage.getItem('anjor-boot')) d.classList.add('boot'); } catch (e) {}
+  try {
+    var home = location.pathname === '/' || location.pathname === '/index.html';
+    if (!rm && home && !sessionStorage.getItem('anjor-boot')) d.classList.add('boot');
+    else if (!rm && sessionStorage.getItem('anjor-pt')) d.classList.add('pt-in');
+    sessionStorage.removeItem('anjor-pt');
+  } catch (e) {}
 })();
