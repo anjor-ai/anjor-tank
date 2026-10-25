@@ -20,7 +20,7 @@ export const SITE = {
 export const HELLOS = ['HELLO', 'नमस्ते', 'HOLA', 'BONJOUR', 'નમસ્તે', 'CIAO', 'OLÁ', 'नमस्कार', 'こんにちは'];
 
 export const NAV = [
-  ['/work', 'Work'], ['/architect', 'Architect'], ['/journey', 'Journey'], ['/meshhetu', 'MESHHETU'], ['/consulting', 'Consulting'], ['/beyond', 'Beyond work'],
+  ['/work', 'Work'], ['/systems', 'Systems'], ['/journey', 'Journey'], ['/meshhetu', 'MESHHETU'], ['/consulting', 'Consulting'], ['/beyond', 'Beyond work'],
 ];
 
 /* ───────────── proof strip ───────────── */
@@ -328,10 +328,6 @@ export const MESH = {
   steps: [['01', 'Detect', 'Code', 'Match every captured signal to the decision that reads it.'], ['02', 'Audit', 'Agent', 'Write ranked, evidence-labelled finding cards.'], ['03', 'Decide', 'Agent', 'Compare solutions, including the cheapest one.'], ['04', 'Build', 'Agent', 'Draft the PRD, wireframe, tickets and checks.'], ['05', 'Release', 'Person', 'The brand signs one exact release candidate.'], ['06', 'Measure', 'Code', 'Check the result against the baseline.']],
   gates: ['Problem', 'Direction', 'Design and PRD', 'Release'],
   rules: [['Code computes', 'Every count, join and ranking comes from code you can reproduce.'], ['Agents draft', 'Agents write drafts. They never write to a live system or approve their own work.'], ['People decide', 'Four gates, each with a named approver.']],
-  founders: [
-    { n: 'Anjor Tank', r: 'Product Architect', p: 'Mumbai', o: 'Detect, Audit and Decide', d: 'Designs the system that turns a stuck number into a shipped fix.' },
-    { n: 'Karan Tank', r: 'AI Engineer', p: 'Seattle', o: 'Build, Orchestrate and Measure', d: 'Puts the intelligence in the orchestrator, and proves it works.' },
-  ],
 };
 
 /* ───────────── beyond work ───────────── */
@@ -411,7 +407,7 @@ export const CONSULT = {
   fit: ['Ecommerce and D2C brands with a stuck conversion, retention or fulfilment number', 'Teams whose tools capture the signals but nobody owns the decision', 'Founders who need a product architect before they hire one'],
   notfit: ['A redesign with no measurable goal', 'Work that needs a large delivery team from day one'],
   faq: [
-    ['Who do I work with?', 'Me, directly. Consulting runs through MESHHETU, with Karan Tank as AI engineer where the work needs it. No hand-off to a junior team.'],
+    ['Who do I work with?', 'Me, directly. Consulting runs through MESHHETU. No hand-off to a junior team.'],
     ['What do you need from us?', 'Read access to the funnel and event data, an hour with the people who run the operation, and one named person to decide.'],
     ['Do you build or only advise?', 'Both. The plan is written to be built by your team, and I can own the build as an embedded product architect.'],
     ['How do we start?', 'Send the metric and a line on the business. I reply with where I would look first, usually within two working days.'],

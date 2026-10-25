@@ -24,7 +24,7 @@ const ROWS = [
 /* artisan caps: icon, face colour, link, label */
 const ARTS = {
   rocket: { c: 'art-w', href: '/work', tip: 'Shipped work' },
-  funnel: { c: 'art-b', href: '/architect', tip: 'How I architect' },
+  funnel: { c: 'art-b', href: '/systems', tip: 'How I build systems' },
   bars: { c: 'art-y', href: '/hire', tip: 'Results' },
   cart: { c: 'art-o', href: '/work/price-lock-checkout', tip: 'Checkout case' },
   lock: { c: 'dark', href: '/work/price-lock-checkout', tip: 'Price Lock' },
@@ -72,19 +72,34 @@ const row = (r) => `<div class="kr"${r.h ? ` style="--h:${r.h}"` : ''}>${r.keys.
 
 const CABLE = `<svg class="kb__cable" viewBox="0 0 200 200" aria-hidden="true" preserveAspectRatio="xMaxYMax meet"><path class="cb" d="M178 196 C178 150 176 120 150 92 C120 60 66 80 80 40 C90 12 150 6 168 34"/><path class="cb2" d="M178 196 C178 150 176 120 150 92 C120 60 66 80 80 40 C90 12 150 6 168 34"/><rect class="plug" x="168" y="188" width="22" height="12" rx="3"/></svg>`;
 
-/** The full 75% board for the home hero. */
-export function keyboard() {
+const TABS = [
+  ['/work', 'Work', '<path d="M4 5h6v6H4zM14 5h6v6h-6zM4 15h6v4H4zM14 15h6v4h-6z"/>'],
+  ['/systems', 'Systems', '<path d="M12 3 3 8l9 5 9-5-9-5zM3 13l9 5 9-5M3 17.5l9 5 9-5" transform="scale(.9) translate(1.3 -1)"/>'],
+  ['/journey', 'Journey', '<path d="M5 19c0-6 4-4 6-8s6-1 8-6M5 19h.01M19 5h.01"/>'],
+  ['/meshhetu', 'MESHHETU', '<path d="M7 5v14M17 5v14M7 12h10"/>'],
+  ['/beyond', 'Beyond', '<path d="M5 19c7 0 13-5 14-14-9 1-14 6-14 14zM5 19c3-5 6-8 10-10"/>'],
+];
+const ICO = (d) => `<svg viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+const KNOB = (id, label) => `<button class="knob" type="button" data-knob="${id}" aria-label="${label}"><span class="knob__b"><i class="knob__r"></i><i class="knob__t"><b></b></i></span><em>${label}</em></button>`;
+
+/** The full board for the home hero: a screen carries the headline, a strip of section keys sits under it, then the keys.
+    `screen` is the markup that goes on the screen; `ctas` are the two buttons in the side panel. */
+export function keyboard({ screen = '', ctas = '' } = {}) {
   return `<div class="kbw" id="kbw">${SPRITE}
-  <div class="kb" id="kb" data-mode="full" role="group" aria-label="A keyboard with a few of my projects as keycaps">${CABLE}
+  <div class="kb" id="kb" data-mode="full" role="group" aria-label="A keyboard whose screen carries my introduction">
     <div class="kb__in">
-      <div class="kb__main"><div class="kb__rows" aria-hidden="true">${ROWS.slice(0, 5).map(row).join('')}</div>${row(ROWS[5])}</div>
-      <div class="kb__side">
-        <div class="knob" id="knob" aria-hidden="true"><i class="knob__r"></i><i class="knob__t"><b></b></i></div>
-        <div class="scr" id="scr" aria-hidden="true"><span class="scr__t" id="scr-t">10:07</span><span class="scr__d" id="scr-d">Sun, Oct 25</span></div>
-        <div class="kr">${art('rocket')}${art('funnel')}</div>
-        <div class="kr">${art('bars')}${art('cart')}</div>
-        <div class="kr">${art('lock')}${art('ok')}</div>
+      <div class="kb__main">
+        <div class="deck">${KNOB('theme', 'Theme')}${KNOB('type', 'Type')}<div class="dscr" id="scr">${screen}</div>${KNOB('scroll', 'Scroll')}</div>
+        <nav class="fstrip" aria-label="Sections">${TABS.map(([h, t, d], i) => `<a href="${h}" class="fstrip__t">${ICO(d)}<span>${t}</span></a>`).join('')}<span class="fstrip__c" id="clock" aria-hidden="true">Mumbai</span><span class="fstrip__s" aria-hidden="true"><i id="prog"></i></span></nav>
+        <div class="kb__rows">${ROWS.slice(1, 5).map((r) => row(r).replace('<div class="kr"', '<div class="kr" aria-hidden="true"')).join('')}${row(ROWS[5])}</div>
       </div>
+      <aside class="kb__panel">
+        <div class="pcta">${ctas}</div>
+        <figure class="pimg"><img src="/img/valley.webp" alt="" width="900" height="1100" loading="eager" decoding="async"><figcaption class="label">Systems that grow</figcaption></figure>
+        <p class="pq">Decisions, wired into systems, then measured.</p>
+        <div class="kr">${art('rocket')}${art('funnel')}${art('bars')}</div>
+        <div class="kr">${art('cart')}${art('lock')}${art('ok')}</div>
+      </aside>
     </div>
   </div>
   <div class="kb__floor" aria-hidden="true"></div></div>`;

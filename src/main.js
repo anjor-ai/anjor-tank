@@ -11,7 +11,7 @@ import { SplitText } from 'gsap/SplitText';
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
 import { CASES, HELLOS, SITE, DOORS } from './content.js';
 import { quick } from './render.js';
-import { wordReel, footLaunch, sceneCanvas, warp, makeDots, blit } from './artcv.js';
+import { wordReel, footLaunch, sceneCanvas } from './artcv.js';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, SplitText, DrawSVGPlugin);
 
@@ -34,7 +34,7 @@ function setTheme(t) {
   root.setAttribute('data-theme', t);
   store.set('anjor-theme', t);
   const m = $('meta[name="theme-color"]');
-  if (m) m.setAttribute('content', t === 'dark' ? '#08090c' : '#ffffff');
+  if (m) m.setAttribute('content', t === 'dark' ? '#070c0a' : '#ffffff');
 }
 $('#theme')?.addEventListener('click', (e) => {
   const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -60,42 +60,15 @@ function sheetOpen(o) {
 burger?.addEventListener('click', () => sheetOpen(sheet.hidden));
 addEventListener('keydown', (e) => { if (e.key === 'Escape' && !sheet.hidden) sheetOpen(false); });
 
-/* ───────────── page transitions: seven shutters ───────────── */
-const bars = $$('#pt i');
-let leaving = false;
-function go(href) {
-  if (leaving) return; leaving = true;
-  store.sset('anjor-pt', '1');
-  const pt = $('#pt'); pt.classList.add('on');
-  gsap.set(bars, { transformOrigin: '50% 100%' });
-  gsap.fromTo(bars, { scaleY: 0 }, { scaleY: 1, duration: 0.5, ease: 'power3.inOut', stagger: { each: 0.045, from: 'center' }, onComplete: () => { location.href = href; } });
-  setTimeout(() => { location.href = href; }, 1600);
-}
+/* ───────────── links: pages simply open (no page loader); a link to the page you are on scrolls to the top ───────────── */
 document.addEventListener('click', (e) => {
   const a = e.target.closest('a[href]');
   if (!a || e.defaultPrevented || e.button || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
   if (a.target === '_blank' || a.hasAttribute('download')) return;
   const u = new URL(a.href, location.href);
   if (u.origin !== location.origin) return;
-  if (u.pathname === location.pathname && u.hash) return; // in-page anchor
-  if (u.pathname === location.pathname && !u.search) { e.preventDefault(); scrollTo({ top: 0, behavior: rm ? 'auto' : 'smooth' }); return; }
-  if (rm) return;
-  e.preventDefault();
-  if ($('#qv')?.open) $('#qv').close();
-  sheetOpen(false);
-  go(u.href);
+  if (u.pathname === location.pathname && !u.search && !u.hash) { e.preventDefault(); scrollTo({ top: 0, behavior: rm ? 'auto' : 'smooth' }); }
 });
-addEventListener('pageshow', (e) => {
-  if (e.persisted) { leaving = false; $('#pt').classList.remove('on'); gsap.set(bars, { scaleY: 0 }); }
-});
-function revealPage() {
-  if (!root.classList.contains('pt-in')) return;
-  gsap.set(bars, { scaleY: 1, transformOrigin: '50% 0' });
-  gsap.to(bars, {
-    scaleY: 0, duration: 0.65, ease: 'power3.inOut', stagger: { each: 0.045, from: 'edges' }, delay: 0.05,
-    onComplete: () => root.classList.remove('pt-in'),
-  });
-}
 
 /* ───────────── cursor ring (fine pointers only) ───────────── */
 if (fine && !rm) {
@@ -142,41 +115,77 @@ function flickerTo(el, text) {
   step();
 }
 
-/* ───────────── intro: a keycap lands in a dot-matrix starfield, says hello, the stars warp, the page opens out of the middle ───────────── */
-function runIntro(done) {
-  const intro = $('#intro'), cv = $('#warp');
-  if (!intro || !cv || !root.classList.contains('boot')) return done();
-  const ctx = cv.getContext('2d'), word = $('#intro-w'), key = $('#intro-k');
-  const CELL = 6, S = { k: 0, a: 1 };
-  let D, img, cols, rows, finished = false, tl;
-  const t0 = performance.now();
-  const size = () => { cols = Math.ceil(innerWidth / CELL); rows = Math.ceil(innerHeight / CELL); D = makeDots(cols, rows); cv.width = cols * CELL; cv.height = rows * CELL; img = ctx.createImageData(cv.width, cv.height); };
-  const draw = () => { D.buf.fill(0); warp(D, ((performance.now() - t0) / 1000) * 7, { x0: 0, y0: 0, w: cols, h: rows }, S.k, S.a); blit(ctx, img, D, CELL, 1); };
-  const finish = () => {
+/* ───────────── the opening film, after the ROQIVA film (first visit of a session, skippable) ─────────────
+   0.0 the name rises; each letter turns into a small screen and back · 1.6 a checkerboard closes · 2.2 three hard colour cuts
+   4.7 the seven systems run past as cards; the last zooms until its screen fills the frame · 7.6 the line, then the name · 9.8 hand-over */
+function runFilm(done) {
+  const film = $('#film');
+  if (!film || !root.classList.contains('boot')) return done();
+  const stage = $('#film-stage'), q = (sel) => $$(sel, film);
+  let finished = false, tl;
+  const fit = () => {
+    const w = innerWidth, h = innerHeight, tall = w < h;
+    stage.style.setProperty('--s', tall ? w / 1000 : Math.min(w / 1600, h / 900));
+    film.classList.toggle('film--tall', tall);
+  };
+  fit(); addEventListener('resize', fit);
+  q('canvas[data-fs]').forEach((cv) => sceneCanvas(cv, cv.dataset.fs, { cell: 4, k: 4, gap: 1, fps: 16 }));
+  root.classList.add('boot-lock');
+  let handed = false;
+  const hand = () => { if (!handed) { handed = true; done(); } };
+  const skip = () => {
     if (finished) return; finished = true;
     store.sset('anjor-boot', '1');
-    tl && tl.kill(); gsap.ticker.remove(draw); removeEventListener('resize', size);
+    tl && tl.pause(); hand();
+    removeEventListener('resize', fit); removeEventListener('keydown', onKey);
     root.classList.remove('boot-lock');
-    gsap.to(intro, { opacity: 0, duration: 0.3, onComplete: () => { root.classList.remove('boot'); intro.remove(); ScrollTrigger.refresh(); } });
-    done();
+    gsap.to(film, { clipPath: 'inset(0 0 100% 0)', duration: 0.6, ease: 'expo.inOut', onComplete: () => { root.classList.remove('boot'); film.remove(); ScrollTrigger.refresh(); } });
   };
-  root.classList.add('boot-lock');
-  size(); addEventListener('resize', size); gsap.ticker.add(draw);
-  const list = HELLOS.slice(0, 7), per = 0.3, t1 = 0.65 + list.length * per + 0.25;
-  word.textContent = list[0];
+  const onKey = (e) => { if (e.key === 'Escape') skip(); };
+  addEventListener('keydown', onKey);
+  film.addEventListener('click', skip); $('#film-skip').addEventListener('click', (e) => { e.stopPropagation(); skip(); });
+  setTimeout(skip, 15000);
+
+  const bg = $('.film__bg', film), lis = q('.fl__i'), scr = q('.film__s0 .fl__scr');
+  const CUTS = [{ bg: '#0083ff', ink: '#f4f6f1' }, { bg: '#f4f6f1', ink: '#08090c' }, { bg: '#08090c', ink: '#2f95ff' }];
+  gsap.set(q('.film__s'), { autoAlpha: 0 });
   tl = gsap.timeline();
-  tl.fromTo(key, { y: -60, opacity: 0, scale: 0.8 }, { y: 0, opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(2.2)' }, 0.05)
-    .to(key, { y: 6, duration: 0.09, yoyo: true, repeat: 1, ease: 'power1.inOut' }, 0.7)
-    .fromTo(word, { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0.55);
-  list.forEach((w, i) => { if (i) tl.call(() => flickerTo(word, w), null, 0.65 + i * per); });
-  tl.to('.intro__c', { opacity: 0, scale: 0.88, duration: 0.4, ease: 'power2.in' }, t1)
-    .to(S, { k: 1, duration: 0.95, ease: 'power2.in' }, t1 - 0.1)
-    .fromTo(intro, { '--r': '0px' }, { '--r': () => Math.hypot(innerWidth, innerHeight) * 0.75 + 'px', duration: 0.9, ease: 'power2.in' }, t1 + 0.55)
-    .call(done, null, t1 + 0.8)
-    .call(finish, null, t1 + 1.55);
-  $('#intro-s')?.addEventListener('click', () => { if (!finished) { done(); finish(); } });
-  addEventListener('keydown', (e) => { if (e.key === 'Escape' && !finished) { done(); finish(); } });
-  setTimeout(() => { if (!finished) { done(); finish(); } }, 12000);
+  tl.set(q('.film__s0'), { autoAlpha: 1 }, 0)
+    .fromTo(lis, { yPercent: 110 }, { yPercent: 0, duration: 0.7, ease: 'expo.out', stagger: 0.05 }, 0.1);
+  lis.forEach((li, k) => {
+    const at = 0.8 + k * 0.07;
+    tl.to(li, { autoAlpha: 0, scale: 0.5, duration: 0.15, ease: 'power2.in' }, at)
+      .fromTo(scr[k], { autoAlpha: 0, scale: 0.3 }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: 'back.out(2.4)' }, at + 0.05)
+      .to(scr[k], { autoAlpha: 0, scale: 0.3, duration: 0.14, ease: 'power2.in' }, at + 0.45)
+      .to(li, { autoAlpha: 1, scale: 1, duration: 0.25, ease: 'back.out(2)' }, at + 0.52);
+  });
+  tl.fromTo(q('.film__ck i'), { scale: 0 }, { scale: 1.02, duration: 0.32, ease: 'power3.in', stagger: { grid: [9, 16], from: 'center', amount: 0.3 } }, 1.55)
+    .set(q('.film__s0'), { autoAlpha: 0 }, 2.2).set(bg, { backgroundColor: CUTS[0].bg }, 2.2).set(q('.film__ck i'), { scale: 0 }, 2.2);
+  CUTS.forEach((c, k) => {
+    const at = 2.2 + k * 0.82, sc = q(`.film__c${k}`);
+    tl.set(bg, { backgroundColor: c.bg }, at).set(sc, { autoAlpha: 1, color: c.ink }, at)
+      .fromTo(sc, { scale: 1.14 }, { scale: 1, duration: 0.7, ease: 'expo.out' }, at)
+      .fromTo(q(`.film__c${k} .wi`), { yPercent: 105, skewY: 6 }, { yPercent: 0, skewY: 0, duration: 0.5, ease: 'expo.out', stagger: 0.06 }, at)
+      .fromTo(q(`.film__c${k} .film__scr`), { scale: 0, rotate: -12 }, { scale: 1, rotate: 0, duration: 0.45, ease: 'back.out(2.2)' }, at + 0.12)
+      .set(sc, { autoAlpha: 0 }, at + 0.82);
+  });
+  const A = 2.2 + 3 * 0.82, cards = q('.film__card'), W = 340, G = 30, X = (k) => (k - 3) * (W + G);
+  gsap.set(cards, { x: (k) => X(k) + 340 });
+  tl.set(bg, { backgroundColor: '#f4f6f1' }, A).set(q('.film__s3'), { autoAlpha: 1 }, A)
+    .from(cards, { autoAlpha: 0, y: 70, scale: 0.8, duration: 0.5, ease: 'back.out(1.6)', stagger: 0.07 }, A)
+    .fromTo(q('.film__lead'), { autoAlpha: 0, y: 20 }, { autoAlpha: 1, y: 0, duration: 0.4 }, A + 0.15)
+    .to(cards, { x: (k) => X(k) - 340, duration: 1.3, ease: 'power1.inOut' }, A + 0.85)
+    .to(q('.film__lead'), { autoAlpha: 0, duration: 0.2 }, A + 1.9)
+    .to(cards.slice(0, 6), { autoAlpha: 0, duration: 0.25 }, A + 2.15)
+    .to(cards[6], { x: 0, y: 0, scale: 8, duration: 0.8, ease: 'expo.in' }, A + 2.1)
+    .set(bg, { backgroundColor: '#08090c' }, A + 2.9).set(q('.film__s3'), { autoAlpha: 0 }, A + 2.92);
+  const B = A + 2.9;
+  tl.set(q('.film__s4'), { autoAlpha: 1 }, B)
+    .fromTo(q('.film__s4 .hw'), { autoAlpha: 0, y: 30, filter: 'blur(10px)' }, { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 0.5, ease: 'power3.out', stagger: 0.06 }, B)
+    .to(q('.film__hero'), { autoAlpha: 0, scale: 0.96, duration: 0.3 }, B + 1.3)
+    .fromTo(q('.film__name'), { autoAlpha: 0, letterSpacing: '0.6em' }, { autoAlpha: 1, letterSpacing: '0.04em', duration: 0.7, ease: 'expo.out' }, B + 1.45)
+    .fromTo(q('.film__status'), { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: 0.4 }, B + 1.7)
+    .call(skip, null, B + 2.4);
 }
 
 /* ───────────── greeting in the hero keeps cycling ───────────── */
@@ -403,76 +412,104 @@ function spotlight() {
   }, { passive: true });
 }
 
-/* ───────────── the hero keyboard: works without motion (clock, real keys, lamps) ───────────── */
+/* ───────────── the hero keyboard: it works without motion (clock, your own keys, lamps, knobs) ───────────── */
 const keyById = (kb, id) => $(`.kc[data-k="${CSS.escape(id)}"]`, kb);
+const kbState = { user: 0, say: null };   // user: when the visitor last typed; say: a message from a lamp
 function keyboardLive() {
-  const kb = $('#kb'); if (!kb) return;
-  const scrT = $('#scr-t'), scrD = $('#scr-d');
-  const clock = () => {
-    if (!scrT || kb.dataset.busy) return;
-    const d = new Date();
-    scrT.textContent = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' }).replace(/\s?[AP]M/i, '');
-    scrD.textContent = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'Asia/Kolkata' });
-  };
-  clock(); setInterval(clock, 20000); document.addEventListener('kb-clock', clock);
-  // the keys you press on your own keyboard press down here too (nothing is intercepted)
+  const kb = $('#kb'); if (!kb || kb.dataset.mode !== 'full') return;
+  const ty = $('#ty-t'), clk = $('#clock');
+  const clock = () => { if (clk) clk.textContent = 'Mumbai ' + new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' }); };
+  clock(); setInterval(clock, 20000);
+  if (ty && !ty.textContent) ty.textContent = 'ANJOR TANK';
+  // the keys you press on your own keyboard press down here too, and what you type shows on the screen
+  let mine = '';
   const map = { arrowup: 'enter', arrowdown: 'shift2', arrowleft: 'control', arrowright: 'alt2' };
   const hit = (e, on) => {
-    if (e.metaKey || e.ctrlKey || e.altKey || e.target.closest?.('input, textarea, select')) return;
-    const k = (map[e.key.toLowerCase()] || e.key.toLowerCase()), el = keyById(kb, k === 'shift' && e.location === 2 ? 'shift2' : k);
-    if (el) el.classList.toggle('is-down', on);
+    if (e.metaKey || e.ctrlKey || e.altKey || e.target.closest?.('input, textarea, select, [contenteditable]')) return;
+    const raw = e.key.toLowerCase(), k = map[raw] || (raw === ' ' ? ' ' : raw);
+    const el = keyById(kb, k === 'shift' && e.location === 2 ? 'shift2' : k); if (!el) return;
+    el.classList.toggle('is-down', on); el.classList.toggle('is-lit', on);
+    if (on && ty) {
+      kbState.user = performance.now();
+      if (raw === 'backspace') mine = mine.slice(0, -1); else if (raw.length === 1) mine = (mine + raw.toUpperCase()).slice(-26);
+      ty.textContent = mine;
+    }
   };
   addEventListener('keydown', (e) => hit(e, true)); addEventListener('keyup', (e) => hit(e, false));
-  // pointer press on any key
-  kb.addEventListener('pointerdown', (e) => { const el = e.target.closest('.kc[data-k]'); if (!el) return; el.classList.add('is-down'); const up = () => { el.classList.remove('is-down'); removeEventListener('pointerup', up); }; addEventListener('pointerup', up); });
+  kb.addEventListener('pointerdown', (e) => { const el = e.target.closest('.kc[data-k]'); if (!el) return; el.classList.add('is-down', 'is-lit'); const up = () => { el.classList.remove('is-down', 'is-lit'); removeEventListener('pointerup', up); }; addEventListener('pointerup', up); });
   // lamps: hold, test, ship
-  const say = (t, d) => { kb.dataset.busy = '1'; scrT.textContent = t; scrD.textContent = d; clearTimeout(say.t); say.t = setTimeout(() => { delete kb.dataset.busy; clock(); $$('.kc--lamp', kb).forEach((x) => x.classList.remove('is-lit')); }, 2400); };
-  const msg = { red: ['HOLD', 'Not yet proven'], amber: ['TEST', 'A/B in flight'], green: ['SHIP', 'Measured, then shipped'] };
+  const msg = { red: 'HOLD · NOT YET PROVEN', amber: 'TEST · A/B IN FLIGHT', green: 'SHIP · MEASURED, THEN SHIPPED' };
   $$('[data-lamp]', kb).forEach((b) => b.addEventListener('click', () => {
-    $$('.kc--lamp', kb).forEach((x) => x.classList.toggle('is-lit', x === b)); say(...msg[b.dataset.lamp]);
+    $$('.kc--lamp', kb).forEach((x) => x.classList.toggle('is-lit', x === b));
+    kbState.say = msg[b.dataset.lamp]; if (ty) ty.textContent = kbState.say; kbState.user = performance.now();
     if (!rm) gsap.fromTo(b, { y: 0 }, { y: 2, duration: 0.08, yoyo: true, repeat: 1 });
+    setTimeout(() => { $$('.kc--lamp', kb).forEach((x) => x.classList.remove('is-lit')); kbState.say = null; }, 2600);
+  }));
+  // knobs: theme flips the page, type plays the name again, scroll takes you to the work
+  $$('[data-knob]', kb).forEach((b) => b.addEventListener('click', () => {
+    const k = b.dataset.knob, dial = $('.knob__b', b);
+    if (k === 'theme') { if (!rm) gsap.to(dial, { rotation: '+=180', duration: 0.6, ease: 'expo.out' }); $('#theme')?.click(); }
+    if (k === 'type') { kbState.user = 0; mine = ''; document.dispatchEvent(new Event('kb-replay')); }
+    if (k === 'scroll') $('#proof')?.scrollIntoView({ behavior: rm ? 'auto' : 'smooth' });
   }));
 }
 
-/* ───────────── the hero keyboard: it drops in, types the name, then follows the scroll ───────────── */
+/* ───────────── the hero keyboard in motion: it lands, then types, on a loop: the name first, then who I am ───────────── */
+const PHRASES = ['ANJOR TANK', 'PRODUCT MANAGER', 'SYSTEMS THAT SHIP', 'FOUNDER OF MESHHETU', 'OPEN TO ROLES'];
 function keyboardMotion() {
-  const kb = $('#kb'); if (!kb) return;
-  const full = kb.dataset.mode === 'full';
-  const keys = $$('.kc', kb), side = $$('.knob, .scr', kb);
-  const scrT = $('#scr-t'), scrD = $('#scr-d');
-  gsap.set(keys, { opacity: 0, y: -46, scale: 0.86, transformOrigin: '50% 100%' });
-  if (side.length) gsap.set(side, { opacity: 0, y: -24 });
-  gsap.set(kb, { opacity: 0, y: 40 });
-  const tl = gsap.timeline({ delay: root.classList.contains('ready') ? 0.15 : 0.3 });
+  const kb = $('#kb'); if (!kb || kb.dataset.mode !== 'full') return;
+  const keys = $$('.kc', kb), ty = $('#ty-t'), prog = $('#prog');
+  const panelBits = $$('.pcta .btn, .pimg, .pq', kb), deckBits = $$('.knob, .dscr, .fstrip', kb);
+  gsap.set(kb, { opacity: 0, y: 50 });
+  gsap.set(keys, { opacity: 0, y: -34, scale: 0.9, transformOrigin: '50% 100%' });
+  gsap.set([...deckBits, ...panelBits], { opacity: 0, y: 16 });
+  const tl = gsap.timeline({ delay: root.classList.contains('ready') ? 0.1 : 0.2 });
   tl.to(kb, { opacity: 1, y: 0, duration: 0.9, ease: 'expo.out' }, 0)
-    .to(keys, { opacity: 1, y: 0, scale: 1, duration: 0.75, ease: 'back.out(1.7)', stagger: { amount: full ? 1.0 : 0.5, from: 'start' }, clearProps: 'transform,opacity' }, 0.1)
-    ;
-  if (side.length) tl.to(side, { opacity: 1, y: 0, duration: 0.8, ease: 'expo.out', stagger: 0.12 }, 0.5);
-  // the cable draws itself
-  const cb = $('.kb__cable .cb', kb);
-  if (cb) tl.fromTo(cb, { drawSVG: '0%' }, { drawSVG: '100%', duration: 1.2, ease: 'power2.inOut' }, 0.4).from('.kb__cable .cb2, .kb__cable .plug', { opacity: 0, duration: 0.5 }, 1.2);
-  // it types the name
-  if (full && scrT) {
-    const word = 'ANJOR TANK', ids = [...word.toLowerCase()];
-    const at = 1.7; kb.dataset.busy = '1';
-    ids.forEach((id, i) => {
-      tl.call(() => {
-        const el = keyById(kb, id); if (!el) return;
-        el.classList.add('is-down', 'is-lit'); setTimeout(() => el.classList.remove('is-down'), 110);
-        scrT.textContent = id === ' ' ? '_' : id.toUpperCase(); scrD.textContent = word.slice(0, i + 1) + (i < ids.length - 1 ? '_' : '');
-      }, null, at + i * 0.16);
+    .to(deckBits, { opacity: 1, y: 0, duration: 0.7, ease: 'expo.out', stagger: 0.06 }, 0.15)
+    .to(keys, { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'back.out(1.6)', stagger: { amount: 0.9, from: 'start' }, clearProps: 'transform,opacity' }, 0.2)
+    .to(panelBits, { opacity: 1, y: 0, duration: 0.7, ease: 'expo.out', stagger: 0.08 }, 0.5);
+
+  // typing: each letter presses its key and lights it, then it backspaces and starts the next phrase. It never stops while the board is on screen.
+  const dial = $('[data-knob="type"] .knob__b', kb);
+  let alive = true, loop = null, idx = 0;
+  const press = (id) => {
+    const el = keyById(kb, id); if (!el) return;
+    el.classList.add('is-down', 'is-lit');
+    setTimeout(() => el.classList.remove('is-down'), 90);
+    setTimeout(() => el.classList.remove('is-lit'), 420);
+  };
+  const play = () => {
+    loop?.kill(); idx = idx % PHRASES.length;
+    const word = PHRASES[idx], t = gsap.timeline({ onComplete: () => { idx += 1; if (alive) play(); } });
+    t.call(() => { if (!kbState.say && performance.now() - kbState.user > 5000) ty.textContent = ''; }, null, 0.2);
+    [...word].forEach((c, i) => {
+      t.call(() => {
+        if (kbState.say || performance.now() - kbState.user < 5000) return;
+        if (c !== ' ') press(c.toLowerCase()); else press(' ');
+        ty.textContent = word.slice(0, i + 1);
+        if (dial) gsap.to(dial, { rotation: '+=14', duration: 0.12, ease: 'power1.out', overwrite: 'auto' });
+      }, null, 0.45 + i * 0.115);
     });
-    tl.call(() => { scrT.textContent = 'AT'; scrD.textContent = 'Anjor Tank'; }, null, at + ids.length * 0.16 + 0.1)
-      .call(() => { $$('.kc.is-lit', kb).forEach((el, i) => setTimeout(() => el.classList.remove('is-lit'), i * 70)); }, null, at + ids.length * 0.16 + 1.1)
-      .call(() => { delete kb.dataset.busy; scrT.textContent = '…'; document.dispatchEvent(new Event('kb-clock')); }, null, at + ids.length * 0.16 + 2.0);
-  }
-  if (!full) return;
-  // the knob turns as the page scrolls
-  const knob = $('#knob');
-  if (knob) gsap.to(knob, { rotation: 1080, ease: 'none', scrollTrigger: { trigger: document.documentElement, start: 'top top', end: 'bottom bottom', scrub: 0.6 } });
+    const end = 0.45 + word.length * 0.115 + 1.5;
+    for (let i = word.length; i > 0; i -= 1) t.call(() => {
+      if (kbState.say || performance.now() - kbState.user < 5000) return;
+      press('backspace'); ty.textContent = word.slice(0, i - 1);
+    }, null, end + (word.length - i) * 0.035);
+    t.to({}, { duration: 0.01 }, end + word.length * 0.035 + 0.25);
+    loop = t;
+  };
+  tl.call(play, null, 1.3);
+  document.addEventListener('kb-replay', () => { idx = 0; alive = true; play(); });
+  ScrollTrigger.create({ trigger: '#kbstage', start: 'top bottom', end: 'bottom top', onToggle: (self) => { alive = self.isActive; if (loop) loop.paused(!alive); if (alive && loop && loop.progress() === 1) play(); } });
+
+  // the dials turn with the page; the slider on the strip fills as you read
+  const sk = $('[data-knob="scroll"] .knob__b', kb);
+  if (sk) gsap.to(sk, { rotation: 1080, ease: 'none', scrollTrigger: { trigger: document.documentElement, start: 'top top', end: 'bottom bottom', scrub: 0.6 } });
+  if (prog) ScrollTrigger.create({ start: 0, end: 'max', onUpdate: (self) => { prog.style.transform = `scaleX(${0.04 + self.progress * 0.96})`; } });
   // the board tips back and settles as it leaves the screen
-  gsap.set('#kbstage', { transformPerspective: 1600 });
-  gsap.to(kb, { rotationX: 16, scale: 0.94, y: -20, transformOrigin: '50% 100%', ease: 'none', scrollTrigger: { trigger: '#kbstage', start: 'center 38%', end: 'bottom top', scrub: 0.5 } });
+  gsap.to(kb, { rotationX: 14, scale: 0.94, y: -16, transformOrigin: '50% 100%', ease: 'none', scrollTrigger: { trigger: '#kbstage', start: 'center 40%', end: 'bottom top', scrub: 0.5 } });
+  // the meadow behind drifts a little slower than the page
+  if ($('.hero__bg')) gsap.to('.hero__bg', { yPercent: 14, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
 }
 
 /* ───────────── motion shared by every page ───────────── */
@@ -594,5 +631,5 @@ function releaseLog() {
 }
 
 /* ───────────── boot ───────────── */
-contactForm(); quickView(); revealPage();
-if (root.classList.contains('boot') && !rm) runIntro(startPage); else startPage();
+contactForm(); quickView();
+if (root.classList.contains('boot') && !rm) runFilm(startPage); else startPage();

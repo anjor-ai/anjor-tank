@@ -91,7 +91,7 @@ export function shell({ path, title, desc, body, boot = false, extra = '' }) {
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
-<meta name="theme-color" content="#08090c">
+<meta name="theme-color" content="#070c0a">
 <meta name="color-scheme" content="dark light">
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -112,17 +112,24 @@ ${nav(path)}
 <main id="main">${body.replace(/\*([^*<>\n]+)\*/g, '<span class="hl">$1</span>')}</main>
 ${foot()}
 <dialog class="qv" id="qv" aria-labelledby="qv-h"><div class="qv__bar"><p class="label" id="qv-c"></p><div class="qv__nav"><button class="kbtn" type="button" id="qv-p" aria-label="Previous case">${I.arrow}</button><button class="kbtn" type="button" id="qv-n" aria-label="Next case">${I.arrow}</button><button class="kbtn" type="button" id="qv-x" aria-label="Close">${I.close}</button></div></div><div class="qv__body" id="qv-b"></div></dialog>
-<div class="pt" id="pt" aria-hidden="true">${'<i></i>'.repeat(7)}</div>
 <div class="cur" id="cur" aria-hidden="true"></div>
 <script type="module" src="/src/main.js"></script>
 </body></html>`;
 }
 
-/* The opening: a keycap lands in a dot-matrix starfield, it says hello, then the stars stretch into warp and the page opens out of the middle. */
+/* The opening, after the ROQIVA film: the name rises and each letter turns into a small screen and back, a checkerboard closes,
+   three hard colour cuts, the seven systems run past as cards, the line, the name. About nine seconds, and it can be skipped. */
+const FILM_SCENES = ['cart', 'trend', 'blocks', 'funnel', 'find', 'agents', 'revops', 'brain', 'launch'];
+const FILM_CUTS = [['Find', 'the leak.', 'find'], ['Design', 'the rule.', 'blocks'], ['Ship', 'the system.', 'launch']];
 function intro() {
-  return `<div class="intro" id="intro" aria-hidden="true"><canvas id="warp"></canvas>
-    <div class="intro__c"><span class="intro__key" id="intro-k"><b>AT</b></span><p class="intro__w" id="intro-w">HELLO</p></div>
-    <button class="intro__skip label" id="intro-s" type="button">Skip</button></div>`;
+  const letters = [...'ANJOR TANK'];
+  let n = -1;
+  return `<div class="film" id="film" aria-hidden="true"><div class="film__bg"></div><div class="film__stage" id="film-stage">
+    <div class="film__s film__s0"><p class="film__word">${letters.map((c) => (c === ' ' ? '<span class="fl fl--sp"></span>' : `<span class="fl"><span class="fl__i">${c}</span><canvas class="fl__scr" data-fs="${FILM_SCENES[++n % 9]}"></canvas></span>`)).join('')}</p></div>
+    ${FILM_CUTS.map(([a, b, sc], k) => `<div class="film__s film__cut film__c${k}"><p class="film__line"><span class="wm"><span class="wi">${a}</span></span><canvas class="film__scr" data-fs="${sc}"></canvas><span class="wm"><span class="wi">${b}</span></span></p></div>`).join('')}
+    <div class="film__s film__s3"><div class="film__track">${CASES.map((c, k) => `<div class="film__card"><canvas data-fs="${SCENE_OF[c.slug] || 'blocks'}"></canvas><p><span>${c.n}</span><b>${esc(c.title)}</b></p></div>`).join('')}</div><p class="film__lead">Seven systems, each with a decision.</p></div>
+    <div class="film__s film__s4"><p class="film__hero">${'A product manager who architects and ships the whole system.'.split(' ').map((w) => `<span class="hw">${w} </span>`).join('')}</p><p class="film__name">ANJOR TANK</p><p class="film__status"><i></i>Open to roles and consulting</p></div>
+  </div><div class="film__ck">${'<i></i>'.repeat(144)}</div><button class="film__skip label" id="film-skip" type="button">Skip intro</button></div>`;
 }
 
 /* ───────────── case card ───────────── */
@@ -179,17 +186,15 @@ function hetu({ solo = false, tail = '' } = {}) {
 const TICK = ['Price Lock at checkout', '45+ coupon combinations', '70,000 SKUs re-indexed', 'Strapi headless CMS', 'Amazon Pay integrated', 'Search-to-order +9.0%', 'Referral 6 → 13%', 'GA4 + BigQuery', 'Voice agent, −20% cost per order', 'CRM routing, −30% resolution time'];
 function home() {
   return `
-<section class="hero" id="top"><div class="wrap">
-  <div class="hero__t">
-    <p class="hello" aria-label="Hello"><span class="hello__w" id="hello">HELLO</span><span class="hello__s label"><i></i>Open to roles and consulting</span></p>
-    <h1 class="h-hero" id="hero-h" data-split>I’m Anjor Tank, a product manager who architects and ships *the whole system.*</h1>
-    <p class="lead" data-in>From the decision rule to the web and app that carry it. Five systems taken from problem to shipped across payments, growth, search and operations, now at GNC India and founding MESHHETU.</p>
-    <div class="btn-row" data-in>${btn('/work', 'See the work')}${btn('/hire', 'Hire me', 'ghost')}</div>
-  </div>
+<section class="hero" id="top"><div class="hero__bg" aria-hidden="true"></div><div class="wrap">
   <div class="kbstage" id="kbstage">
-    <div class="kbmeta kbmeta--t label"><span>Product manager // Mumbai</span></div>
-    ${keyboard()}
-    <div class="kbmeta kbmeta--b label"><span>Payments // Growth // Search // AI</span><span>Web // App // Platform</span></div>
+    ${keyboard({
+      screen: `<div class="dscr__top"><p class="hello" aria-label="Hello"><span class="hello__w" id="hello">HELLO</span></p><span class="hello__s label"><i></i>Open to roles and consulting</span></div>
+      <h1 class="h-hero" id="hero-h">I’m Anjor Tank, a product manager who architects and ships *the whole system.*</h1>
+      <p class="lead">From the decision rule to the web and app that carry it. Five systems taken from problem to shipped across payments, growth, search and operations, now at GNC India and founding MESHHETU.</p>
+      <p class="typed" aria-hidden="true"><span>›</span><b id="ty-t"></b><i></i></p>`,
+      ctas: `${btn('/work', 'See the work')}${btn('/hire', 'Hire me', 'ghost')}`,
+    })}
   </div>
 </div></section>
 
@@ -212,10 +217,28 @@ ${hetu({ tail: `<div class="btn-row" data-in>${btn('/meshhetu', 'The MESHHETU st
     <div class="asc__t"><h3>${esc(b.t)}</h3><p>${esc(b.d)}</p><ul>${b.chips.map((c) => `<li>${esc(c)}</li>`).join('')}</ul></div></article>`).join('')}</div>
 </div></section>
 
+<section class="sec nature" id="nature"><div class="wrap">
+  <div class="nat" data-in>
+    <div class="nat__bg" aria-hidden="true"><img src="/img/meadow.webp" alt="" width="1800" height="760" loading="lazy" decoding="async"><i class="nat__px"></i></div>
+    <div class="nat__g">
+      <div class="nat__c glass">
+        <p class="label eyebrow">Built to grow</p>
+        <h2 class="h-2">Systems that grow like *living things.*</h2>
+        <ol class="nat__l"><li><b>Observe</b><span>Read the signal before touching the screen.</span></li><li><b>Tend</b><span>Own the loop: rule, build, release, measure.</span></li><li><b>Compound</b><span>Ship the fix that makes the next one cheaper.</span></li></ol>
+      </div>
+      <div class="nat__c glass nat__con" aria-hidden="true">
+        <p class="label">System health</p>
+        ${[['Payments', '77.2 → 89.7%', 'Shipped'], ['Search', '+9.0% to order', 'Shipped'], ['Growth', '6 → 13% referral', 'Measured'], ['Operations', '−20% cost per order', 'Shipped']].map(([a, b, c]) => `<p class="nat__r"><span>${a}</span><em>${b}</em><i>${c}</i></p>`).join('')}
+      </div>
+    </div>
+  </div>
+</div></section>
+
+
 <section class="sec arch" id="arch"><div class="wrap arch__g">
   <div class="arch__l">${sh('Product architect', 'I don’t stop at the spec. *I build the thing.*', 'I own web and app development end to end, from the wireframe and the API payload to the release and the number that moves.')}
     <ul class="ticks">${OWN.slice(0, 3).map((o) => `<li data-in><b>${esc(o.t)}</b><span>${esc(o.d)}</span></li>`).join('')}</ul>
-    <div class="btn-row">${btn('/architect', 'See how I architect')}</div></div>
+    <div class="btn-row">${btn('/systems', 'See how I build systems')}</div></div>
   <div class="arch__r">${mockup()}</div>
 </div></section>
 
@@ -298,8 +321,8 @@ function casePage(c) {
 ${cta('Like how I think? Let’s talk.')}`;
 }
 
-/* ───────────── ARCHITECT ───────────── */
-function architect() {
+/* ───────────── SYSTEMS ───────────── */
+function systems() {
   return `
 <section class="phead"><div class="wrap phead__g">
   <div><p class="label eyebrow" data-in>Product architect</p><h1 class="h-hero" data-split>I own the web, the app and *the system between them.*</h1>
@@ -349,10 +372,6 @@ ${hetu({ solo: true, tail: `<div class="btn-row" data-in>${btn(SITE.meshhetu, 'V
   <div class="rules">${MESH.rules.map(([t, d], i) => `<article class="rule" data-in><span class="label">Rule ${pad(i + 1)}</span><h3 class="h-3">${esc(t)}.</h3><p>${esc(d)}</p></article>`).join('')}</div>
 </div></section>
 
-<section class="sec"><div class="wrap">
-  ${sh('The founders', 'Put a *product architect* and an *AI engineer* on your revenue system.', 'The two of us run every engagement. No hand-offs to a junior team.')}
-  <div class="fnd">${MESH.founders.map((f, i) => `<article class="card" data-in><p class="label">${esc(f.p)} · owns ${esc(f.o)}</p><h3 class="h-3">${esc(f.n)} <span>${esc(f.r)}</span></h3><p>${esc(f.d)}</p></article>`).join('')}</div>
-</div></section>
 ${cta('Have a metric that won’t move?')}`;
 }
 
@@ -505,10 +524,6 @@ function consulting() {
   <div class="relg">${CASES.slice(0, 3).map((c, i) => caseCard(c, i, 'ccard--s')).join('')}</div>
 </div></section>
 
-<section class="sec"><div class="wrap">
-  ${sh('The team', 'A *product architect* and an *AI engineer.*', 'The two of us run every engagement. No hand-offs to a junior team.')}
-  <div class="fnd">${MESH.founders.map((f) => `<article class="card" data-in><p class="label">${esc(f.p)} · owns ${esc(f.o)}</p><h3 class="h-3">${esc(f.n)} <span>${esc(f.r)}</span></h3><p>${esc(f.d)}</p></article>`).join('')}</div>
-</div></section>
 
 <section class="sec"><div class="wrap faqw">
   ${sh('Questions', 'Before you *write in.*', '')}
@@ -528,7 +543,7 @@ export function routes() {
     { path: '/', file: 'index.html', title: 'Anjor Tank | Product manager and product architect', desc: D, body: home, boot: true },
     { path: '/work', file: 'work/index.html', title: 'Work | Anjor Tank', desc: 'Seven product systems across payments, growth, search, AI and operations, each with the decision behind it and the number that moved.', body: work },
     ...CASES.map((c) => ({ path: '/work/' + c.slug, file: `work/${c.slug}/index.html`, title: `${c.title} | Anjor Tank`, desc: c.line, body: () => casePage(c) })),
-    { path: '/architect', file: 'architect/index.html', title: 'Product architect | Anjor Tank', desc: 'How Anjor Tank owns web, app, platform and internal tools end to end, from wireframe and schema to release and result.', body: architect },
+    { path: '/systems', file: 'systems/index.html', title: 'Systems | Anjor Tank', desc: 'How Anjor Tank owns web, app, platform and internal tools end to end, from wireframe and schema to release and result.', body: systems },
     { path: '/meshhetu', file: 'meshhetu/index.html', title: 'MESHHETU | Anjor Tank', desc: 'MESHHETU is the systems engineering company Anjor Tank founded: strategic consulting, modular intelligence and ROQIVA in development.', body: meshhetu },
     { path: '/journey', file: 'journey/index.html', title: 'Journey | Anjor Tank', desc: 'From campaigns to commerce systems: Anjor Tank’s path through marketing, product and founding MESHHETU.', body: journey },
     { path: '/beyond', file: 'beyond/index.html', title: 'Beyond work | Anjor Tank', desc: 'Karts, live music, mountains and good food: what Anjor Tank does away from the keyboard.', body: beyond },

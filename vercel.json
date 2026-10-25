@@ -5,6 +5,7 @@
   "outputDirectory": "dist",
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [{ "source": "/architect", "destination": "/systems", "permanent": true }],
   "headers": [
     {
       "source": "/(.*)",
