@@ -103,7 +103,7 @@ export function studioWork() {
       <div class="studio-archive__grid">${CASES.slice(3).map(c=>featureCard(c,true)).join('')}</div>
       <p class="studio-footnote">Impact figures reflect the source case narratives; measurement windows and direct ownership should be clarified where not yet documented.</p>
     </div></section>
-    <section class="studio-close"><div class="wrap"><p class="studio-kicker">Next / Conversation</p><h2>Have a product challenge in mind?</h2>${link('/contact','Let's talk')}</div></section>`;
+    <section class="studio-close"><div class="wrap"><p class="studio-kicker">Next / Conversation</p><h2>Have a product challenge in mind?</h2>${link('/contact','Start a conversation')}</div></section>`;
 }
 
 function founder() {
