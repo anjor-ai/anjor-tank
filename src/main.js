@@ -9,7 +9,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import { SplitText } from 'gsap/SplitText';
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
-import { CASES, HELLOS, SITE, DOORS } from './content.js';
+import { CASES, HELLOS, SITE, DOORS, NAV } from './content.js';
 import { quick } from './render.js';
 import { wordReel, footLaunch, sceneCanvas } from './artcv.js';
 
@@ -34,7 +34,7 @@ function setTheme(t) {
   root.setAttribute('data-theme', t);
   store.set('anjor-theme', t);
   const m = $('meta[name="theme-color"]');
-  if (m) m.setAttribute('content', t === 'dark' ? '#070c0a' : '#ffffff');
+  if (m) m.setAttribute('content', t === 'dark' ? '#08090c' : '#ffffff');
 }
 $('#theme')?.addEventListener('click', (e) => {
   const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -393,8 +393,8 @@ function startPage() {
     filters('#filters', '#cgrid .ccard', (c, f) => f === 'All' || c.dataset.tag === f);
     filters('#pfilters', '#mas .ph', (c, f) => f === 'All' || c.dataset.g === f);
     heroHello();
-    keyboardLive();
-    if (!rm) { keyboardMotion(); pageMotion(); hetuMotion(); architectMotion(); journeyMotion(); mockMotion(); fanMotion(); }
+    heroField(); sysConsole(); palette(); tilt();
+    if (!rm) { pageMotion(); hetuMotion(); architectMotion(); journeyMotion(); mockMotion(); fanMotion(); }
     caseMotion(); layersLink(); releaseLog();
     ScrollTrigger.refresh();
   };
@@ -412,104 +412,125 @@ function spotlight() {
   }, { passive: true });
 }
 
-/* ───────────── the hero keyboard: it works without motion (clock, your own keys, lamps, knobs) ───────────── */
-const keyById = (kb, id) => $(`.kc[data-k="${CSS.escape(id)}"]`, kb);
-const kbState = { user: 0, say: null };   // user: when the visitor last typed; say: a message from a lamp
-function keyboardLive() {
-  const kb = $('#kb'); if (!kb || kb.dataset.mode !== 'full') return;
-  const ty = $('#ty-t'), clk = $('#clock');
-  const clock = () => { if (clk) clk.textContent = 'Mumbai ' + new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' }); };
-  clock(); setInterval(clock, 20000);
-  if (ty && !ty.textContent) ty.textContent = 'ANJOR TANK';
-  // the keys you press on your own keyboard press down here too, and what you type shows on the screen
-  let mine = '';
-  const map = { arrowup: 'enter', arrowdown: 'shift2', arrowleft: 'control', arrowright: 'alt2' };
-  const hit = (e, on) => {
-    if (e.metaKey || e.ctrlKey || e.altKey || e.target.closest?.('input, textarea, select, [contenteditable]')) return;
-    const raw = e.key.toLowerCase(), k = map[raw] || (raw === ' ' ? ' ' : raw);
-    const el = keyById(kb, k === 'shift' && e.location === 2 ? 'shift2' : k); if (!el) return;
-    el.classList.toggle('is-down', on); el.classList.toggle('is-lit', on);
-    if (on && ty) {
-      kbState.user = performance.now();
-      if (raw === 'backspace') mine = mine.slice(0, -1); else if (raw.length === 1) mine = (mine + raw.toUpperCase()).slice(-26);
-      ty.textContent = mine;
+/* ───────────── the hero: a dot grid that follows the pointer and ripples when you click ───────────── */
+function heroField() {
+  const cv = $('#field'); if (!cv) return;
+  const ctx = cv.getContext('2d'), hero = cv.parentElement, S = 26;
+  let w = 0, h = 0, dpr = 1, cols = 0, rows = 0, live = true, ink = '246,248,251', acc = '47,149,255', n = 0;
+  const P = { x: -999, y: -999, tx: -999, ty: -999 }, rip = [];
+  const colors = () => { const l = root.getAttribute('data-theme') === 'light'; ink = l ? '6,7,10' : '246,248,251'; acc = l ? '0,131,255' : '47,149,255'; };
+  const size = () => { dpr = Math.min(devicePixelRatio || 1, 2); w = hero.clientWidth; h = hero.clientHeight; cv.width = w * dpr; cv.height = h * dpr; ctx.setTransform(dpr, 0, 0, dpr, 0, 0); cols = Math.ceil(w / S) + 1; rows = Math.ceil(h / S) + 1; };
+  const draw = (t) => {
+    if (!(n++ % 40)) colors();
+    P.x += (P.tx - P.x) * 0.2; P.y += (P.ty - P.y) * 0.2;
+    ctx.clearRect(0, 0, w, h);
+    for (let r = 0; r < rows; r += 1) for (let c = 0; c < cols; c += 1) {
+      const x = c * S, y = r * S;
+      let a = 0.075 + 0.04 * Math.sin(t / 900 + c * 0.33 + r * 0.27), near = 0;
+      const dx = x - P.x, dy = y - P.y, d = Math.hypot(dx, dy);
+      if (d < 200) near = (1 - d / 200) ** 2;
+      for (const q of rip) { const e = Math.abs(Math.hypot(x - q.x, y - q.y) - q.r); if (e < 34) near += (1 - e / 34) * q.a; }
+      a += near * 0.8;
+      const s = 2 + near * 5;
+      ctx.globalAlpha = Math.min(a, 0.95); ctx.fillStyle = `rgb(${near > 0.04 ? acc : ink})`;
+      ctx.fillRect(x - s / 2, y - s / 2, s, s);
     }
+    for (let i = rip.length - 1; i >= 0; i -= 1) { rip[i].r += 10; rip[i].a *= 0.985; if (rip[i].r > 1500 || rip[i].a < 0.03) rip.splice(i, 1); }
   };
-  addEventListener('keydown', (e) => hit(e, true)); addEventListener('keyup', (e) => hit(e, false));
-  kb.addEventListener('pointerdown', (e) => { const el = e.target.closest('.kc[data-k]'); if (!el) return; el.classList.add('is-down', 'is-lit'); const up = () => { el.classList.remove('is-down', 'is-lit'); removeEventListener('pointerup', up); }; addEventListener('pointerup', up); });
-  // lamps: hold, test, ship
-  const msg = { red: 'HOLD · NOT YET PROVEN', amber: 'TEST · A/B IN FLIGHT', green: 'SHIP · MEASURED, THEN SHIPPED' };
-  $$('[data-lamp]', kb).forEach((b) => b.addEventListener('click', () => {
-    $$('.kc--lamp', kb).forEach((x) => x.classList.toggle('is-lit', x === b));
-    kbState.say = msg[b.dataset.lamp]; if (ty) ty.textContent = kbState.say; kbState.user = performance.now();
-    if (!rm) gsap.fromTo(b, { y: 0 }, { y: 2, duration: 0.08, yoyo: true, repeat: 1 });
-    setTimeout(() => { $$('.kc--lamp', kb).forEach((x) => x.classList.remove('is-lit')); kbState.say = null; }, 2600);
-  }));
-  // knobs: theme flips the page, type plays the name again, scroll takes you to the work
-  $$('[data-knob]', kb).forEach((b) => b.addEventListener('click', () => {
-    const k = b.dataset.knob, dial = $('.knob__b', b);
-    if (k === 'theme') { if (!rm) gsap.to(dial, { rotation: '+=180', duration: 0.6, ease: 'expo.out' }); $('#theme')?.click(); }
-    if (k === 'type') { kbState.user = 0; mine = ''; document.dispatchEvent(new Event('kb-replay')); }
-    if (k === 'scroll') $('#proof')?.scrollIntoView({ behavior: rm ? 'auto' : 'smooth' });
-  }));
+  size(); colors(); addEventListener('resize', size);
+  if (rm) { draw(0); return; }
+  hero.addEventListener('pointermove', (e) => { const r = hero.getBoundingClientRect(); P.tx = e.clientX - r.left; P.ty = e.clientY - r.top; });
+  hero.addEventListener('pointerleave', () => { P.tx = P.ty = -999; });
+  hero.addEventListener('pointerdown', (e) => { if (e.target.closest('a, button, .sysc')) return; const r = hero.getBoundingClientRect(); rip.push({ x: e.clientX - r.left, y: e.clientY - r.top, r: 0, a: 1 }); });
+  // the grid wakes up as the page opens
+  rip.push({ x: w * 0.7, y: h * 0.4, r: 0, a: 1 });
+  new IntersectionObserver(([e]) => { live = e.isIntersecting; }).observe(hero);
+  gsap.ticker.add((time) => { if (live && !document.hidden) draw(time * 1000); });
 }
 
-/* ───────────── the hero keyboard in motion: it lands, then types, on a loop: the name first, then who I am ───────────── */
-const PHRASES = ['ANJOR TANK', 'PRODUCT MANAGER', 'SYSTEMS THAT SHIP', 'FOUNDER OF MESHHETU', 'OPEN TO ROLES'];
-function keyboardMotion() {
-  const kb = $('#kb'); if (!kb || kb.dataset.mode !== 'full') return;
-  const keys = $$('.kc', kb), ty = $('#ty-t'), prog = $('#prog');
-  const panelBits = $$('.pcta .btn, .pimg, .pq', kb), deckBits = $$('.knob, .dscr, .fstrip', kb);
-  gsap.set(kb, { opacity: 0, y: 50 });
-  gsap.set(keys, { opacity: 0, y: -34, scale: 0.9, transformOrigin: '50% 100%' });
-  gsap.set([...deckBits, ...panelBits], { opacity: 0, y: 16 });
-  const tl = gsap.timeline({ delay: root.classList.contains('ready') ? 0.1 : 0.2 });
-  tl.to(kb, { opacity: 1, y: 0, duration: 0.9, ease: 'expo.out' }, 0)
-    .to(deckBits, { opacity: 1, y: 0, duration: 0.7, ease: 'expo.out', stagger: 0.06 }, 0.15)
-    .to(keys, { opacity: 1, y: 0, scale: 1, duration: 0.6, ease: 'back.out(1.6)', stagger: { amount: 0.9, from: 'start' }, clearProps: 'transform,opacity' }, 0.2)
-    .to(panelBits, { opacity: 1, y: 0, duration: 0.7, ease: 'expo.out', stagger: 0.08 }, 0.5);
+/* ───────────── the hero console: six moves, each tied to a real case; click through or let it run ───────────── */
+function sysConsole() {
+  const c = $('#sysc'); if (!c) return;
+  const tabs = $$('.sysc__t', c), panels = $$('.sysc__p', c), num = $('#sysc-n'), bar = $('#sysc-bar'), pp = $('#sysc-pp');
+  const DUR = 4800, started = new Set();
+  let cur = 0, timer = null, paused = false, inside = false;
+  const stop = () => { clearTimeout(timer); gsap.killTweensOf(bar); gsap.set(bar, { scaleX: 0 }); };
+  const run = () => { stop(); if (paused || inside || rm) return; gsap.to(bar, { scaleX: 1, duration: DUR / 1000, ease: 'none' }); timer = setTimeout(() => show(cur + 1), DUR); };
+  function show(i, animate = true) {
+    cur = (i + tabs.length) % tabs.length;
+    tabs.forEach((t, k) => { t.setAttribute('aria-selected', k === cur); t.tabIndex = k === cur ? 0 : -1; });
+    panels.forEach((p, k) => { p.hidden = k !== cur; });
+    const cv = $('canvas', panels[cur]);
+    if (!started.has(cur)) { started.add(cur); sceneCanvas(cv, cv.dataset.sc, { cell: 4, k: 4, gap: 1, fps: 16 }); }
+    num.textContent = `${pad(cur + 1)} / ${pad(tabs.length)}`;
+    if (animate && !rm) gsap.fromTo($$('.sysc__art, .sysc__c > *', panels[cur]), { opacity: 0, y: 14 }, { opacity: 1, y: 0, duration: 0.5, stagger: 0.06, ease: 'power3.out', overwrite: true, clearProps: 'opacity,transform' });
+    run();
+  }
+  tabs.forEach((t, k) => {
+    t.addEventListener('click', () => show(k));
+    t.addEventListener('keydown', (e) => { const d = { ArrowRight: 1, ArrowDown: 1, ArrowLeft: -1, ArrowUp: -1 }[e.key]; if (d) { e.preventDefault(); show(cur + d); tabs[cur].focus(); } });
+  });
+  c.addEventListener('pointerenter', () => { inside = true; stop(); });
+  c.addEventListener('pointerleave', () => { inside = false; run(); });
+  c.addEventListener('focusin', () => { inside = true; stop(); });
+  c.addEventListener('focusout', () => { inside = false; run(); });
+  pp.addEventListener('click', () => { paused = !paused; pp.setAttribute('aria-pressed', paused); pp.setAttribute('aria-label', paused ? 'Play the tour' : 'Pause the tour'); c.classList.toggle('is-paused', paused); run(); });
+  show(0, false);
+  new IntersectionObserver(([e]) => { if (e.isIntersecting) run(); else stop(); }).observe(c);
+  if (!rm) gsap.from(c, { opacity: 0, y: 50, duration: 1.1, ease: 'expo.out', delay: root.classList.contains('ready') ? 0.25 : 0.45, clearProps: 'opacity,transform' });
+}
 
-  // typing: each letter presses its key and lights it, then it backspaces and starts the next phrase. It never stops while the board is on screen.
-  const dial = $('[data-knob="type"] .knob__b', kb);
-  let alive = true, loop = null, idx = 0;
-  const press = (id) => {
-    const el = keyById(kb, id); if (!el) return;
-    el.classList.add('is-down', 'is-lit');
-    setTimeout(() => el.classList.remove('is-down'), 90);
-    setTimeout(() => el.classList.remove('is-lit'), 420);
+/* ───────────── a command palette: Ctrl K (or /) from anywhere ───────────── */
+function palette() {
+  const dlg = $('#cmd'); if (!dlg || !dlg.showModal) return;
+  const inp = $('#cmd-i'), list = $('#cmd-l');
+  const mac = /Mac|iPhone|iPad/.test(navigator.platform || navigator.userAgent);
+  const hk = $('#hint-k'); if (hk) hk.textContent = mac ? '⌘ K' : 'Ctrl K';
+  const esc = (v) => String(v).replace(/[&<>"]/g, (ch) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+  const ITEMS = [
+    ...NAV.map(([h, t]) => ({ g: 'Pages', t, h })), { g: 'Pages', t: 'Hire me', h: '/hire' }, { g: 'Pages', t: 'Contact', h: '/contact' },
+    ...CASES.map((c) => ({ g: 'Case studies', t: c.title, h: `/work/${c.slug}`, s: c.cat })),
+    { g: 'Actions', t: 'Switch theme', f: () => $('#theme')?.click() },
+    { g: 'Actions', t: 'Copy my email', s: SITE.email, f: () => navigator.clipboard?.writeText(SITE.email).catch(() => {}) },
+    { g: 'Actions', t: 'Book a call', h: SITE.calendly, ext: 1 }, { g: 'Actions', t: 'Open LinkedIn', h: SITE.linkedin, ext: 1 }, { g: 'Actions', t: 'Visit meshhetu.com', h: SITE.meshhetu, ext: 1 },
+  ];
+  let sel = 0, shown = [];
+  const paint = () => $$('[role="option"]', list).forEach((o) => o.setAttribute('aria-selected', +o.dataset.k === sel));
+  const render = () => {
+    const q = inp.value.trim().toLowerCase();
+    shown = ITEMS.filter((i) => !q || `${i.t} ${i.s || ''} ${i.g}`.toLowerCase().includes(q));
+    sel = Math.min(sel, Math.max(0, shown.length - 1));
+    let g = '';
+    list.innerHTML = shown.map((i, k) => { const head = i.g !== g ? ((g = i.g), `<li class="cmd__g" role="presentation">${i.g}</li>`) : ''; return `${head}<li role="option" data-k="${k}" aria-selected="${k === sel}"><span>${esc(i.t)}</span>${i.s ? `<em>${esc(i.s)}</em>` : ''}</li>`; }).join('') || '<li class="cmd__g" role="presentation">Nothing matches</li>';
+    $('[aria-selected="true"]', list)?.scrollIntoView({ block: 'nearest' });
   };
-  const play = () => {
-    loop?.kill(); idx = idx % PHRASES.length;
-    const word = PHRASES[idx], t = gsap.timeline({ onComplete: () => { idx += 1; if (alive) play(); } });
-    t.call(() => { if (!kbState.say && performance.now() - kbState.user > 5000) ty.textContent = ''; }, null, 0.2);
-    [...word].forEach((c, i) => {
-      t.call(() => {
-        if (kbState.say || performance.now() - kbState.user < 5000) return;
-        if (c !== ' ') press(c.toLowerCase()); else press(' ');
-        ty.textContent = word.slice(0, i + 1);
-        if (dial) gsap.to(dial, { rotation: '+=14', duration: 0.12, ease: 'power1.out', overwrite: 'auto' });
-      }, null, 0.45 + i * 0.115);
-    });
-    const end = 0.45 + word.length * 0.115 + 1.5;
-    for (let i = word.length; i > 0; i -= 1) t.call(() => {
-      if (kbState.say || performance.now() - kbState.user < 5000) return;
-      press('backspace'); ty.textContent = word.slice(0, i - 1);
-    }, null, end + (word.length - i) * 0.035);
-    t.to({}, { duration: 0.01 }, end + word.length * 0.035 + 0.25);
-    loop = t;
-  };
-  tl.call(play, null, 1.3);
-  document.addEventListener('kb-replay', () => { idx = 0; alive = true; play(); });
-  ScrollTrigger.create({ trigger: '#kbstage', start: 'top bottom', end: 'bottom top', onToggle: (self) => { alive = self.isActive; if (loop) loop.paused(!alive); if (alive && loop && loop.progress() === 1) play(); } });
+  const go = (i) => { if (!i) return; dlg.close(); if (i.f) i.f(); else if (i.ext) window.open(i.h, '_blank', 'noopener'); else location.href = i.h; };
+  const openIt = () => { inp.value = ''; sel = 0; render(); dlg.showModal(); inp.focus(); if (!rm) gsap.fromTo('.cmd__in', { y: -14, opacity: 0, scale: 0.98 }, { y: 0, opacity: 1, scale: 1, duration: 0.3, ease: 'expo.out' }); };
+  $('#cmd-b')?.addEventListener('click', openIt);
+  addEventListener('keydown', (e) => {
+    if ((e.key === 'k' || e.key === 'K') && (e.metaKey || e.ctrlKey)) { e.preventDefault(); if (dlg.open) dlg.close(); else openIt(); }
+    else if (e.key === '/' && !dlg.open && !e.target.closest?.('input, textarea, select, [contenteditable]')) { e.preventDefault(); openIt(); }
+  });
+  inp.addEventListener('input', () => { sel = 0; render(); });
+  inp.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowDown') { e.preventDefault(); sel = Math.min(sel + 1, shown.length - 1); paint(); $('[aria-selected="true"]', list)?.scrollIntoView({ block: 'nearest' }); }
+    else if (e.key === 'ArrowUp') { e.preventDefault(); sel = Math.max(sel - 1, 0); paint(); $('[aria-selected="true"]', list)?.scrollIntoView({ block: 'nearest' }); }
+    else if (e.key === 'Enter') { e.preventDefault(); go(shown[sel]); }
+  });
+  list.addEventListener('click', (e) => { const li = e.target.closest('[data-k]'); if (li) go(shown[+li.dataset.k]); });
+  list.addEventListener('pointermove', (e) => { const li = e.target.closest('[data-k]'); if (li && +li.dataset.k !== sel) { sel = +li.dataset.k; paint(); } });
+  dlg.addEventListener('click', (e) => { if (e.target === dlg) dlg.close(); });
+}
 
-  // the dials turn with the page; the slider on the strip fills as you read
-  const sk = $('[data-knob="scroll"] .knob__b', kb);
-  if (sk) gsap.to(sk, { rotation: 1080, ease: 'none', scrollTrigger: { trigger: document.documentElement, start: 'top top', end: 'bottom bottom', scrub: 0.6 } });
-  if (prog) ScrollTrigger.create({ start: 0, end: 'max', onUpdate: (self) => { prog.style.transform = `scaleX(${0.04 + self.progress * 0.96})`; } });
-  // the board tips back and settles as it leaves the screen
-  gsap.to(kb, { rotationX: 14, scale: 0.94, y: -16, transformOrigin: '50% 100%', ease: 'none', scrollTrigger: { trigger: '#kbstage', start: 'center 40%', end: 'bottom top', scrub: 0.5 } });
-  // the meadow behind drifts a little slower than the page
-  if ($('.hero__bg')) gsap.to('.hero__bg', { yPercent: 14, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+/* ───────────── work cards lean toward the pointer ───────────── */
+function tilt() {
+  if (!fine || rm) return;
+  $$('.ccard, .door').forEach((el) => {
+    gsap.set(el, { transformPerspective: 900 });
+    const rx = gsap.quickTo(el, 'rotationX', { duration: 0.5, ease: 'power3' }), ry = gsap.quickTo(el, 'rotationY', { duration: 0.5, ease: 'power3' });
+    el.addEventListener('pointermove', (e) => { const r = el.getBoundingClientRect(); ry(((e.clientX - r.left) / r.width - 0.5) * 7); rx(-((e.clientY - r.top) / r.height - 0.5) * 6); });
+    el.addEventListener('pointerleave', () => { rx(0); ry(0); });
+  });
 }
 
 /* ───────────── motion shared by every page ───────────── */

@@ -10,7 +10,7 @@
   } catch (e) {}
   d.setAttribute('data-theme', t);
   var m = document.querySelector('meta[name="theme-color"]');
-  if (m) m.setAttribute('content', t === 'dark' ? '#070c0a' : '#ffffff');
+  if (m) m.setAttribute('content', t === 'dark' ? '#08090c' : '#ffffff');
   var rm = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   if (rm) d.classList.add('rm');
   try {

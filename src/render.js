@@ -5,7 +5,6 @@
    ========================================================================== */
 import { SITE, NAV, PROOF, BELIEFS, ARC, LAYERS, OWN, RELEASE, TOOLS, CASES, CASE_STEPS, TAGS, CHAPTERS, EDU, CERTS, SKILLS, MESH, PHOTOS, ALT, LOVES, DOORS, WINS, HIRE, CONSULT, GLANCE } from './content.js';
 import { isoStack, wf, mockup } from './art.js';
-import { keyboard, keystrip } from './kb.js';
 import { WM } from './wm.js';
 
 export const esc = (v) => String(v).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -48,6 +47,7 @@ function nav(path) {
     <a class="brand" href="/" aria-label="Anjor Tank, home">${key()}${reel('nav')}</a>
     <nav class="nav__links" aria-label="Main">${NAV.map(([h, t]) => `<a href="${h}"${cur(h)}>${t}</a>`).join('')}</nav>
     <div class="nav__r">
+      <button class="kbtn" id="cmd-b" type="button" aria-label="Search and jump" aria-haspopup="dialog"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg></button>
       <button class="kbtn" id="theme" type="button" aria-label="Switch colour theme">${I.sun}${I.moon}</button>
       <a class="btn btn--primary btn--sm nav__cta" href="/hire"><span>Hire me</span></a>
       <button class="kbtn burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sheet">${I.menu}</button>
@@ -91,7 +91,7 @@ export function shell({ path, title, desc, body, boot = false, extra = '' }) {
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
-<meta name="theme-color" content="#070c0a">
+<meta name="theme-color" content="#08090c">
 <meta name="color-scheme" content="dark light">
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -112,6 +112,7 @@ ${nav(path)}
 <main id="main">${body.replace(/\*([^*<>\n]+)\*/g, '<span class="hl">$1</span>')}</main>
 ${foot()}
 <dialog class="qv" id="qv" aria-labelledby="qv-h"><div class="qv__bar"><p class="label" id="qv-c"></p><div class="qv__nav"><button class="kbtn" type="button" id="qv-p" aria-label="Previous case">${I.arrow}</button><button class="kbtn" type="button" id="qv-n" aria-label="Next case">${I.arrow}</button><button class="kbtn" type="button" id="qv-x" aria-label="Close">${I.close}</button></div></div><div class="qv__body" id="qv-b"></div></dialog>
+<dialog class="cmd" id="cmd" aria-label="Jump to"><div class="cmd__in"><input id="cmd-i" type="text" autocomplete="off" spellcheck="false" placeholder="Jump to a page, a case study or an action" aria-label="Jump to"><ul id="cmd-l" role="listbox" aria-label="Results"></ul><p class="label cmd__f">Up and down to move · Enter to open · Esc to close</p></div></dialog>
 <div class="cur" id="cur" aria-hidden="true"></div>
 <script type="module" src="/src/main.js"></script>
 </body></html>`;
@@ -182,20 +183,33 @@ function hetu({ solo = false, tail = '' } = {}) {
     </div></div></section>`;
 }
 
+/* The hero's console: the six moves I make on every system, each tied to a real case. Click through, or let it run. */
+const SYS = [['Detect', 'Find where the number leaks.', 'search-discovery'], ['Audit', 'Trace it to the workflow underneath.', 'internal-ops-cx'], ['Decide', 'Write the rule and price the trade-off.', 'price-lock-checkout'], ['Build', 'Own the web, app and API that carry it.', 'sku-substitution-engine'], ['Release', 'Ship behind a measured launch.', 'coupons-cashback'], ['Measure', 'Prove the lift, then close the loop.', 'growth-loops']];
+function sysc() {
+  const item = SYS.map(([n, d, slug]) => ({ n, d, c: CASES.find((x) => x.slug === slug) }));
+  return `<section class="sysc glass" id="sysc" aria-label="How I work, as a system you can click through">
+  <header class="sysc__h"><span class="label"><i></i>The system, live</span><span class="label" id="sysc-n" aria-hidden="true">01 / 06</span><button class="kbtn" id="sysc-pp" type="button" aria-label="Pause the tour" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="pp-a" d="M8 5v14M16 5v14"/><path class="pp-b" d="M8 5l11 7-11 7z"/></svg></button></header>
+  <div class="sysc__tabs" role="tablist" aria-label="The six moves">${item.map((x, i) => `<button class="sysc__t" role="tab" type="button" id="st${i}" aria-controls="sp${i}" aria-selected="${i === 0}" ${i ? 'tabindex="-1"' : ''}><i>0${i + 1}</i><b>${x.n}</b></button>`).join('')}</div>
+  ${item.map((x, i) => `<div class="sysc__p" role="tabpanel" id="sp${i}" aria-labelledby="st${i}" ${i ? 'hidden' : ''}>
+    <div class="sysc__art"><canvas data-sc="${SCENE_OF[x.c.slug]}" aria-hidden="true"></canvas><span class="chip">${esc(x.c.tag)}</span></div>
+    <div class="sysc__c"><p class="sysc__d">${esc(x.d)}</p><p class="sysc__m"><strong>${esc(x.c.metrics[0][0])}</strong><span>${esc(x.c.metrics[0][1])}</span></p><a class="sysc__l" href="/work/${x.c.slug}">${esc(x.c.title)} ${I.arrow}</a></div></div>`).join('')}
+  <span class="sysc__bar" aria-hidden="true"><i id="sysc-bar"></i></span></section>`;
+}
+
 /* ───────────── HOME ───────────── */
 const TICK = ['Price Lock at checkout', '45+ coupon combinations', '70,000 SKUs re-indexed', 'Strapi headless CMS', 'Amazon Pay integrated', 'Search-to-order +9.0%', 'Referral 6 → 13%', 'GA4 + BigQuery', 'Voice agent, −20% cost per order', 'CRM routing, −30% resolution time'];
 function home() {
   return `
-<section class="hero" id="top"><div class="hero__bg" aria-hidden="true"></div><div class="wrap">
-  <div class="kbstage" id="kbstage">
-    ${keyboard({
-      screen: `<div class="dscr__top"><p class="hello" aria-label="Hello"><span class="hello__w" id="hello">HELLO</span></p><span class="hello__s label"><i></i>Open to roles and consulting</span></div>
-      <h1 class="h-hero" id="hero-h">I’m Anjor Tank, a product manager who architects and ships *the whole system.*</h1>
-      <p class="lead">From the decision rule to the web and app that carry it. Five systems taken from problem to shipped across payments, growth, search and operations, now at GNC India and founding MESHHETU.</p>
-      <p class="typed" aria-hidden="true"><span>›</span><b id="ty-t"></b><i></i></p>`,
-      ctas: `${btn('/work', 'See the work')}${btn('/hire', 'Hire me', 'ghost')}`,
-    })}
+<section class="hero" id="top"><canvas class="hero__field" id="field" aria-hidden="true"></canvas>
+<div class="wrap hero__g">
+  <div class="hero__t">
+    <p class="hello" aria-label="Hello"><span class="hello__w" id="hello">HELLO</span><span class="hello__s label"><i></i>Open to roles and consulting</span></p>
+    <h1 class="h-hero" id="hero-h" data-split>I’m Anjor Tank, a product manager who architects and ships *the whole system.*</h1>
+    <p class="lead" data-in>From the decision rule to the web and app that carry it. Five systems taken from problem to shipped across payments, growth, search and operations, now at GNC India and founding MESHHETU.</p>
+    <div class="btn-row" data-in>${btn('/work', 'See the work')}${btn('/hire', 'Hire me', 'ghost')}</div>
+    <p class="hint label" data-in>Move your mouse over the grid. Press <kbd id="hint-k">Ctrl K</kbd> to jump anywhere.</p>
   </div>
+  ${sysc()}
 </div></section>
 
 <div class="ticker" aria-hidden="true"><div class="ticker__t" id="ticker">${[...TICK, ...TICK].map((t) => `<span>${esc(t)}</span>`).join('')}</div></div>
@@ -217,22 +231,6 @@ ${hetu({ tail: `<div class="btn-row" data-in>${btn('/meshhetu', 'The MESHHETU st
     <div class="asc__t"><h3>${esc(b.t)}</h3><p>${esc(b.d)}</p><ul>${b.chips.map((c) => `<li>${esc(c)}</li>`).join('')}</ul></div></article>`).join('')}</div>
 </div></section>
 
-<section class="sec nature" id="nature"><div class="wrap">
-  <div class="nat" data-in>
-    <div class="nat__bg" aria-hidden="true"><img src="/img/meadow.webp" alt="" width="1800" height="760" loading="lazy" decoding="async"><i class="nat__px"></i></div>
-    <div class="nat__g">
-      <div class="nat__c glass">
-        <p class="label eyebrow">Built to grow</p>
-        <h2 class="h-2">Systems that grow like *living things.*</h2>
-        <ol class="nat__l"><li><b>Observe</b><span>Read the signal before touching the screen.</span></li><li><b>Tend</b><span>Own the loop: rule, build, release, measure.</span></li><li><b>Compound</b><span>Ship the fix that makes the next one cheaper.</span></li></ol>
-      </div>
-      <div class="nat__c glass nat__con" aria-hidden="true">
-        <p class="label">System health</p>
-        ${[['Payments', '77.2 → 89.7%', 'Shipped'], ['Search', '+9.0% to order', 'Shipped'], ['Growth', '6 → 13% referral', 'Measured'], ['Operations', '−20% cost per order', 'Shipped']].map(([a, b, c]) => `<p class="nat__r"><span>${a}</span><em>${b}</em><i>${c}</i></p>`).join('')}
-      </div>
-    </div>
-  </div>
-</div></section>
 
 
 <section class="sec arch" id="arch"><div class="wrap arch__g">
@@ -459,7 +457,7 @@ function hire() {
     <p class="lead" data-in>${esc(HIRE.pitch)}</p>
     <div class="btn-row" data-in>${btn('/contact?intent=job', 'Start a conversation')}${btn(SITE.linkedin, 'LinkedIn', 'ghost', true)}</div>
     <div class="open glass" data-in><p class="label"><i></i>Open to</p><ul>${HIRE.roles.map((r) => `<li>${esc(r)}</li>`).join('')}</ul><p class="open__w">${esc(HIRE.where)}</p></div></div>
-  <div class="phead__art kbpage">${keystrip('OK')}</div>
+  <div class="phead__art"><div class="sart"><canvas data-scene="launch" aria-hidden="true"></canvas></div></div>
 </div></section>
 
 <section class="sec"><div class="wrap">
@@ -500,7 +498,7 @@ function consulting() {
     <p class="lead" data-in>${esc(CONSULT.lead)}</p>
     <div class="btn-row" data-in>${btn('/contact?intent=consult', 'Bring me the number')}${btn(SITE.calendly, 'Book a call', 'ghost', true)}</div>
     <ul class="chips" data-in><li>Ecommerce</li><li>D2C</li><li>GTM engineering</li><li>RevOps</li></ul></div>
-  <div class="phead__art kbpage">${keystrip('PM')}</div>
+  <div class="phead__art"><div class="sart"><canvas data-scene="revops" aria-hidden="true"></canvas></div></div>
 </div></section>
 
 <section class="sec"><div class="wrap">
