@@ -7,6 +7,7 @@ import { SITE, NAV, PROOF, BELIEFS, ARC, LAYERS, OWN, RELEASE, TOOLS, CASES, CAS
 import { isoStack, wf, mockup } from './art.js';
 import { isoScene, SCHEMES } from './iso.js';
 import { WM } from './wm.js';
+import { studioHome, studioWork, studioAbout, studioContact, studioCaseMap } from './studio.js';
 
 export const esc = (v) => String(v).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const hl = (t) => esc(t).replace(/\*([^*]+)\*/g, '<span class="hl">$1</span>');
@@ -43,43 +44,33 @@ function reel(size) {
 }
 
 function nav(path) {
-  const cur = (p) => (path === p || path.startsWith(p + '/') ? ' aria-current="page"' : '');
+  const cur = p => (path === p || path.startsWith(p + '/') ? ' aria-current="page"' : '');
+  const item = ([h, t], i) => `<a href="${h}"${cur(h)}${h.startsWith('http') ? ' target="_blank" rel="noopener noreferrer"' : ''}>${i != null ? `<i>${pad(i + 1)}</i>` : ''}${esc(t)}</a>`;
   return `<header class="nav" id="nav"><div class="nav__in">
     <a class="brand" href="/" aria-label="Anjor Tank, home">${key()}${reel('nav')}</a>
-    <nav class="nav__links" aria-label="Main">${NAV.map(([h, t]) => `<a href="${h}"${cur(h)}>${t}</a>`).join('')}</nav>
+    <nav class="nav__links" aria-label="Main">${NAV.map(x => item(x)).join('')}</nav>
     <div class="nav__r">
       <button class="kbtn" id="theme" type="button" aria-label="Switch colour theme">${I.sun}${I.moon}</button>
-      <a class="btn btn--primary btn--sm nav__cta" href="/hire"><span>Hire me</span></a>
+      <a class="btn btn--primary btn--sm nav__cta" href="/contact"><span>Get in touch</span></a>
       <button class="kbtn burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sheet">${I.menu}</button>
     </div></div>
-    <div class="sheet" id="sheet" hidden>${[...NAV, ['/hire', 'Hire me'], ['/contact', 'Contact']].map(([h, t], i) => `<a href="${h}"><i>${pad(i + 1)}</i>${t}</a>`).join('')}</div>
+    <div class="sheet" id="sheet" hidden>${NAV.map((x, i) => item(x, i)).join('')}</div>
   </header>`;
 }
 
 function foot() {
-  const links = [['/', 'Home'], ...NAV, ['/hire', 'Hire me'], ['/contact', 'Contact']];
-  const half = Math.ceil(links.length / 2);
   return `<footer class="foot" id="foot">
-    <div class="wrap foot__top">
-      <div class="foot__id"><a href="/" aria-label="Anjor Tank, home">${key()}</a><p class="foot__line">Product manager. Product architect. Founder, MESHHETU.</p><p class="label">Mumbai · ${SITE.lat} ${SITE.lon}</p></div>
-      <nav class="foot__col" aria-label="Pages"><p class="label">Pages</p>${links.slice(0, half).map(([h, t]) => `<a href="${h}">${t}</a>`).join('')}</nav>
-      <nav class="foot__col" aria-label="More pages"><p class="label">&nbsp;</p>${links.slice(half).map(([h, t]) => `<a href="${h}">${t}</a>`).join('')}</nav>
-      <div class="foot__col"><p class="label">Elsewhere</p><a href="${SITE.linkedin}" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:${SITE.email}">Email</a><a href="${SITE.calendly}" target="_blank" rel="noopener">Book a call</a><a href="${SITE.meshhetu}" target="_blank" rel="noopener">meshhetu.com</a></div>
+    <div class="wrap foot__top studio-footer">
+      <div class="foot__id"><a href="/" aria-label="Anjor Tank, home">${key()}</a><p class="foot__line">Product Manager at GNC India. Founder, MESHHETU.</p><p class="label">Mumbai · India</p></div>
+      <nav class="foot__col" aria-label="Site links"><p class="label">Explore</p><a href="/work">Work</a><a href="/about">About</a><a href="/contact">Contact</a></nav>
+      <div class="foot__col"><p class="label">Elsewhere</p><a href="${SITE.linkedin}" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="mailto:${SITE.email}">Email</a><a href="${SITE.meshhetu}" target="_blank" rel="noopener noreferrer">MESHHETU ↗</a></div>
     </div>
-    <div class="wrap foot__bar"><p class="label">© 2026 Anjor Tank</p><p class="label">Hello from Mumbai</p></div>
-    <div class="foot__horizon"><div class="wrap foot__stage">
-      <div class="foot__reel">${reel('foot')}</div>
-      <div class="foot__launch" aria-hidden="true"><canvas id="foot-launch"></canvas></div>
-    </div></div>
+    <div class="wrap foot__bar"><p class="label">© 2026 Anjor Tank</p><p class="label">Designed to make the work clearer.</p></div>
   </footer>`;
 }
 
-function cta(title = 'Two ways to work with me.') {
-  return `<section class="sec cta" id="cta"><div class="wrap">
-    ${sh('Next', title, 'Reach out for a role, or for a consulting problem. Either way, you will hear from me directly.')}
-    <div class="doors">${DOORS.map((d, i) => `<a class="door ${i ? 'door--ink' : ''}" href="${i ? '/consulting' : '/hire'}" data-in>
-      <p class="label">${esc(d.s)}</p><h3 class="h-3">${esc(d.t)}</h3><p>${esc(d.d)}</p><span class="door__go">${i ? 'See how consulting works' : 'See why hire me'}${I.arrow}</span></a>`).join('')}</div>
-  </div></section>`;
+function cta(title = 'Have a product problem to solve?') {
+  return `<section class="studio-close"><div class="wrap"><p class="studio-kicker">Next / Conversation</p><h2>${esc(title)}</h2><a class="studio-link" href="/contact"><span>Get in touch</span><span aria-hidden="true">↗</span></a></div></section>`;
 }
 
 export function shell({ path, title, desc, body, boot = false, extra = '' }) {
@@ -107,7 +98,7 @@ ${extra}
 <body data-page="${esc(path)}">
 <a class="skip-link" href="#main">Skip to content</a>
 <div class="space" aria-hidden="true"><div class="space__hills"></div><div class="space__word"></div><div class="space__shade"></div></div>
-${path === '/' ? intro() : ''}
+
 ${nav(path)}
 <main id="main">${body.replace(/\*([^*<>\n]+)\*/g, '<span class="hl">$1</span>')}</main>
 ${foot()}
@@ -279,6 +270,7 @@ function casePage(c) {
     <div class="chead__art" data-in>${wf(c.wf)}</div></div>
   <ul class="mets mets--3">${c.metrics.map(([v, l]) => `<li class="met" data-in><strong>${esc(v)}</strong><span>${esc(l)}</span></li>`).join('')}</ul>
 </div></section>
+${studioCaseMap(c)}
 <div class="wrap cbody">
   <aside class="toc" aria-label="On this page"><p class="label">On this page</p><ol>${secs.map(([id, t], k) => `<li><a href="#${id}"${k ? '' : ' aria-current="true"'}><i>${pad(k + 1)}</i>${esc(t)}</a></li>`).join('')}</ol><div class="toc__bar"><i id="prog"></i></div></aside>
   <div class="cmain">
@@ -290,7 +282,7 @@ function casePage(c) {
     <dl><div><dt>Role</dt><dd>${esc(g.role)}</dd></div><div><dt>Company</dt><dd>Truemeds</dd></div><div><dt>Team</dt><dd>${esc(g.team)}</dd></div><div><dt>Timeline</dt><dd>${esc(c.year)}</dd></div><div><dt>Domain</dt><dd>${esc(c.tag)}</dd></div></dl>
     <p class="label">Built with</p><ul class="chips chips--sm">${g.stack.map((s) => `<li>${esc(s)}</li>`).join('')}</ul>
     <div class="glance__r"><p class="label">Result</p>${c.metrics.slice(0, 2).map(([v, l]) => `<p><b>${esc(v)}</b><span>${esc(l)}</span></p>`).join('')}</div>
-    <a class="btn btn--primary btn--sm" href="/hire"><span>Hire me</span>${I.arrow}</a>
+    <a class="btn btn--primary btn--sm" href="/contact"><span>Hire me</span>${I.arrow}</a>
   </aside>
 </div>
 <section class="sec rel"><div class="wrap">
@@ -538,25 +530,19 @@ function notfound() {
 }
 
 /* ───────────── route table ───────────── */
-const D = 'Anjor Tank is a product manager and product architect in Mumbai who owns web and app development end to end, is Product Manager at GNC India and founded MESHHETU.';
+const D = 'Anjor Tank is a Product Manager at GNC India, working across ecommerce, growth, customer experience and internal platforms, and founder of MESHHETU.';
 export function routes() {
-  const R = [
-    { path: '/', file: 'index.html', title: 'Anjor Tank | Product manager and product architect', desc: D, body: home, boot: true },
-    { path: '/work', file: 'work/index.html', title: 'Work | Anjor Tank', desc: 'Seven product systems across payments, growth, search, AI and operations, each with the decision behind it and the number that moved.', body: work },
-    ...CASES.map((c) => ({ path: '/work/' + c.slug, file: `work/${c.slug}/index.html`, title: `${c.title} | Anjor Tank`, desc: c.line, body: () => casePage(c) })),
-    { path: '/architect', file: 'architect/index.html', title: 'Product architect | Anjor Tank', desc: 'How Anjor Tank owns web, app, platform and internal tools end to end, from wireframe and schema to release and result.', body: architect },
-    { path: '/meshhetu', file: 'meshhetu/index.html', title: 'MESHHETU | Anjor Tank', desc: 'MESHHETU is the systems engineering company Anjor Tank founded: strategic consulting, modular intelligence and ROQIVA in development.', body: meshhetu },
-    { path: '/journey', file: 'journey/index.html', title: 'Journey | Anjor Tank', desc: 'From campaigns to commerce systems: Anjor Tank’s path through marketing, product and founding MESHHETU.', body: journey },
-    { path: '/beyond', file: 'beyond/index.html', title: 'Beyond work | Anjor Tank', desc: 'Karts, live music, mountains and good food: what Anjor Tank does away from the keyboard.', body: beyond },
-    { path: '/hire', file: 'hire/index.html', title: 'Hire me | Anjor Tank', desc: 'Anjor Tank is open to product manager, product architect and GTM engineering roles in India or remote with US and global teams.', body: hire },
-    { path: '/consulting', file: 'consulting/index.html', title: 'Consulting | Anjor Tank', desc: 'Revenue-leak audits, build-ready plans and an embedded product architect, through MESHHETU.', body: consulting },
-    { path: '/contact', file: 'contact/index.html', title: 'Contact | Anjor Tank', desc: 'Reach Anjor Tank for a product role or for consulting through MESHHETU.', body: contact },
+  return [
+    { path: '/', file: 'index.html', title: 'Anjor Tank | Product Manager, Ecommerce & Growth', desc: D, body: studioHome, boot: false },
+    { path: '/work', file: 'work/index.html', title: 'Work & Case Studies | Anjor Tank', desc: 'Product decisions across checkout, growth, search, fulfilment and customer operations.', body: studioWork },
+    ...CASES.map(c => ({ path: '/work/' + c.slug, file: `work/${c.slug}/index.html`, title: `${c.title} | Anjor Tank`, desc: c.line, body: () => casePage(c) })),
+    { path: '/about', file: 'about/index.html', title: 'About | Anjor Tank', desc: 'From marketing to product management at Truemeds and GNC India, and founding MESHHETU.', body: studioAbout },
+    { path: '/contact', file: 'contact/index.html', title: 'Contact | Anjor Tank', desc: 'Reach Anjor Tank for product roles, collaborations and introductions.', body: studioContact },
     { path: '/404', file: '404.html', title: 'Page not found | Anjor Tank', desc: 'Page not found.', body: notfound },
   ];
-  return R;
 }
 
 export function renderRoute(r) {
-  const ld = r.path === '/' ? `<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'Person', name: 'Anjor Tank', jobTitle: 'Product Manager and Product Architect', url: SITE.origin, sameAs: [SITE.linkedin, SITE.meshhetu], address: { '@type': 'PostalAddress', addressLocality: 'Mumbai', addressCountry: 'IN' } })}</script>` : '';
+  const ld = r.path === '/' ? `<script type="application/ld+json">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'Person', name: 'Anjor Tank', jobTitle: 'Product Manager', url: SITE.origin, sameAs: [SITE.linkedin, SITE.meshhetu], address: { '@type': 'PostalAddress', addressLocality: 'Mumbai', addressCountry: 'IN' } })}</script>` : '';
   return shell({ path: r.path, title: r.title, desc: r.desc, body: r.body(), extra: ld });
 }
