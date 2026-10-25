@@ -25,6 +25,6 @@ const art=readFileSync('public/img/keyboard-silver.svg','utf8');
 assert(art.startsWith('<svg') && art.includes('</svg>') && art.includes('MESHHETU'),'Keyboard asset must have artwork and labels');
 assert(by('/experience').includes('xp-timeline__item'));
 assert(by('/hire').includes('track-a__cards') && by('/hire').includes('MESHHETU'));
-assert(by('/about').includes('xp-timeline__item'));
+assert(by('/about').includes('studio-about-thought') && !by('/about').includes('xp-timeline__item'),'About must focus on personal philosophy, not duplicate Experience');
 for (const p of ['/work','/experience','/hire','/about','/contact']) assert(seen.has(p));
 console.log('Smoke test passed: ' + pages.length + ' static routes, full-length SVG keyboard, timeline and Track A consulting.');
