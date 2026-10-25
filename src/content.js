@@ -20,7 +20,7 @@ export const SITE = {
 export const HELLOS = ['HELLO', 'नमस्ते', 'HOLA', 'BONJOUR', 'નમસ્તે', 'CIAO', 'OLÁ', 'नमस्कार', 'こんにちは'];
 
 export const NAV = [
-  ['/work', 'Work'], ['/architect', 'Architect'], ['/journey', 'Journey'], ['/meshhetu', 'MESHHETU'], ['/consulting', 'Consulting'], ['/beyond', 'Beyond work'],
+  ['/work', 'Work'], ['/about', 'About'], ['https://meshhetu.com', 'MESHHETU ↗'], ['/contact', 'Contact'],
 ];
 
 /* ───────────── proof strip ───────────── */
@@ -160,12 +160,12 @@ export const CASES = [
   {
     slug: 'sku-substitution-engine', n: '03', tag: 'Operations', wf: 'swap', cat: 'Logistics automation · Platform', year: '2024',
     title: 'The algorithmic SKU substitution engine',
-    line: 'Replaced a spreadsheet and a delete-and-add workaround with a live-inventory engine that swaps one item for another without the customer noticing.',
+    line: 'Replaced a spreadsheet and a delete-and-add workaround with a live-inventory substitution workflow and stable customer-facing pricing.',
     metrics: [['+3.0%', 'Delivery fulfilment'], ['−2.6pp', 'Cancellations'], ['70,000+', 'SKUs re-indexed']],
     hook: 'Warehouse leads were running high-volume fulfilment from a static Excel sheet. A stockout meant deleting and re-adding medicines, which spiked prices and left customers so blindsided they cancelled.',
     quick: {
       problem: 'A stockout threatened retention. Operators cross-referenced a spreadsheet that ignored live inventory, then deleted the item and added another as a new line. The pricing system saw a fresh purchase, so the bill rose. Orders also reached the lead only after picker and checker, missing courier cut-offs by up to a day.',
-      call: 'Intercept the order at the warehouse portal with a live-inventory suggestion engine, and shield the customer: no front-end toggles, no price shocks. The company absorbs the delta.',
+      call: 'Intercept stockouts in the warehouse portal, suggest verified equivalents from live inventory and protect the originally agreed price.',
       result: 'Fulfilment rate rose 3.0% and cancellations fell 2.6pp after two months of careful scaling, with fewer support tickets and cleaner data for procurement.',
     },
     table: [['Delivery fulfilment rate', 'Baseline', '—', '+3.0%'], ['User order cancellations', 'Baseline', '—', '−2.6pp'], ['Operational turnaround', 'High lag', 'Optimised', 'Adherence ↑'], ['Customer support tickets', 'Baseline', '—', '↓']],
@@ -183,7 +183,7 @@ export const CASES = [
         'The challenge was bringing fragmented systems together while repairing a compromised database. Before automating anything in the Catalogue Management System, we found a master catalogue full of errors and mistagged items. We paused to run a data-cleaning initiative, re-indexing more than 70,000 SKUs by exact salt composition, brand, variant and dosage form.',
         'On the finance side, the price locked at order placement had to remain the most a customer would pay. If our own inefficiency forced a substitution, the company absorbed the delta as a discount or an automatic refund. The logic had to separate a customer-initiated change (update the bill) from a company-driven substitution (absorb the delta), update invoices in real time and avoid latency in the checkout API. That demanded precise state-machine routing.'] },
       { id: 'decision', h: 'The decision', call: 'Intercept the order lifecycle at the warehouse portal with a live-inventory suggestion engine.',
-        bullets: ['Shield the customer from stockout friction instead of pushing the choice to the front end.', 'Absorb the price variance internally to preserve trust and protect conversion.', 'Keep the footprint inside internal logistics tools and catalogue engines.'],
+        bullets: ['Resolve stockout friction through an auditable operations flow, with pharmacy and customer communication safeguards to be documented.', 'Absorb the price variance internally to preserve trust and protect conversion.', 'Keep the footprint inside internal logistics tools and catalogue engines.'],
         skipped: 'Consumer-facing configuration paths or dynamic cart validation in the first rollout. Stakeholders argued warning users would protect margin, but it would have forced manual toggles and drop-offs.',
         validation: 'A live rollout, scaled warehouse by warehouse after an early misstep (see the reflections below).' },
       { id: 'built', h: 'What was built', items: [
@@ -318,7 +318,7 @@ export const MESH = {
   hindi: 'हेतु', meaning: 'Hindi for reason, cause and purpose.',
   tagline: 'The systems engineering company.',
   category: 'Commercial systems engineering for ecommerce and D2C',
-  why: 'We founded MESHHETU to connect the work that falls between commercial tools, teams and decisions, not to add technology for its own sake.',
+  why: 'I founded MESHHETU to connect the work that falls between commercial tools, teams and decisions, not to add technology for its own sake.',
   principle: 'Every system should have a reason to exist, every recommendation should have evidence, and every improvement should have a clear owner.',
   tracks: [
     { k: 'A', t: 'Strategic consulting', s: 'Available today', tone: 'ok', d: 'Founder-led investigation, options and a decision-ready handoff: PRD, tracking spec, tickets and acceptance criteria.' },
