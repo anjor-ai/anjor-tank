@@ -1,17 +1,32 @@
-# Anjor Tank — portfolio
+# Anjor Tank — Decision Studio portfolio
 
-A multi-page product portfolio: Home, Work (7 case studies with a quick-view pop-up and a full case-study page each), Architect, MESHHETU, Journey, Beyond work, Hire me, Consulting and Contact.
+A focused product-management portfolio with **Home, Work, About and Contact** plus seven existing detailed project URLs.
 
-- **Content** lives in `src/content.js` (case studies, roles, copy). Edit text there.
-- **Pages** are generated from that content by `src/render.js`; `vite.config.js` turns each route into a real HTML page at build time.
-- **Illustrations** (isometric stack, wireframes, mockups) are generated as SVG in `src/art.js`.
-- **Motion** is in `src/main.js` (GSAP: intro globe, scroll reveals, pinned story, quick-view, form).
-- **Design tokens** (colours, type) are at the top of `src/styles.css`. No text is larger than 40px.
+## Content structure
 
+- `src/content.js`: source of truth for case study evidence, roles, labels and contact links. Avoid copying metrics into other content files.
+- `src/studio.js`: Home, Work, About, Contact and the decision-at-a-glance diagram for case pages.
+- `src/render.js`: document shell, case-study details, metadata and the public route registry.
+- `src/art.js`: accessible, responsive inline SVG illustrations used throughout the case studies.
+- `src/studio.css`: editorial layout and responsive cards; `src/styles.css` retains the shared design system.
+- `src/studio-motion.js`: restrained GSAP reveals and accessible contact form; reduced-motion preferences are honoured.
+
+Legacy URLs redirect: `/journey`, `/architect`, `/beyond` to `/about`; `/hire` to `/contact`; `/meshhetu` and `/consulting` to `meshhetu.com`. The Vercel rules are in `vercel.json`.
+
+## Development
+
+```bash
+npm ci
+npm run dev
+npm run build
 ```
-npm install
-npm run dev      # local
-npm run build    # outputs dist/
-```
 
-Deploys on Vercel from `main` (production) and `preview` (preview deployments).
+Preview branches can be deployed by the connected Vercel Git integration. Production is not modified by the redesign branch until merged.
+
+## Editorial guardrails
+
+- Home shows exactly three distinct pieces of proof; case-specific detail belongs on the case page.
+- Do not present parallel job titles as equal identities: product manager first; MESHHETU is separately a founder venture.
+- Keep the 3 featured projects distinct from the 4 shorter archive entries.
+- Do not publish invented baselines, experiments, technical ownership or safety/consent claims. See `CONTENT_QA.md`.
+- Keep animations lightweight and optional; all content remains readable in reduced-motion mode.
