@@ -74,9 +74,9 @@ function foot() {
   </footer>`;
 }
 
-function cta(title = 'Two ways to work with me.') {
+function cta(title = 'Two ways in. *One person on the other end.*') {
   return `<section class="sec cta" id="cta"><div class="wrap">
-    ${sh('Next', title, 'Reach out for a role, or for a consulting problem. Either way, you will hear from me directly.')}
+    ${sh('Next', title, 'Hiring for a product role, or stuck on a metric that will not move? Either way, you write to me, and I write back. No form letters, no handoffs.')}
     <div class="doors">${DOORS.map((d, i) => `<a class="door ${i ? 'door--ink' : ''}" href="${i ? '/consulting' : '/hire'}" data-in>
       <p class="label">${esc(d.s)}</p><h3 class="h-3">${esc(d.t)}</h3><p>${esc(d.d)}</p><span class="door__go">${i ? 'See how consulting works' : 'See why hire me'}${I.arrow}</span></a>`).join('')}</div>
   </div></section>`;
@@ -205,7 +205,7 @@ function home() {
   <div class="hero__t">
     <p class="hello" aria-label="Hello"><span class="hello__w" id="hello">HELLO</span><span class="hello__s label"><i></i>Open to roles and consulting</span></p>
     <h1 class="h-hero" id="hero-h" data-split>I’m Anjor Tank, a product manager who architects and ships *the whole system.*</h1>
-    <p class="lead" data-in>From the decision rule to the web and app that carry it. Five systems taken from problem to shipped across payments, growth, search and operations, now at GNC India and founding MESHHETU.</p>
+    <p class="lead" data-in>Most products do not break on the screen. They break in the rule, the data or the workflow underneath. I find that layer, design the fix and stay until the number moves. Seven systems shipped at Truemeds. Now at GNC India, and building MESHHETU.</p>
     <div class="btn-row" data-in>${btn('/work', 'See the work')}${btn('/hire', 'Hire me', 'ghost')}</div>
     <p class="hint label" data-in>Move your mouse over the grid. Press <kbd id="hint-k">Ctrl K</kbd> to jump anywhere.</p>
   </div>
@@ -217,31 +217,48 @@ function home() {
 <section class="proof" id="proof"><div class="wrap"><ul class="mets">${PROOF.map((m, i) => `<li class="met" data-in><span class="label">T-0${i + 1} · ${m.tag}</span><strong ${m.to != null ? `data-count data-from="${m.from}" data-to="${m.to}" data-dp="${m.dp}" data-pre="${esc(m.pre || '')}" data-suf="${esc(m.suf || '')}"` : ''}>${m.to != null ? esc(m.pre + m.to.toFixed(m.dp) + m.suf) : esc(m.text)}</strong><span>${esc(m.label)}</span></li>`).join('')}</ul>
   <p class="foot-note label">Results are from product work at Truemeds, 2023 – 2026.</p></div></section>
 
-<section class="sec work" id="work"><div class="wrap">
-  ${sh('Selected work', 'Seven systems, *each with a decision.*', 'Open any card for the quick version. Each one leads to a full case study: context, trade-offs, what shipped and what I would change.')}
-  <div class="wgrid">${CASES.map((c, i) => caseCard(c, i, i > 2 ? 'ccard--s' : '')).join('')}</div>
-  <div class="btn-row">${btn('/work', 'All case studies', 'ghost')}</div>
-</div></section>
+<section class="sec deck" id="work"><div class="deck__pin"><div class="wrap deck__g">
+  <div class="deck__l">
+    ${sh('Selected work', 'Seven systems. *Each began with a number that would not move.*', 'Scroll to move through the deck, or pick one. Every card opens a quick read, and the quick read opens the full case.')}
+    <ol class="deck__i" id="deck-i" aria-label="Case studies">${CASES.map((c, i) => `<li><button type="button" data-d="${i}"><i>${pad(i + 1)}</i><span>${esc(c.title)}</span><em>${esc(c.metrics[0][0])}</em></button></li>`).join('')}</ol>
+    <div class="btn-row">${btn('/work', 'All case studies', 'ghost')}</div>
+  </div>
+  <div class="deck__r wgrid" id="deck">${CASES.map((c, i) => caseCard(c, i)).join('')}</div>
+</div></div></section>
 
 ${hetu({ tail: `<div class="btn-row" data-in>${btn('/meshhetu', 'The MESHHETU story', 'light')}${btn('/consulting', 'Consulting', 'ghost-d')}</div>` })}
 
 <section class="sec think" id="think"><div class="wrap">
-  ${sh('How I think', 'Three beliefs *behind every system.*', 'They come from the case studies above, and they decide what I build first.')}
+  ${sh('How I think', 'Three beliefs *behind every system.*', 'These came from the case studies, not from a book. They decide what I build first, and what I refuse to build.')}
   <div class="asc">${BELIEFS.map((b, i) => `<article class="asc__c sp" data-in><canvas class="asc__cv" data-ascii="${b.art}" width="10" height="10" aria-hidden="true"></canvas>
     <div class="asc__t"><h3>${esc(b.t)}</h3><p>${esc(b.d)}</p><ul>${b.chips.map((c) => `<li>${esc(c)}</li>`).join('')}</ul></div></article>`).join('')}</div>
 </div></section>
 
 
 
-<section class="sec arch" id="arch"><div class="wrap arch__g">
-  <div class="arch__l">${sh('Product architect', 'I don’t stop at the spec. *I build the thing.*', 'I own web and app development end to end, from the wireframe and the API payload to the release and the number that moves.')}
-    <ul class="ticks">${OWN.slice(0, 3).map((o) => `<li data-in><b>${esc(o.t)}</b><span>${esc(o.d)}</span></li>`).join('')}</ul>
-    <div class="btn-row">${btn('/systems', 'See how I build systems')}</div></div>
-  <div class="arch__r">${mockup()}</div>
+<section class="sec say" id="say"><div class="wrap">
+  <p class="label eyebrow" data-in>The short version</p>
+  <p class="say__t" id="say-t">I turn <span class="pill"><img src="/img/anjor.webp" alt="" width="120" height="120" loading="lazy"></span> messy commerce <span class="pill"><canvas data-scene="find" aria-hidden="true"></canvas></span> into systems <span class="pill"><img src="/img/adventure/kart-grid.webp" alt="" width="120" height="120" loading="lazy"></span> that ship, then I measure what moved <span class="pill"><canvas data-scene="trend" aria-hidden="true"></canvas></span> and write it down.</p>
+</div></section>
+
+<section class="sec bento" id="arch"><div class="wrap">
+  ${sh('What I own', 'Everything between *the click and the ledger.*', 'Four layers, one owner. Poke at the tiles. They are small versions of how I actually work.')}
+  <div class="bn">
+    <article class="bn__t bn__a sp"><p class="label">01 · The stack</p><h3 class="h-3">Four layers, one owner.</h3>
+      <ol class="bn__lay" id="bn-lay">${LAYERS.map((l, i) => `<li class="${i === 0 ? 'is-on' : ''}" data-i="${i}" tabindex="0"><i>${l.n}</i><b>${esc(l.t)}</b><span>${esc(l.d)}</span></li>`).join('')}</ol></article>
+    <button class="bn__t bn__k sp" type="button" id="bn-k"><span class="bn__keys"><kbd>⌘</kbd><kbd>K</kbd></span><b>Jump anywhere.</b><span>Every page and case, one keystroke away. Try it.</span></button>
+    <article class="bn__t bn__c sp"><p class="label">02 · Proof</p>
+      <div class="bn__v" id="bn-v" aria-live="polite"></div><p class="bn__l" id="bn-l"></p>
+      <div class="bn__tabs" role="tablist" aria-label="Results">${PROOF.map((m, i) => `<button type="button" role="tab" data-p="${i}" aria-selected="${i === 0}" data-v="${esc(m.text || `${m.pre || ''}${m.to}${m.suf || ''}`)}" data-l="${esc(m.label)}">${m.tag}</button>`).join('')}</div></article>
+    <article class="bn__t bn__s sp"><p class="label">03 · Release log</p><ol class="bn__log">${RELEASE.slice(0, 4).map(([v, w]) => `<li><b>${esc(v)}</b><code>${esc(w)}</code></li>`).join('')}</ol></article>
+    <article class="bn__t bn__d sp"><canvas data-scene="agents" aria-hidden="true"></canvas><div class="bn__dt"><p class="label">04 · The rule</p><h3 class="h-3">Code computes. Agents draft. People decide.</h3></div></article>
+    <article class="bn__t bn__m sp"><p class="label">05 · Toolbox</p><div class="bn__mq" aria-hidden="true"><div>${[...TOOLS, ...TOOLS].map((t) => `<span>${esc(t)}</span>`).join('')}</div></div><p class="bn__n">Strapi to SQL to Claude API. I write the schema as well as the spec.</p></article>
+  </div>
+  <div class="btn-row">${btn('/systems', 'How I build systems')}</div>
 </div></section>
 
 <section class="sec path" id="path"><div class="wrap">
-  ${sh('Journey', 'Marketing, then product, *then a company of my own.*', 'Marketing taught me demand. Product taught me systems. MESHHETU is where both meet.')}
+  ${sh('Journey', 'Marketing, then product, *then a company of my own.*', 'Marketing taught me how demand is made. Product taught me how it breaks. MESHHETU is where both meet.')}
   <ol class="strip" id="strip">${[['2021', 'Digital marketing intern', '9LedgePro'], ['2022', 'Client services associate', 'Eggfirst'], ['2023', 'Management trainee', 'Neil Patel Digital'], ['2023 – 26', 'Associate Product Manager', 'Truemeds'], ['2026 –', 'Product Manager', 'GNC India'], ['2026 –', 'Founder, MESHHETU', 'Product Architect']].map(([w, r, o], i, a) => `<li class="strip__i${i >= a.length - 2 ? ' strip__i--now' : ''}" data-in><span class="label">${w}</span><i></i><b>${esc(r)}</b><span>${esc(o)}</span></li>`).join('')}</ol>
   <div class="btn-row">${btn('/journey', 'The full timeline', 'ghost')}</div>
 </div></section>
@@ -259,7 +276,7 @@ function work() {
   return `
 <section class="phead"><div class="wrap">
   <p class="label eyebrow" data-in>Work</p><h1 class="h-hero" data-split>Seven systems. *Each one a decision, a build and a number.*</h1>
-  <p class="lead" data-in>Three of them are written up in full. The rest are shorter reads. Every case follows the same eight steps, so you can compare how I think across very different problems.</p>
+  <p class="lead" data-in>Three are written up in full, the rest are shorter reads. Every case follows the same eight steps, so you can compare how I think across very different problems: what hurt, what I decided, what shipped, what I would change.</p>
   <div class="filters" id="filters" role="group" aria-label="Filter by domain" data-in>${TAGS.map((t, i) => `<button type="button" class="fchip${i ? '' : ' is-on'}" data-f="${t}" aria-pressed="${!i}">${t}</button>`).join('')}</div>
 </div></section>
 <section class="sec sec--tight"><div class="wrap"><div class="cgrid" id="cgrid">${CASES.map((c, i) => caseCard(c, i, i < 3 ? 'ccard--w' : 'ccard--s2')).join('')}</div></div></section>
@@ -324,7 +341,7 @@ function systems() {
   return `
 <section class="phead"><div class="wrap phead__g">
   <div><p class="label eyebrow" data-in>Product architect</p><h1 class="h-hero" data-split>I own the web, the app and *the system between them.*</h1>
-  <p class="lead" data-in>A product manager decides what to build. An architect also decides how it fits together, and stays until it ships. I work on both sides: the wireframe and the schema, the experience and the rule engine behind it.</p>
+  <p class="lead" data-in>A product manager decides what to build. An architect also decides how it fits together, and stays until it ships. I work both sides of that line: the wireframe and the schema, the screen and the rule engine behind it. That is why my specs get built the first time.</p>
   <div class="btn-row" data-in>${btn('/work', 'See what I built')}${btn('/contact?intent=job', 'Hire me', 'ghost')}</div></div>
   <div class="phead__art" id="arch-art">${isoStack()}</div>
 </div></section>
@@ -377,17 +394,28 @@ ${cta('Have a metric that won’t move?')}`;
 function role(r) {
   return `<article class="role" data-in><div class="role__w label">${esc(r.when)}</div><div class="role__c"><h3 class="h-3">${esc(r.role)}</h3><p class="role__o">${esc(r.org)}</p><p>${esc(r.text)}</p>${r.tags ? `<ul class="chips chips--sm">${r.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}</div></article>`;
 }
+const YR = [['2021', '2021', '2022', '2023'], ['2023'], ['2026', '2026']];
+const CH_SCENE = ['funnel', 'cart', 'launch'];
 function journey() {
+  const slides = [];
+  CHAPTERS.forEach((c, ci) => {
+    slides.push(`<li class="rs rs--c" data-ch="${ci}" data-y="${YR[ci][0]}"><div class="rs__art"><canvas data-scene="${CH_SCENE[ci]}" aria-hidden="true"></canvas></div><span class="chap__k">${c.k}</span><p class="label">${esc(c.span)}</p><h2 class="h-2">${esc(c.t)}</h2><p class="lead">${esc(c.d)}</p></li>`);
+    c.roles.forEach((r, ri) => slides.push(`<li class="rs rs--r" data-ch="${ci}" data-y="${YR[ci][ri] || YR[ci][0]}"><article class="rs__c glass sp"><p class="label">${esc(r.when)}</p><h3 class="h-3">${esc(r.role)}</h3><p class="role__o">${esc(r.org)}</p><p>${esc(r.text)}</p>${r.tags ? `<ul class="chips chips--sm">${r.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}</article></li>`));
+  });
+  slides.push(`<li class="rs rs--e" data-ch="2" data-y="Now"><div class="rs__end"><p class="label">What comes next</p><h2 class="h-2">${hl('A company built on *the same question.*')}</h2><p class="lead">Where does the number leak, and who owns the fix? MESHHETU takes that question to other commerce teams.</p><div class="btn-row">${btn('/meshhetu', 'The MESHHETU story', 'light')}${btn('/contact?intent=job', 'Hire me', 'ghost-d')}</div></div></li>`);
   return `
 <section class="phead"><div class="wrap">
-  <p class="label eyebrow" data-in>Journey</p><h1 class="h-hero" data-split>From campaigns to *commerce systems.*</h1>
-  <p class="lead" data-in>I started in marketing and client services, moved into product, and now build commerce systems and a company around them. Read it top to bottom.</p>
+  <p class="label eyebrow" data-in>Journey</p><h1 class="h-hero" data-split>From campaigns *to commerce systems.*</h1>
+  <p class="lead" data-in>Marketing taught me what a customer does between the ad and the order. Product taught me why they sometimes cannot finish. Now I build the systems that let them, and a company around it. Scroll sideways: it is a film, not a CV.</p>
 </div></section>
-<section class="sec sec--tight"><div class="wrap"><div class="tline" id="tline"><div class="tline__rail"><i id="tline-fill"></i><b id="tline-dot"></b></div>
-  ${CHAPTERS.map((c) => `<section class="chap"><header class="chap__h" data-in><span class="chap__k">${c.k}</span><div><p class="label">${esc(c.span)}</p><h2 class="h-2">${esc(c.t)}</h2><p class="lead">${esc(c.d)}</p></div></header>${c.roles.map(role).join('')}</section>`).join('')}
-</div></div></section>
 
-${hetu({ tail: `<div class="btn-row" data-in>${btn('/meshhetu', 'The MESHHETU story', 'light')}${btn(SITE.meshhetu, 'meshhetu.com', 'ghost-d', true)}</div>` })}
+<section class="reel" id="reel" aria-label="Career timeline"><div class="reel__pin">
+  <header class="reel__h wrap"><div class="reel__y"><span class="label">Year</span><b id="reel-y">${YR[0][0]}</b></div>
+    <ol class="reel__nav" id="reel-nav">${CHAPTERS.map((c, i) => `<li><button type="button" data-ch="${i}" class="${i ? '' : 'is-on'}"><i>${c.k}</i><span>${esc(c.t)}</span></button></li>`).join('')}</ol>
+    <span class="label" id="reel-n">01 / ${pad(slides.length)}</span></header>
+  <div class="reel__vp" id="reel-vp"><ul class="reel__tr" id="reel-tr">${slides.join('')}</ul></div>
+  <div class="reel__bar" aria-hidden="true"><i id="reel-bar"></i></div>
+</div></section>
 
 <section class="sec"><div class="wrap trio">
   <div data-in><h3 class="label">Education</h3><ul class="plain">${EDU.map(([a, b]) => `<li><b>${esc(a)}</b><span>${esc(b)}</span></li>`).join('')}</ul></div>
@@ -402,7 +430,7 @@ function beyond() {
   return `
 <section class="phead"><div class="wrap phead__g">
   <div><p class="label eyebrow" data-in>Beyond work</p><h1 class="h-hero" data-split>Fast karts, loud rooms, *slow water.*</h1>
-  <p class="lead" data-in>The person behind the product decisions. Away from the keyboard I’m on a kart track, in a crowd with the lights down, or somewhere with a view. I’ll also travel for a good meal.</p></div>
+  <p class="lead" data-in>The person behind the product decisions. I like things that are fast, loud or very quiet: a kart track at night, a crowd with the lights down, a lake with nobody on it. I will also cross a city for a good meal.</p></div>
   <figure class="me me--big" data-in><img src="/img/anjor.webp" width="447" height="721" alt="Anjor Tank standing at a turquoise mountain lake in a blue jacket" loading="eager"></figure>
 </div></section>
 <section class="sec sec--tight"><div class="wrap">

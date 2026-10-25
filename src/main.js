@@ -366,6 +366,7 @@ function startPage() {
   if (started) return; started = true;
   root.classList.add('ready');
   const run = () => {
+    deckPrep();
     // 1. headings: lines rise out of a mask
     $$('[data-split]').forEach((el) => {
       if (rm) { gsap.set(el, { visibility: 'visible' }); return; }
@@ -393,8 +394,8 @@ function startPage() {
     filters('#filters', '#cgrid .ccard', (c, f) => f === 'All' || c.dataset.tag === f);
     filters('#pfilters', '#mas .ph', (c, f) => f === 'All' || c.dataset.g === f);
     heroHello();
-    heroField(); sysConsole(); palette(); tilt();
-    if (!rm) { pageMotion(); hetuMotion(); architectMotion(); journeyMotion(); mockMotion(); fanMotion(); }
+    heroField(); sysConsole(); palette(); tilt(); bentoMotion(); reelMotion();
+    if (!rm) { pageMotion(); sayMotion(); deckMotion(); hetuMotion(); architectMotion(); journeyMotion(); mockMotion(); fanMotion(); }
     caseMotion(); layersLink(); releaseLog();
     ScrollTrigger.refresh();
   };
@@ -526,11 +527,98 @@ function palette() {
 function tilt() {
   if (!fine || rm) return;
   $$('.ccard, .door').forEach((el) => {
+    if (el.closest('.deck.is-live')) return;
     gsap.set(el, { transformPerspective: 900 });
     const rx = gsap.quickTo(el, 'rotationX', { duration: 0.5, ease: 'power3' }), ry = gsap.quickTo(el, 'rotationY', { duration: 0.5, ease: 'power3' });
     el.addEventListener('pointermove', (e) => { const r = el.getBoundingClientRect(); ry(((e.clientX - r.left) / r.width - 0.5) * 7); rx(-((e.clientY - r.top) / r.height - 0.5) * 6); });
     el.addEventListener('pointerleave', () => { rx(0); ry(0); });
   });
+}
+
+/* ───────────── the work deck: cards fly through a 3D stack as you scroll ───────────── */
+function deckPrep() {
+  const sec = $('#work.deck'); if (!sec || !desktop() || rm) return;
+  sec.classList.add('is-live'); $$('.ccard', sec).forEach((c) => c.removeAttribute('data-in'));
+}
+function deckMotion() {
+  const sec = $('.deck.is-live'); if (!sec) return;
+  const cards = $$('.ccard', sec), idx = $$('#deck-i button'), N = cards.length;
+  let cur = -1;
+  const place = (p) => {
+    cards.forEach((c, i) => {
+      const d = i - p, a = Math.abs(d);
+      const t = d >= 0
+        ? { x: d * 30, y: d * 30, z: -d * 150, rotationX: 0, rotationY: -Math.min(d, 3) * 3, scale: 1 - Math.min(d, 6) * 0.035, opacity: Math.max(0, 1 - d * 0.3) }
+        : { x: d * 40, y: d * 300, z: d * 40, rotationX: -d * 14, rotationY: 0, scale: 1 + d * 0.04, opacity: Math.max(0, 1 + d * 1.5) };
+      gsap.set(c, { ...t, xPercent: -50, yPercent: -50, zIndex: Math.round(100 - d * 10), transformPerspective: 1700, pointerEvents: a < 0.5 ? 'auto' : 'none' });
+    });
+    const k = Math.round(p); if (k !== cur) { cur = k; idx.forEach((b, i) => b.classList.toggle('is-on', i === k)); }
+  };
+  place(0);
+  const st = ScrollTrigger.create({ trigger: sec, start: 'top top', end: `+=${(N - 1) * 62}%`, pin: $('.deck__pin', sec), scrub: 0.6, onUpdate: (s) => place(s.progress * (N - 1)) });
+  idx.forEach((b, i) => b.addEventListener('click', () => gsap.to(window, { scrollTo: st.start + (i / (N - 1)) * (st.end - st.start), duration: 1, ease: 'power3.inOut' })));
+}
+
+/* ───────────── the statement: words light up as you read, pills grow open ───────────── */
+function sayMotion() {
+  const el = $('#say-t'); if (!el) return;
+  const out = [];
+  [...el.childNodes].forEach((n) => {
+    if (n.nodeType === 3) n.textContent.split(/(\s+)/).forEach((w) => { if (!w.trim()) { out.push(document.createTextNode(w)); return; } const s = document.createElement('span'); s.className = 'w'; s.textContent = w; out.push(s); });
+    else { n.classList.add('w'); out.push(n); }
+  });
+  el.replaceChildren(...out);
+  if (rm) return;
+  const ws = $$('.w', el);
+  gsap.fromTo(ws, { opacity: 0.16 }, { opacity: 1, stagger: 0.12, ease: 'none', scrollTrigger: { trigger: el, start: 'top 82%', end: 'bottom 48%', scrub: 0.4 } });
+  $$('.pill', el).forEach((p) => gsap.from(p, { width: 0, marginInline: 0, ease: 'none', scrollTrigger: { trigger: p, start: 'top 82%', end: 'top 55%', scrub: 0.4 } }));
+}
+
+/* ───────────── the bento: small working versions of how I operate ───────────── */
+function bentoMotion() {
+  const lay = $('#bn-lay');
+  if (lay) $$('li', lay).forEach((li) => { const on = () => { $$('li', lay).forEach((o) => o.classList.toggle('is-on', o === li)); }; li.addEventListener('pointerenter', on); li.addEventListener('focus', on); li.addEventListener('click', on); });
+  $('#bn-k')?.addEventListener('click', () => $('#cmd-b')?.click());
+  const v = $('#bn-v'), l = $('#bn-l'), tabs = $$('.bn__tabs button'); if (!v) return;
+  const show = (b, animate) => {
+    tabs.forEach((t) => t.setAttribute('aria-selected', t === b)); v.textContent = b.dataset.v; l.textContent = b.dataset.l;
+    if (animate && !rm) gsap.fromTo([v, l], { y: 14, opacity: 0 }, { y: 0, opacity: 1, duration: 0.5, stagger: 0.05, ease: 'power3.out', clearProps: 'transform,opacity' });
+  };
+  tabs.forEach((b) => b.addEventListener('click', () => show(b, true)));
+  show(tabs[0], false);
+}
+
+/* ───────────── the journey reel: a pinned film you scroll sideways through ───────────── */
+function reelMotion() {
+  const sec = $('#reel'); if (!sec) return;
+  const tr = $('#reel-tr'), vp = $('#reel-vp'), slides = $$('.rs', tr), yEl = $('#reel-y'), nEl = $('#reel-n'), bar = $('#reel-bar'), chips = $$('#reel-nav button');
+  let cur = -1;
+  const active = (i) => {
+    if (i === cur) return; cur = i; const s = slides[i];
+    yEl.textContent = s.dataset.y; nEl.textContent = `${pad(i + 1)} / ${pad(slides.length)}`;
+    chips.forEach((b) => b.classList.toggle('is-on', +b.dataset.ch === +s.dataset.ch));
+    if (!rm) gsap.fromTo(yEl, { y: 10, opacity: 0 }, { y: 0, opacity: 1, duration: 0.4, ease: 'power3.out' });
+  };
+  active(0);
+  if (!desktop() || rm) {
+    const upd = () => { const mid = vp.scrollLeft + vp.clientWidth / 2; let k = 0, best = 1e9; slides.forEach((s, i) => { const d = Math.abs(s.offsetLeft + s.offsetWidth / 2 - mid); if (d < best) { best = d; k = i; } }); active(k); bar.style.transform = `scaleX(${vp.scrollLeft / Math.max(1, vp.scrollWidth - vp.clientWidth)})`; };
+    vp.addEventListener('scroll', upd, { passive: true });
+    chips.forEach((b) => b.addEventListener('click', () => { const s = slides.find((x) => +x.dataset.ch === +b.dataset.ch); vp.scrollTo({ left: s.offsetLeft - 20, behavior: 'smooth' }); }));
+    return;
+  }
+  sec.classList.add('is-live');
+  const dist = () => Math.max(1, tr.scrollWidth - innerWidth);
+  const lean = () => {
+    const c = innerWidth / 2; let k = 0, best = 1e9;
+    slides.forEach((s, i) => {
+      const r = s.getBoundingClientRect(), d = (r.left + r.width / 2 - c) / innerWidth, a = Math.min(Math.abs(d), 1);
+      if (a < best) { best = a; k = i; }
+      gsap.set(s, { rotationY: d * -16, scale: 1 - a * 0.12, opacity: 1 - a * 0.55, transformPerspective: 1300 });
+    });
+    active(k);
+  };
+  const st = ScrollTrigger.create({ trigger: sec, start: 'top top', end: () => `+=${dist()}`, pin: $('.reel__pin', sec), scrub: 0.5, invalidateOnRefresh: true, animation: gsap.to(tr, { x: () => -dist(), ease: 'none' }), onUpdate: (s) => { bar.style.transform = `scaleX(${s.progress})`; lean(); }, onRefresh: lean });
+  chips.forEach((b) => b.addEventListener('click', () => { const s = slides.find((x) => +x.dataset.ch === +b.dataset.ch); const x = Math.min(dist(), Math.max(0, s.offsetLeft + s.offsetWidth / 2 - innerWidth / 2)); gsap.to(window, { scrollTo: st.start + (x / dist()) * (st.end - st.start), duration: 1.1, ease: 'power3.inOut' }); }));
 }
 
 /* ───────────── motion shared by every page ───────────── */

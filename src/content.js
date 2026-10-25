@@ -291,18 +291,18 @@ export const TAGS = ['All', 'Payments', 'Growth', 'Operations', 'Search', 'AI'];
 
 /* ───────────── journey ───────────── */
 export const CHAPTERS = [
-  { k: 'I', t: 'Learn how demand is made', span: '2021 – 2023', d: 'Three roles in marketing and client services, from an SEO audit to dealer networks and campaign targeting.',
+  { k: 'I', t: 'Learn how demand is made', span: '2021 – 2023', d: 'Dealer networks, landing pages and campaign targeting. Three roles that taught me what a customer does between an ad and an order.',
     roles: [
       { when: 'May – Jun 2021', role: 'Digital Marketing and Web Development Intern', org: '9LedgePro · Microsoft Partner Network', text: 'Ran an SEO audit, shipped 30+ posts and 10 blogs, and set a 40/40/20 low-medium-high competition keyword mix.' },
       { when: 'Apr – Sep 2022', role: 'Client Services Associate', org: 'Eggfirst Advertising and Design · Goregaon', text: 'Primary contact for 15 Tata Motors dealers across Maharashtra. Wireframed 48 landing pages and a lead-management system, and planned about 100 campaigns.' },
       { when: 'Sep – Dec 2023', role: 'Management Trainee', org: 'Neil Patel Digital India · Mumbai', text: 'Managed 6 clients across sectors, supported pitches that won new business and refined campaign targeting from consumer-behaviour data.' },
     ] },
-  { k: 'II', t: 'Ship the systems underneath', span: 'Dec 2023 – Jul 2026', d: 'Two years and eight months owning products from problem to release.',
+  { k: 'II', t: 'Ship the systems underneath', span: 'Dec 2023 – Jul 2026', d: 'Two years and eight months at one company, owning five systems from first problem to measured result.',
     roles: [
       { when: 'Dec 2023 – Jul 2026', role: 'Associate Product Manager', org: 'Truemeds · Mumbai', text: 'Co-managed two product pods of 12 engineers across payments and portals, with the engineering lead and a senior PM. Built five systems 0-to-1 and owned sprint planning, prioritisation, on-call rotation and delivery.',
         tags: ['Payments', 'Growth', 'Search', 'Internal tools', 'Operations'] },
     ] },
-  { k: 'III', t: 'Own the product, then the company', span: '2026 – now', d: 'A new product role, and a company of my own alongside it.',
+  { k: 'III', t: 'Own the product, then the company', span: '2026 – now', d: 'A product role at GNC India and a company of my own, working on the same question from two sides.',
     roles: [
       { when: 'Oct 2026 – now', role: 'Product Manager', org: 'GNC India · OneGuardian Brands · Mumbai', text: 'Product manager at GNC India, the consumer wellness brand, across ecommerce, growth and the internal platforms behind them.', tags: ['Ecommerce', 'D2C', 'Growth', 'Platform'] },
       { when: '2026 – now', role: 'Founder and Product Architect', org: 'MESHHETU', text: 'Founded a systems engineering company for ecommerce and D2C: strategic consulting, modular intelligence, and ROQIVA in development.', tags: ['Consulting', 'GTM engineering', 'RevOps'] },
