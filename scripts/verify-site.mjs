@@ -1,30 +1,44 @@
-import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
-import { routes, renderRoute } from '../src/render.js';
-
-const pages = routes();
-const seen = new Set();
+import assert from "node:assert/strict";
+import { existsSync } from "node:fs";
+import { routes, renderRoute } from "../src/render.js";
+import { CASES } from "../src/content.js";
+import { LABS } from "../src/lab-data.js";
+const pages = routes(),
+  paths = new Set(pages.map((p) => p.path));
+assert.equal(paths.size, pages.length);
 for (const r of pages) {
-  assert(!seen.has(r.path), 'Duplicate path: ' + r.path);
-  seen.add(r.path);
   const html = renderRoute(r);
-  assert(html.includes('<!doctype html>') && html.includes('</html>'), 'Invalid document at ' + r.path);
-  assert(!html.includes('undefined'), 'Undefined interpolation in ' + r.path);
-  assert(html.includes('href="/hire"'), 'Expected Hire me entry in global navigation');
-  const internalLinks = [...html.matchAll(/href="(\/[^"#?]*)(?:[#?][^"]*)?"/g)].map(m => m[1]);
-  for (const url of internalLinks) {
-    if (/\.(?:svg|png|ico|jpg|webp|xml|webmanifest)$/i.test(url)) continue;
-    assert(seen.has(url) || pages.some(p => p.path === url), 'Broken internal destination ' + url + ' at ' + r.path);
-  }
+  assert(html.startsWith("<!doctype html>") && html.endsWith("</html>"));
+  assert(!html.includes("undefined"), "Undefined at " + r.path);
+  assert.equal((html.match(/<h1[ >]/g) || []).length, 1, "One h1: " + r.path);
+  const ids = [...html.matchAll(/\sid="([^"]+)"/g)].map((x) => x[1]);
+  assert.equal(new Set(ids).size, ids.length, "Duplicate id " + r.path);
+  for (const [, url] of html.matchAll(/href="(\/[^"?#]*)(?:[?#][^"]*)?"/g))
+    assert(
+      paths.has(url) || existsSync("public" + url),
+      "Broken destination " + url,
+    );
+  for (const [, src] of html.matchAll(/<img[^>]+src="([^"]+)"/g))
+    assert(existsSync("public" + src), "Missing image " + src);
+  for (const [, hash] of html.matchAll(/href="#([^"]+)"/g))
+    assert(ids.includes(hash), "Missing section " + hash);
 }
-const by = p => renderRoute(pages.find(r => r.path === p));
-assert(by('/').includes('data-keyboard-root') && by('/').includes('home-xp') && by('/').includes('home-consult'));
-assert((by('/').match(/data-liquid-key/g)||[]).length>=6,'Missing keyboard navigation keys');
-assert(existsSync('public/img/keyboard-silver.svg'),'Keyboard asset must exist');
-const art=readFileSync('public/img/keyboard-silver.svg','utf8');
-assert(art.startsWith('<svg') && art.includes('</svg>') && art.includes('MESHHETU'),'Keyboard asset must have artwork and labels');
-assert(by('/experience').includes('xp-timeline__item'));
-assert(by('/hire').includes('track-a__cards') && by('/hire').includes('MESHHETU'));
-assert(by('/about').includes('studio-about-thought') && !by('/about').includes('xp-timeline__item'),'About must focus on personal philosophy, not duplicate Experience');
-for (const p of ['/work','/experience','/hire','/about','/contact']) assert(seen.has(p));
-console.log('Smoke test passed: ' + pages.length + ' static routes, full-length SVG keyboard, timeline and Track A consulting.');
+for (const c of CASES) {
+  const l = LABS[c.slug];
+  assert(l && l.choices.length === l.results.length && l.results.length === 3);
+  assert(l.results.every((r) => r.length === 3));
+  assert(
+    renderRoute(pages.find((p) => p.path === "/work/" + c.slug)).includes(
+      "data-lab",
+    ),
+  );
+}
+const html = (p) => renderRoute(pages.find((r) => r.path === p));
+assert.equal((html("/").match(/data-key="/g) || []).length, 6);
+assert(!html("/experience").includes("Founder and Product Architect"));
+assert(html("/hire").includes("TRACK B"));
+assert(html("/founder").includes("IN DEVELOPMENT"));
+assert(html("/about").includes("data-photo-filter"));
+console.log(
+  `Verified ${pages.length} routes, destinations, image assets, section anchors, founder separation and ${CASES.length} interactive workspaces.`,
+);

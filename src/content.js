@@ -224,7 +224,7 @@ export const CASES = [
   {
     slug: 'search-discovery', n: '05', tag: 'Search', wf: 'search', cat: 'Search · SEO · Analytics', year: '2024 – 2026',
     title: 'Search and discovery',
-    line: 'Rebuilt predictive search around behaviour and took organic clicks from 468K to 1.6M in six months.',
+    line: 'Rebuilt predictive search around behaviour. Separately, SEO work grew organic clicks from 468K to 1.6M in six months.',
     metrics: [['+9.0%', 'Search-to-order conversion'], ['468K → 1.6M', 'Organic clicks, six months'], ['127K+', 'App installs']],
     hook: 'Funnel analysis showed customers typing queries the engine could not resolve, and it was costing orders.',
     quick: {
