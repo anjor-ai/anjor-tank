@@ -16,14 +16,11 @@ export const SITE = {
   lat: '19.08°N', lon: '72.88°E',
 };
 
-/* Greetings that flicker in the intro and the hero. English first, then Hindi. */
-export const HELLOS = [
-  ['HELLO', 'English'], ['नमस्ते', 'Hindi'], ['HOLA', 'Spanish'], ['BONJOUR', 'French'],
-  ['નમસ્તે', 'Gujarati'], ['CIAO', 'Italian'], ['OLÁ', 'Portuguese'], ['नमस्कार', 'Marathi'],
-];
+/* Greetings that flicker in the intro and the hero. English first, then Hindi. No language labels. */
+export const HELLOS = ['HELLO', 'नमस्ते', 'HOLA', 'BONJOUR', 'નમસ્તે', 'CIAO', 'OLÁ', 'नमस्कार', 'こんにちは'];
 
 export const NAV = [
-  ['/work', 'Work'], ['/architect', 'Architect'], ['/meshhetu', 'MESHHETU'], ['/journey', 'Journey'], ['/beyond', 'Beyond work'],
+  ['/work', 'Work'], ['/architect', 'Architect'], ['/journey', 'Journey'], ['/meshhetu', 'MESHHETU'], ['/consulting', 'Consulting'], ['/beyond', 'Beyond work'],
 ];
 
 /* ───────────── proof strip ───────────── */
@@ -296,20 +293,24 @@ export const TAGS = ['All', 'Payments', 'Growth', 'Operations', 'Search', 'AI'];
 export const CHAPTERS = [
   { k: 'I', t: 'Learn how demand is made', span: '2021 – 2023', d: 'Three roles in marketing and client services, from an SEO audit to dealer networks and campaign targeting.',
     roles: [
-      { when: 'Sep – Dec 2023', role: 'Management Trainee', org: 'Neil Patel Digital India · Mumbai', text: 'Managed 6 clients across sectors and refined campaign targeting from consumer-behaviour data.' },
+      { when: 'May – Jun 2021', role: 'Digital Marketing and Web Development Intern', org: '9LedgePro · Microsoft Partner Network', text: 'Ran an SEO audit, shipped 30+ posts and 10 blogs, and set a 40/40/20 low-medium-high competition keyword mix.' },
       { when: 'Apr – Sep 2022', role: 'Client Services Associate', org: 'Eggfirst Advertising and Design · Goregaon', text: 'Primary contact for 15 Tata Motors dealers across Maharashtra. Wireframed 48 landing pages and a lead-management system, and planned about 100 campaigns.' },
-      { when: 'May – Jun 2021', role: 'Digital Marketing and Web Development Intern', org: '9LedgePro · Microsoft Partner Network', text: 'Ran an SEO audit and set a 40/40/20 low-medium-high competition keyword mix.' },
+      { when: 'Sep – Dec 2023', role: 'Management Trainee', org: 'Neil Patel Digital India · Mumbai', text: 'Managed 6 clients across sectors, supported pitches that won new business and refined campaign targeting from consumer-behaviour data.' },
     ] },
   { k: 'II', t: 'Ship the systems underneath', span: 'Dec 2023 – Jul 2026', d: 'Two years and eight months owning products from problem to release.',
     roles: [
-      { when: 'Dec 2023 – Jul 2026', role: 'Associate Product Manager', org: 'Series C online pharmacy · Mumbai', text: 'Co-managed two product pods of 12 engineers across payments and portals, with the engineering lead and a senior PM. Built five systems 0-to-1 and owned sprint planning, prioritisation, on-call rotation and delivery.',
+      { when: 'Dec 2023 – Jul 2026', role: 'Associate Product Manager', org: 'Truemeds · Mumbai', text: 'Co-managed two product pods of 12 engineers across payments and portals, with the engineering lead and a senior PM. Built five systems 0-to-1 and owned sprint planning, prioritisation, on-call rotation and delivery.',
         tags: ['Payments', 'Growth', 'Search', 'Internal tools', 'Operations'] },
     ] },
+  { k: 'III', t: 'Own the product, then the company', span: '2026 – now', d: 'A new product role, and a company of my own alongside it.',
+    roles: [
+      { when: 'Oct 2026 – now', role: 'Product Manager', org: 'GNC India · OneGuardian Brands · Mumbai', text: 'Product manager at GNC India, the consumer wellness brand, across ecommerce, growth and the internal platforms behind them.', tags: ['Ecommerce', 'D2C', 'Growth', 'Platform'] },
+      { when: '2026 – now', role: 'Founder and Product Architect', org: 'MESHHETU', text: 'Founded a systems engineering company for ecommerce and D2C: strategic consulting, modular intelligence, and ROQIVA in development.', tags: ['Consulting', 'GTM engineering', 'RevOps'] },
+    ] },
 ];
-CHAPTERS[0].roles.reverse();
 
 export const EDU = [['MBA · Marketing, Operations and SCM', 'NMIMS, Mumbai · 2021 – 2023'], ['BTech · Electronics and Telecommunications', 'NMIMS, Mumbai · 2018 – 2022']];
-export const CERTS = ['Model Context Protocol: Advanced Topics (Anthropic)', 'Building with the Claude API (Anthropic)', 'Building Agentic AI Systems', 'Create Generative AI Apps on Google Cloud', 'Aha! Product Management Professional', 'Executive Program in Product Management'];
+export const CERTS = ['Model Context Protocol: Advanced Topics (Anthropic)', 'Building with the Claude API (Anthropic)', 'Building Agentic AI Systems', 'Create Generative AI Apps on Google Cloud', 'Aha! Product Management Professional', 'Executive Program in Product Management', 'Eye Tracking in Neuromarketing: a study on visual attention patterns (publication)'];
 export const SKILLS = ['Payment systems and architecture', 'Product discovery and roadmapping', 'Product analytics and SQL', 'Wireframing and product design', 'A/B testing', 'Workflow automation', 'API and platform integrations', 'Agile and Scrum', 'Market research'];
 
 /* ───────────── MESHHETU ───────────── */
@@ -367,3 +368,63 @@ export const DOORS = [
   { id: 'consult', t: 'Consult with me', s: 'MESHHETU', d: 'Diagnose a stuck metric, design the system behind it and hand over a build-ready plan, through MESHHETU’s consulting and modular intelligence tracks.', cta: 'Bring me the number',
     asks: [['Business', 'text'], ['The metric that won’t move', 'text']], opts: ['E-commerce or D2C', 'Subscription or refill', 'Marketplace', 'Something else'] },
 ];
+
+/* ───────────── achievements (beyond one employer) ───────────── */
+export const WINS = [
+  { k: 'Payments', v: '+12.5pp', d: 'Prepaid order-to-delivery, from a checkout rebuild and Price Lock.' },
+  { k: 'Payments', v: '+6.0%', d: 'Online prepaid adoption, from redesigning payment visibility. Amazon Pay integrated.' },
+  { k: 'Search', v: '+9.0%', d: 'Search-to-order conversion from predictive search and behavioural suggestions.' },
+  { k: 'Growth', v: '~1,100/day', d: 'Repeat orders from an automated reminder platform.' },
+  { k: 'Growth', v: '6 → 13%', d: 'Referral share of acquisition after closing two fraud vectors.' },
+  { k: 'Retention', v: '+1.9pp', d: 'User retention from a coupon platform with 45+ stacking combinations and cashback.' },
+  { k: 'AI', v: '−20%', d: 'Cost per order from a voice agent and order prioritisation.' },
+  { k: 'AI', v: '+11%', d: 'Medicine substitution acceptance from a behaviour-driven recommender.' },
+  { k: 'Operations', v: '−30%', d: 'Support resolution time after unifying CRM routing, returns and refunds.' },
+  { k: 'Platform', v: '70,000+', d: 'SKUs re-indexed by salt, brand, variant and dosage form for the substitution engine.' },
+  { k: 'Analytics', v: 'GA4 + BigQuery', d: 'End-to-end analytics infrastructure, with Mixpanel, CleverTap and AppsFlyer centralised.' },
+  { k: 'Growth', v: '127K+', d: 'App installs from a web-to-app banner.' },
+];
+
+/* ───────────── hire me ───────────── */
+export const HIRE = {
+  pitch: 'I build the systems that turn customer signals into revenue. I find where revenue leaks, design the decision logic, wire it into the systems that act on it, and measure the lift with proper experiments.',
+  roles: ['Product Manager (growth, payments, platform, AI)', 'Product Architect or Technical Product Manager', 'GTM Engineer or revenue-systems roles'],
+  where: 'India, or remote with US and global teams.',
+  strengths: ['Consumer product', 'Ecommerce and D2C', 'Growth product', 'RevOps', 'GTM engineering', 'Search and discovery', 'Checkout and payments', 'Retention and lifecycle', 'Fulfilment and logistics', 'CX', 'AI and automation', 'Product analytics', 'Experimentation', 'Revenue systems'],
+  pattern: [
+    ['Find the leak', 'Funnel analysis, SQL and time with the warehouse and support teams, to see where revenue actually escapes.'],
+    ['Design the rule', 'The decision logic written as states and exceptions an engineer can build, with the options I rejected on the page.'],
+    ['Wire it in', 'The web, app, API and internal tool that act on the rule, owned end to end with the engineering lead.'],
+    ['Prove the lift', 'Phased A/B releases against a baseline, then a write-up of what worked and what I would change.'],
+  ],
+  fit: [['Growth PM', 'Referral, lifecycle, CMS and experimentation that growth can run without a ticket.'], ['Payments PM', 'Checkout, price integrity, payment adoption and failure handling.'], ['Platform PM', 'Rule engines, catalogues, portals and the internal tools behind them.'], ['AI PM', 'Automation and recommendation that start with the cheapest high-volume intent.']],
+};
+
+/* ───────────── consulting ───────────── */
+export const CONSULT = {
+  lead: 'Bring me a metric that will not move. I will find the leak between your tools, design the system behind the fix and hand your team a build-ready plan.',
+  offers: [
+    { k: '01', t: 'Revenue leak audit', time: '1 to 2 weeks', d: 'Trace the funnel and the systems under it. You get ranked, evidence-labelled findings and the first fix worth making.', gets: ['Funnel and event audit', 'Ranked findings with evidence', 'The cheapest fix first'] },
+    { k: '02', t: 'Decision-ready build plan', time: '2 to 4 weeks', d: 'Turn the chosen fix into a PRD, wireframes, tracking spec, tickets and acceptance criteria your engineers can pick up.', gets: ['PRD and wireframes', 'Tracking plan', 'Tickets with acceptance criteria'] },
+    { k: '03', t: 'Embedded product architect', time: 'Monthly', d: 'I sit with your team, own a track end to end across web, app and platform, and report against a baseline.', gets: ['Roadmap and sprint ownership', 'Release and measurement', 'A named owner for every change'] },
+  ],
+  fit: ['Ecommerce and D2C brands with a stuck conversion, retention or fulfilment number', 'Teams whose tools capture the signals but nobody owns the decision', 'Founders who need a product architect before they hire one'],
+  notfit: ['A redesign with no measurable goal', 'Work that needs a large delivery team from day one'],
+  faq: [
+    ['Who do I work with?', 'Me, directly. Consulting runs through MESHHETU, with Karan Tank as AI engineer where the work needs it. No hand-off to a junior team.'],
+    ['What do you need from us?', 'Read access to the funnel and event data, an hour with the people who run the operation, and one named person to decide.'],
+    ['Do you build or only advise?', 'Both. The plan is written to be built by your team, and I can own the build as an embedded product architect.'],
+    ['How do we start?', 'Send the metric and a line on the business. I reply with where I would look first, usually within two working days.'],
+  ],
+};
+
+/* ───────────── case-page sidebar: at a glance ───────────── */
+export const GLANCE = {
+  'price-lock-checkout': { role: 'Owner, 0-to-1', team: 'Designers, engineers and a data analyst', stack: ['Payments stack', 'Order-processing portals', 'Firebase A/B', 'Mixpanel'], read: '8 min' },
+  'coupons-cashback': { role: 'Owner, with marketing and design', team: 'Marketing, design pod, engineering', stack: ['Rule validator', 'Cashback ledger', 'Admin portals'], read: '8 min' },
+  'sku-substitution-engine': { role: 'Architect of the logic layer', team: 'Warehouse ops, catalogue, engineering', stack: ['Catalogue CMS', 'Order-routing tables', 'Metabase'], read: '9 min' },
+  'growth-loops': { role: 'Product owner', team: 'Growth, engineering', stack: ['Strapi CMS', 'Referral service', 'Reminder journeys'], read: '3 min' },
+  'search-discovery': { role: 'Product owner', team: 'Growth, SEO, engineering', stack: ['Predictive search', 'GA4', 'Looker Studio', 'Meta CAPI'], read: '3 min' },
+  'ai-automation': { role: 'Product owner', team: 'Support, operations, engineering', stack: ['NLP voice bot', 'Recommendation model', 'Risk scoring'], read: '3 min' },
+  'internal-ops-cx': { role: 'Product owner', team: 'Warehouse, finance, engineering', stack: ['Kapture CRM', 'Returns workflow', 'Maker-checker'], read: '3 min' },
+};

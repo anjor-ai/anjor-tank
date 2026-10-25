@@ -1,6 +1,6 @@
 # Anjor Tank — portfolio
 
-A multi-page product portfolio: Home, Work (7 case studies with a quick-view pop-up and a full page each), Architect, MESHHETU, Journey, Beyond work and Contact.
+A multi-page product portfolio: Home, Work (7 case studies with a quick-view pop-up and a full case-study page each), Architect, MESHHETU, Journey, Beyond work, Hire me, Consulting and Contact.
 
 - **Content** lives in `src/content.js` (case studies, roles, copy). Edit text there.
 - **Pages** are generated from that content by `src/render.js`; `vite.config.js` turns each route into a real HTML page at build time.

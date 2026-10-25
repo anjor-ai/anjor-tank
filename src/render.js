@@ -3,8 +3,10 @@
    Used at build time by vite.config.js (full pages) and at run time by
    main.js (the case quick-view). No framework: strings in, strings out.
    ========================================================================== */
-import { SITE, NAV, PROOF, BELIEFS, ARC, LAYERS, OWN, RELEASE, TOOLS, CASES, CASE_STEPS, TAGS, CHAPTERS, EDU, CERTS, SKILLS, MESH, PHOTOS, ALT, LOVES, DOORS, HELLOS } from './content.js';
+import { SITE, NAV, PROOF, BELIEFS, ARC, LAYERS, OWN, RELEASE, TOOLS, CASES, CASE_STEPS, TAGS, CHAPTERS, EDU, CERTS, SKILLS, MESH, PHOTOS, ALT, LOVES, DOORS, WINS, HIRE, CONSULT, GLANCE } from './content.js';
 import { isoStack, wf, mockup } from './art.js';
+import { isoScene, SCHEMES } from './iso.js';
+import { WM } from './wm.js';
 
 export const esc = (v) => String(v).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const hl = (t) => esc(t).replace(/\*([^*]+)\*/g, '<span class="hl">$1</span>');
@@ -30,37 +32,53 @@ const sh = (label, title, lead = '', cls = '') =>
 const key = (t = 'AT') => `<span class="key" aria-hidden="true"><b>${t}</b></span>`;
 
 /* ───────────── shell ───────────── */
+/** The ANJOR TANK logotype as a reel: letters that turn into small dot-matrix screens and back (see artcv.js). */
+function reel(size) {
+  const { w, boxes } = WM;
+  return `<span class="rl rl--${size}" data-rl="${size}" role="img" aria-label="Anjor Tank">${boxes.map(([a, b]) => {
+    const bw = b - a, p = (a / (w - bw) * 100).toFixed(3);
+    const m = `-webkit-mask-size:${(w / bw * 100).toFixed(2)}% 100%;mask-size:${(w / bw * 100).toFixed(2)}% 100%;-webkit-mask-position:${p}% 0;mask-position:${p}% 0`;
+    return `<span class="rl__slot" style="left:${(a / w * 100).toFixed(3)}%;width:${(bw / w * 100).toFixed(3)}%"><span class="rl__ch" style="${m}"></span><span class="rl__tile" aria-hidden="true"><canvas></canvas></span></span>`;
+  }).join('')}</span>`;
+}
+
 function nav(path) {
   const cur = (p) => (path === p || path.startsWith(p + '/') ? ' aria-current="page"' : '');
   return `<header class="nav" id="nav"><div class="nav__in">
-    <a class="brand" href="/" aria-label="Anjor Tank, home">${key()}<span class="brand__t">ANJOR TANK</span></a>
+    <a class="brand" href="/" aria-label="Anjor Tank, home">${key()}${reel('nav')}</a>
     <nav class="nav__links" aria-label="Main">${NAV.map(([h, t]) => `<a href="${h}"${cur(h)}>${t}</a>`).join('')}</nav>
     <div class="nav__r">
       <button class="kbtn" id="theme" type="button" aria-label="Switch colour theme">${I.sun}${I.moon}</button>
-      <a class="btn btn--primary btn--sm nav__cta" href="/contact"><span>Let’s talk</span></a>
+      <a class="btn btn--primary btn--sm nav__cta" href="/hire"><span>Hire me</span></a>
       <button class="kbtn burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sheet">${I.menu}</button>
     </div></div>
-    <div class="sheet" id="sheet" hidden>${NAV.map(([h, t], i) => `<a href="${h}"><i>${pad(i + 1)}</i>${t}</a>`).join('')}<a href="/contact"><i>06</i>Contact</a></div>
+    <div class="sheet" id="sheet" hidden>${[...NAV, ['/hire', 'Hire me'], ['/contact', 'Contact']].map(([h, t], i) => `<a href="${h}"><i>${pad(i + 1)}</i>${t}</a>`).join('')}</div>
   </header>`;
 }
 
 function foot() {
-  const links = [...NAV, ['/contact', 'Contact']];
-  return `<footer class="foot" id="foot"><div class="wrap">
-    <div class="foot__top">
-      <div class="foot__id">${key()}<p class="foot__name">Anjor Tank</p><p class="foot__line">Product manager. Product architect. Founder, MESHHETU.</p></div>
-      <div class="foot__col"><p class="label">Pages</p>${links.map(([h, t]) => `<a href="${h}">${t}</a>`).join('')}</div>
+  const links = [['/', 'Home'], ...NAV, ['/hire', 'Hire me'], ['/contact', 'Contact']];
+  const half = Math.ceil(links.length / 2);
+  return `<footer class="foot" id="foot">
+    <div class="wrap foot__top">
+      <div class="foot__id"><a href="/" aria-label="Anjor Tank, home">${key()}</a><p class="foot__line">Product manager. Product architect. Founder, MESHHETU.</p><p class="label">Mumbai · ${SITE.lat} ${SITE.lon}</p></div>
+      <nav class="foot__col" aria-label="Pages"><p class="label">Pages</p>${links.slice(0, half).map(([h, t]) => `<a href="${h}">${t}</a>`).join('')}</nav>
+      <nav class="foot__col" aria-label="More pages"><p class="label">&nbsp;</p>${links.slice(half).map(([h, t]) => `<a href="${h}">${t}</a>`).join('')}</nav>
       <div class="foot__col"><p class="label">Elsewhere</p><a href="${SITE.linkedin}" target="_blank" rel="noopener">LinkedIn</a><a href="mailto:${SITE.email}">Email</a><a href="${SITE.calendly}" target="_blank" rel="noopener">Book a call</a><a href="${SITE.meshhetu}" target="_blank" rel="noopener">meshhetu.com</a></div>
     </div>
-    <div class="foot__bar"><p class="label">Mumbai · ${SITE.lat} ${SITE.lon}</p><p class="label">© 2026 Anjor Tank</p></div>
-  </div></footer>`;
+    <div class="wrap foot__bar"><p class="label">© 2026 Anjor Tank</p><p class="label">Hello from Mumbai</p></div>
+    <div class="foot__horizon"><div class="wrap foot__stage">
+      <div class="foot__reel">${reel('foot')}</div>
+      <div class="foot__launch" aria-hidden="true"><canvas id="foot-launch"></canvas></div>
+    </div></div>
+  </footer>`;
 }
 
 function cta(title = 'Two ways to work with me.') {
   return `<section class="sec cta" id="cta"><div class="wrap">
     ${sh('Next', title, 'Reach out for a role, or for a consulting problem. Either way, you will hear from me directly.')}
-    <div class="doors">${DOORS.map((d, i) => `<a class="door ${i ? 'door--ink' : ''}" href="/contact?intent=${d.id}" data-in>
-      <p class="label">${esc(d.s)}</p><h3 class="h-3">${esc(d.t)}</h3><p>${esc(d.d)}</p><span class="door__go">${esc(d.cta)}${I.arrow}</span></a>`).join('')}</div>
+    <div class="doors">${DOORS.map((d, i) => `<a class="door ${i ? 'door--ink' : ''}" href="${i ? '/consulting' : '/hire'}" data-in>
+      <p class="label">${esc(d.s)}</p><h3 class="h-3">${esc(d.t)}</h3><p>${esc(d.d)}</p><span class="door__go">${i ? 'See how consulting works' : 'See why hire me'}${I.arrow}</span></a>`).join('')}</div>
   </div></section>`;
 }
 
@@ -88,7 +106,7 @@ ${extra}
 </head>
 <body data-page="${esc(path)}">
 <a class="skip-link" href="#main">Skip to content</a>
-<div class="space" aria-hidden="true"><div class="space__dots"></div><div class="space__glow"></div></div>
+<div class="space" aria-hidden="true"><div class="space__hills"></div><div class="space__word"></div><div class="space__shade"></div></div>
 ${path === '/' ? intro() : ''}
 ${nav(path)}
 <main id="main">${body.replace(/\*([^*<>\n]+)\*/g, '<span class="hl">$1</span>')}</main>
@@ -100,10 +118,10 @@ ${foot()}
 </body></html>`;
 }
 
+/* The opening: a keycap lands in a dot-matrix starfield, it says hello, then the stars stretch into warp and the page opens out of the middle. */
 function intro() {
-  return `<div class="intro" id="intro" aria-hidden="true"><canvas id="globe"></canvas>
-    <div class="intro__c"><p class="intro__w" id="intro-w">HELLO</p><p class="label" id="intro-l">English</p></div>
-    <p class="intro__hud label" id="intro-h">Locating · ${SITE.lat} ${SITE.lon}</p>
+  return `<div class="intro" id="intro" aria-hidden="true"><canvas id="warp"></canvas>
+    <div class="intro__c"><span class="intro__key" id="intro-k"><b>AT</b></span><p class="intro__w" id="intro-w">HELLO</p></div>
     <button class="intro__skip label" id="intro-s" type="button">Skip</button></div>`;
 }
 
@@ -115,8 +133,8 @@ function caseCard(c, i, cls = '') {
     <div class="ccard__art">${wf(c.wf)}</div>
     <h3 class="h-3">${esc(c.title)}</h3>
     <p class="ccard__p">${esc(c.line)}</p>
-    <dl class="ccard__m">${c.metrics.slice(0, 2).map(([v, l]) => `<div><dt>${esc(l)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>
-    <span class="ccard__go" aria-hidden="true">Quick view ${I.plus}</span>
+    <dl class="ccard__m">${c.metrics.slice(0, 2).map(([v, l]) => `<div><dd>${esc(v)}</dd><dt>${esc(l)}</dt></div>`).join('')}</dl>
+    <span class="ccard__go" aria-hidden="true">${I.plus}</span>
   </article>`;
 }
 
@@ -135,25 +153,40 @@ export function quick(c, i, total) {
     </div></div>`;
 }
 
+const picker = () => `<div class="hs__pick glass" role="group" aria-label="Scene colour"><span class="label">Colour</span>${SCHEMES.map(([k, l], i) => `<button type="button" class="sw sw--${k}${i ? '' : ' is-on'}" data-scheme="${k}" aria-label="${l}" aria-pressed="${!i}"></button>`).join('')}</div>`;
+
 /* ───────────── HOME ───────────── */
+const TICK = ['Price Lock at checkout', '45+ coupon combinations', '70,000 SKUs re-indexed', 'Strapi headless CMS', 'Amazon Pay integrated', 'Search-to-order +9.0%', 'Referral 6 → 13%', 'GA4 + BigQuery', 'Voice agent, −20% cost per order', 'CRM routing, −30% resolution time'];
 function home() {
   const feat = CASES.slice(0, 3), rest = CASES.slice(3);
   return `
 <section class="hero" id="top"><div class="wrap hero__g">
   <div class="hero__l">
-    <p class="hello" aria-label="Hello"><span class="hello__w" id="hello">HELLO</span><span class="hello__l label" id="hello-l">English</span></p>
+    <p class="hello" aria-label="Hello"><span class="hello__w" id="hello">HELLO</span><span class="hello__s label"><i></i>Open to roles and consulting</span></p>
     <h1 class="h-hero" id="hero-h">I’m Anjor Tank, a product manager who architects and ships *the whole system.*</h1>
-    <p class="lead" data-in>From the decision rule to the web and app that carry it. Five systems taken from problem to shipped across payments, growth, search and operations, and now founding MESHHETU.</p>
-    <div class="btn-row" data-in>${btn('/work', 'See the work')}${btn('/contact', 'Work with me', 'ghost')}</div>
+    <p class="lead" data-in>From the decision rule to the web and app that carry it. Five systems taken from problem to shipped across payments, growth, search and operations, now at GNC India and founding MESHHETU.</p>
+    <div class="btn-row" data-in>${btn('/work', 'See the work')}${btn('/hire', 'Hire me', 'ghost')}</div>
     <ul class="chips" data-in><li>Mumbai</li><li>Product Manager</li><li>Product Architect</li><li>Founder, MESHHETU</li></ul>
   </div>
-  <div class="hero__r" id="hero-art">${isoStack()}
-    <figure class="me" data-in><img src="/img/anjor.webp" width="447" height="721" alt="Anjor Tank standing at a turquoise mountain lake in a blue jacket" loading="eager"><figcaption><b>Anjor Tank</b><span class="label">Mumbai · ${SITE.lat}</span></figcaption></figure>
+  <div class="hero__r hs" id="hero-art">
+    <div class="hs__scene">${isoScene({ word: 'AT' })}</div>
+    <div class="hs__card hs__card--a glass" data-fl><span class="label">Prepaid delivery</span><b>77.2 → 89.7%</b><svg viewBox="0 0 120 34" aria-hidden="true"><path class="sp" d="M2 28 C20 27 28 24 44 22 S70 16 82 12 106 5 118 3"/></svg><span class="hs__up">+12.5pp</span></div>
+    <div class="hs__card hs__card--b glass" data-fl><p class="bub bub--q">Why did prepaid delivery jump?</p><p class="bub bub--a">We took payment at the order and locked the price, so it never changes.</p></div>
+    <div class="hs__card hs__card--c glass" data-fl><img src="/img/anjor.webp" width="44" height="44" alt="Anjor Tank"><span><b>Anjor Tank</b><i class="label">Product architect · Mumbai</i></span></div>
+    ${picker()}
   </div>
 </div></section>
 
+<div class="ticker" aria-hidden="true"><div class="ticker__t">${[...TICK, ...TICK].map((t) => `<span>${esc(t)}</span>`).join('')}</div></div>
+
 <section class="proof" id="proof"><div class="wrap"><ul class="mets">${PROOF.map((m, i) => `<li class="met" data-in><span class="label">T-0${i + 1} · ${m.tag}</span><strong ${m.to != null ? `data-count data-from="${m.from}" data-to="${m.to}" data-dp="${m.dp}" data-pre="${esc(m.pre || '')}" data-suf="${esc(m.suf || '')}"` : ''}>${m.to != null ? esc(m.pre + m.to.toFixed(m.dp) + m.suf) : esc(m.text)}</strong><span>${esc(m.label)}</span></li>`).join('')}</ul>
-  <p class="foot-note label">Results are from product work at a Series C online pharmacy, 2023 – 2026.</p></div></section>
+  <p class="foot-note label">Results are from product work at Truemeds, 2023 – 2026.</p></div></section>
+
+<section class="sec work" id="work"><div class="wrap">
+  ${sh('Selected work', 'Seven systems, *each with a decision.*', 'Open any card for the quick version. Each one leads to a full case study: context, trade-offs, what shipped and what I would change.')}
+  <div class="bento">${feat.map((c, i) => caseCard(c, i, 'ccard--m')).join('')}${rest.map((c, i) => caseCard(c, i + 3, 'ccard--s')).join('')}</div>
+  <div class="btn-row">${btn('/work', 'All case studies', 'ghost')}</div>
+</div></section>
 
 <section class="arc" id="arc"><div class="wrap arc__g">
   <div class="arc__l"><header class="sh"><p class="label eyebrow">The story so far</p><h2 class="h-2" data-split>From making demand to *building the system under it.*</h2></header>
@@ -167,15 +200,9 @@ function home() {
 </div></section>
 
 <section class="sec think" id="think"><div class="wrap">
-  ${sh('How I think', 'Three beliefs *behind every system.*', 'They come from the case studies below, and they decide what I build first.')}
+  ${sh('How I think', 'Three beliefs *behind every system.*', 'They come from the case studies above, and they decide what I build first.')}
   <div class="asc">${BELIEFS.map((b, i) => `<article class="asc__c" data-in><canvas class="asc__cv" data-ascii="${b.art}" width="10" height="10" aria-hidden="true"></canvas>
     <div class="asc__t"><h3>${esc(b.t)}</h3><p>${esc(b.d)}</p><ul>${b.chips.map((c) => `<li>${esc(c)}</li>`).join('')}</ul></div></article>`).join('')}</div>
-</div></section>
-
-<section class="sec work" id="work"><div class="wrap">
-  ${sh('Selected work', 'Seven systems, *each with a decision.*', 'Open any card for the quick version. Each one leads to the full case study: context, trade-offs, what shipped and what I would change.')}
-  <div class="bento">${feat.map((c, i) => caseCard(c, i, i === 0 ? 'ccard--feat' : 'ccard--b')).join('')}${rest.map((c, i) => caseCard(c, i + 3, 'ccard--s')).join('')}</div>
-  <div class="btn-row">${btn('/work', 'All case studies', 'ghost')}</div>
 </div></section>
 
 <section class="sec arch" id="arch"><div class="wrap arch__g">
@@ -193,12 +220,12 @@ function home() {
     <div class="meshcard__r"><p class="label eyebrow">Founder</p><h2 class="h-2">Built with a *purpose.* Engineered with a reason.</h2>
       <p class="lead">${esc(MESH.why)}</p>
       <ul class="trk">${MESH.tracks.map((t) => `<li><span class="trk__k">${t.k}</span><div><b>${esc(t.t)}</b><span class="chip chip--${t.tone}">${esc(t.s)}</span></div></li>`).join('')}</ul>
-      <div class="btn-row">${btn('/meshhetu', 'The MESHHETU story', 'light')}${btn(SITE.meshhetu, 'meshhetu.com', 'ghost-d', true)}</div></div>
+      <div class="btn-row">${btn('/meshhetu', 'The MESHHETU story', 'light')}${btn('/consulting', 'Consulting', 'ghost-d')}</div></div>
   </div></div></section>
 
 <section class="sec path" id="path"><div class="wrap">
-  ${sh('Journey', 'Four roles, then *a company of my own.*', 'Marketing taught me demand. Product taught me systems. MESHHETU is where both meet.')}
-  <ol class="strip">${[['2021', 'Digital marketing intern', '9LedgePro'], ['2022', 'Client services associate', 'Eggfirst'], ['2023', 'Management trainee', 'Neil Patel Digital'], ['2023 – 26', 'Associate Product Manager', 'Series C online pharmacy'], ['2026 –', 'Founder, MESHHETU', 'Product Architect']].map(([w, r, o], i, a) => `<li class="strip__i${i === a.length - 1 ? ' strip__i--now' : ''}" data-in><span class="label">${w}</span><i></i><b>${esc(r)}</b><span>${esc(o)}</span></li>`).join('')}</ol>
+  ${sh('Journey', 'Marketing, then product, *then a company of my own.*', 'Marketing taught me demand. Product taught me systems. MESHHETU is where both meet.')}
+  <ol class="strip">${[['2021', 'Digital marketing intern', '9LedgePro'], ['2022', 'Client services associate', 'Eggfirst'], ['2023', 'Management trainee', 'Neil Patel Digital'], ['2023 – 26', 'Associate Product Manager', 'Truemeds'], ['2026 –', 'Product Manager', 'GNC India'], ['2026 –', 'Founder, MESHHETU', 'Product Architect']].map(([w, r, o], i, a) => `<li class="strip__i${i >= a.length - 2 ? ' strip__i--now' : ''}" data-in><span class="label">${w}</span><i></i><b>${esc(r)}</b><span>${esc(o)}</span></li>`).join('')}</ol>
   <div class="btn-row">${btn('/journey', 'The full timeline', 'ghost')}</div>
 </div></section>
 
@@ -227,8 +254,8 @@ ${cta()}`;
 }
 
 /* ───────────── CASE ───────────── */
-function caseBody(sec) {
-  let h = `<section class="cs" id="${sec.id}" data-sec><h2 class="h-2" data-in>${esc(sec.h)}</h2>`;
+function caseBody(sec, n = 0) {
+  let h = `<section class="cs" id="${sec.id}" data-sec><p class="label cs__n" data-in><b>${pad(n)}</b>${esc(sec.h)}</p><h2 class="h-2" data-in>${esc(sec.h)}</h2>`;
   (sec.p || []).forEach((p) => { h += `<p class="cs__p" data-in>${esc(p)}</p>`; });
   if (sec.table) h += `<div class="tbl" data-in><table><thead><tr>${sec.table.head.map((x) => `<th>${esc(x)}</th>`).join('')}</tr></thead><tbody>${sec.table.rows.map((r) => `<tr>${r.map((x, j) => (j ? `<td>${esc(x)}</td>` : `<th scope="row">${esc(x)}</th>`)).join('')}</tr>`).join('')}</tbody></table></div>`;
   if (sec.after && sec.table) h += `<p class="cs__p" data-in>${esc(sec.after)}</p>`;
@@ -240,23 +267,36 @@ function caseBody(sec) {
 }
 
 function casePage(c) {
-  const i = CASES.indexOf(c), nx = CASES[(i + 1) % CASES.length];
+  const i = CASES.indexOf(c), nx = CASES[(i + 1) % CASES.length], g = GLANCE[c.slug];
+  const related = [...CASES.filter((x) => x !== c && x.tag === c.tag), ...CASES.filter((x) => x !== c && x.tag !== c.tag)].slice(0, 3);
+  const secs = [['hook', 'The hook'], ...c.body.map((s) => [s.id, s.h])];
   return `
 <article>
-<section class="chead"><div class="wrap"><a class="back" href="/work">${I.arrow} All case studies</a>
-  <div class="chead__g"><div><p class="label eyebrow" data-in>Case ${c.n} · ${esc(c.cat)}</p><h1 class="h-hero" data-split>${esc(c.title)}</h1><p class="lead" data-in>${esc(c.line)}</p>
-    <dl class="meta" data-in><div><dt>Role</dt><dd>Associate Product Manager</dd></div><div><dt>Context</dt><dd>Series C online pharmacy</dd></div><div><dt>Timeline</dt><dd>${esc(c.year)}</dd></div><div><dt>Domain</dt><dd>${c.tag}</dd></div></dl></div>
+<section class="chead"><div class="wrap">
+  <nav class="crumbs label" aria-label="Breadcrumb"><a href="/work">Work</a><i>/</i><span>${esc(c.tag)}</span><i>/</i><span>Case ${c.n}</span></nav>
+  <div class="chead__g"><div><p class="label eyebrow" data-in>${esc(c.cat)} · ${esc(c.year)}</p><h1 class="h-hero" data-split>${esc(c.title)}</h1><p class="lead" data-in>${esc(c.line)}</p>
+    <ul class="chips" data-in><li>${c.tag}</li><li>${esc(g.read)} read</li><li>Truemeds</li></ul></div>
     <div class="chead__art" data-in>${wf(c.wf)}</div></div>
   <ul class="mets mets--3">${c.metrics.map(([v, l]) => `<li class="met" data-in><strong>${esc(v)}</strong><span>${esc(l)}</span></li>`).join('')}</ul>
 </div></section>
 <div class="wrap cbody">
-  <aside class="toc" aria-label="On this page"><p class="label">On this page</p><ol>${[['hook', 'The hook'], ...c.body.map((s) => [s.id, s.h])].map(([id, t], k) => `<li><a href="#${id}"${k ? '' : ' aria-current="true"'}><i>${pad(k + 1)}</i>${esc(t)}</a></li>`).join('')}</ol><div class="toc__bar"><i id="prog"></i></div></aside>
+  <aside class="toc" aria-label="On this page"><p class="label">On this page</p><ol>${secs.map(([id, t], k) => `<li><a href="#${id}"${k ? '' : ' aria-current="true"'}><i>${pad(k + 1)}</i>${esc(t)}</a></li>`).join('')}</ol><div class="toc__bar"><i id="prog"></i></div></aside>
   <div class="cmain">
     <section class="cs" id="hook" data-sec><blockquote class="hookq" data-in>${esc(c.hook)}</blockquote>
       ${c.table ? `<div class="tbl" data-in><table><thead><tr><th>Metric</th><th>Before</th><th>After</th><th>Change</th></tr></thead><tbody>${c.table.map((r) => `<tr>${r.map((x, j) => (j ? `<td${j === 3 ? ' class="chg"' : ''}>${esc(x)}</td>` : `<th scope="row">${esc(x)}</th>`)).join('')}</tr>`).join('')}</tbody></table></div>` : ''}</section>
-    ${c.body.map(caseBody).join('')}
+    ${c.body.map((s, k) => caseBody(s, k + 2)).join('')}
   </div>
+  <aside class="glance glass" aria-label="At a glance"><p class="label">At a glance</p>
+    <dl><div><dt>Role</dt><dd>${esc(g.role)}</dd></div><div><dt>Company</dt><dd>Truemeds</dd></div><div><dt>Team</dt><dd>${esc(g.team)}</dd></div><div><dt>Timeline</dt><dd>${esc(c.year)}</dd></div><div><dt>Domain</dt><dd>${esc(c.tag)}</dd></div></dl>
+    <p class="label">Built with</p><ul class="chips chips--sm">${g.stack.map((s) => `<li>${esc(s)}</li>`).join('')}</ul>
+    <div class="glance__r"><p class="label">Result</p>${c.metrics.slice(0, 2).map(([v, l]) => `<p><b>${esc(v)}</b><span>${esc(l)}</span></p>`).join('')}</div>
+    <a class="btn btn--primary btn--sm" href="/hire"><span>Hire me</span>${I.arrow}</a>
+  </aside>
 </div>
+<section class="sec rel"><div class="wrap">
+  ${sh('Keep reading', 'More *systems, more decisions.*', '')}
+  <div class="relg">${related.map((x, k) => caseCard(x, k, 'ccard--s')).join('')}</div>
+</div></section>
 <section class="sec nextc"><div class="wrap"><a class="nextc__a" href="/work/${nx.slug}"><span class="label">Next case · ${nx.n}</span><b class="h-2">${esc(nx.title)}</b><span class="nextc__go">${I.arrow}</span></a></div></section>
 </article>
 ${cta('Like how I think? Let’s talk.')}`;
@@ -407,12 +447,98 @@ function contact() {
 </div></section>`;
 }
 
+/* ───────────── HIRE ───────────── */
+function hire() {
+  const xp = CHAPTERS.slice().reverse().flatMap((c) => (c.k === 'III' ? c.roles : c.roles.slice().reverse()));
+  return `
+<section class="phead phead--scene"><div class="wrap phead__g">
+  <div><p class="label eyebrow" data-in>Hire me</p><h1 class="h-hero" data-split>A product manager who *architects and ships* the whole system.</h1>
+    <p class="lead" data-in>${esc(HIRE.pitch)}</p>
+    <div class="btn-row" data-in>${btn('/contact?intent=job', 'Start a conversation')}${btn(SITE.linkedin, 'LinkedIn', 'ghost', true)}</div>
+    <div class="open glass" data-in><p class="label"><i></i>Open to</p><ul>${HIRE.roles.map((r) => `<li>${esc(r)}</li>`).join('')}</ul><p class="open__w">${esc(HIRE.where)}</p></div></div>
+  <div class="hs hs--page" id="page-art"><div class="hs__scene">${isoScene({ word: 'OK', scene: 'hire' })}</div>${picker()}</div>
+</div></section>
+
+<section class="sec"><div class="wrap">
+  ${sh('How I work', 'The same four moves, *every time.*', 'Different problems, one pattern. It is why the results in the next section look so different and read so alike.')}
+  <ol class="moves">${HIRE.pattern.map(([t, d], i) => `<li class="move" data-in><span class="move__n">${pad(i + 1)}</span><h3 class="h-3">${esc(t)}</h3><p>${esc(d)}</p></li>`).join('')}</ol>
+</div></section>
+
+<section class="sec"><div class="wrap">
+  ${sh('Results', 'Twelve numbers *I can explain.*', 'Across payments, search, growth, AI and operations. Each has a case study or a clear owner behind it, and none depends on a single project.')}
+  <ul class="wins">${WINS.map((w) => `<li class="win2" data-in><span class="label">${esc(w.k)}</span><strong>${esc(w.v)}</strong><p>${esc(w.d)}</p></li>`).join('')}</ul>
+  <div class="btn-row">${btn('/work', 'Read the case studies', 'ghost')}</div>
+</div></section>
+
+<section class="sec"><div class="wrap">
+  ${sh('Where I fit', 'Four kinds of *PM seat.*', 'I can sit in any of these, and I am at my best where they overlap.')}
+  <div class="fit">${HIRE.fit.map(([t, d], i) => `<article class="card" data-in><span class="label">${pad(i + 1)}</span><h3 class="h-3">${esc(t)}</h3><p>${esc(d)}</p></article>`).join('')}</div>
+</div></section>
+
+<section class="sec"><div class="wrap">
+  ${sh('Experience', 'Where I have *done the work.*', 'Newest first. The full story is on the journey page.')}
+  <div class="xp">${xp.map((r) => `<article class="role" data-in><div class="role__w label">${esc(r.when)}</div><div class="role__c"><h3 class="h-3">${esc(r.role)}</h3><p class="role__o">${esc(r.org)}</p><p>${esc(r.text)}</p>${r.tags ? `<ul class="chips chips--sm">${r.tags.map((t) => `<li>${esc(t)}</li>`).join('')}</ul>` : ''}</div></article>`).join('')}</div>
+  <div class="btn-row">${btn('/journey', 'The full journey', 'ghost')}</div>
+</div></section>
+
+<section class="sec"><div class="wrap trio">
+  <div data-in><h3 class="label">Strongest areas</h3><ul class="chips chips--sm">${HIRE.strengths.map((c) => `<li>${esc(c)}</li>`).join('')}</ul></div>
+  <div data-in><h3 class="label">Toolbox</h3><ul class="chips chips--sm">${TOOLS.map((c) => `<li>${esc(c)}</li>`).join('')}</ul></div>
+  <div data-in><h3 class="label">Education and certifications</h3><ul class="plain">${EDU.map(([a, b]) => `<li><b>${esc(a)}</b><span>${esc(b)}</span></li>`).join('')}${CERTS.slice(0, 4).map((c) => `<li>${esc(c)}</li>`).join('')}</ul></div>
+</div></section>
+${cta('Let’s talk about the role.')}`;
+}
+
+/* ───────────── CONSULTING ───────────── */
+function consulting() {
+  return `
+<section class="phead phead--scene"><div class="wrap phead__g">
+  <div><p class="label eyebrow" data-in>Consulting · MESHHETU</p><h1 class="h-hero" data-split>Find the revenue leak *between your tools.*</h1>
+    <p class="lead" data-in>${esc(CONSULT.lead)}</p>
+    <div class="btn-row" data-in>${btn('/contact?intent=consult', 'Bring me the number')}${btn(SITE.calendly, 'Book a call', 'ghost', true)}</div>
+    <ul class="chips" data-in><li>Ecommerce</li><li>D2C</li><li>GTM engineering</li><li>RevOps</li></ul></div>
+  <div class="hs hs--page" id="page-art"><div class="hs__scene">${isoScene({ word: 'PM', scene: 'consult' })}</div>${picker()}</div>
+</div></section>
+
+<section class="sec"><div class="wrap">
+  ${sh('Three ways in', 'Start small, *or embed.*', 'Each one ends in something your team can build or run. None of them ends in a deck.')}
+  <div class="offers">${CONSULT.offers.map((o) => `<article class="offer" data-in><div class="offer__h"><span class="trk__k">${o.k}</span><span class="chip">${esc(o.time)}</span></div><h3 class="h-3">${esc(o.t)}</h3><p>${esc(o.d)}</p><ul class="bl">${o.gets.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></article>`).join('')}</div>
+</div></section>
+
+<section class="sec"><div class="wrap">
+  ${sh('How an engagement runs', 'A signal becomes *a decision worth acting on.*', 'Six steps and four human gates. Any gate can send the work back with a reason.')}
+  <div class="flow" id="flow"><ol class="flow__s">${MESH.steps.map(([n, t, a, d]) => `<li class="flow__i" data-in><span class="label">${n}</span><b>${t}</b><span class="chip chip--${a === 'Code' ? 'ok' : a === 'Agent' ? 'vi' : 'sky'}">${a}</span><p>${esc(d)}</p></li>`).join('')}</ol>
+    <ol class="flow__g">${MESH.gates.map((g, i) => `<li><i>${i + 1}</i>${g}</li>`).join('')}</ol></div>
+</div></section>
+
+<section class="sec"><div class="wrap fitg">
+  <div class="card card--yes" data-in><p class="label">A good fit</p><ul class="bl">${CONSULT.fit.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
+  <div class="card" data-in><p class="label">Probably not</p><ul class="bl bl--no">${CONSULT.notfit.map((x) => `<li>${esc(x)}</li>`).join('')}</ul></div>
+</div></section>
+
+<section class="sec"><div class="wrap">
+  ${sh('Proof', 'The work *behind the offer.*', 'Three systems I took from a stuck number to a shipped fix.')}
+  <div class="relg">${CASES.slice(0, 3).map((c, i) => caseCard(c, i, 'ccard--s')).join('')}</div>
+</div></section>
+
+<section class="sec"><div class="wrap">
+  ${sh('The team', 'A *product architect* and an *AI engineer.*', 'The two of us run every engagement. No hand-offs to a junior team.')}
+  <div class="fnd">${MESH.founders.map((f) => `<article class="card" data-in><p class="label">${esc(f.p)} · owns ${esc(f.o)}</p><h3 class="h-3">${esc(f.n)} <span>${esc(f.r)}</span></h3><p>${esc(f.d)}</p></article>`).join('')}</div>
+</div></section>
+
+<section class="sec"><div class="wrap faqw">
+  ${sh('Questions', 'Before you *write in.*', '')}
+  <div class="faq">${CONSULT.faq.map(([q, a]) => `<details class="qa" data-in><summary>${esc(q)}<span aria-hidden="true">${I.plus}</span></summary><p>${esc(a)}</p></details>`).join('')}</div>
+</div></section>
+${cta('Have a metric that won’t move?')}`;
+}
+
 function notfound() {
   return `<section class="phead nf"><div class="wrap"><p class="label eyebrow">404 · Off the drawing</p><h1 class="h-hero">Head back to *a page that exists.*</h1><p class="lead">That address doesn’t match anything on this site.</p><div class="btn-row">${btn('/', 'Go home')}${btn('/work', 'See the work', 'ghost')}</div></div></section>`;
 }
 
 /* ───────────── route table ───────────── */
-const D = 'Anjor Tank is a product manager and product architect in Mumbai who owns web and app development end to end, and founder of MESHHETU.';
+const D = 'Anjor Tank is a product manager and product architect in Mumbai who owns web and app development end to end, is Product Manager at GNC India and founded MESHHETU.';
 export function routes() {
   const R = [
     { path: '/', file: 'index.html', title: 'Anjor Tank | Product manager and product architect', desc: D, body: home, boot: true },
@@ -422,6 +548,8 @@ export function routes() {
     { path: '/meshhetu', file: 'meshhetu/index.html', title: 'MESHHETU | Anjor Tank', desc: 'MESHHETU is the systems engineering company Anjor Tank founded: strategic consulting, modular intelligence and ROQIVA in development.', body: meshhetu },
     { path: '/journey', file: 'journey/index.html', title: 'Journey | Anjor Tank', desc: 'From campaigns to commerce systems: Anjor Tank’s path through marketing, product and founding MESHHETU.', body: journey },
     { path: '/beyond', file: 'beyond/index.html', title: 'Beyond work | Anjor Tank', desc: 'Karts, live music, mountains and good food: what Anjor Tank does away from the keyboard.', body: beyond },
+    { path: '/hire', file: 'hire/index.html', title: 'Hire me | Anjor Tank', desc: 'Anjor Tank is open to product manager, product architect and GTM engineering roles in India or remote with US and global teams.', body: hire },
+    { path: '/consulting', file: 'consulting/index.html', title: 'Consulting | Anjor Tank', desc: 'Revenue-leak audits, build-ready plans and an embedded product architect, through MESHHETU.', body: consulting },
     { path: '/contact', file: 'contact/index.html', title: 'Contact | Anjor Tank', desc: 'Reach Anjor Tank for a product role or for consulting through MESHHETU.', body: contact },
     { path: '/404', file: '404.html', title: 'Page not found | Anjor Tank', desc: 'Page not found.', body: notfound },
   ];

@@ -11,7 +11,7 @@ import { SplitText } from 'gsap/SplitText';
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin';
 import { CASES, HELLOS, SITE, DOORS } from './content.js';
 import { quick } from './render.js';
-import { SCENES } from './art.js';
+import { wordReel, footLaunch, sceneCanvas, warp, makeDots, blit } from './artcv.js';
 
 gsap.registerPlugin(ScrollTrigger, ScrollToPlugin, SplitText, DrawSVGPlugin);
 
@@ -107,7 +107,7 @@ if (fine && !rm) {
   const cur = $('#cur');
   const qx = gsap.quickTo(cur, 'x', { duration: 0.35, ease: 'power3' }), qy = gsap.quickTo(cur, 'y', { duration: 0.35, ease: 'power3' });
   addEventListener('pointermove', (e) => { cur.classList.add('on'); qx(e.clientX); qy(e.clientY); }, { passive: true });
-  document.addEventListener('pointerover', (e) => { cur.classList.toggle('big', !!e.target.closest('a, button, .ccard, .layer, .door, .fchip, .ph')); });
+  document.addEventListener('pointerover', (e) => { cur.classList.toggle('big', !!e.target.closest('a, button, .ccard, .layer, .door, .fchip, .ph, summary, .win2')); });
   document.addEventListener('pointerleave', () => cur.classList.remove('on'));
   // magnetic buttons
   $$('.btn, .kbtn, .nav__cta').forEach((b) => {
@@ -125,11 +125,11 @@ const rand = (a) => a[Math.floor(Math.random() * a.length)];
 function drawIn(svg, delay = 0) {
   if (!svg || rm) return;
   const lines = $$('.ln, .ac, .dm', svg), solids = $$('.af, .tx, .fl:not(.side):not(.side2)', svg);
-  gsap.fromTo(lines, { drawSVG: '0%' }, {
+  if (lines.length) gsap.fromTo(lines, { drawSVG: '0%' }, {
     drawSVG: '100%', duration: 1.1, delay, ease: 'power2.inOut', stagger: { amount: 0.7, from: 'start' },
     onComplete: () => lines.forEach((l) => { l.style.strokeDasharray = ''; l.style.strokeDashoffset = ''; }),
   });
-  gsap.from(solids, { opacity: 0, duration: 0.6, delay: delay + 0.5, stagger: { amount: 0.4 }, ease: 'none', clearProps: 'opacity' });
+  if (solids.length) gsap.from(solids, { opacity: 0, duration: 0.6, delay: delay + 0.5, stagger: { amount: 0.4 }, ease: 'none', clearProps: 'opacity' });
 }
 
 /** Flicker a greeting into another language: a few frames of noise built from its own glyphs, then the word. */
@@ -147,119 +147,38 @@ function flickerTo(el, text) {
   step();
 }
 
-/* ───────────── intro: HELLO in many languages over a world that zooms into Mumbai ───────────── */
+/* ───────────── intro: a keycap lands in a dot-matrix starfield, says hello, the stars warp, the page opens out of the middle ───────────── */
 function runIntro(done) {
-  const intro = $('#intro'), cv = $('#globe');
+  const intro = $('#intro'), cv = $('#warp');
   if (!intro || !cv || !root.classList.contains('boot')) return done();
-  const ctx = cv.getContext('2d');
-  const DPR = Math.min(devicePixelRatio || 1, 1.5);
-  let W = 0, H = 0, finished = false, tl;
-  const word = $('#intro-w'), lab = $('#intro-l'), hud = $('#intro-h');
-  const MUM = { lat: 19.076 * Math.PI / 180, lon: 72.8777 * Math.PI / 180 };
-  const cam = { lon: -1.9, lat: 0.34, R: 0, zoom: 0 }; // radians; R is set on resize
-  const lit = { n: 0 };
-  let land = null, LW = 0, LH = 0;
-
+  const ctx = cv.getContext('2d'), word = $('#intro-w'), key = $('#intro-k');
+  const CELL = 6, S = { k: 0, a: 1 };
+  let D, img, cols, rows, finished = false, tl;
+  const t0 = performance.now();
+  const size = () => { cols = Math.ceil(innerWidth / CELL); rows = Math.ceil(innerHeight / CELL); D = makeDots(cols, rows); cv.width = cols * CELL; cv.height = rows * CELL; img = ctx.createImageData(cv.width, cv.height); };
+  const draw = () => { D.buf.fill(0); warp(D, ((performance.now() - t0) / 1000) * 7, { x0: 0, y0: 0, w: cols, h: rows }, S.k, S.a); blit(ctx, img, D, CELL, 1); };
   const finish = () => {
     if (finished) return; finished = true;
     store.sset('anjor-boot', '1');
-    tl && tl.kill(); gsap.ticker.remove(draw); removeEventListener('resize', resize);
+    tl && tl.kill(); gsap.ticker.remove(draw); removeEventListener('resize', size);
     root.classList.remove('boot-lock');
-    gsap.to(intro, { opacity: 0, duration: 0.35, onComplete: () => { root.classList.remove('boot'); intro.remove(); ScrollTrigger.refresh(); } });
+    gsap.to(intro, { opacity: 0, duration: 0.3, onComplete: () => { root.classList.remove('boot'); intro.remove(); ScrollTrigger.refresh(); } });
     done();
   };
-  const resize = () => {
-    W = innerWidth; H = innerHeight; cv.width = W * DPR; cv.height = H * DPR;
-    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-  };
   root.classList.add('boot-lock');
-  resize(); addEventListener('resize', resize);
-  const base = () => Math.min(W, H) * 0.34;
-
-  // land bitmap → single-channel array
-  const img = new Image();
-  img.onload = () => {
-    const c = document.createElement('canvas'); LW = c.width = img.width; LH = c.height = img.height;
-    const x = c.getContext('2d', { willReadFrequently: true }); x.drawImage(img, 0, 0);
-    const d = x.getImageData(0, 0, LW, LH).data; land = new Float32Array(LW * LH);
-    for (let i = 0; i < land.length; i++) land[i] = d[i * 4] / 255;
-    start();
-  };
-  img.onerror = finish;
-  img.src = '/img/land.png';
-  const sample = (lat, lon) => { // bilinear, wraps in longitude
-    let fx = ((lon + Math.PI) / (2 * Math.PI)) * LW - 0.5, fy = ((Math.PI / 2 - lat) / Math.PI) * LH - 0.5;
-    fy = Math.max(0, Math.min(LH - 1.001, fy)); fx = ((fx % LW) + LW) % LW;
-    const x0 = Math.floor(fx), y0 = Math.floor(fy), tx = fx - x0, ty = fy - y0, x1 = (x0 + 1) % LW, y1 = y0 + 1;
-    return (land[y0 * LW + x0] * (1 - tx) + land[y0 * LW + x1] * tx) * (1 - ty) + (land[y1 * LW + x0] * (1 - tx) + land[y1 * LW + x1] * tx) * ty;
-  };
-
-  function draw() {
-    ctx.clearRect(0, 0, W, H);
-    const cx = W / 2, cy = H / 2, R = cam.R;
-    const sp = 7 + cam.zoom * 7; // dot pitch in css px, grows as we zoom so the coast stays crisp
-    const sinP = Math.sin(cam.lat), cosP = Math.cos(cam.lat);
-    // disc
-    const g = ctx.createRadialGradient(cx - R * 0.25, cy - R * 0.3, R * 0.1, cx, cy, R);
-    g.addColorStop(0, '#10192d'); g.addColorStop(1, '#070a14');
-    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(cx, cy, R, 0, 7); ctx.fill();
-    // dots on a screen grid, looked up on the globe (an LED-matrix world)
-    const x0 = Math.max(0, Math.floor((cx - R) / sp) * sp), x1 = Math.min(W, cx + R), y0 = Math.max(0, Math.floor((cy - R) / sp) * sp), y1 = Math.min(H, cy + R);
-    const off = (cx % sp), offy = (cy % sp);
-    for (let y = y0 + offy; y < y1; y += sp) {
-      for (let x = x0 + off; x < x1; x += sp) {
-        const u = (x - cx) / R, v = (cy - y) / R, r2 = u * u + v * v;
-        if (r2 >= 1) continue;
-        const z = Math.sqrt(1 - r2);
-        const lat = Math.asin(z * sinP + v * cosP), lon = cam.lon + Math.atan2(u, z * cosP - v * sinP);
-        const L = sample(lat, lon);
-        const shade = 0.25 + 0.75 * z;
-        if (L > 0.5) {
-          ctx.fillStyle = `rgba(${90 + 120 * z | 0},${170 + 70 * z | 0},255,${0.35 + 0.65 * shade})`;
-          ctx.beginPath(); ctx.arc(x, y, sp * 0.27, 0, 7); ctx.fill();
-        } else {
-          ctx.fillStyle = `rgba(80,120,200,${0.1 * shade})`;
-          ctx.fillRect(x - 0.7, y - 0.7, 1.4, 1.4);
-        }
-      }
-    }
-    // rim light and HUD ring
-    ctx.lineWidth = 1.2; ctx.strokeStyle = 'rgba(74,163,255,.55)'; ctx.beginPath(); ctx.arc(cx, cy, R, 0, 7); ctx.stroke();
-    ctx.strokeStyle = 'rgba(74,163,255,.18)'; ctx.beginPath(); ctx.arc(cx, cy, R * 1.07, 0, 7); ctx.stroke();
-    for (let i = 0; i < 72; i++) {
-      const a = (i / 72) * Math.PI * 2 + cam.lon * 0.5, l = i % 6 === 0 ? 10 : 4;
-      ctx.strokeStyle = i % 6 === 0 ? 'rgba(250,249,245,.45)' : 'rgba(250,249,245,.18)';
-      ctx.beginPath(); ctx.moveTo(cx + Math.cos(a) * R * 1.07, cy + Math.sin(a) * R * 1.07); ctx.lineTo(cx + Math.cos(a) * (R * 1.07 + l), cy + Math.sin(a) * (R * 1.07 + l)); ctx.stroke();
-    }
-    // Mumbai pin
-    const dl = MUM.lon - cam.lon, cL = Math.cos(MUM.lat);
-    const pz = sinP * Math.sin(MUM.lat) + cosP * cL * Math.cos(dl);
-    if (pz > 0) {
-      const px = cx + R * cL * Math.sin(dl), py = cy - R * (cosP * Math.sin(MUM.lat) - sinP * cL * Math.cos(dl));
-      const t = (performance.now() / 900) % 1;
-      ctx.strokeStyle = `rgba(74,163,255,${0.9 * (1 - t)})`; ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.arc(px, py, 6 + t * (14 + cam.zoom * 60), 0, 7); ctx.stroke();
-      ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(px, py, 3 + cam.zoom * 3, 0, 7); ctx.fill();
-    }
-  }
-
-  function start() {
-    cam.R = base();
-    gsap.ticker.add(draw);
-    // greetings: English then Hindi first, then the rest
-    word.textContent = HELLOS[0][0]; lab.textContent = HELLOS[0][1];
-    tl = gsap.timeline({ defaults: { ease: 'none' } });
-    const per = 0.36;
-    HELLOS.forEach(([w, l], i) => { if (i) tl.call(() => { flickerTo(word, w); lab.textContent = l; }, null, i * per + 0.35); });
-    const t0 = HELLOS.length * per + 0.45; // end of greetings
-    tl.fromTo(cam, { lon: -1.9 }, { lon: MUM.lon - 0.06, lat: MUM.lat, duration: t0, ease: 'power2.inOut' }, 0);
-    tl.to('.intro__c', { opacity: 0, y: -14, duration: 0.45, ease: 'power2.in' }, t0 - 0.1);
-    tl.call(() => { hud.textContent = `Locked · ${SITE.lat} ${SITE.lon}`; }, null, t0);
-    tl.to(cam, { R: () => base() * 15, zoom: 1, lon: MUM.lon, duration: 1.9, ease: 'expo.inOut' }, t0);
-    tl.fromTo(intro, { '--r': '0px' }, { '--r': () => Math.hypot(W, H) * 0.75 + 'px', duration: 1.0, ease: 'power2.in' }, t0 + 1.35);
-    tl.call(done, null, t0 + 1.4); // page motion starts as the hole opens
-    tl.call(finish, null, t0 + 2.4);
-  }
+  size(); addEventListener('resize', size); gsap.ticker.add(draw);
+  const list = HELLOS.slice(0, 7), per = 0.3, t1 = 0.65 + list.length * per + 0.25;
+  word.textContent = list[0];
+  tl = gsap.timeline();
+  tl.fromTo(key, { y: -60, opacity: 0, scale: 0.8 }, { y: 0, opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(2.2)' }, 0.05)
+    .to(key, { y: 6, duration: 0.09, yoyo: true, repeat: 1, ease: 'power1.inOut' }, 0.7)
+    .fromTo(word, { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0.55);
+  list.forEach((w, i) => { if (i) tl.call(() => flickerTo(word, w), null, 0.65 + i * per); });
+  tl.to('.intro__c', { opacity: 0, scale: 0.88, duration: 0.4, ease: 'power2.in' }, t1)
+    .to(S, { k: 1, duration: 0.95, ease: 'power2.in' }, t1 - 0.1)
+    .fromTo(intro, { '--r': '0px' }, { '--r': () => Math.hypot(innerWidth, innerHeight) * 0.75 + 'px', duration: 0.9, ease: 'power2.in' }, t1 + 0.55)
+    .call(done, null, t1 + 0.8)
+    .call(finish, null, t1 + 1.55);
   $('#intro-s')?.addEventListener('click', () => { if (!finished) { done(); finish(); } });
   addEventListener('keydown', (e) => { if (e.key === 'Escape' && !finished) { done(); finish(); } });
   setTimeout(() => { if (!finished) { done(); finish(); } }, 12000);
@@ -267,12 +186,12 @@ function runIntro(done) {
 
 /* ───────────── greeting in the hero keeps cycling ───────────── */
 function heroHello() {
-  const w = $('#hello'), l = $('#hello-l');
+  const w = $('#hello');
   if (!w || rm) return;
   let i = 0;
   setInterval(() => {
     if (document.hidden) return;
-    i = (i + 1) % HELLOS.length; flickerTo(w, HELLOS[i][0]); l.textContent = HELLOS[i][1];
+    i = (i + 1) % HELLOS.length; flickerTo(w, HELLOS[i]);
   }, 2600);
 }
 
@@ -338,26 +257,24 @@ function asciiCards() {
   gsap.ticker.add((time) => { state.forEach((s) => s.on && frame(s, time)); });
 }
 
-/* ───────────── MESHHETU dot-matrix reel ───────────── */
+/* ───────────── MESHHETU card: a row of dot-matrix screens, each running a scene of the work ───────────── */
 function reels() {
-  $$('[data-reel]').forEach((reel) => {
-    const N = 6, cvs = [];
-    for (let k = 0; k < N; k++) { const c = document.createElement('canvas'); c.width = 52; c.height = 68; reel.append(c); cvs.push(c); }
-    const paint = (c, scene, noise = 0) => {
-      const x = c.getContext('2d'); x.clearRect(0, 0, 52, 68);
-      const rows = scene.length, cw = 52 / 10, ch = 68 / 13;
-      for (let j = 0; j < 13; j++) for (let i = 0; i < 9; i++) {
-        const on = noise ? Math.random() < noise : (scene[j]?.[i] === '#');
-        x.fillStyle = on ? '#faf9f5' : '#2a2a2e'; x.beginPath(); x.arc(cw * (i + 1), ch * (j + 0.9), on ? 1.7 : 1.1, 0, 7); x.fill();
-      }
-      return rows;
+  const names = ['launch', 'gtm', 'funnel', 'trend', 'agents'];
+  $$('[data-reel]').forEach((reel) => names.forEach((n) => { const c = document.createElement('canvas'); reel.append(c); sceneCanvas(c, n, { cell: 3, k: 3, gap: 1, fps: 16 }); }));
+}
+
+/* ───────────── colour pickers on the diorama ───────────── */
+function pickers() {
+  const saved = store.get('anjor-scheme');
+  $$('.hs').forEach((hs) => {
+    const svg = $('.isoS', hs); if (!svg) return;
+    const apply = (k, animate) => {
+      svg.dataset.scheme = k;
+      $$('.sw', hs).forEach((x) => { const on = x.dataset.scheme === k; x.classList.toggle('is-on', on); x.setAttribute('aria-pressed', String(on)); });
+      if (animate && !rm) gsap.fromTo($$('.kx', svg), { y: -4 }, { y: 0, duration: 0.55, stagger: { amount: 0.4, from: 'random' }, ease: 'back.out(3)', clearProps: 'transform' });
     };
-    let off = 0;
-    const set = (k) => { const c = cvs[k], sc = SCENES[(off + k * 2) % SCENES.length]; if (rm) return paint(c, sc); let n = 0; const t = setInterval(() => { n++; if (n < 4) paint(c, sc, 0.4); else { paint(c, sc); clearInterval(t); } }, 45); };
-    cvs.forEach((_, k) => set(k));
-    if (rm) return;
-    let vis = false; new IntersectionObserver(([e]) => { vis = e.isIntersecting; }).observe(reel);
-    setInterval(() => { if (!vis || document.hidden) return; off += 1; cvs.forEach((_, k) => setTimeout(() => set(k), k * 110)); }, 2200);
+    $$('.sw', hs).forEach((b) => b.addEventListener('click', () => { apply(b.dataset.scheme, true); store.set('anjor-scheme', b.dataset.scheme); }));
+    if (saved && $(`.sw[data-scheme="${saved}"]`, hs)) apply(saved, false);
   });
 }
 
@@ -458,7 +375,6 @@ function startPage() {
   if (started) return; started = true;
   root.classList.add('ready');
   const run = () => {
-    $('#hero-art .me')?.removeAttribute('data-in'); // the hero portrait has its own entrance
     // 1. headings: lines rise out of a mask
     $$('[data-split]').forEach((el) => {
       if (rm) { gsap.set(el, { visibility: 'visible' }); return; }
@@ -480,33 +396,44 @@ function startPage() {
         },
       });
     }
-    counters(); asciiCards(); reels();
+    counters(); asciiCards(); reels(); pickers();
+    $$('[data-rl]').forEach(wordReel);
+    const fl = $('#foot-launch'); if (fl) footLaunch(fl);
     filters('#filters', '#cgrid .ccard', (c, f) => f === 'All' || c.dataset.tag === f);
     filters('#pfilters', '#mas .ph', (c, f) => f === 'All' || c.dataset.g === f);
     heroHello();
-    if (!rm) { homeMotion(); architectMotion(); journeyMotion(); mockMotion(); fanMotion(); }
+    if (!rm) { sceneMotion(); architectMotion(); journeyMotion(); mockMotion(); fanMotion(); }
     arcStory(); caseMotion(); layersLink(); releaseLog();
     ScrollTrigger.refresh();
   };
   (document.fonts?.ready || Promise.resolve()).then(run);
 }
 
-function homeMotion() {
-  const art = $('#hero-art'); if (!art) return;
-  const iso = $('.iso', art), pls = $$('.pl', iso), cos = $$('.co', iso);
-  const tl = gsap.timeline({ delay: 0.15 });
-  tl.from('.hello', { opacity: 0, x: -20, duration: 0.7, ease }, 0);
-  tl.from($$('.guides path', iso), { drawSVG: 0, duration: 1.1, ease: 'power2.inOut' }, 0.1);
-  pls.forEach((p, i) => tl.from(p, { y: -i * 100, opacity: 0, duration: 1.1, ease: 'expo.out', clearProps: 'opacity' }, 0.25 + (3 - i) * 0.12));
-  tl.from(cos, { opacity: 0, x: (i) => (i % 2 ? 24 : -24), duration: 0.7, stagger: 0.12, ease, clearProps: 'opacity' }, 1.0);
-  tl.from('.me', { y: 40, opacity: 0, rotate: -6, duration: 0.9, ease: 'back.out(1.6)' }, 1.2);
-  tl.call(() => pls.forEach((p, i) => gsap.to(p, { y: '+=6', duration: 2.4 + i * 0.35, yoyo: true, repeat: -1, ease: 'sine.inOut', delay: i * 0.3 })), null, 2);
-  if (fine) {
-    const qs = pls.map((p, i) => gsap.quickTo(p, 'x', { duration: 0.9, ease: 'power3' }));
-    art.addEventListener('pointermove', (e) => { const r = art.getBoundingClientRect(), n = (e.clientX - r.left) / r.width - 0.5; qs.forEach((q, i) => q(n * (10 + i * 8))); });
-    art.addEventListener('pointerleave', () => qs.forEach((q) => q(0)));
-  }
-  hotLink(iso, '.pl, .co');
+/** The diorama assembles: the floor slides in, the letters drop into place, the props pop up, the cards float in. */
+function sceneMotion() {
+  $$('.hs').forEach((hs) => {
+    const svg = $('.isoS', hs); if (!svg) return;
+    const letters = $$('.kx', svg), floor = $('.floor', svg), tiles = $('.tiles', svg), cards = $$('.hs__card, .hs__pick', hs);
+    const props = $$('.bx', svg).filter((b) => !b.classList.contains('kx') && !b.classList.contains('floor')), grow = $$('[data-grow]', svg);
+    gsap.set($$('.bx', svg), { opacity: 0 }); gsap.set(cards, { opacity: 0 });
+    hs.classList.add('is-in');
+    const tl = gsap.timeline({ delay: 0.1 });
+    if (hs.id === 'hero-art') tl.from('.hello', { opacity: 0, x: -20, duration: 0.7, ease }, 0);
+    tl.fromTo(floor, { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 0.9, ease: 'expo.out' }, 0)
+      .fromTo(tiles, { opacity: 0 }, { opacity: 1, duration: 0.6 }, 0.35)
+      .fromTo(letters, { opacity: 0, y: -110 }, { opacity: 1, y: 0, duration: 0.85, ease: 'back.out(1.5)', stagger: { amount: 0.75, from: 'random' } }, 0.3)
+      .fromTo(props, { opacity: 0, scale: 0.2, transformOrigin: '50% 100%' }, { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(2.4)', stagger: { amount: 0.8 } }, 1.0)
+      .call(() => {}, null, 0);
+    if (grow.length) tl.fromTo(grow, { scaleY: 0.1, transformOrigin: '50% 100%' }, { scaleY: 1, duration: 0.9, ease: 'power3.out', stagger: 0.12 }, 1.8);
+    if (cards.length) tl.fromTo(cards, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.12, ease }, 1.3);
+    tl
+      .call(() => $$('[data-fl]', hs).forEach((c, i) => gsap.to(c, { y: '+=8', duration: 2.6 + i * 0.5, yoyo: true, repeat: -1, ease: 'sine.inOut' })), null, 2.3);
+    if (fine) {
+      const sx = gsap.quickTo($('.hs__scene', hs), 'x', { duration: 0.9, ease: 'power3' }), sy = gsap.quickTo($('.hs__scene', hs), 'y', { duration: 0.9, ease: 'power3' });
+      hs.addEventListener('pointermove', (e) => { const r = hs.getBoundingClientRect(); sx(((e.clientX - r.left) / r.width - 0.5) * 16); sy(((e.clientY - r.top) / r.height - 0.5) * 10); });
+      hs.addEventListener('pointerleave', () => { sx(0); sy(0); });
+    }
+  });
 }
 
 /** hovering a plate or a callout lights its partner */
