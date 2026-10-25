@@ -394,7 +394,7 @@ function startPage() {
     filters('#filters', '#cgrid .ccard', (c, f) => f === 'All' || c.dataset.tag === f);
     filters('#pfilters', '#mas .ph', (c, f) => f === 'All' || c.dataset.g === f);
     heroHello();
-    heroField(); sysConsole(); palette(); tilt(); bentoMotion(); reelMotion();
+    heroField(); sysConsole(); palette(); tilt(); bentoMotion(); reelMotion(); walkMotion();
     if (!rm) { pageMotion(); sayMotion(); deckMotion(); hetuMotion(); architectMotion(); journeyMotion(); mockMotion(); fanMotion(); }
     caseMotion(); layersLink(); releaseLog();
     ScrollTrigger.refresh();
@@ -548,7 +548,7 @@ function deckMotion() {
     cards.forEach((c, i) => {
       const d = i - p, a = Math.abs(d);
       const t = d >= 0
-        ? { x: d * 30, y: d * 30, z: -d * 150, rotationX: 0, rotationY: -Math.min(d, 3) * 3, scale: 1 - Math.min(d, 6) * 0.035, opacity: Math.max(0, 1 - d * 0.3) }
+        ? { x: d * 30, y: d * 30, z: -d * 150, rotationX: 0, rotationY: -Math.min(d, 3) * 3, scale: 1 - Math.min(d, 6) * 0.035, opacity: d > 2.5 ? Math.max(0, 1 - (d - 2.5) * 0.6) : 1 }
         : { x: d * 40, y: d * 300, z: d * 40, rotationX: -d * 14, rotationY: 0, scale: 1 + d * 0.04, opacity: Math.max(0, 1 + d * 1.5) };
       gsap.set(c, { ...t, xPercent: -50, yPercent: -50, zIndex: Math.round(100 - d * 10), transformPerspective: 1700, pointerEvents: a < 0.5 ? 'auto' : 'none' });
     });
@@ -619,6 +619,18 @@ function reelMotion() {
   };
   const st = ScrollTrigger.create({ trigger: sec, start: 'top top', end: () => `+=${dist()}`, pin: $('.reel__pin', sec), scrub: 0.5, invalidateOnRefresh: true, animation: gsap.to(tr, { x: () => -dist(), ease: 'none' }), onUpdate: (s) => { bar.style.transform = `scaleX(${s.progress})`; lean(); }, onRefresh: lean });
   chips.forEach((b) => b.addEventListener('click', () => { const s = slides.find((x) => +x.dataset.ch === +b.dataset.ch); const x = Math.min(dist(), Math.max(0, s.offsetLeft + s.offsetWidth / 2 - innerWidth / 2)); gsap.to(window, { scrollTo: st.start + (x / dist()) * (st.end - st.start), duration: 1.1, ease: 'power3.inOut' }); }));
+}
+
+/* ───────────── the stack walk: scroll down four layers, the drawing follows ───────────── */
+function walkMotion() {
+  const sec = $('#walk'); if (!sec) return;
+  const svg = $('#walk-art .iso'), steps = $$('#walk-s li'); if (!svg) return;
+  const set = hotLink(svg, '.pl, .co'), pick = (i) => { steps.forEach((l, k) => l.classList.toggle('is-on', k === i)); set(i); };
+  steps.forEach((l, i) => { l.addEventListener('pointerenter', () => { if (!sec.classList.contains('is-live')) pick(i); }); l.addEventListener('focus', () => pick(i)); });
+  if (!desktop() || rm) return;
+  sec.classList.add('is-live'); pick(0);
+  const st = ScrollTrigger.create({ trigger: sec, start: 'top top', end: '+=240%', pin: $('.walk__pin', sec), scrub: 0.4, onUpdate: (s) => pick(Math.min(steps.length - 1, Math.floor(s.progress * steps.length))) });
+  steps.forEach((l, i) => l.addEventListener('click', () => gsap.to(window, { scrollTo: st.start + ((i + 0.5) / steps.length) * (st.end - st.start), duration: 0.9, ease: 'power3.inOut' })));
 }
 
 /* ───────────── motion shared by every page ───────────── */

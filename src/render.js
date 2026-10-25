@@ -198,6 +198,17 @@ function sysc() {
 
 /* ───────────── HOME ───────────── */
 const TICK = ['Price Lock at checkout', '45+ coupon combinations', '70,000 SKUs re-indexed', 'Strapi headless CMS', 'Amazon Pay integrated', 'Search-to-order +9.0%', 'Referral 6 → 13%', 'GA4 + BigQuery', 'Voice agent, −20% cost per order', 'CRM routing, −30% resolution time'];
+function deckSec(home) {
+  return `<section class="sec deck" id="work"><div class="deck__pin"><div class="wrap deck__g">
+  <div class="deck__l">
+    ${sh(home ? 'Selected work' : 'The deck', home ? 'Seven systems. *Each began with a number that would not move.*' : 'Pick a system. *Read the decision behind it.*', 'Scroll to move through the deck, or pick one. Every card opens a quick read, and the quick read opens the full case.')}
+    <ol class="deck__i" id="deck-i" aria-label="Case studies">${CASES.map((c, i) => `<li><button type="button" data-d="${i}"><i>${pad(i + 1)}</i><span>${esc(c.title)}</span><em>${esc(c.metrics[0][0])}</em></button></li>`).join('')}</ol>
+    ${home ? `<div class="btn-row">${btn('/work', 'All case studies', 'ghost')}</div>` : ''}
+  </div>
+  <div class="deck__r wgrid" id="deck">${CASES.map((c, i) => caseCard(c, i)).join('')}</div>
+</div></div></section>`;
+}
+
 function home() {
   return `
 <section class="hero" id="top"><canvas class="hero__field" id="field" aria-hidden="true"></canvas>
@@ -217,14 +228,7 @@ function home() {
 <section class="proof" id="proof"><div class="wrap"><ul class="mets">${PROOF.map((m, i) => `<li class="met" data-in><span class="label">T-0${i + 1} · ${m.tag}</span><strong ${m.to != null ? `data-count data-from="${m.from}" data-to="${m.to}" data-dp="${m.dp}" data-pre="${esc(m.pre || '')}" data-suf="${esc(m.suf || '')}"` : ''}>${m.to != null ? esc(m.pre + m.to.toFixed(m.dp) + m.suf) : esc(m.text)}</strong><span>${esc(m.label)}</span></li>`).join('')}</ul>
   <p class="foot-note label">Results are from product work at Truemeds, 2023 – 2026.</p></div></section>
 
-<section class="sec deck" id="work"><div class="deck__pin"><div class="wrap deck__g">
-  <div class="deck__l">
-    ${sh('Selected work', 'Seven systems. *Each began with a number that would not move.*', 'Scroll to move through the deck, or pick one. Every card opens a quick read, and the quick read opens the full case.')}
-    <ol class="deck__i" id="deck-i" aria-label="Case studies">${CASES.map((c, i) => `<li><button type="button" data-d="${i}"><i>${pad(i + 1)}</i><span>${esc(c.title)}</span><em>${esc(c.metrics[0][0])}</em></button></li>`).join('')}</ol>
-    <div class="btn-row">${btn('/work', 'All case studies', 'ghost')}</div>
-  </div>
-  <div class="deck__r wgrid" id="deck">${CASES.map((c, i) => caseCard(c, i)).join('')}</div>
-</div></div></section>
+${deckSec(true)}
 
 ${hetu({ tail: `<div class="btn-row" data-in>${btn('/meshhetu', 'The MESHHETU story', 'light')}${btn('/consulting', 'Consulting', 'ghost-d')}</div>` })}
 
@@ -279,7 +283,9 @@ function work() {
   <p class="lead" data-in>Three are written up in full, the rest are shorter reads. Every case follows the same eight steps, so you can compare how I think across very different problems: what hurt, what I decided, what shipped, what I would change.</p>
   <div class="filters" id="filters" role="group" aria-label="Filter by domain" data-in>${TAGS.map((t, i) => `<button type="button" class="fchip${i ? '' : ' is-on'}" data-f="${t}" aria-pressed="${!i}">${t}</button>`).join('')}</div>
 </div></section>
-<section class="sec sec--tight"><div class="wrap"><div class="cgrid" id="cgrid">${CASES.map((c, i) => caseCard(c, i, i < 3 ? 'ccard--w' : 'ccard--s2')).join('')}</div></div></section>
+${deckSec(false)}
+<section class="sec sec--tight"><div class="wrap">
+  ${sh('All cases', 'Filter by *the kind of problem.*')}<div class="cgrid" id="cgrid">${CASES.map((c, i) => caseCard(c, i, i < 3 ? 'ccard--w' : 'ccard--s2')).join('')}</div></div></section>
 <section class="sec steps"><div class="wrap">
   ${sh('How each case is written', 'Eight steps, *always in the same order.*', 'The structure matters as much as the result. It shows the discovery, the trade-offs and what I would do differently.')}
   <ol class="eight">${CASE_STEPS.map((s, i) => `<li data-in><span class="label">${pad(i + 1)}</span><b>${s}</b></li>`).join('')}</ol>
@@ -346,10 +352,11 @@ function systems() {
   <div class="phead__art" id="arch-art">${isoStack()}</div>
 </div></section>
 
-<section class="sec"><div class="wrap">
-  ${sh('The stack', 'Four layers, *one owner.*', 'Hover a layer to find it in the drawing. Each one is a place where a product breaks or compounds.')}
-  <div class="layers" id="layers">${LAYERS.map((l, i) => `<article class="layer" data-i="${i}" tabindex="0" data-in><span class="label">Layer ${l.n}</span><h3 class="h-3">${esc(l.t)}</h3><p class="layer__s">${esc(l.s)}</p><p>${esc(l.d)}</p></article>`).join('')}</div>
-</div></section>
+<section class="walk" id="walk"><div class="walk__pin"><div class="wrap walk__g">
+  <div class="walk__l">${sh('The stack', 'Four layers, *one owner.*', 'Scroll to walk down the stack, or tap a layer. Each one is a place where a product breaks or compounds, and the fix almost never lives in the layer where the symptom shows.')}
+    <ol class="bn__lay walk__s" id="walk-s">${LAYERS.map((l, i) => `<li class="${i === 0 ? 'is-on' : ''}" data-i="${i}" tabindex="0"><i>${l.n}</i><b>${esc(l.t)} <em>${esc(l.s)}</em></b><span>${esc(l.d)}</span></li>`).join('')}</ol></div>
+  <div class="walk__r" id="walk-art">${isoStack()}</div>
+</div></div></section>
 
 <section class="sec"><div class="wrap">
   ${sh('What I own', 'Web, app, platform, *and the tools behind them.*', 'The systems are real and shipped. This is the surface area I own day to day.')}
