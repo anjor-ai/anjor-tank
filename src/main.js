@@ -34,7 +34,7 @@ function setTheme(t) {
   root.setAttribute('data-theme', t);
   store.set('anjor-theme', t);
   const m = $('meta[name="theme-color"]');
-  if (m) m.setAttribute('content', t === 'dark' ? '#141413' : '#ffffff');
+  if (m) m.setAttribute('content', t === 'dark' ? '#08090c' : '#ffffff');
 }
 $('#theme')?.addEventListener('click', (e) => {
   const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
@@ -49,18 +49,13 @@ $('#theme')?.addEventListener('click', (e) => {
   )).catch(() => {});
 });
 
-/* ───────────── nav: hides on the way down, returns on the way up; mobile sheet ───────────── */
-const nav = $('#nav'), sheet = $('#sheet'), burger = $('#burger');
-let lastY = scrollY;
-addEventListener('scroll', () => {
-  const y = scrollY;
-  if (y > 140 && y > lastY + 6 && sheet.hidden) nav.classList.add('is-hidden');
-  else if (y < lastY - 6 || y < 140) nav.classList.remove('is-hidden');
-  lastY = y;
-}, { passive: true });
+/* ───────────── nav: always on screen; it tightens and fills in once you scroll, and a line fills along its edge ───────────── */
+const nav = $('#nav'), sheet = $('#sheet'), burger = $('#burger'), navP = $('#nav-p');
+const stick = () => nav.classList.toggle('is-stuck', scrollY > 24);
+stick(); addEventListener('scroll', stick, { passive: true });
 function sheetOpen(o) {
   sheet.hidden = !o; burger.setAttribute('aria-expanded', String(o));
-  if (o) { nav.classList.remove('is-hidden'); if (!rm) gsap.from('#sheet a', { y: 18, opacity: 0, stagger: 0.05, duration: 0.5, ease }); }
+  if (o) { if (!rm) gsap.from('#sheet a', { y: 18, opacity: 0, stagger: 0.05, duration: 0.5, ease }); }
 }
 burger?.addEventListener('click', () => sheetOpen(sheet.hidden));
 addEventListener('keydown', (e) => { if (e.key === 'Escape' && !sheet.hidden) sheetOpen(false); });
@@ -107,7 +102,7 @@ if (fine && !rm) {
   const cur = $('#cur');
   const qx = gsap.quickTo(cur, 'x', { duration: 0.35, ease: 'power3' }), qy = gsap.quickTo(cur, 'y', { duration: 0.35, ease: 'power3' });
   addEventListener('pointermove', (e) => { cur.classList.add('on'); qx(e.clientX); qy(e.clientY); }, { passive: true });
-  document.addEventListener('pointerover', (e) => { cur.classList.toggle('big', !!e.target.closest('a, button, .ccard, .layer, .door, .fchip, .ph, summary, .win2')); });
+  document.addEventListener('pointerover', (e) => { cur.classList.toggle('big', !!e.target.closest('a, button, .ccard, .layer, .door, .fchip, .ph, summary, .win2, .kc')); });
   document.addEventListener('pointerleave', () => cur.classList.remove('on'));
   // magnetic buttons
   $$('.btn, .kbtn, .nav__cta').forEach((b) => {
@@ -248,7 +243,7 @@ function asciiCards() {
       for (let i = 0; i < s.cols; i++) {
         const v = f(i / s.cols, j / s.rows, t, s); if (v < 0.06) continue;
         const k = Math.min(RAMP.length - 1, Math.floor(v * RAMP.length));
-        c.fillStyle = k > 8 ? '#fff3dd' : k > 5 ? '#ffc98a' : '#e8763c';
+        c.fillStyle = k > 8 ? '#f2f8ff' : k > 5 ? '#8fc6ff' : '#2f95ff';
         c.fillText(RAMP[k], i * s.cw, j * s.ch);
       }
     }
@@ -257,24 +252,11 @@ function asciiCards() {
   gsap.ticker.add((time) => { state.forEach((s) => s.on && frame(s, time)); });
 }
 
-/* ───────────── MESHHETU card: a row of dot-matrix screens, each running a scene of the work ───────────── */
-function reels() {
-  const names = ['launch', 'gtm', 'funnel', 'trend', 'agents'];
-  $$('[data-reel]').forEach((reel) => names.forEach((n) => { const c = document.createElement('canvas'); reel.append(c); sceneCanvas(c, n, { cell: 3, k: 3, gap: 1, fps: 16 }); }));
-}
-
-/* ───────────── colour pickers on the diorama ───────────── */
-function pickers() {
-  const saved = store.get('anjor-scheme');
-  $$('.hs').forEach((hs) => {
-    const svg = $('.isoS', hs); if (!svg) return;
-    const apply = (k, animate) => {
-      svg.dataset.scheme = k;
-      $$('.sw', hs).forEach((x) => { const on = x.dataset.scheme === k; x.classList.toggle('is-on', on); x.setAttribute('aria-pressed', String(on)); });
-      if (animate && !rm) gsap.fromTo($$('.kx', svg), { y: -4 }, { y: 0, duration: 0.55, stagger: { amount: 0.4, from: 'random' }, ease: 'back.out(3)', clearProps: 'transform' });
-    };
-    $$('.sw', hs).forEach((b) => b.addEventListener('click', () => { apply(b.dataset.scheme, true); store.set('anjor-scheme', b.dataset.scheme); }));
-    if (saved && $(`.sw[data-scheme="${saved}"]`, hs)) apply(saved, false);
+/* ───────────── MESHHETU dot-matrix screens: every canvas with data-scene runs one of the MESHHETU art scenes ───────────── */
+function scenes(scope = document) {
+  $$('canvas[data-scene]', scope).forEach((c) => {
+    if (c.dataset.on) return; c.dataset.on = '1';
+    sceneCanvas(c, c.dataset.scene, { cell: 4, k: 4, gap: 1, fps: 18 });
   });
 }
 
@@ -311,8 +293,8 @@ function quickView() {
     idx = (i + CASES.length) % CASES.length; const c = CASES[idx];
     body.innerHTML = quick(c, idx, CASES.length);
     cap.textContent = `Case ${c.n} of ${pad(CASES.length)}`;
-    body.scrollTop = 0;
-    if (!rm) { gsap.from(body.children[0], { x: dir * 40, opacity: dir ? 0 : 1, duration: 0.45, ease }); drawIn($('.wf', body), 0.1); gsap.from($$('.qv__m div', body), { y: 14, opacity: 0, stagger: 0.08, duration: 0.5, delay: 0.2, ease }); }
+    body.scrollTop = 0; scenes(body);
+    if (!rm) { gsap.from(body.children[0], { x: dir * 40, opacity: dir ? 0 : 1, duration: 0.45, ease }); gsap.from($$('.qv__m div', body), { y: 14, opacity: 0, stagger: 0.08, duration: 0.5, delay: 0.2, ease }); }
   };
   const open = (slug) => {
     const i = CASES.findIndex((c) => c.slug === slug); if (i < 0) return;
@@ -392,48 +374,146 @@ function startPage() {
         start: 'top 90%', once: true, interval: 0.1, batchMax: 6,
         onEnter: (els) => {
           gsap.to(els, { opacity: 1, y: 0, duration: 0.9, stagger: 0.09, ease, overwrite: 'auto', onComplete: () => els.forEach((e) => { e.classList.add('in'); gsap.set(e, { clearProps: 'opacity,transform' }); }) });
-          els.forEach((el) => { const art = $(':scope > .ccard__art svg, .chead__art svg', el) || (el.matches('.chead__art') && $('svg', el)); if (art) drawIn(art, 0.15); });
+          els.forEach((el) => { const cv = $('.ccard__art canvas', el); if (cv) gsap.from(cv, { scale: 1.28, duration: 1.5, ease: 'expo.out', clearProps: 'transform' }); const art = $('.chead__art svg', el); if (art) drawIn(art, 0.15); });
         },
       });
     }
-    counters(); asciiCards(); reels(); pickers();
+    counters(); asciiCards(); scenes(); spotlight();
     $$('[data-rl]').forEach(wordReel);
     const fl = $('#foot-launch'); if (fl) footLaunch(fl);
     filters('#filters', '#cgrid .ccard', (c, f) => f === 'All' || c.dataset.tag === f);
     filters('#pfilters', '#mas .ph', (c, f) => f === 'All' || c.dataset.g === f);
     heroHello();
-    if (!rm) { sceneMotion(); architectMotion(); journeyMotion(); mockMotion(); fanMotion(); }
-    arcStory(); caseMotion(); layersLink(); releaseLog();
+    keyboardLive();
+    if (!rm) { keyboardMotion(); pageMotion(); hetuMotion(); architectMotion(); journeyMotion(); mockMotion(); fanMotion(); }
+    caseMotion(); layersLink(); releaseLog();
     ScrollTrigger.refresh();
   };
   (document.fonts?.ready || Promise.resolve()).then(run);
 }
 
-/** The diorama assembles: the floor slides in, the letters drop into place, the props pop up, the cards float in. */
-function sceneMotion() {
-  $$('.hs').forEach((hs) => {
-    const svg = $('.isoS', hs); if (!svg) return;
-    const letters = $$('.kx', svg), floor = $('.floor', svg), tiles = $('.tiles', svg), cards = $$('.hs__card, .hs__pick', hs);
-    const props = $$('.bx', svg).filter((b) => !b.classList.contains('kx') && !b.classList.contains('floor')), grow = $$('[data-grow]', svg);
-    gsap.set($$('.bx', svg), { opacity: 0 }); gsap.set(cards, { opacity: 0 });
-    hs.classList.add('is-in');
-    const tl = gsap.timeline({ delay: 0.1 });
-    if (hs.id === 'hero-art') tl.from('.hello', { opacity: 0, x: -20, duration: 0.7, ease }, 0);
-    tl.fromTo(floor, { opacity: 0, y: 36 }, { opacity: 1, y: 0, duration: 0.9, ease: 'expo.out' }, 0)
-      .fromTo(tiles, { opacity: 0 }, { opacity: 1, duration: 0.6 }, 0.35)
-      .fromTo(letters, { opacity: 0, y: -110 }, { opacity: 1, y: 0, duration: 0.85, ease: 'back.out(1.5)', stagger: { amount: 0.75, from: 'random' } }, 0.3)
-      .fromTo(props, { opacity: 0, scale: 0.2, transformOrigin: '50% 100%' }, { opacity: 1, scale: 1, duration: 0.6, ease: 'back.out(2.4)', stagger: { amount: 0.8 } }, 1.0)
-      .call(() => {}, null, 0);
-    if (grow.length) tl.fromTo(grow, { scaleY: 0.1, transformOrigin: '50% 100%' }, { scaleY: 1, duration: 0.9, ease: 'power3.out', stagger: 0.12 }, 1.8);
-    if (cards.length) tl.fromTo(cards, { opacity: 0, y: 24 }, { opacity: 1, y: 0, duration: 0.8, stagger: 0.12, ease }, 1.3);
-    tl
-      .call(() => $$('[data-fl]', hs).forEach((c, i) => gsap.to(c, { y: '+=8', duration: 2.6 + i * 0.5, yoyo: true, repeat: -1, ease: 'sine.inOut' })), null, 2.3);
-    if (fine) {
-      const sx = gsap.quickTo($('.hs__scene', hs), 'x', { duration: 0.9, ease: 'power3' }), sy = gsap.quickTo($('.hs__scene', hs), 'y', { duration: 0.9, ease: 'power3' });
-      hs.addEventListener('pointermove', (e) => { const r = hs.getBoundingClientRect(); sx(((e.clientX - r.left) / r.width - 0.5) * 16); sy(((e.clientY - r.top) / r.height - 0.5) * 10); });
-      hs.addEventListener('pointerleave', () => { sx(0); sy(0); });
-    }
-  });
+/* ───────────── spotlight: cards light up where the pointer is ───────────── */
+function spotlight() {
+  $$('.card, .layer, .move, .win2, .offer, .track, .love, .door, .role, .item, .asc__c, .qa').forEach((el) => el.classList.add('sp'));
+  if (!fine) return;
+  document.addEventListener('pointermove', (e) => {
+    const el = e.target.closest('.sp'); if (!el) return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty('--mx', e.clientX - r.left + 'px'); el.style.setProperty('--my', e.clientY - r.top + 'px');
+  }, { passive: true });
+}
+
+/* ───────────── the hero keyboard: works without motion (clock, real keys, lamps) ───────────── */
+const keyById = (kb, id) => $(`.kc[data-k="${CSS.escape(id)}"]`, kb);
+function keyboardLive() {
+  const kb = $('#kb'); if (!kb) return;
+  const scrT = $('#scr-t'), scrD = $('#scr-d');
+  const clock = () => {
+    if (!scrT || kb.dataset.busy) return;
+    const d = new Date();
+    scrT.textContent = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true, timeZone: 'Asia/Kolkata' }).replace(/\s?[AP]M/i, '');
+    scrD.textContent = d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', timeZone: 'Asia/Kolkata' });
+  };
+  clock(); setInterval(clock, 20000); document.addEventListener('kb-clock', clock);
+  // the keys you press on your own keyboard press down here too (nothing is intercepted)
+  const map = { arrowup: 'enter', arrowdown: 'shift2', arrowleft: 'control', arrowright: 'alt2' };
+  const hit = (e, on) => {
+    if (e.metaKey || e.ctrlKey || e.altKey || e.target.closest?.('input, textarea, select')) return;
+    const k = (map[e.key.toLowerCase()] || e.key.toLowerCase()), el = keyById(kb, k === 'shift' && e.location === 2 ? 'shift2' : k);
+    if (el) el.classList.toggle('is-down', on);
+  };
+  addEventListener('keydown', (e) => hit(e, true)); addEventListener('keyup', (e) => hit(e, false));
+  // pointer press on any key
+  kb.addEventListener('pointerdown', (e) => { const el = e.target.closest('.kc[data-k]'); if (!el) return; el.classList.add('is-down'); const up = () => { el.classList.remove('is-down'); removeEventListener('pointerup', up); }; addEventListener('pointerup', up); });
+  // lamps: hold, test, ship
+  const say = (t, d) => { kb.dataset.busy = '1'; scrT.textContent = t; scrD.textContent = d; clearTimeout(say.t); say.t = setTimeout(() => { delete kb.dataset.busy; clock(); $$('.kc--lamp', kb).forEach((x) => x.classList.remove('is-lit')); }, 2400); };
+  const msg = { red: ['HOLD', 'Not yet proven'], amber: ['TEST', 'A/B in flight'], green: ['SHIP', 'Measured, then shipped'] };
+  $$('[data-lamp]', kb).forEach((b) => b.addEventListener('click', () => {
+    $$('.kc--lamp', kb).forEach((x) => x.classList.toggle('is-lit', x === b)); say(...msg[b.dataset.lamp]);
+    if (!rm) gsap.fromTo(b, { y: 0 }, { y: 2, duration: 0.08, yoyo: true, repeat: 1 });
+  }));
+}
+
+/* ───────────── the hero keyboard: it drops in, types the name, then follows the scroll ───────────── */
+function keyboardMotion() {
+  const kb = $('#kb'); if (!kb) return;
+  const full = kb.dataset.mode === 'full';
+  const keys = $$('.kc', kb), side = $$('.knob, .scr', kb);
+  const scrT = $('#scr-t'), scrD = $('#scr-d');
+  gsap.set(keys, { opacity: 0, y: -46, scale: 0.86, transformOrigin: '50% 100%' });
+  if (side.length) gsap.set(side, { opacity: 0, y: -24 });
+  gsap.set(kb, { opacity: 0, y: 40 });
+  const tl = gsap.timeline({ delay: root.classList.contains('ready') ? 0.15 : 0.3 });
+  tl.to(kb, { opacity: 1, y: 0, duration: 0.9, ease: 'expo.out' }, 0)
+    .to(keys, { opacity: 1, y: 0, scale: 1, duration: 0.75, ease: 'back.out(1.7)', stagger: { amount: full ? 1.0 : 0.5, from: 'start' }, clearProps: 'transform,opacity' }, 0.1)
+    ;
+  if (side.length) tl.to(side, { opacity: 1, y: 0, duration: 0.8, ease: 'expo.out', stagger: 0.12 }, 0.5);
+  // the cable draws itself
+  const cb = $('.kb__cable .cb', kb);
+  if (cb) tl.fromTo(cb, { drawSVG: '0%' }, { drawSVG: '100%', duration: 1.2, ease: 'power2.inOut' }, 0.4).from('.kb__cable .cb2, .kb__cable .plug', { opacity: 0, duration: 0.5 }, 1.2);
+  // it types the name
+  if (full && scrT) {
+    const word = 'ANJOR TANK', ids = [...word.toLowerCase()];
+    const at = 1.7; kb.dataset.busy = '1';
+    ids.forEach((id, i) => {
+      tl.call(() => {
+        const el = keyById(kb, id); if (!el) return;
+        el.classList.add('is-down', 'is-lit'); setTimeout(() => el.classList.remove('is-down'), 110);
+        scrT.textContent = id === ' ' ? '_' : id.toUpperCase(); scrD.textContent = word.slice(0, i + 1) + (i < ids.length - 1 ? '_' : '');
+      }, null, at + i * 0.16);
+    });
+    tl.call(() => { scrT.textContent = 'AT'; scrD.textContent = 'Anjor Tank'; }, null, at + ids.length * 0.16 + 0.1)
+      .call(() => { $$('.kc.is-lit', kb).forEach((el, i) => setTimeout(() => el.classList.remove('is-lit'), i * 70)); }, null, at + ids.length * 0.16 + 1.1)
+      .call(() => { delete kb.dataset.busy; scrT.textContent = '…'; document.dispatchEvent(new Event('kb-clock')); }, null, at + ids.length * 0.16 + 2.0);
+  }
+  if (!full) return;
+  // the knob turns as the page scrolls
+  const knob = $('#knob');
+  if (knob) gsap.to(knob, { rotation: 1080, ease: 'none', scrollTrigger: { trigger: document.documentElement, start: 'top top', end: 'bottom bottom', scrub: 0.6 } });
+  // the board tips back and settles as it leaves the screen
+  gsap.set('#kbstage', { transformPerspective: 1600 });
+  gsap.to(kb, { rotationX: 16, scale: 0.94, y: -20, transformOrigin: '50% 100%', ease: 'none', scrollTrigger: { trigger: '#kbstage', start: 'center 38%', end: 'bottom top', scrub: 0.5 } });
+}
+
+/* ───────────── motion shared by every page ───────────── */
+function pageMotion() {
+  // the nav's progress line
+  if (navP) ScrollTrigger.create({ start: 0, end: 'max', onUpdate: (self) => { navP.style.transform = `scaleX(${self.progress})`; } });
+  // the blue lights behind the page drift as you scroll
+  const gA = $('.space__glow:not(.space__glow--b)'), gB = $('.space__glow--b');
+  const drive = { trigger: document.documentElement, start: 'top top', end: 'bottom bottom', scrub: 1.2 };
+  if (gA) gsap.to(gA, { y: () => innerHeight * 0.7, x: () => -innerWidth * 0.18, scale: 1.2, ease: 'none', scrollTrigger: drive });
+  if (gB) gsap.to(gB, { y: () => -innerHeight * 0.6, x: () => innerWidth * 0.22, ease: 'none', scrollTrigger: drive });
+  // the hero text lifts away
+  if ($('.hero__t')) gsap.to('.hero__t', { y: -50, opacity: 0.25, ease: 'none', scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true } });
+  // the ticker runs, and speeds up with your scroll
+  const tk = $('#ticker');
+  if (tk) {
+    const run = gsap.to(tk, { x: () => -tk.scrollWidth / 2, duration: 90, ease: 'none', repeat: -1 });
+    ScrollTrigger.create({ onUpdate: (self) => { const v = gsap.utils.clamp(-6, 8, self.getVelocity() / 240); gsap.timeline({ overwrite: true }).to(run, { timeScale: 1 + v, duration: 0.2 }).to(run, { timeScale: 1, duration: 1.2, ease: 'power2.out' }); } });
+  }
+  // the work grid: pictures settle as their cards arrive; the footer rises
+  gsap.from('.foot__top > *', { y: 34, opacity: 0, stagger: 0.08, duration: 0.9, ease, scrollTrigger: { trigger: '.foot', start: 'top 88%', once: true } });
+  $$('.strip__i i').forEach((d, i) => gsap.from(d, { scale: 0, duration: 0.6, ease: 'back.out(3)', scrollTrigger: { trigger: d, start: 'top 92%', once: true }, delay: i * 0.05 }));
+  // case pages: the big dot-matrix screen drifts a little
+  const ca = $('.chead__art canvas'); if (ca) gsap.to(ca, { scale: 1.08, ease: 'none', scrollTrigger: { trigger: '.chead', start: 'top top', end: 'bottom top', scrub: true } });
+  // page heads: the lead and buttons drift up as the page goes
+  $$('.phead .wrap > *').forEach((el, i) => gsap.to(el, { y: -14 * (i % 3), ease: 'none', scrollTrigger: { trigger: '.phead', start: 'top top', end: 'bottom top', scrub: true } }));
+}
+
+/* ───────────── the HETU card: tilts toward the pointer, the Hindi name wipes in, and the light moves ───────────── */
+function hetuMotion() {
+  const h = $('.hetu'), card = $('#hetu-card'); if (!h || !card) return;
+  const hi = $('.hetu__hi', h), mark = $('.hetu__m', h);
+  gsap.set(card, { transformPerspective: 1100 });
+  if (hi) gsap.from(hi, { clipPath: 'inset(0 100% 0 0)', duration: 1.4, ease: 'expo.inOut', scrollTrigger: { trigger: card, start: 'top 78%', once: true } });
+  if (mark) gsap.from(mark, { rotate: -90, scale: 0.4, opacity: 0, duration: 1.1, ease: 'back.out(1.8)', scrollTrigger: { trigger: card, start: 'top 80%', once: true } });
+  gsap.fromTo(h, { '--bx': '-140px', '--by': '40px' }, { '--bx': '160px', '--by': '-60px', ease: 'none', scrollTrigger: { trigger: h, start: 'top bottom', end: 'bottom top', scrub: 1 } });
+  if (fine) {
+    const rx = gsap.quickTo(card, 'rotationX', { duration: 0.6, ease: 'power3' }), ry = gsap.quickTo(card, 'rotationY', { duration: 0.6, ease: 'power3' });
+    h.addEventListener('pointermove', (e) => { const r = card.getBoundingClientRect(); ry(((e.clientX - r.left) / r.width - 0.5) * 9); rx(-((e.clientY - r.top) / r.height - 0.5) * 7); });
+    h.addEventListener('pointerleave', () => { rx(0); ry(0); });
+  }
 }
 
 /** hovering a plate or a callout lights its partner */
@@ -480,30 +560,6 @@ function fanMotion() {
     fan.addEventListener('pointerleave', () => gsap.to(fan, { '--s': 1, duration: 0.7, ease: 'power3.out', overwrite: true }));
   }
   $$('.fan__c img', fan).forEach((im, i) => { gsap.set(im, { scale: 1.14 }); gsap.to(im, { yPercent: i % 2 ? -4 : 4, duration: 2.6 + i * 0.3, yoyo: true, repeat: -1, ease: 'sine.inOut' }); });
-}
-
-/** pinned three-act story on Home */
-function arcStory() {
-  const arc = $('#arc'); if (!arc) return;
-  const steps = $$('.arc__s', arc), acts = $$('.act', arc);
-  let cur = 0;
-  const setAct = (i) => {
-    if (i === cur) return; cur = i;
-    steps.forEach((s, k) => s.classList.toggle('is-on', k === i)); acts.forEach((a, k) => a.classList.toggle('is-on', k === i));
-    if (rm) return;
-    const a = acts[i];
-    if (i === 0) drawIn($('svg', a)); else if (i === 1) gsap.from($$('.mini > div', a), { y: 24, opacity: 0, stagger: 0.1, duration: 0.6, ease });
-    else gsap.from($('.lock', a), { scale: 0.8, opacity: 0, duration: 0.9, ease: 'back.out(1.6)' });
-    if (i === 1) $$('.mini svg', a).forEach((s, k) => drawIn(s, 0.1 + k * 0.1));
-  };
-  if (!rm) gsap.matchMedia().add('(min-width: 901px)', () => {
-    ScrollTrigger.create({
-      trigger: '.arc__g', start: 'center center', end: '+=220%', pin: true, anticipatePin: 1,
-      onUpdate: (self) => setAct(Math.min(2, Math.floor(self.progress * 3))),
-    });
-  }); // on small screens all three steps are listed and the first act stays on show
-  if (rm) { steps.forEach((s, k) => s.addEventListener('mouseenter', () => setAct(k))); }
-  if (!rm) drawIn($('svg', acts[0]), 0.4);
 }
 
 function journeyMotion() {

@@ -5,7 +5,7 @@
    ========================================================================== */
 import { SITE, NAV, PROOF, BELIEFS, ARC, LAYERS, OWN, RELEASE, TOOLS, CASES, CASE_STEPS, TAGS, CHAPTERS, EDU, CERTS, SKILLS, MESH, PHOTOS, ALT, LOVES, DOORS, WINS, HIRE, CONSULT, GLANCE } from './content.js';
 import { isoStack, wf, mockup } from './art.js';
-import { isoScene, SCHEMES } from './iso.js';
+import { keyboard, keystrip } from './kb.js';
 import { WM } from './wm.js';
 
 export const esc = (v) => String(v).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
@@ -51,7 +51,7 @@ function nav(path) {
       <button class="kbtn" id="theme" type="button" aria-label="Switch colour theme">${I.sun}${I.moon}</button>
       <a class="btn btn--primary btn--sm nav__cta" href="/hire"><span>Hire me</span></a>
       <button class="kbtn burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sheet">${I.menu}</button>
-    </div></div>
+    </div><span class="nav__p" aria-hidden="true"><i id="nav-p"></i></span></div>
     <div class="sheet" id="sheet" hidden>${[...NAV, ['/hire', 'Hire me'], ['/contact', 'Contact']].map(([h, t], i) => `<a href="${h}"><i>${pad(i + 1)}</i>${t}</a>`).join('')}</div>
   </header>`;
 }
@@ -91,7 +91,7 @@ export function shell({ path, title, desc, body, boot = false, extra = '' }) {
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>${esc(title)}</title>
 <meta name="description" content="${esc(desc)}">
-<meta name="theme-color" content="#141413">
+<meta name="theme-color" content="#08090c">
 <meta name="color-scheme" content="dark light">
 <link rel="canonical" href="${url}">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -106,7 +106,7 @@ ${extra}
 </head>
 <body data-page="${esc(path)}">
 <a class="skip-link" href="#main">Skip to content</a>
-<div class="space" aria-hidden="true"><div class="space__hills"></div><div class="space__word"></div><div class="space__shade"></div></div>
+<div class="space" aria-hidden="true"><i class="space__glow"></i><i class="space__glow space__glow--b"></i><i class="space__grain"></i></div>
 ${path === '/' ? intro() : ''}
 ${nav(path)}
 <main id="main">${body.replace(/\*([^*<>\n]+)\*/g, '<span class="hl">$1</span>')}</main>
@@ -126,21 +126,22 @@ function intro() {
 }
 
 /* ───────────── case card ───────────── */
+/** Each case has a MESHHETU dot-matrix scene as its picture. */
+export const SCENE_OF = { 'price-lock-checkout': 'cart', 'coupons-cashback': 'trend', 'sku-substitution-engine': 'blocks', 'growth-loops': 'funnel', 'search-discovery': 'find', 'ai-automation': 'agents', 'internal-ops-cx': 'revops' };
 function caseCard(c, i, cls = '') {
-  return `<article class="ccard ${cls}" data-tag="${c.tag}" data-slug="${c.slug}" data-in>
+  return `<article class="ccard sp ${cls}" data-tag="${c.tag}" data-slug="${c.slug}" data-in>
     <button class="ccard__hit" type="button" data-case="${c.slug}" aria-label="Quick view: ${esc(c.title)}"></button>
-    <div class="ccard__top"><span class="label">${c.n}</span><span class="chip">${c.tag}</span></div>
-    <div class="ccard__art">${wf(c.wf)}</div>
-    <h3 class="h-3">${esc(c.title)}</h3>
+    <div class="ccard__art"><canvas data-scene="${SCENE_OF[c.slug] || 'blocks'}" aria-hidden="true"></canvas><span class="chip">${c.tag}</span><span class="label">${c.n}</span></div>
+    <div class="ccard__b"><h3 class="h-3">${esc(c.title)}</h3>
     <p class="ccard__p">${esc(c.line)}</p>
-    <dl class="ccard__m">${c.metrics.slice(0, 2).map(([v, l]) => `<div><dd>${esc(v)}</dd><dt>${esc(l)}</dt></div>`).join('')}</dl>
+    <dl class="ccard__m">${c.metrics.slice(0, 2).map(([v, l]) => `<div><dd>${esc(v)}</dd><dt>${esc(l)}</dt></div>`).join('')}</dl></div>
     <span class="ccard__go" aria-hidden="true">${I.plus}</span>
   </article>`;
 }
 
 /* The pop-up: a quick read of a case, with a way in to the full page */
 export function quick(c, i, total) {
-  return `<div class="qv__g"><div class="qv__l"><div class="qv__art">${wf(c.wf)}</div>
+  return `<div class="qv__g"><div class="qv__l"><div class="qv__art"><canvas data-scene="${SCENE_OF[c.slug] || 'blocks'}" aria-hidden="true"></canvas></div>
       <dl class="qv__m">${c.metrics.map(([v, l]) => `<div><dd>${esc(v)}</dd><dt>${esc(l)}</dt></div>`).join('')}</dl></div>
     <div class="qv__r">
       <p class="label"><span class="chip">${c.tag}</span> ${esc(c.cat.toLowerCase().startsWith(c.tag.toLowerCase()) ? c.cat.slice(c.tag.length).replace(/^\s*·\s*/, '') || c.cat : c.cat)} · ${esc(c.year)}</p>
@@ -153,55 +154,61 @@ export function quick(c, i, total) {
     </div></div>`;
 }
 
-const picker = () => `<div class="hs__pick glass" role="group" aria-label="Scene colour"><span class="label">Colour</span>${SCHEMES.map(([k, l], i) => `<button type="button" class="sw sw--${k}${i ? '' : ' is-on'}" data-scheme="${k}" aria-label="${l}" aria-pressed="${!i}"></button>`).join('')}</div>`;
+/* The HETU card: the MESHHETU brand card on a field of blue light, after the MESHHETU site. */
+const HETU_VB = '0 -896 1201 1164', HETU_D = 'M346 -51Q368 -65 380.0 -81.5Q392 -98 392 -115Q392 -139 371.5 -154.5Q351 -170 305 -170Q251 -170 222.5 -149.5Q194 -129 194 -93Q194 -63 217.0 -39.0Q240 -15 289.0 7.0Q338 29 414 54L355 163Q253 133 186.5 96.0Q120 59 87.5 12.5Q55 -34 55 -91Q55 -157 90 -198Q99 -209 110 -219Q88 -238 75 -258Q54 -291 54 -327Q54 -388 99.0 -420.0Q144 -452 228 -452H351V-510H0V-622H581V-510H489V-345H249Q219 -345 205.0 -335.0Q191 -325 191 -306Q191 -290 203 -276Q207 -271 212 -267Q258 -278 312 -278Q389 -278 437.0 -256.0Q485 -234 507.5 -198.5Q530 -163 530 -121Q530 -82 513.5 -49.0Q497 -16 460 15ZM356 -615Q339 -667 325.5 -700.0Q312 -733 298.5 -751.0Q285 -769 269.0 -775.5Q253 -782 232 -782Q214 -782 194.5 -778.0Q175 -774 158 -767L123 -876Q150 -886 179.5 -891.0Q209 -896 238 -896Q284 -896 317.5 -883.0Q351 -870 377.0 -838.5Q403 -807 426.5 -752.5Q450 -698 476 -615ZM1109 -510V0H969V-291H842Q793 -291 767.0 -272.0Q741 -253 741 -215Q741 -177 767.5 -140.5Q794 -104 845 -57L742 23Q676 -42 638.5 -101.5Q601 -161 601 -231Q601 -318 658.5 -360.5Q716 -403 823 -403H969V-510H566V-622H1201V-510ZM1001 268Q935 268 881.0 248.5Q827 229 781.5 193.5Q736 158 695 112L780 36Q822 83 856.0 111.5Q890 140 923.5 152.0Q957 164 995 164Q1035 164 1054.0 151.0Q1073 138 1073 115Q1073 95 1060.5 83.5Q1048 72 1023 72Q1000 72 978.0 81.0Q956 90 935 105L883 17Q912 -5 948.0 -17.0Q984 -29 1033 -29Q1110 -29 1153.5 13.0Q1197 55 1197 122Q1197 187 1148.5 227.5Q1100 268 1001 268Z';
+function hetu({ solo = false, tail = '' } = {}) {
+  return `<section class="hetu${solo ? ' hetu--solo' : ''}" id="mesh"><div class="wrap hetu__g">
+    <div class="hetu__card" id="hetu-card" data-in>
+      <img class="hetu__m" src="/img/meshhetu-mark-dark.svg" width="76" height="76" alt="">
+      <p class="hetu__w">MESHHETU</p>
+      <p class="label hetu__tag">${esc(MESH.tagline.toUpperCase())}</p>
+      <svg class="hetu__hi" viewBox="${HETU_VB}" role="img" aria-label="${MESH.hindi}"><path d="${HETU_D}" fill="currentColor"/></svg>
+      <p class="hetu__s">${MESH.hindi} (hetu) · ${esc(MESH.meaning)}</p>
+    </div>
+    <div class="hetu__r">
+      <p class="label eyebrow" data-in>Why we started MESHHETU</p>
+      <h2 class="h-2" data-split>Built with a *purpose.* Engineered with a reason.</h2>
+      <p class="lead" data-in>${esc(MESH.why)}</p>
+      <hr class="hetu__hr" data-in>
+      <p class="hetu__p" data-in>The name is our reminder: ${esc(MESH.principle.charAt(0).toLowerCase() + MESH.principle.slice(1))}</p>
+      ${tail}
+    </div></div></section>`;
+}
 
 /* ───────────── HOME ───────────── */
 const TICK = ['Price Lock at checkout', '45+ coupon combinations', '70,000 SKUs re-indexed', 'Strapi headless CMS', 'Amazon Pay integrated', 'Search-to-order +9.0%', 'Referral 6 → 13%', 'GA4 + BigQuery', 'Voice agent, −20% cost per order', 'CRM routing, −30% resolution time'];
 function home() {
-  const feat = CASES.slice(0, 3), rest = CASES.slice(3);
   return `
-<section class="hero" id="top"><div class="wrap hero__g">
-  <div class="hero__l">
+<section class="hero" id="top"><div class="wrap">
+  <div class="hero__t">
     <p class="hello" aria-label="Hello"><span class="hello__w" id="hello">HELLO</span><span class="hello__s label"><i></i>Open to roles and consulting</span></p>
-    <h1 class="h-hero" id="hero-h">I’m Anjor Tank, a product manager who architects and ships *the whole system.*</h1>
+    <h1 class="h-hero" id="hero-h" data-split>I’m Anjor Tank, a product manager who architects and ships *the whole system.*</h1>
     <p class="lead" data-in>From the decision rule to the web and app that carry it. Five systems taken from problem to shipped across payments, growth, search and operations, now at GNC India and founding MESHHETU.</p>
     <div class="btn-row" data-in>${btn('/work', 'See the work')}${btn('/hire', 'Hire me', 'ghost')}</div>
-    <ul class="chips" data-in><li>Mumbai</li><li>Product Manager</li><li>Product Architect</li><li>Founder, MESHHETU</li></ul>
   </div>
-  <div class="hero__r hs" id="hero-art">
-    <div class="hs__scene">${isoScene({ word: 'AT' })}</div>
-    <div class="hs__card hs__card--a glass" data-fl><span class="label">Prepaid delivery</span><b>77.2 → 89.7%</b><svg viewBox="0 0 120 34" aria-hidden="true"><path class="sp" d="M2 28 C20 27 28 24 44 22 S70 16 82 12 106 5 118 3"/></svg><span class="hs__up">+12.5pp</span></div>
-    <div class="hs__card hs__card--b glass" data-fl><p class="bub bub--q">Why did prepaid delivery jump?</p><p class="bub bub--a">We took payment at the order and locked the price, so it never changes.</p></div>
-    <div class="hs__card hs__card--c glass" data-fl><img src="/img/anjor.webp" width="44" height="44" alt="Anjor Tank"><span><b>Anjor Tank</b><i class="label">Product architect · Mumbai</i></span></div>
-    ${picker()}
+  <div class="kbstage" id="kbstage">
+    <div class="kbmeta kbmeta--t label"><span>Product manager // Mumbai</span></div>
+    ${keyboard()}
+    <div class="kbmeta kbmeta--b label"><span>Payments // Growth // Search // AI</span><span>Web // App // Platform</span></div>
   </div>
 </div></section>
 
-<div class="ticker" aria-hidden="true"><div class="ticker__t">${[...TICK, ...TICK].map((t) => `<span>${esc(t)}</span>`).join('')}</div></div>
+<div class="ticker" aria-hidden="true"><div class="ticker__t" id="ticker">${[...TICK, ...TICK].map((t) => `<span>${esc(t)}</span>`).join('')}</div></div>
 
 <section class="proof" id="proof"><div class="wrap"><ul class="mets">${PROOF.map((m, i) => `<li class="met" data-in><span class="label">T-0${i + 1} · ${m.tag}</span><strong ${m.to != null ? `data-count data-from="${m.from}" data-to="${m.to}" data-dp="${m.dp}" data-pre="${esc(m.pre || '')}" data-suf="${esc(m.suf || '')}"` : ''}>${m.to != null ? esc(m.pre + m.to.toFixed(m.dp) + m.suf) : esc(m.text)}</strong><span>${esc(m.label)}</span></li>`).join('')}</ul>
   <p class="foot-note label">Results are from product work at Truemeds, 2023 – 2026.</p></div></section>
 
 <section class="sec work" id="work"><div class="wrap">
   ${sh('Selected work', 'Seven systems, *each with a decision.*', 'Open any card for the quick version. Each one leads to a full case study: context, trade-offs, what shipped and what I would change.')}
-  <div class="bento">${feat.map((c, i) => caseCard(c, i, 'ccard--m')).join('')}${rest.map((c, i) => caseCard(c, i + 3, 'ccard--s')).join('')}</div>
+  <div class="wgrid">${CASES.map((c, i) => caseCard(c, i, i > 2 ? 'ccard--s' : '')).join('')}</div>
   <div class="btn-row">${btn('/work', 'All case studies', 'ghost')}</div>
 </div></section>
 
-<section class="arc" id="arc"><div class="wrap arc__g">
-  <div class="arc__l"><header class="sh"><p class="label eyebrow">The story so far</p><h2 class="h-2" data-split>From making demand to *building the system under it.*</h2></header>
-    <ol class="arc__steps">${ARC.map((a, i) => `<li class="arc__s${i ? '' : ' is-on'}" data-act="${i}"><span class="arc__k">${a.k}</span><div><p class="label">${a.when}</p><h3 class="h-3">${esc(a.t)}</h3><p>${esc(a.d)}</p></div></li>`).join('')}</ol>
-    <div class="btn-row">${btn('/journey', 'Read the full journey', 'ghost')}</div></div>
-  <div class="arc__r" aria-hidden="true"><div class="stage">
-    <div class="act act-0 is-on"><svg viewBox="0 0 320 240" class="wf"><path class="ln" d="M20 24H300L250 84H70Z"/><path class="ln" d="M70 96H250L222 148H98Z"/><path class="ac" d="M98 160H222L202 206H118Z"/><text class="tx mono" x="160" y="58" text-anchor="middle">IMPRESSIONS</text><text class="tx mono" x="160" y="126" text-anchor="middle">CLICKS</text><text class="tx mono inv" x="160" y="188" text-anchor="middle">ORDERS</text><path class="dm" d="M160 206v22"/><circle class="af" cx="160" cy="230" r="5"/></svg><p class="label">Act I · the funnel, seen from marketing</p></div>
-    <div class="act act-1"><div class="mini">${['checkout', 'coupon', 'swap', 'ops'].map((n) => `<div>${wf(n)}</div>`).join('')}</div><p class="label">Act II · checkout, coupons, substitution, routing</p></div>
-    <div class="act act-2"><div class="lock"><img src="/img/meshhetu-mark-dark.svg" width="72" height="72" alt=""><p class="lock__w">MESHHETU</p><p class="lock__h">हेतु</p></div><p class="label">Act III · architect, and founder</p></div>
-  </div></div>
-</div></section>
+${hetu({ tail: `<div class="btn-row" data-in>${btn('/meshhetu', 'The MESHHETU story', 'light')}${btn('/consulting', 'Consulting', 'ghost-d')}</div>` })}
 
 <section class="sec think" id="think"><div class="wrap">
   ${sh('How I think', 'Three beliefs *behind every system.*', 'They come from the case studies above, and they decide what I build first.')}
-  <div class="asc">${BELIEFS.map((b, i) => `<article class="asc__c" data-in><canvas class="asc__cv" data-ascii="${b.art}" width="10" height="10" aria-hidden="true"></canvas>
+  <div class="asc">${BELIEFS.map((b, i) => `<article class="asc__c sp" data-in><canvas class="asc__cv" data-ascii="${b.art}" width="10" height="10" aria-hidden="true"></canvas>
     <div class="asc__t"><h3>${esc(b.t)}</h3><p>${esc(b.d)}</p><ul>${b.chips.map((c) => `<li>${esc(c)}</li>`).join('')}</ul></div></article>`).join('')}</div>
 </div></section>
 
@@ -212,20 +219,9 @@ function home() {
   <div class="arch__r">${mockup()}</div>
 </div></section>
 
-<section class="mesh" id="mesh"><div class="wrap">
-  <div class="meshcard" data-in>
-    <div class="meshcard__l"><div class="reel" data-reel aria-hidden="true"></div>
-      <img class="meshcard__m" src="/img/meshhetu-mark-dark.svg" width="64" height="64" alt="">
-      <p class="meshcard__w">MESHHETU</p><p class="label">${esc(MESH.tagline)}</p><p class="meshcard__h">${MESH.hindi}</p><p class="meshcard__s">${MESH.hindi} (hetu) · ${esc(MESH.meaning)}</p></div>
-    <div class="meshcard__r"><p class="label eyebrow">Founder</p><h2 class="h-2">Built with a *purpose.* Engineered with a reason.</h2>
-      <p class="lead">${esc(MESH.why)}</p>
-      <ul class="trk">${MESH.tracks.map((t) => `<li><span class="trk__k">${t.k}</span><div><b>${esc(t.t)}</b><span class="chip chip--${t.tone}">${esc(t.s)}</span></div></li>`).join('')}</ul>
-      <div class="btn-row">${btn('/meshhetu', 'The MESHHETU story', 'light')}${btn('/consulting', 'Consulting', 'ghost-d')}</div></div>
-  </div></div></section>
-
 <section class="sec path" id="path"><div class="wrap">
   ${sh('Journey', 'Marketing, then product, *then a company of my own.*', 'Marketing taught me demand. Product taught me systems. MESHHETU is where both meet.')}
-  <ol class="strip">${[['2021', 'Digital marketing intern', '9LedgePro'], ['2022', 'Client services associate', 'Eggfirst'], ['2023', 'Management trainee', 'Neil Patel Digital'], ['2023 – 26', 'Associate Product Manager', 'Truemeds'], ['2026 –', 'Product Manager', 'GNC India'], ['2026 –', 'Founder, MESHHETU', 'Product Architect']].map(([w, r, o], i, a) => `<li class="strip__i${i >= a.length - 2 ? ' strip__i--now' : ''}" data-in><span class="label">${w}</span><i></i><b>${esc(r)}</b><span>${esc(o)}</span></li>`).join('')}</ol>
+  <ol class="strip" id="strip">${[['2021', 'Digital marketing intern', '9LedgePro'], ['2022', 'Client services associate', 'Eggfirst'], ['2023', 'Management trainee', 'Neil Patel Digital'], ['2023 – 26', 'Associate Product Manager', 'Truemeds'], ['2026 –', 'Product Manager', 'GNC India'], ['2026 –', 'Founder, MESHHETU', 'Product Architect']].map(([w, r, o], i, a) => `<li class="strip__i${i >= a.length - 2 ? ' strip__i--now' : ''}" data-in><span class="label">${w}</span><i></i><b>${esc(r)}</b><span>${esc(o)}</span></li>`).join('')}</ol>
   <div class="btn-row">${btn('/journey', 'The full timeline', 'ghost')}</div>
 </div></section>
 
@@ -276,7 +272,7 @@ function casePage(c) {
   <nav class="crumbs label" aria-label="Breadcrumb"><a href="/work">Work</a><i>/</i><span>${esc(c.tag)}</span><i>/</i><span>Case ${c.n}</span></nav>
   <div class="chead__g"><div><p class="label eyebrow" data-in>${esc(c.cat)} · ${esc(c.year)}</p><h1 class="h-hero" data-split>${esc(c.title)}</h1><p class="lead" data-in>${esc(c.line)}</p>
     <ul class="chips" data-in><li>${c.tag}</li><li>${esc(g.read)} read</li><li>Truemeds</li></ul></div>
-    <div class="chead__art" data-in>${wf(c.wf)}</div></div>
+    <div class="chead__art" data-in><canvas data-scene="${SCENE_OF[c.slug] || 'blocks'}" aria-hidden="true"></canvas></div></div>
   <ul class="mets mets--3">${c.metrics.map(([v, l]) => `<li class="met" data-in><strong>${esc(v)}</strong><span>${esc(l)}</span></li>`).join('')}</ul>
 </div></section>
 <div class="wrap cbody">
@@ -339,14 +335,7 @@ ${cta('Need someone who can own it end to end?')}`;
 /* ───────────── MESHHETU ───────────── */
 function meshhetu() {
   return `
-<section class="mhero"><div class="wrap mhero__g">
-  <div class="meshcard meshcard--solo" data-in><div class="meshcard__l"><div class="reel" data-reel aria-hidden="true"></div>
-    <img class="meshcard__m" src="/img/meshhetu-mark-dark.svg" width="64" height="64" alt="">
-    <p class="meshcard__w">MESHHETU</p><p class="label">${esc(MESH.tagline)}</p><p class="meshcard__h">${MESH.hindi}</p><p class="meshcard__s">${MESH.hindi} (hetu) · ${esc(MESH.meaning)}</p></div></div>
-  <div class="mhero__r"><p class="label eyebrow" data-in>Founder · 2026 – now</p><h1 class="h-hero" data-split>Built with a *purpose.* Engineered with a reason.</h1>
-    <p class="lead" data-in>${esc(MESH.why)}</p><p class="cs__p" data-in>${esc(MESH.principle)}</p>
-    <div class="btn-row" data-in>${btn(SITE.meshhetu, 'Visit meshhetu.com', 'primary', true)}${btn('/contact?intent=consult', 'Consult with me', 'ghost')}</div></div>
-</div></section>
+${hetu({ solo: true, tail: `<div class="btn-row" data-in>${btn(SITE.meshhetu, 'Visit meshhetu.com', 'light', true)}${btn('/contact?intent=consult', 'Consult with me', 'ghost-d')}</div>` })}
 
 <section class="sec"><div class="wrap">
   ${sh('What it is', 'Find the revenue leaks *hiding between your tools.*', MESH.category + '. Your tools capture the signals. Your teams make the decisions. Too often the two do not connect, and we close that gap.')}
@@ -381,12 +370,7 @@ function journey() {
   ${CHAPTERS.map((c) => `<section class="chap"><header class="chap__h" data-in><span class="chap__k">${c.k}</span><div><p class="label">${esc(c.span)}</p><h2 class="h-2">${esc(c.t)}</h2><p class="lead">${esc(c.d)}</p></div></header>${c.roles.map(role).join('')}</section>`).join('')}
 </div></div></section>
 
-<section class="mesh" id="mesh"><div class="wrap">
-  <div class="meshcard" data-in>
-    <div class="meshcard__l"><div class="reel" data-reel aria-hidden="true"></div><img class="meshcard__m" src="/img/meshhetu-mark-dark.svg" width="64" height="64" alt=""><p class="meshcard__w">MESHHETU</p><p class="label">${esc(MESH.tagline)}</p><p class="meshcard__h">${MESH.hindi}</p></div>
-    <div class="meshcard__r"><p class="label eyebrow">Now · Founder and Product Architect</p><h2 class="h-2">The role I built *for myself.*</h2>
-      <p class="lead">Founder-led GTM engineering for ecommerce and D2C: strategic consulting, modular systems intelligence, and ROQIVA in development. Product architect for every engagement.</p>
-      <div class="btn-row">${btn('/meshhetu', 'The MESHHETU story', 'light')}${btn(SITE.meshhetu, 'meshhetu.com', 'ghost-d', true)}</div></div></div></div></section>
+${hetu({ tail: `<div class="btn-row" data-in>${btn('/meshhetu', 'The MESHHETU story', 'light')}${btn(SITE.meshhetu, 'meshhetu.com', 'ghost-d', true)}</div>` })}
 
 <section class="sec"><div class="wrap trio">
   <div data-in><h3 class="label">Education</h3><ul class="plain">${EDU.map(([a, b]) => `<li><b>${esc(a)}</b><span>${esc(b)}</span></li>`).join('')}</ul></div>
@@ -456,7 +440,7 @@ function hire() {
     <p class="lead" data-in>${esc(HIRE.pitch)}</p>
     <div class="btn-row" data-in>${btn('/contact?intent=job', 'Start a conversation')}${btn(SITE.linkedin, 'LinkedIn', 'ghost', true)}</div>
     <div class="open glass" data-in><p class="label"><i></i>Open to</p><ul>${HIRE.roles.map((r) => `<li>${esc(r)}</li>`).join('')}</ul><p class="open__w">${esc(HIRE.where)}</p></div></div>
-  <div class="hs hs--page" id="page-art"><div class="hs__scene">${isoScene({ word: 'OK', scene: 'hire' })}</div>${picker()}</div>
+  <div class="phead__art kbpage">${keystrip('OK')}</div>
 </div></section>
 
 <section class="sec"><div class="wrap">
@@ -497,7 +481,7 @@ function consulting() {
     <p class="lead" data-in>${esc(CONSULT.lead)}</p>
     <div class="btn-row" data-in>${btn('/contact?intent=consult', 'Bring me the number')}${btn(SITE.calendly, 'Book a call', 'ghost', true)}</div>
     <ul class="chips" data-in><li>Ecommerce</li><li>D2C</li><li>GTM engineering</li><li>RevOps</li></ul></div>
-  <div class="hs hs--page" id="page-art"><div class="hs__scene">${isoScene({ word: 'PM', scene: 'consult' })}</div>${picker()}</div>
+  <div class="phead__art kbpage">${keystrip('PM')}</div>
 </div></section>
 
 <section class="sec"><div class="wrap">
