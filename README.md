@@ -1,6 +1,6 @@
 # Anjor Tank — Decision Studio portfolio
 
-A focused product-management portfolio with **Home, Work, About and Contact** plus seven existing detailed project URLs.
+A focused product-management portfolio with **Home, Work, Experience, Hire Me, About and Contact** plus seven existing detailed project URLs.
 
 ## Content structure
 
@@ -30,3 +30,11 @@ Preview branches can be deployed by the connected Vercel Git integration. Produc
 - Keep the 3 featured projects distinct from the 4 shorter archive entries.
 - Do not publish invented baselines, experiments, technical ownership or safety/consent claims. See `CONTENT_QA.md`.
 - Keep animations lightweight and optional; all content remains readable in reduced-motion mode.
+
+## AI-native interaction refresh
+
+- `src/studio-upgrades.js`: interactive 6-key page navigator, detailed career timeline, Hire Me page and MESHHETU Track A consulting feature.
+- `src/studio-upgrades.css`: tactile keyboard in pure CSS, dark cobalt palette, timelines, responsive service cards.
+- `src/studio-upgrades-motion.js`: pointer-aware keyboard previews, GSAP depth and scroll sequencing with a reduced-motion fallback.
+- Content from LinkedIn and resume is role-scoped. Track A consulting deliverables mirror the `orchestration-intelligence` system source; ROQIVA remains in development.
+- Release process: prepare Git blobs without changing a branch; update the `preview` branch once after checks to avoid many Vercel preview deployments. `main` is unaffected.

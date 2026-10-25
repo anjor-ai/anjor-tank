@@ -65,29 +65,24 @@
       "permanent": true
     },
     {
-      "source": "/journey",
-      "destination": "/about",
-      "permanent": true
-    },
-    {
       "source": "/beyond",
       "destination": "/about",
       "permanent": true
     },
     {
-      "source": "/hire",
-      "destination": "/contact",
+      "source": "/meshhetu",
+      "destination": "https://meshhetu.com",
+      "permanent": false
+    },
+    {
+      "source": "/journey",
+      "destination": "/experience",
       "permanent": true
     },
     {
       "source": "/consulting",
-      "destination": "https://meshhetu.com",
-      "permanent": false
-    },
-    {
-      "source": "/meshhetu",
-      "destination": "https://meshhetu.com",
-      "permanent": false
+      "destination": "/hire",
+      "permanent": true
     }
   ]
 }

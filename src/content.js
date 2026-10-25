@@ -20,7 +20,7 @@ export const SITE = {
 export const HELLOS = ['HELLO', 'नमस्ते', 'HOLA', 'BONJOUR', 'નમસ્તે', 'CIAO', 'OLÁ', 'नमस्कार', 'こんにちは'];
 
 export const NAV = [
-  ['/work', 'Work'], ['/about', 'About'], ['https://meshhetu.com', 'MESHHETU ↗'], ['/contact', 'Contact'],
+  ['/work', 'Work'], ['/experience', 'Experience'], ['/hire', 'Hire me'], ['/about', 'About'], ['/contact', 'Contact'],
 ];
 
 /* ───────────── proof strip ───────────── */

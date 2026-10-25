@@ -2,6 +2,7 @@
    One canonical CASES source supplies case titles, metrics and diagrams. */
 import { CASES, SITE } from './content.js';
 import { wf } from './art.js';
+import { keyboardShowcase, homepageExperience, consultingTeaser, experienceTimeline } from './studio-upgrades.js';
 
 const esc = value => String(value).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const link = (href, label, secondary = false, external = false) =>
@@ -52,17 +53,12 @@ export function studioHome() {
   <section class="studio-hero"><div class="wrap studio-hero__grid">
     <div class="studio-hero__copy" data-studio-reveal>
       <p class="studio-kicker"><span class="studio-live"></span> Anjor Tank / Product Manager / Mumbai</p>
-      <h1>Good products don’t stop <em>at the screen.</em></h1>
-      <p class="studio-lead">I’m Anjor, a Product Manager at GNC India. I work across customer experience, growth and the systems behind them—from payments and discovery to fulfilment and retention. I also founded MESHHETU.</p>
+      <h1>I build the systems <em>behind the click.</em></h1>
+      <p class="studio-lead">I’m Anjor, a Product Manager at GNC India working across ecommerce, consumer journeys, growth and internal platforms. I turn complex product problems into systems that ship. I also founded MESHHETU.</p>
       <div class="studio-actions">${link('/work', 'Explore my work')}${link('/contact', 'Get in touch', true)}</div>
       <p class="studio-under">Commerce / D2C / Consumer journeys / Internal platforms</p>
     </div>
-    <div class="studio-board" aria-label="Illustrated checkout, discovery and operations product flows" data-studio-board>
-      <div class="studio-board__heading"><span>DECISION STUDIO</span><span>01 / 03</span></div>
-      <div class="studio-board__main">${wf('checkout')}<div class="studio-board__stamp">PAYMENT<br>CONFIRMED <b>✓</b></div></div>
-      <div class="studio-board__small"><div>${wf('search')}<span>Find intent</span></div><div>${wf('ops')}<span>Close the loop</span></div></div>
-      <div class="studio-board__footer"><span>PRODUCT → SYSTEM → OUTCOME</span><span class="studio-board__pulse">● live systems</span></div>
-    </div>
+    ${keyboardShowcase()}
   </div></section>
   <section class="studio-proof"><div class="wrap">
     <div class="studio-proof__heading"><p class="studio-kicker">Selected outcomes</p><p>Truemeds product work · 2023–2026</p></div>
@@ -82,7 +78,9 @@ export function studioHome() {
       <article data-studio-reveal><span>03 / OPERATIONS</span><h3>Systems teams rely on.</h3><p>Catalogue, fulfilment, CRMs and workflows built for actual operators.</p></article>
     </div>
   </div></section>
+  ${homepageExperience()}
   ${founder()}
+  ${consultingTeaser()}
   <section class="studio-section studio-human"><div class="wrap studio-human__grid">
     <img src="/img/adventure/kart-grid.webp" width="480" height="320" loading="lazy" alt="On a go-kart track">
     <div data-studio-reveal><p class="studio-kicker">Beyond the backlog</p><h2>Curious about systems. <em>And everything outside them.</em></h2><p>Racing weekends, live music, travel, good design and a slightly unreasonable interest in how products are made.</p><div class="studio-actions">${link('/about', 'A little more about me')}${link('/contact', 'Say hello', true)}</div></div>
@@ -109,7 +107,7 @@ export function studioWork() {
 function founder() {
   return `<section class="studio-section studio-founder"><div class="wrap"><div class="studio-founder__panel" data-studio-reveal>
     <div class="studio-founder__mark"><img src="/img/meshhetu-mark-dark.svg" alt="" width="68" height="68"><span>हेतु</span><small>MESHHETU / FOUNDER</small></div>
-    <div class="studio-founder__story"><p class="studio-kicker">03 / Founder chapter</p><h2>Building MESHHETU.</h2>
+    <div class="studio-founder__story"><p class="studio-kicker">Founder / MESHHETU</p><h2>Building MESHHETU.</h2>
     <p>I founded MESHHETU to help commerce teams connect the tools, signals and decisions that are too often left isolated. Its work spans GTM engineering, RevOps and product-led systems consulting.</p>
     <p class="studio-founder__note">ROQIVA is a developing product direction, not a claim of a fully shipped client platform.</p>
     ${link(SITE.meshhetu,'Explore MESHHETU',false,true)}</div>
@@ -131,7 +129,8 @@ export function studioAbout() {
   </div></section>
   <section class="studio-section studio-history"><div class="wrap">
     ${sectionHead('01 / The path','Marketing taught me demand. Product taught me delivery.','Four chapters; one evolving way of thinking.')}
-    <div class="studio-history__list">${HISTORY.map(([time,role,org,what])=>`<article data-studio-reveal><span class="studio-kicker">${time}</span><div><h3>${esc(role)}</h3><b>${esc(org)}</b></div><p>${esc(what)}</p></article>`).join('')}</div>
+    ${experienceTimeline(true)}
+    <div class="studio-actions">${link("/experience","View the complete career timeline",true)}</div>
   </div></section>
   ${founder()}
   <section class="studio-section studio-personal"><div class="wrap">
@@ -145,7 +144,7 @@ export function studioAbout() {
 
 export function studioContact() {
   return `<section class="studio-page-head"><div class="wrap"><p class="studio-kicker">Contact / Open lines</p>
-  <h1>Let's make <em>something useful.</em></h1><p class="studio-lead">A product role, an interesting team, or simply a good conversation—reach out directly or leave a note.</p></div></section>
+  <h1>Let's make <em>something useful.</em></h1><p class="studio-lead">A product role, a consulting brief through MESHHETU Track A, or simply a good conversation—reach out directly or leave a note.</p></div></section>
   <section class="studio-section studio-contact"><div class="wrap studio-contact__grid">
     <div class="studio-contact__direct"><h2>Reach me directly.</h2>
       <a href="mailto:${SITE.email}"><span>Email</span><strong>${SITE.email}</strong><b aria-hidden="true">↗</b></a>

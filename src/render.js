@@ -8,6 +8,7 @@ import { isoStack, wf, mockup } from './art.js';
 import { isoScene, SCHEMES } from './iso.js';
 import { WM } from './wm.js';
 import { studioHome, studioWork, studioAbout, studioContact, studioCaseMap } from './studio.js';
+import { experiencePage, hirePage } from './studio-upgrades.js';
 
 export const esc = (v) => String(v).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const hl = (t) => esc(t).replace(/\*([^*]+)\*/g, '<span class="hl">$1</span>');
@@ -51,7 +52,7 @@ function nav(path) {
     <nav class="nav__links" aria-label="Main">${NAV.map(x => item(x)).join('')}</nav>
     <div class="nav__r">
       <button class="kbtn" id="theme" type="button" aria-label="Switch colour theme">${I.sun}${I.moon}</button>
-      <a class="btn btn--primary btn--sm nav__cta" href="/contact"><span>Get in touch</span></a>
+      <a class="btn btn--primary btn--sm nav__cta" href="/hire"><span>Hire me</span></a>
       <button class="kbtn burger" id="burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="sheet">${I.menu}</button>
     </div></div>
     <div class="sheet" id="sheet" hidden>${NAV.map((x, i) => item(x, i)).join('')}</div>
@@ -62,7 +63,7 @@ function foot() {
   return `<footer class="foot" id="foot">
     <div class="wrap foot__top studio-footer">
       <div class="foot__id"><a href="/" aria-label="Anjor Tank, home">${key()}</a><p class="foot__line">Product Manager at GNC India. Founder, MESHHETU.</p><p class="label">Mumbai · India</p></div>
-      <nav class="foot__col" aria-label="Site links"><p class="label">Explore</p><a href="/work">Work</a><a href="/about">About</a><a href="/contact">Contact</a></nav>
+      <nav class="foot__col" aria-label="Site links"><p class="label">Explore</p><a href="/work">Work</a><a href="/experience">Experience</a><a href="/hire">Hire me</a><a href="/about">About</a><a href="/contact">Contact</a></nav>
       <div class="foot__col"><p class="label">Elsewhere</p><a href="${SITE.linkedin}" target="_blank" rel="noopener noreferrer">LinkedIn</a><a href="mailto:${SITE.email}">Email</a><a href="${SITE.meshhetu}" target="_blank" rel="noopener noreferrer">MESHHETU ↗</a></div>
     </div>
     <div class="wrap foot__bar"><p class="label">© 2026 Anjor Tank</p><p class="label">Designed to make the work clearer.</p></div>
@@ -536,6 +537,8 @@ export function routes() {
     { path: '/', file: 'index.html', title: 'Anjor Tank | Product Manager, Ecommerce & Growth', desc: D, body: studioHome, boot: false },
     { path: '/work', file: 'work/index.html', title: 'Work & Case Studies | Anjor Tank', desc: 'Product decisions across checkout, growth, search, fulfilment and customer operations.', body: studioWork },
     ...CASES.map(c => ({ path: '/work/' + c.slug, file: `work/${c.slug}/index.html`, title: `${c.title} | Anjor Tank`, desc: c.line, body: () => casePage(c) })),
+    { path: '/experience', file: 'experience/index.html', title: 'Experience & Timeline | Anjor Tank', desc: 'Professional product experience from marketing through Truemeds, GNC India and founding MESHHETU.', body: experiencePage },
+    { path: '/hire', file: 'hire/index.html', title: 'Hire Anjor Tank | Product Roles & Consulting', desc: 'Product Manager opportunities and founder-led strategic consulting through MESHHETU Track A.', body: hirePage },
     { path: '/about', file: 'about/index.html', title: 'About | Anjor Tank', desc: 'From marketing to product management at Truemeds and GNC India, and founding MESHHETU.', body: studioAbout },
     { path: '/contact', file: 'contact/index.html', title: 'Contact | Anjor Tank', desc: 'Reach Anjor Tank for product roles, collaborations and introductions.', body: studioContact },
     { path: '/404', file: '404.html', title: 'Page not found | Anjor Tank', desc: 'Page not found.', body: notfound },
