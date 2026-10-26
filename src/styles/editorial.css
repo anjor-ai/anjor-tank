@@ -1,23 +1,5 @@
 /* The editorial layer: asymmetric story composition, product-led interactivity, accessible motion.
    Uses existing Space Grotesk / IBM typography and the Meshhetu blue family. */
-[data-theme='dark'] {
- --bg:#070e1b;--bg-2:#0b1729;--surface:#0e1c30;--surface-2:#14233b;
- --line:#213750;--line-2:#31516f;--text:#f2f8ff;--text-2:#b6cde5;--text-3:#88a4c2;
- --accent:#368dff;--accent-text:#7abaff;--accent-head:#65afff;
- --accent-soft:rgba(45,139,255,.14);--accent-glow:rgba(47,133,255,.3);
- --btn-bg:#edf6ff;--btn-ink:#071426;--nav-bg:rgba(7,14,27,.87);
- --node-bg:#0e1c30;--stage-bg:#0b1729;--stage-line:#213750;--stage-glow:rgba(45,139,255,.2);
- --ed-blue:#60b4ff;--ed-cyan:#7be4ed;--ed-ink:#08172a;--ed-panel:#10243b;
-}
-[data-theme='light'] {
- --bg:#f5faff;--bg-2:#eaf4ff;--surface:#fff;--surface-2:#eaf4ff;
- --line:#cfe2f6;--line-2:#9ec8eb;--text:#071a32;--text-2:#315577;--text-3:#52769c;
- --accent:#066fee;--accent-text:#045cc9;--accent-head:#086cf0;
- --accent-soft:rgba(5,108,238,.09);--accent-glow:rgba(5,108,238,.19);
- --btn-bg:#071d37;--btn-ink:#fff;--nav-bg:rgba(245,250,255,.9);
- --node-bg:#fff;--stage-bg:#eaf4ff;--stage-line:#cfe2f6;--stage-glow:rgba(5,108,238,.1);
- --ed-blue:#066fee;--ed-cyan:#147ba0;--ed-ink:#071a32;--ed-panel:#eaf4ff;
-}
 .ed-micro {font:500 10px/1.5 var(--font-mono);letter-spacing:.13em;text-transform:uppercase;color:var(--text-3)}
 .ed-dot{width:8px;height:8px;border-radius:50%;display:inline-block;background:#58dccc;box-shadow:0 0 0 4px rgba(88,220,204,.12);flex:none}
 .ed-homehero {padding:clamp(58px,8vw,100px) 0 36px;position:relative;overflow:hidden;isolation:isolate}

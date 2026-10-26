@@ -129,3 +129,7 @@
 [data-theme='dark'] { --t-peach: #2a1c15; --t-lilac: #1d1c34; --t-mint: #112620; --t-sky: #12202f; --t-butter: #292411;
   --ts-peach: #e08a5c; --ts-lilac: #8d7cf0; --ts-mint: #46b88a; --ts-sky: #4a9ae8; --ts-butter: #d4ad3a;
   --tg: linear-gradient(150deg, #e0622f, #b02a14 75%); --tg-ink: #ffffff; --mesh-a: #3a2116; --mesh-b: #24214a; --mesh-c: #123050; }
+
+/* Aux colours used by the editorial and studio blocks, mapped onto the one palette */
+[data-theme='light'] { --ed-blue: #005fc7; --ed-cyan: #0a7d95; --ed-panel: var(--bg-2); --ed-ink: #0b0c0f; }
+[data-theme='dark'] { --ed-blue: #4aa3ff; --ed-cyan: #7be4ed; --ed-panel: var(--surface); --ed-ink: #0b0c0f; }

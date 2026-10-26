@@ -306,3 +306,46 @@ body::before { background: radial-gradient(60% 40% at 85% -5%, color-mix(in srgb
 .mk__flow li.is-end { color: var(--text); }
 @media (max-width: 760px) { .phero p > .btn, p > .btn { white-space: normal; } }
 .sec--alt + .sec--alt, .sec--alt + .sec--band, .sec--band + .sec--alt { margin-top: 12px; }
+
+.ed-homehero { overflow: clip; }
+
+/* Journey ribbon: the four cards take the shared tints, so they follow the theme */
+.ed-journey__timeline li { border-radius: 26px; border: 0 !important; color: var(--text); }
+.ed-journey__timeline li:nth-child(1) { background: var(--t-peach); color: var(--text); }
+.ed-journey__timeline li:nth-child(2) { background: var(--t-lilac); color: var(--text); }
+.ed-journey__timeline li:nth-child(3) { background: var(--t-mint); color: var(--text); }
+.ed-journey__timeline li:nth-child(4) { background: #0e1014; color: #f4f3ee; }
+.ed-journey__timeline li:nth-child(1) .label, .ed-journey__timeline li:nth-child(2) .label, .ed-journey__timeline li:nth-child(3) .label { color: var(--text-2); }
+.ed-journey__timeline li p { opacity: 1; color: var(--text-2); }
+.ed-journey__timeline li:nth-child(4) p, .ed-journey__timeline li:nth-child(4) .label { color: #b7c0cf; }
+
+/* Panels that are dark in both themes carry the dark palette inside them; the white cards on them carry the light one.
+   This is what keeps text readable when the page theme and the panel disagree. */
+.v3-founder, .fdr, .cs__rq, .ed-consult, .czm__p, .czs__move, .rqh {
+  --bg: #0b0c0f; --bg-2: #101216; --surface: #15171c; --surface-2: #1b1e24; --line: #23262d; --line-2: #303540;
+  --text: #f4f3ee; --text-2: #b4b7bd; --text-3: #8d9199; --accent-text: #4aa3ff; --ed-blue: #4aa3ff; color-scheme: dark;
+}
+.ed-consult__graphic, .st-console {
+  --bg: #ffffff; --bg-2: #f4f3ee; --surface: #ffffff; --surface-2: #f8f7f3; --line: #e4e2da; --line-2: #d3d1c6;
+  --text: #0b0c0f; --text-2: #4a4f57; --text-3: #5b616b; --accent-text: #005fc7; --ed-blue: #005fc7; color-scheme: light;
+}
+[data-theme='dark'] .st-console { --bg: #15171c; --bg-2: #101216; --surface: #1b1e24; --surface-2: #15171c; --line: #2f333b; --line-2: #3a3f48;
+  --text: #f4f3ee; --text-2: #b4b7bd; --text-3: #9a9ea6; --accent-text: #6db3ff; color-scheme: dark; }
+.st-console__online { color: var(--st-ok); }
+.st-console__state, .st-console__disclaimer, .st-console .st-eyebrow { color: var(--text-2); }
+.st-console .st-console__metric .st-eyebrow { color: #a6b6c8; }
+.st-console__chrome, .st-console__tabs, .st-console__tab span, .st-console__navlabel, .st-console__navfoot, .st-console__sub, .st-console__bottom span { color: var(--text-2); }
+.st-console__tab strong { color: var(--text); }
+.ed-consult__toolbar { color: var(--text-2); border-color: var(--line); }
+.ed-consult__toolbar > span:last-child { color: var(--text-3); }
+.ed-consult__trace, .ed-consult__trace span { color: var(--text-2); }
+.ed-consult__signal small { color: var(--ed-blue); }
+.ed-consult__signal b { color: var(--text); }
+.ed-consult__signal p { color: var(--text-2); }
+.ed-consult__foot .ed-micro { color: var(--text-2); }
+.status--sky { color: var(--st-sky); }
+[data-theme='dark'] .st-console__bottom a { color: #4aa3ff; }
+[data-theme='light'] .ha__pill--sky, [data-theme='light'] .status--sky { color: #075a8c; }
+[data-theme='light'] .ha__pill--ok { color: #11633f; }
+[data-theme='light'] .ha__pill--grey { color: #4b4e56; }
+.v3-hirehero__glass i { color: var(--accent-text); }
