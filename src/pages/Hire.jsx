@@ -1,51 +1,31 @@
-import { TOOLS, consulting as C, hire as P } from '../content'
-import { Arrow, Button, Cta, Head, PageHero, Section } from '../components/ui'
-import { RoqivaFounder, WhereIFit } from '../components/folio'
-import { Leaks, Phases } from '../components/gtm'
-import { SystemStory } from '../components/system'
-import { Kinetic } from '../components/kinetic'
+import { Cta, Section, PageHero, Arrow, Button } from '../components/ui'
 import { PageMotion } from '../lib/PageMotion'
+import { SystemSuite, OfferBento, EngagementBoard, FounderBridge } from '../components/ConsultingSuite'
+import { Leaks } from '../components/gtm'
+import { WhereIFit } from '../components/folio'
 
-/* Hire me: one page, three ways in. Join the team, consult on GTM engineering and RevOps, or build alongside ROQIVA.
-   The consulting part is one story: find the leak, fix the loop, prove the lift, run it in ROQIVA. */
 export default function Hire() {
-  const h = P.hero
-  return (
-    <PageMotion routeKey="/hire">
-      <PageHero eyebrow={h.eyebrow} title={h.title} lead={h.lead}>
-        <div className="hero__btns hero__a" style={{ '--i': 3 }}>
-          <Button to={h.primary.to} track="cta_hire_hero">{h.primary.label}<Arrow /></Button>
-          <Button href={h.secondary.href} variant="ghost">{h.secondary.label} ↗</Button>
-        </div>
-        <ol className="ways hero__a" style={{ '--i': 4 }}>
-          {h.ways.map((w) => <li key={w.n}><a href={w.to}><span className="label">{w.n}</span><b>{w.t}</b><span>{w.d}</span></a></li>)}
-        </ol>
-      </PageHero>
-
-      <Section id="fit" rule={false}>
-        <Head eyebrow={P.fit.eyebrow} title={P.fit.title} />
-        <WhereIFit />
-        <ul className="chips-sm gap-top" data-reveal>{TOOLS.slice(0, 14).map((t) => <li key={t}>{t}</li>)}</ul>
-      </Section>
-
-      <Kinetic rows={['GTM engineering', 'RevOps', 'ROQIVA']} />
-
-      <Section id="system" tone="alt">
-        <Head eyebrow={C.eyebrow} title={C.title} lead={C.lead} />
-        <SystemStory />
-      </Section>
-
-      <Section id="consulting">
-        <h3 className="label">{C.leaks.title.replace(/\*/g, '')}</h3>
-        <Leaks />
-        <h3 className="label gap-top">{C.process.title.replace(/\*/g, '')}</h3>
-        <Phases />
-        <p className="more" data-reveal><Button to={C.cta.to}>{C.cta.label}<Arrow /></Button></p>
-      </Section>
-
-      <Section id="roqiva" tone="band"><RoqivaFounder compact /></Section>
-
-      <Cta {...P.cta} />
-    </PageMotion>
-  )
+ return <PageMotion routeKey="/hire">
+  <header className="v3-hirehero">
+   <div className="container v3-hirehero__in">
+    <div className="v3-hirehero__copy">
+     <p className="v3-hero-kicker">PRODUCT-LED CONSULTING</p>
+     <h1 className="h-hero">Build the systems that <span className="em">make growth work.</span></h1>
+     <p className="lead">I connect GTM engineering, RevOps and product thinking to diagnose revenue leaks, engineer operating loops and prove the lift. ROQIVA is the independent product I am founding from that method.</p>
+     <div className="hero__btns"><Button to="/contact?intent=consult#brief">Discuss consulting <Arrow /></Button><Button to="#system" variant="ghost">Explore the system</Button></div>
+     <p className="v3-hirehero__minor">Prefer a product role conversation? <a href="/contact?intent=job#brief">Get in touch ↗</a></p>
+    </div>
+    <div className="v3-hirehero__graphic" aria-label="GTM, RevOps, and ROQIVA connected">
+     <div className="v3-hirehero__glass"><span>THE GROWTH SYSTEM</span><div><i>01</i><b>GTM engineering</b><small>Capture intent & close journey gaps</small></div><div><i>02</i><b>Revenue operations</b><small>Standardize decisions & workflows</small></div><div><i>03</i><b>ROQIVA</b><small>Governed product in development</small></div><p>Find the leak → Fix the loop → Prove the lift</p></div>
+    </div>
+   </div>
+  </header>
+  <Section id="system" rule={false}><SystemSuite /></Section>
+  <Section id="consulting" tone="alt"><OfferBento /></Section>
+  <Section id="problems"><div className="v3-centered"><h2 className="h-2">Recognize the revenue leak?</h2><p className="lead">Explore the failure modes I help diagnose across your commercial journey.</p></div><Leaks /></Section>
+  <Section id="process" tone="alt"><EngagementBoard /></Section>
+  <Section id="roqiva"><FounderBridge /></Section>
+  <Section id="fit" tone="alt"><div className="v3-centered"><h2 className="h-2">The product roles I can own.</h2><p className="lead">Consulting is one way we can work together. I also build consumer, growth and platform products as part of a team.</p></div><WhereIFit /></Section>
+  <Cta title="Bring a real constraint. *Let's design the next move.*" lead="Start with the problem and the tools involved. A short brief is enough." primary={{label:"Discuss consulting",to:"/contact?intent=consult#brief"}} secondary={{label:"Talk about a product role",to:"/contact?intent=job#brief"}}/>
+ </PageMotion>
 }

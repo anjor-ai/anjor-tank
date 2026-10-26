@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { ALT, PHOTOS, beyond as P } from '../content'
 import { Cta, Head, PageHero, Section } from '../components/ui'
+import { BeyondHeroVisual } from '../components/Editorial'
 import { PageMotion } from '../lib/PageMotion'
 
 /* Beyond work: the person. Photos in three folders (filterable, each opens larger), then the things I love. */
@@ -44,9 +45,9 @@ export default function Beyond() {
   const list = PHOTOS.filter((p) => g === 'All' || p.g === g)
   return (
     <PageMotion routeKey="/beyond">
-      <PageHero eyebrow={P.hero.eyebrow} title={P.hero.title} lead={P.hero.lead} />
+      <PageHero variant="beyond" title={P.hero.title} lead={P.hero.lead} visual={<BeyondHeroVisual />} visualLive />
 
-      <Section id="photos" rule={false}>
+      <Section id="photos" rule={false}><div className="v3-beyond-intro"><div><h2 className="h-2">Outside the roadmap.</h2><p className="lead">Some things are better experienced than described. These are the moments that keep me curious.</p></div><span>EXPLORE THE GALLERY ↓</span></div>
         <div className="chips-row" role="group" aria-label="Filter photos" data-reveal>
           {P.groups.map((x) => <button key={x} type="button" className="chip" aria-pressed={g === x} onClick={() => { setG(x); setOpen(-1) }}>{x}</button>)}
         </div>
