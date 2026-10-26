@@ -62,9 +62,9 @@ export const roqiva = {
     lead: 'At Truemeds I fixed checkout, coupons, substitution, search and support by hand. Every time I started from zero: find the gap, argue for it, write the spec, ship, measure. ROQIVA is that loop, made repeatable, with a person approving every step that changes the business.',
     cards: [
       { slug: 'price-lock-checkout', lane: 'Lane C · Shopping and conversion', t: 'Payment failures nobody retried', d: 'Checkout lost orders to failures treated alike. In ROQIVA’s design it becomes a detector that checks every failure reason reaches a retry rule.' },
-      { slug: 'coupons-cashback', lane: 'Lane C and F · Conversion and lifecycle', t: 'Coupon rules that disagree with the cart', d: 'Rules that stacked differently from checkout cost conversion. In ROQIVA’s design a detector compares the promise with the cart logic.' },
+      { slug: 'retention-reminders', lane: 'Lane F · Retention and lifecycle', t: 'Reminders nobody timed', d: 'Repeat orders leaked because timing and ownership were split. In ROQIVA’s design a detector checks that journeys fire on real order cadence and do not conflict.' },
       { slug: 'sku-substitution-engine', lane: 'Lane D and H · Fulfilment and supply', t: 'Stock the promise did not know about', d: 'Delivery promises made on a spreadsheet. In ROQIVA’s design a detector checks that stock, catalogue and promise agree before the order is promised.' },
-      { slug: 'internal-ops-cx', lane: 'Lane E · Post-purchase service', t: 'Support status that never reached the CRM', d: 'Tickets moving between teams with no owner. In ROQIVA’s design a detector checks status reaches the system that acts on it.' },
+      { slug: 'headless-cms-experimentation', lane: 'Lane A and F · Acquisition and lifecycle', t: 'Pages launched without the tag', d: 'Landing pages shipped with broken tracking and offers the cart did not honour. In ROQIVA’s design a detector checks the page carries what the campaign needs.' },
     ],
     founder: { who: 'Anjor Tank', role: 'Founder', d: 'Product architect, previously owning payments, growth and platform product. ROQIVA is where I am putting my time now, and a company will be formed around it.', cta: { label: 'Read the cases it comes from', to: '/work' } },
   },

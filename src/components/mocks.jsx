@@ -38,30 +38,7 @@ function Checkout() {
   )
 }
 
-/* 02 · Coupons and cashback */
-function Coupons() {
-  return (
-    <Frame title="Coupons · rule builder" flow={['Create rule', 'Target cohort', 'Best coupon applies', 'Cashback credited']}>
-      <div className="mk__split">
-        <div className="mk__phone">
-          <p className="label">Offers for you</p>
-          <ul className="mk__cards">
-            <li className="is-best"><b>SAVE10</b><span>10% off · applied</span><Pill tone="ok">Best</Pill></li>
-            <li><b>WELCOME</b><span>New users · app only</span></li>
-            <li><b>CASHBACK</b><span>Credited to wallet</span></li>
-          </ul>
-          <p className="mk__lock"><Icon name="check" size={13} />You save more with SAVE10</p>
-        </div>
-        <div className="mk__side">
-          <p className="label">Rule</p>
-          <ul className="mk__kv"><li><span>Channel</span><b>App</b></li><li><span>Cohort</span><b>Lapsed 30d</b></li><li><span>Reward</span><b>Cashback</b></li><li><span>Expires</span><b>Alerts on</b></li></ul>
-        </div>
-      </div>
-    </Frame>
-  )
-}
-
-/* 03 · SKU substitution engine */
+/* 02 · SKU substitution engine */
 function Substitution() {
   return (
     <Frame title="Warehouse portal · order" flow={['Stockout', 'Live inventory', 'Suggest nearest SKU', 'Operator confirms', 'Price held']}>
@@ -83,7 +60,7 @@ function Substitution() {
   )
 }
 
-/* 04 · Growth loops */
+/* 03 · Retention reminders */
 function Loops() {
   return (
     <Frame title="Growth · the loop" flow={['Order', 'Reminder', 'Repeat order', 'Referral']}>
@@ -104,7 +81,7 @@ function Loops() {
   )
 }
 
-/* 05 · Search and discovery */
+/* 04 · Search and discovery */
 function Search() {
   return (
     <Frame title="Search · results" flow={['Query', 'Intent', 'Rank', 'Result']}>
@@ -121,7 +98,7 @@ function Search() {
   )
 }
 
-/* 06 · AI and automation */
+/* 05 · AI and automation */
 function Automation() {
   const N = ({ k, t, tone = '' }) => <div className={`mk__node ${tone}`}><span className="label">{k}</span><b>{t}</b></div>
   return (
@@ -140,15 +117,21 @@ function Automation() {
   )
 }
 
-/* 07 · Internal ops and CX */
-function Ops() {
-  const col = (h, items) => <div className="mk__col"><p className="label">{h}</p>{items.map(([t, s, tone]) => <div key={t} className="mk__tk"><b>{t}</b><Pill tone={tone}>{s}</Pill></div>)}</div>
+/* 06 · Headless CMS and experimentation */
+function Cms() {
   return (
-    <Frame title="CX · query board" flow={['Query in', 'One owner', 'SLA timer', 'Resolved']}>
-      <div className="mk__board">
-        {col('New', [['Refund query', '3h left', 'warn'], ['Delivery delay', '5h left', '']])}
-        {col('Owned', [['Return pickup', 'Finance', ''], ['Wrong item', 'Warehouse', '']])}
-        {col('Resolved', [['Refund issued', 'On time', 'ok']])}
+    <Frame title="Page builder · campaign page" flow={['Brief page', 'Build in CMS', 'QA and preview', 'Launch test', 'Measure CVR']}>
+      <div className="mk__split">
+        <div className="mk__side">
+          <p className="label">Modules</p>
+          <ul className="mk__blocks"><li>Hero banner</li><li className="is-on">Offer strip</li><li>Social proof</li><li className="is-on">Sticky CTA</li></ul>
+          <p className="mk__note">Marketing publishes without a ticket.</p>
+        </div>
+        <div className="mk__side">
+          <p className="label">Experiment</p>
+          <ul className="mk__kv"><li><span>Variant A</span><b>Control</b></li><li><span>Variant B</span><b className="is-up">+1.7% CVR</b></li><li><span>Tracking</span><b>Verified</b></li></ul>
+          <div className="mk__ev is-ok"><b>QA passed</b><span>Links, tags and layout checked</span></div>
+        </div>
       </div>
     </Frame>
   )
@@ -156,12 +139,11 @@ function Ops() {
 
 const MOCKS = {
   'price-lock-checkout': Checkout,
-  'coupons-cashback': Coupons,
   'sku-substitution-engine': Substitution,
-  'growth-loops': Loops,
+  'retention-reminders': Loops,
   'search-discovery': Search,
   'ai-automation': Automation,
-  'internal-ops-cx': Ops,
+  'headless-cms-experimentation': Cms,
 }
 
 /** The illustration for one case, picked by slug. */

@@ -20,9 +20,26 @@ export const home = {
     lead: 'Product manager at GNC India. Founder of ROQIVA, the system I am building to do it for everyone.',
     primary: { label: 'See my work', to: '#work' },
     secondary: { label: 'Say hello', to: '/contact' },
-    facts: [['Now', 'Product Manager, GNC India'], ['Building', 'ROQIVA, in development'], ['Before', 'Truemeds, 7 systems shipped']],
+    facts: [['Now', 'Product Manager, GNC India'], ['Building', 'ROQIVA, in development'], ['Before', 'Product Manager, Truemeds']],
+    proof: [['+12.5pp', 'Prepaid conversion'], ['~1,100', 'Repeat orders a day'], ['3.4×', 'Organic clicks in six months'], ['−20%', 'Cost per order']],
+    badges: ['77.2 → 89.7% prepaid', 'ROQIVA · in development', '70,000+ SKUs indexed'],
+    tags: ['AI Product Manager', 'Payments', 'Search', 'MarTech', 'Operations & Logistics', 'Platform Products', 'GTM Engineering', 'RevOps'],
   },
-  work: { eyebrow: 'Selected work', title: 'Seven systems. *Tap one for the quick view.*', link: ['All cases', '/work'] },
+  work: { eyebrow: 'Selected work', title: 'Six systems. *Drag the ring, open a case.*', link: ['All cases', '/work'] },
+  band: ['Find the leak', 'Fix the loop', 'Prove the lift'],
+  layers: { eyebrow: 'How I build', title: 'Every number sits on *four layers.*', lead: 'When scale breaks a product it rarely breaks on the screen. It breaks in the layers underneath, so that is where I work.' },
+  system: {
+    eyebrow: 'One system',
+    title: 'From a client leak to *a product that finds it.*',
+    lead: 'GTM engineering and RevOps is how I work today. ROQIVA is the same loop, written as software.',
+    steps: [
+      { n: '01', t: 'Find the leak', d: 'Map the journey, test the data, size each leak in rupees.' },
+      { n: '02', t: 'Fix the loop', d: 'Signals, rules and suppression built once, running without a ticket.' },
+      { n: '03', t: 'Prove the lift', d: 'Every claim measured against a holdout that was never contacted.' },
+      { n: '04', t: 'Run it in ROQIVA', d: 'Detectors find it, agents draft the fix, a person approves.' },
+    ],
+    link: ['See the whole system', '/hire#system'],
+  },
   fit: { eyebrow: 'Where I fit', title: 'Pick *the seat you need.*', link: ['Hire me', '/hire'] },
   roqiva: {
     eyebrow: 'Founder · In development',
@@ -42,7 +59,7 @@ export const home = {
 
 // Where I fit: six seats, the proof behind each and where to start. Used on Home and on Hire.
 export const fit = [
-  { id: 'growth', seat: 'Growth PM', d: 'Referral, lifecycle, CMS and experimentation that growth can run without an engineering ticket.', proof: '6 → 13% referral share · ~1,100 repeat orders a day', start: 'Where growth waits on engineering.', case: 'growth-loops' },
+  { id: 'growth', seat: 'Growth PM', d: 'Referral, lifecycle, CMS and experimentation that growth can run without an engineering ticket.', proof: '6 → 13% referral share · ~1,100 repeat orders a day', start: 'Where growth waits on engineering.', case: 'retention-reminders' },
   { id: 'payments', seat: 'Payments PM', d: 'Checkout, price integrity, payment adoption and what happens when a payment fails.', proof: '77.2 → 89.7% prepaid order-to-delivery', start: 'Where failures are treated alike.', case: 'price-lock-checkout' },
   { id: 'platform', seat: 'Platform PM', d: 'Rule engines, catalogues, portals and the internal tools behind a consumer product.', proof: '45+ coupon combinations · 70,000+ SKUs re-indexed', start: 'Where operators work from spreadsheets.', case: 'sku-substitution-engine' },
   { id: 'ai', seat: 'AI PM', d: 'Automation and recommendation that start with the cheapest high-volume intent, and keep a person where it matters.', proof: '−20% cost per order · +11% substitution acceptance', start: 'Where cost follows volume, not complexity.', case: 'ai-automation' },
@@ -54,7 +71,7 @@ export const fit = [
 export const work = {
   hero: {
     eyebrow: 'Proof · Work',
-    title: 'Seven systems *I owned end to end.*',
+    title: 'Six systems *I owned end to end.*',
     lead: 'Payments, growth, search, AI and operations at a Series C online pharmacy.',
     facts: ['Truemeds · Dec 2023 – Jul 2026', 'Two pods · 12 engineers', 'Five systems built 0-to-1'],
   },
@@ -68,6 +85,12 @@ export const consulting = {
   leaks: { title: 'Which leak *do you recognise?*' },
   offers: { title: 'Six offers, *one ladder.*' },
   process: { title: 'Four phases, *twelve weeks.*' },
+  story: [
+    { id: 'sys-leak', eyebrow: '01 · Find the leak', title: 'Revenue leaks *between your tools.*', lead: 'Search, stock, checkout, support and CRM each report their own number. I map the journey end to end, test which data to trust, and size every leak.', chips: ['Journey map', 'Data trust test', 'Finding cards'] },
+    { id: 'sys-loop', eyebrow: '02 · Fix the loop', title: 'Build the fix *once, as a system.*', lead: 'Signals, rules and suppression, engineered into a loop that runs without a ticket. Six offers, from a fixed-fee audit to a monthly partnership.', chips: ['Fixed fee', 'Owner named', 'Rollback path'] },
+    { id: 'sys-lift', eyebrow: '03 · Prove the lift', title: 'No claim *without a holdout.*', lead: 'A group that is never contacted shows what would have happened anyway. Twelve weeks from first call to a measured result.', chips: ['Holdout', 'Guardrails', 'Decision trace'] },
+    { id: 'sys-roqiva', eyebrow: '04 · Run it in ROQIVA', title: 'ROQIVA is *the same loop, as software.*', lead: 'What I do by hand for a client, ROQIVA is being built to do continuously: detectors find the leak, agents draft the fix, a named person approves, and the lift is measured.', chips: ['In development', 'Human gates', 'No live writes'] },
+  ],
   cta: { label: 'Bring me a number', to: '/contact?intent=consult#brief' },
 }
 
@@ -122,7 +145,7 @@ export const hire = {
     secondary: { label: 'LinkedIn', href: site.linkedin },
     ways: [
       { n: '01', t: 'Join your team', d: 'Growth, payments, platform or AI product.', to: '#fit' },
-      { n: '02', t: 'Consult', d: 'GTM engineering and RevOps, from audit to running system.', to: '#consulting' },
+      { n: '02', t: 'Consult', d: 'GTM engineering and RevOps, from audit to running system.', to: '#system' },
       { n: '03', t: 'Build with ROQIVA', d: 'Follow it, or help shape what it does first.', to: '#roqiva' },
     ],
     where: 'India, or remote with global teams.',

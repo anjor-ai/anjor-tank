@@ -4,6 +4,7 @@ import { CASES, bridge, fit as FIT, home, roqiva } from '../content'
 import { Arrow, Button, LinkArrow, Rich } from './ui'
 import { Icon } from './icons'
 import { CaseMock } from './mocks'
+import { Stat } from './kinetic'
 import { WordReel } from '../art/Reel'
 import { HeroApp } from '../scenes/HeroApp'
 
@@ -24,6 +25,7 @@ export function HelloCard() {
     return () => { clearInterval(c); if (g) clearInterval(g) }
   }, [H.greeting.length])
   return (
+    <div className="hlw">
     <aside className="hlc" aria-label="Hello">
       <figure className="hlc__ph"><img src="/img/anjor.webp" width="447" height="721" alt="Anjor Tank" decoding="async" /></figure>
       <div className="hlc__b">
@@ -32,6 +34,8 @@ export function HelloCard() {
         <dl className="hlc__f">{H.facts.map(([k, v]) => <div key={k}><dt className="label">{k}</dt><dd>{v}</dd></div>)}</dl>
       </div>
     </aside>
+    <ul className="hfl" aria-hidden="true">{H.badges.map((b, k) => <li key={b} className={`hfl__${k}`}>{b}</li>)}</ul>
+    </div>
   )
 }
 
@@ -73,15 +77,17 @@ export function WhereIFit({ initial = 0 }) {
   )
 }
 
-/** One case, as a card. With `onOpen` the card opens the quick view; the full case is always one link away. */
+/** One case, as a card: the illustration, the number, the tags. With `onOpen` the card opens the quick view; the full case is always one link away. */
 export function CaseCard({ c, onOpen }) {
   const b = bridge[c.slug]
   return (
     <li className="ccd" data-reveal>
       <div className="ccd__a" onClick={onOpen ? () => onOpen(c.slug) : undefined}>
+        <div className="ccd__art" aria-hidden="true"><div className="ccd__mock"><CaseMock slug={c.slug} /></div></div>
         <span className="ccd__top"><span className="ccd__n">{c.n}</span><span className="label">{c.cat}</span><span className="ccd__yr label">{c.year}</span></span>
         <h3 className="h-3">{c.title}</h3>
-        <ul className="ccd__m">{c.metrics.map(([v, l]) => <li key={l}><b>{v}</b><span>{l}</span></li>)}</ul>
+        <ul className="ccd__m">{c.metrics.slice(0, 2).map(([v, l]) => <li key={l}><Stat v={v} /><span>{l}</span></li>)}</ul>
+        <ul className="ccd__tags">{c.chips.map((t) => <li key={t}>{t}</li>)}</ul>
         {b && !onOpen && <p className="ccd__b"><span className="label">In ROQIVA</span>{b.became}</p>}
         <span className="ccd__acts">
           {onOpen && <button type="button" className="ccd__go" onClick={(e) => { e.stopPropagation(); onOpen(c.slug) }}>Quick view<Icon name="eye" size={14} /></button>}

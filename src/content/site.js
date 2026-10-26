@@ -41,7 +41,7 @@ export const routes = [
     description: 'Hello, I am Anjor Tank. I fix revenue leaks between commerce systems, and I am building ROQIVA, a governed revenue system.' },
   { path: '/work', label: 'Work', type: 'CollectionPage', updated: '2026-10-26', story: true, step: 'Proof',
     title: `Work — ${site.name}`,
-    description: 'Seven commerce systems owned end to end, from Price Lock and checkout to SKU substitution, search and AI automation.' },
+    description: 'Six commerce systems owned end to end, from Price Lock and checkout to SKU substitution, search, retention and AI automation.' },
   ...CASES.map((c) => ({ path: `/work/${c.slug}`, label: c.title, hidden: true, type: 'Article', updated: '2026-10-26', parent: '/work',
     title: `${c.title} — ${site.name}`, description: c.line })),
   { path: '/journey', label: 'Journey', type: 'AboutPage', updated: '2026-10-26', story: true, step: 'Path',

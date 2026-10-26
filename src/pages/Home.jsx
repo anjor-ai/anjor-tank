@@ -1,10 +1,13 @@
 import { useState } from 'react'
-import { CASES, home } from '../content'
+import { CASES, LAYERS, home } from '../content'
 import { Arrow, Button, Cta, Head, LinkArrow, Rich, Section } from '../components/ui'
 import { CaseCard, CaseModal, HelloCard, RoqivaFounder, WhereIFit } from '../components/folio'
+import { Kinetic, LayerStack, Stat, WorkRing } from '../components/kinetic'
+import { SystemRail } from '../components/system'
 import { PageMotion } from '../lib/PageMotion'
 
-/* Home: hello, the founder band, the work (each case opens a quick view), where I fit. Four short steps, then a way to talk. */
+/* Home: hello with the proof, the work as a ring of illustrated cases (each opens a quick view), the layers I build on,
+   the one system from client leak to ROQIVA, the founder band, where I fit. */
 export default function Home() {
   const h = home.hello
   const [open, setOpen] = useState('')
@@ -20,19 +23,37 @@ export default function Home() {
               <Button to={h.primary.to} track="cta_work_hero">{h.primary.label}<Arrow /></Button>
               <Button to={h.secondary.to} variant="ghost">{h.secondary.label}</Button>
             </div>
+            <ul className="hpr hero__a" style={{ '--i': 4 }} aria-label="Results">
+              {h.proof.map(([v, l]) => <li key={l}><Stat v={v} /><span>{l}</span></li>)}
+            </ul>
+            <ul className="htg hero__a" style={{ '--i': 5 }} aria-label="What I work on">
+              {h.tags.map((t, k) => <li key={t} style={{ '--k': k }}>{t}</li>)}
+            </ul>
           </div>
           <div className="hero__app hero__a" style={{ '--i': 3 }}><HelloCard /></div>
         </div>
       </header>
 
-      <Section id="roqiva" tone="band"><RoqivaFounder /></Section>
+      <Kinetic rows={home.band} />
 
       <Section id="work">
         <Head scrub eyebrow={home.work.eyebrow} title={home.work.title} />
-        <ul className="cgrid cgrid--3">{CASES.map((c) => <CaseCard key={c.slug} c={c} onOpen={setOpen} />)}</ul>
+        <WorkRing label="Selected work" items={CASES} render={(c) => <CaseCard c={c} onOpen={setOpen} />} />
         <p className="more" data-reveal><LinkArrow to={home.work.link[1]}>{home.work.link[0]}</LinkArrow></p>
         {open && <CaseModal slug={open} setSlug={setOpen} onClose={() => setOpen('')} />}
       </Section>
+
+      <Section id="layers" tone="alt">
+        <Head eyebrow={home.layers.eyebrow} title={home.layers.title} lead={home.layers.lead} />
+        <LayerStack layers={LAYERS} label="The four layers I build on" />
+      </Section>
+
+      <Section id="system">
+        <Head eyebrow={home.system.eyebrow} title={home.system.title} lead={home.system.lead} />
+        <SystemRail />
+      </Section>
+
+      <Section id="roqiva" tone="band"><RoqivaFounder /></Section>
 
       <Section id="fit" tone="alt">
         <Head eyebrow={home.fit.eyebrow} title={home.fit.title} />

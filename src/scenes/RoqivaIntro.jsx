@@ -1,9 +1,9 @@
 import { useEffect, useLayoutEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
-import { roqiva as R, workflow } from '../content'
+import { home, roqiva as R, site, workflow } from '../content'
 import { gsap } from '../lib/motion'
 import { DotCanvas } from '../art/ArtCanvas'
-import { SCENES } from '../art/cards'
+import { ANJOR_TILES, SCENES } from '../art/cards'
 import { WordReel } from '../art/Reel'
 
 /* How ROQIVA opens. Never mounted under reduced motion; both are skippable (button, Esc, or a click).
@@ -189,6 +189,104 @@ export function RoqivaReel({ onReveal, onDone }) {
       <div className="rqf__bg" />
       <WordReel word="roq" size="intro" once onDone={out} label={R.name} />
       <button type="button" className="rqf__skip" onClick={(e) => { e.stopPropagation(); out() }}>Skip</button>
+    </div>,
+    document.body,
+  )
+}
+
+/* ───────── The portfolio's own opening: once per visit, on a direct load. About seven seconds, after the ROQIVA film.
+     0.0  ANJOR TANK   the name rises in; each letter turns into a small screen of the work and back
+     1.6  checker      a blue checkerboard closes over the frame
+     2.2  three cuts   "Find the leak." · "Fix the loop." · "Prove the lift."
+     4.7  the line     who I am, then the name and the role; the frame wipes up
+   Skippable with the button, Esc or a click. Never mounted under reduced motion. ───────── */
+const SITE_CUTS = [
+  { bg: '#0083ff', ink: '#faf9f5', w: `${home.band[0]}.`.split(' '), art: 'find' },
+  { bg: '#faf9f5', ink: '#141413', w: `${home.band[1]}.`.split(' '), art: 'agent' },
+  { bg: '#141413', ink: '#0083ff', w: `${home.band[2]}.`.split(' '), art: 'prove' },
+]
+const SITE_NAME = Array.from(site.name.toUpperCase())
+
+export function SiteFilm({ onDone }) {
+  const ref = useRef(null)
+  const tl = useRef(null)
+  const left = useRef(false)
+  const skip = () => {
+    if (left.current) return
+    left.current = true
+    tl.current?.pause()
+    gsap.to(ref.current, { clipPath: 'inset(0 0 100% 0)', duration: 0.6, ease: 'expo.inOut', onComplete: onDone })
+  }
+  useIntro(ref, { onSkip: skip })
+
+  useLayoutEffect(() => {
+    const q = gsap.utils.selector(ref)
+    const ctx = gsap.context(() => {
+      const t = gsap.timeline()
+      tl.current = t
+      const bg = q('.rqf__bg')
+      gsap.set(q('.rqf__scene'), { autoAlpha: 0 })
+      const letters = q('.rqf__li'), screens = q('.rqf__s0 .rqf__scr')
+      t.set(q('.rqf__s0'), { autoAlpha: 1 }, 0)
+        .fromTo(letters, { yPercent: 110 }, { yPercent: 0, duration: 0.7, ease: 'expo.out', stagger: 0.04 }, 0.1)
+      letters.forEach((_, k) => {
+        const at = 0.7 + k * 0.07
+        t.to(letters[k], { autoAlpha: 0, scale: 0.5, duration: 0.15, ease: 'power2.in' }, at)
+          .fromTo(screens[k], { autoAlpha: 0, scale: 0.3 }, { autoAlpha: 1, scale: 1, duration: 0.3, ease: 'back.out(2.4)' }, at + 0.05)
+          .to(screens[k], { autoAlpha: 0, scale: 0.3, duration: 0.14, ease: 'power2.in' }, at + 0.42)
+          .to(letters[k], { autoAlpha: 1, scale: 1, duration: 0.25, ease: 'back.out(2)' }, at + 0.5)
+      })
+      t.fromTo(q('.rqf__ck i'), { scale: 0 }, { scale: 1.02, duration: 0.32, ease: 'power3.in', stagger: { grid: [9, 16], from: 'center', amount: 0.3 } }, 1.65)
+        .set(q('.rqf__s0'), { autoAlpha: 0 }, 2.3)
+        .set(bg, { backgroundColor: SITE_CUTS[0].bg }, 2.3)
+        .set(q('.rqf__ck i'), { scale: 0 }, 2.3)
+      SITE_CUTS.forEach((c, k) => {
+        const at = 2.3 + k * 0.82, s = q(`.rqf__c${k}`)
+        t.set(bg, { backgroundColor: c.bg }, at)
+          .set(s, { autoAlpha: 1 }, at)
+          .fromTo(s, { scale: 1.14 }, { scale: 1, duration: 0.7, ease: 'expo.out' }, at)
+          .fromTo(q(`.rqf__c${k} .rqf__wi`), { yPercent: 105, skewY: 6 }, { yPercent: 0, skewY: 0, duration: 0.5, ease: 'expo.out', stagger: 0.06 }, at)
+          .fromTo(q(`.rqf__c${k} .rqf__scr`), { scale: 0, rotate: -12 }, { scale: 1, rotate: 0, duration: 0.45, ease: 'back.out(2.2)' }, at + 0.12)
+          .set(s, { autoAlpha: 0 }, at + 0.82)
+      })
+      const B = 2.3 + 3 * 0.82 // 4.76
+      t.set(bg, { backgroundColor: '#141413' }, B)
+        .set(q('.rqf__s4'), { autoAlpha: 1 }, B)
+        .fromTo(q('.rqf__hw'), { autoAlpha: 0, y: 30, filter: 'blur(10px)' }, { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 0.5, ease: 'power3.out', stagger: 0.07 }, B)
+        .to(q('.rqf__hero'), { autoAlpha: 0, scale: 0.96, duration: 0.3 }, B + 1.45)
+        .fromTo(q('.rqf__name'), { autoAlpha: 0, letterSpacing: '0.6em' }, { autoAlpha: 1, letterSpacing: '0.04em', duration: 0.7, ease: 'expo.out' }, B + 1.6)
+        .fromTo(q('.rqf__status'), { autoAlpha: 0, y: 8 }, { autoAlpha: 1, y: 0, duration: 0.4 }, B + 1.85)
+        .call(skip, null, B + 2.6)
+    }, ref)
+    return () => ctx.revert()
+  }, [])
+
+  return createPortal(
+    <div className="rqf sif" ref={ref} onClick={skip} role="presentation">
+      <div className="rqf__bg" />
+      <div className="rqf__stage">
+        <div className="rqf__scene rqf__s0">
+          <p className="rqf__word">{SITE_NAME.map((c, k) => (c === ' '
+            ? <span key={k} className="sif__sp" />
+            : <span key={k} className="rqf__l"><span className="rqf__li">{c}</span><Screen art={ANJOR_TILES[SITE_NAME.slice(0, k).filter((x) => x !== ' ').length]} /></span>))}</p>
+        </div>
+        {SITE_CUTS.map((c, k) => (
+          <div key={k} className={`rqf__scene rqf__cut rqf__c${k}`} style={{ color: c.ink }}>
+            <p className="rqf__line">
+              <span className="rqf__wm"><span className="rqf__wi">{c.w[0]}</span></span>
+              <Screen art={c.art} className="rqf__scr--in" />
+              {c.w.slice(1).map((w) => <span key={w} className="rqf__wm"><span className="rqf__wi">{w}</span></span>)}
+            </p>
+          </div>
+        ))}
+        <div className="rqf__scene rqf__s4">
+          <p className="rqf__hero">{plain(home.hello.title).split(' ').map((w, k) => <span key={k} className="rqf__hw">{w} </span>)}</p>
+          <p className="rqf__name">{site.name}</p>
+          <p className="rqf__status"><i />Product Manager · Founder of ROQIVA</p>
+        </div>
+      </div>
+      <div className="rqf__ck" aria-hidden="true">{Array.from({ length: 144 }, (_, k) => <i key={k} />)}</div>
+      <button type="button" className="rqf__skip" onClick={(e) => { e.stopPropagation(); skip() }}>Skip intro</button>
     </div>,
     document.body,
   )

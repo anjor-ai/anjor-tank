@@ -1,10 +1,13 @@
-import { TOOLS, consulting as C, gtm, hire as P } from '../content'
+import { TOOLS, consulting as C, hire as P } from '../content'
 import { Arrow, Button, Cta, Head, PageHero, Section } from '../components/ui'
 import { RoqivaFounder, WhereIFit } from '../components/folio'
 import { Leaks, Phases } from '../components/gtm'
+import { SystemStory } from '../components/system'
+import { Kinetic } from '../components/kinetic'
 import { PageMotion } from '../lib/PageMotion'
 
-/* Hire me: one page, three ways in. Join the team, consult on GTM engineering and RevOps, or build alongside ROQIVA. */
+/* Hire me: one page, three ways in. Join the team, consult on GTM engineering and RevOps, or build alongside ROQIVA.
+   The consulting part is one story: find the leak, fix the loop, prove the lift, run it in ROQIVA. */
 export default function Hire() {
   const h = P.hero
   return (
@@ -25,16 +28,16 @@ export default function Hire() {
         <ul className="chips-sm gap-top" data-reveal>{TOOLS.slice(0, 14).map((t) => <li key={t}>{t}</li>)}</ul>
       </Section>
 
-      <Section id="consulting" tone="alt">
+      <Kinetic rows={['GTM engineering', 'RevOps', 'ROQIVA']} />
+
+      <Section id="system" tone="alt">
         <Head eyebrow={C.eyebrow} title={C.title} lead={C.lead} />
-        <h3 className="label gap-top">{C.leaks.title.replace(/\*/g, '')}</h3>
+        <SystemStory />
+      </Section>
+
+      <Section id="consulting">
+        <h3 className="label">{C.leaks.title.replace(/\*/g, '')}</h3>
         <Leaks />
-        <h3 className="label gap-top">{C.offers.title.replace(/\*/g, '')}</h3>
-        <ol className="rows6" id="offers" data-reveal>
-          {gtm.services.map((o) => (
-            <li key={o.id}><span className="offer__c">{o.code}</span><b>{o.name}</b><span className="muted">{o.line}</span><small>{o.first} · {o.model}</small></li>
-          ))}
-        </ol>
         <h3 className="label gap-top">{C.process.title.replace(/\*/g, '')}</h3>
         <Phases />
         <p className="more" data-reveal><Button to={C.cta.to}>{C.cta.label}<Arrow /></Button></p>

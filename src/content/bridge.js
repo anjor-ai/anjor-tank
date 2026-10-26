@@ -9,19 +9,13 @@ export const bridge = {
     d: 'Every payment failure reason is captured and a retry rule reads it. The price promised at checkout matches the price billed. A gap in either is flagged and ranked by what it costs.',
     agent: 'Detectors, then the Analyst',
   },
-  'coupons-cashback': {
-    lane: 'C and F · Conversion and lifecycle',
-    became: 'A promise-versus-cart check',
-    d: 'Coupon and cashback rules are compared with the cart logic that applies them, and with the lifecycle journeys that reward the next order, so offers never disagree with checkout.',
-    agent: 'Detectors, then the Analyst',
-  },
   'sku-substitution-engine': {
     lane: 'D and H · Fulfilment and supply',
     became: 'A stock, catalogue and promise agreement check',
     d: 'The delivery promise a customer sees is checked against live stock and the catalogue before the order exists, and the cheapest safe substitute is drafted as an option.',
     agent: 'Detectors, Research and Architect',
   },
-  'growth-loops': {
+  'retention-reminders': {
     lane: 'F · Retention and lifecycle',
     became: 'A journey-conflict and abuse check',
     d: 'Journeys are checked so they do not conflict or double-send, and repeated rewards from one device or return pattern are flagged before they leak budget.',
@@ -39,10 +33,10 @@ export const bridge = {
     d: 'The voice bot taught me where automation pays and where a person must stay in the loop. ROQIVA keeps that line: code computes, agents draft, a named person decides.',
     agent: 'The Orchestrator and the gates',
   },
-  'internal-ops-cx': {
-    lane: 'E · Post-purchase service',
-    became: 'A support-status-to-CRM check',
-    d: 'Ticket and refund status must reach the system that acts on it, with one owner and a clock. A break in that chain is a finding, not an anecdote.',
-    agent: 'Detectors, then the Monitor',
+  'headless-cms-experimentation': {
+    lane: 'A and F · Acquisition and lifecycle',
+    became: 'A page, tag and experiment consistency check',
+    d: 'Landing pages are checked for the tracking, metadata and offer logic they should carry, so a campaign never launches with a broken tag or an offer the cart does not honour.',
+    agent: 'Detectors, then the Analyst',
   },
 }
