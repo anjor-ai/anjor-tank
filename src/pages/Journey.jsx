@@ -1,8 +1,8 @@
-import { BELIEFS, CERTS, EDU, journeyPage as P } from '../content'
+import { BELIEFS, EDU, SKILLS, journeyPage as P } from '../content'
 import { SectionNav } from '../components/SectionNav'
 import { Cta, Head, LinkArrow, PageHero, Section } from '../components/ui'
 import { Icon } from '../components/icons'
-import { JourneyStage, useInView } from '../components/Story'
+import { EduPath, JourneyStage, useInView } from '../components/Story'
 import { PageMotion } from '../lib/PageMotion'
 
 /* Journey: a route in three chapters. The chapter sits still on the left while its roles scroll past as boarding passes. */
@@ -71,16 +71,8 @@ export default function Journey() {
       </Section>
 
       <Section id="learning">
-        <div className="pass">
-          <div className="pass__edu" data-reveal>
-            <h2 className="label">Education</h2>
-            {EDU.map(([a, b], k) => <div key={a} className="dip" style={{ '--k': k }}><Icon name="docs" size={20} /><div><b>{a}</b><span>{b}</span></div></div>)}
-          </div>
-          <div className="pass__cert" data-reveal>
-            <h2 className="label">Certifications</h2>
-            <ul>{CERTS.slice(0, 4).map((c, k) => <li key={c} style={{ '--k': k }}><Icon name="check" size={15} />{c}</li>)}</ul>
-          </div>
-        </div>
+        <Head eyebrow="Learning" title="Where the *foundations* came from." />
+        <EduPath edu={EDU} skills={SKILLS} />
       </Section>
 
       <Cta title="Ask me *about any of it.*" lead="Pick a chapter, a case or a role." primary={{ label: 'Start a conversation', to: '/contact#brief' }} secondary={{ label: 'Hire me', to: '/hire' }} />

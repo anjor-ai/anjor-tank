@@ -384,3 +384,13 @@ export const track = [
   ['Two product pods', '12 engineers across payments and portals'],
   ['10 connected systems', 'From acquisition to retention'],
 ]
+
+// "Pick the sentence that sounds like your week." Each symptom points at the leak behind it and the offer to start with.
+export const symptoms = [
+  { q: '“Cart abandonment keeps creeping up.”', leak: 'Conversion leakage', check: ['Cart-to-checkout drop by cohort', 'Payment and gateway failure codes', 'Time to recovery, by channel'], offer: 'intent-sprint' },
+  { q: '“Repeat purchase is flat, even though we send more.”', leak: 'Lifecycle leakage', check: ['Reorder cycle by cohort', 'Message frequency against response', 'Gaps in suppression rules'], offer: 'lifecycle-sprint' },
+  { q: '“Our numbers differ in every tool.”', leak: 'Signal fragmentation', check: ['Identity match across sessions and orders', 'Event schema drift', 'Who owns the source of truth'], offer: 'data-foundation' },
+  { q: '“We hear about problems from customers first.”', leak: 'Execution inefficiency', check: ['Payment, fulfilment and support event flow', 'Detection lag per exception', 'An owner for each exception'], offer: 'ops-systems' },
+  { q: '“We can’t prove the campaigns worked.”', leak: 'Measurement failure', check: ['Whether a holdout exists', 'Attributed against incremental lift', 'Guardrail metrics'], offer: 'partnership' },
+  { q: '“We don’t know where to start.”', leak: 'Unsized leakage', check: ['Journey and funnel map', 'Data trust at each stage', 'Value of every leak'], offer: 'revenue-audit' },
+]

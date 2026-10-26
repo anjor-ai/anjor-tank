@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { consulting, gtm } from '../content'
 import { Arrow, Button, LinkArrow, Rich } from './ui'
 import { FindingCard } from '../diagrams/FindingCard'
-import { LayerStack, OfferGlyph, PhaseGantt } from './Story'
+import { BlueprintViz, LayerStack, OfferGlyph, PhaseGantt } from './Story'
 
 const lanes = [
   { key:'gtm', label:'GTM engineering', summary:'Turn fragmented demand into an instrumented journey.', accent:'blue',
@@ -33,7 +33,7 @@ export function SystemSuite() {
      <div className="v3-suite__top"><div><span className="v3-suite__caption">SYSTEM BLUEPRINT / {s.label}</span><h3>{s.summary}</h3></div><span className="v3-suite__pill">{index===2?'PRODUCT · IN DEVELOPMENT':'CONSULTING · AVAILABLE TODAY'}</span></div>
      <div className="v3-suite__window">
        <div className="v3-suite__bar"><span>Architecture / signal → decision → outcome</span><span className="v3-suite__running"><i />REFERENCE WORKFLOW</span></div>
-       <div className="v3-suite__nodes">{s.nodes.map((n,i)=><div key={n[0]} className="v3-suite__node"><span>0{i+1}</span><b>{n[0]}</b><small>{n[1]}</small></div>)}</div>
+       <BlueprintViz kind={s.key} nodes={s.nodes} />
        <div className="v3-suite__trail"><div><span>INPUT</span><b>{s.input}</b></div><div className="v3-suite__arrow">→</div><div><span>DESIGNED OUTPUT</span><b>{s.output}</b></div></div>
      </div>
      <div className="v3-suite__bottom"><p>{s.description}</p><a href={index===2?'/roqiva':'/contact?intent=consult#brief'}>{index===2?'Explore the ROQIVA product':'Discuss this layer'} <Arrow /></a></div>

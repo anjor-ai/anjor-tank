@@ -5,9 +5,7 @@ import { useTheme } from '../lib/theme'
 import { Icon } from './icons'
 import { BrandMark } from './BrandMark'
 import { Arrow, Button, Rich, Wordmark } from './ui'
-import { AsciiCanvas } from '../art/ArtCanvas'
 import { WordReel } from '../art/Reel'
-import { asciiLaunch } from '../art/space'
 
 function ThemeToggle() {
   const { theme, forced, toggle } = useTheme()
@@ -144,11 +142,8 @@ export function StoryPager() {
 }
 
 // The footer: a grainy horizon of hills (light or dark with the page), the ASCII launch, and the name as a reel.
-const INK = { light: [null, '#1b1a18', '#d9541f', '#8a847a', '#55534e'], dark: [null, '#faf9f5', '#ffb07a', '#b0aea5', '#6f6a62'] }
-const footLaunch = (A, t) => asciiLaunch(A, t % 15, { x: 0.5, scale: 0.62, ground: 0.985 })
 
 export function Footer() {
-  const { theme } = useTheme()
   const story = routes.filter((r) => r.story)
   return (
     <footer className="foot">
@@ -182,7 +177,6 @@ export function Footer() {
       <div className="foot__horizon">
         <div className="container foot__stage">
           <div className="foot__reel"><WordReel word="anjor" size="foot" /></div>
-          <div className="foot__launch" aria-hidden="true"><AsciiCanvas key={theme} draw={footLaunch} colors={INK[theme === 'dark' ? 'dark' : 'light']} font={8} fps={24} still={3.4} fromView /></div>
         </div>
       </div>
     </footer>

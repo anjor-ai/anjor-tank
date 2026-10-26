@@ -1,7 +1,8 @@
 import { Cta, Section, PageHero, Arrow, Button } from '../components/ui'
 import { PageMotion } from '../lib/PageMotion'
 import { SystemSuite, OfferBento, EngagementBoard, FounderBridge } from '../components/ConsultingSuite'
-import { HireStage, LeakStory } from '../components/Story'
+import { Versus } from '../components/gtm'
+import { HireStage, LeakStory, SymptomRouter, WhoFor } from '../components/Story'
 import { WhereIFit } from '../components/folio'
 
 export default function Hire() {
@@ -13,7 +14,10 @@ export default function Hire() {
   <Section id="system" rule={false}><SystemSuite /></Section>
   <Section id="consulting" tone="alt"><OfferBento /></Section>
   <Section id="problems"><div className="v3-centered"><h2 className="h-2">Recognize the revenue leak?</h2><p className="lead">Explore the failure modes I help diagnose across your commercial journey.</p></div><LeakStory /></Section>
-  <Section id="process" tone="alt"><EngagementBoard /></Section>
+  <Section id="symptoms" tone="alt"><div className="v3-centered"><h2 className="h-2">Pick the sentence that <span className="em">sounds like your week.</span></h2><p className="lead">Select a symptom. See the leak behind it, what I would check first and where to start.</p></div><SymptomRouter /></Section>
+  <Section id="process"><EngagementBoard /></Section>
+  <Section id="whofor" tone="alt"><div className="v3-centered"><h2 className="h-2">See where revenue leaks in a <span className="em">business like yours.</span></h2><p className="lead">Pick your business. These are the leaks I look for first, what I would build and what I would measure.</p></div><WhoFor /></Section>
+  <Section id="compared"><div className="v3-centered"><h2 className="h-2">Why not an agency, a tool <span className="em">or an in-house hire?</span></h2></div><Versus /></Section>
   <Section id="roqiva"><FounderBridge /></Section>
   <Section id="fit" tone="alt"><div className="v3-centered"><h2 className="h-2">The product roles I can own.</h2><p className="lead">Consulting is one way we can work together. I also build consumer, growth and platform products as part of a team.</p></div><WhereIFit /></Section>
   <Cta title="Bring a real constraint. *Let's design the next move.*" lead="Start with the problem and the tools involved. A short brief is enough." primary={{label:"Discuss consulting",to:"/contact?intent=consult#brief"}} secondary={{label:"Talk about a product role",to:"/contact?intent=job#brief"}}/>
