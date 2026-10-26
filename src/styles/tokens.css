@@ -51,34 +51,35 @@
    near-white surfaces with the cobalt accent; dark mode sits on navy black. */
 [data-theme='dark'] {
   color-scheme: dark;
-  /* Dark, after claude.com and openai.com: warm near-black, ivory text, quiet borders, clay as the one accent */
-  --bg: #0b0c0f;
-  --bg-2: #101216;
-  --surface: #15171c;
-  --surface-2: #1b1e24;
-  --line: #23262d;
-  --line-2: #303540;
-  --text: #f4f3ee;
-  --text-2: #b4b7bd;
-  --text-3: #8d9199;
-  --accent: #2f95ff;
-  --accent-fill: #0070e0; /* AA behind white text */
-  --accent-text: #4aa3ff;
+  /* Dark, after claude.com/product/claude-code: warm charcoal, ivory type, hairline borders, one clay accent. No navy, no pure black. */
+  --bg: #181715;
+  --bg-2: #1e1d1a;
+  --surface: #262421;
+  --surface-2: #2e2c28;
+  --line: #35322d;
+  --line-2: #47433c;
+  --text: #f5f3ec;
+  --text-2: #c4c0b5;
+  --text-3: #9d998d;
+  --accent: #e8825a;
+  --accent-fill: #c2562c; /* AA behind white text */
+  --accent-text: #f2966f;
+  --accent-head: #f2966f;
   --accent-ink: #ffffff;
-  --accent-soft: rgba(47, 149, 255, 0.12);
-  --accent-glow: rgba(47, 149, 255, 0.26);
-  --btn-bg: #f4f3ee;
-  --btn-ink: #0b0c0f;
-  --ok: #3ed598;
-  --warn: #ff6b5a;
-  --amber: #f2b84b;
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 18px 40px -12px rgba(0, 0, 0, 0.55);
-  --dot: rgba(244, 243, 238, 0.06);
-  --nav-bg: rgba(21, 23, 28, 0.72);
-  --node-bg: #15171c;
-  --stage-bg: #101216;
-  --stage-line: #23262d;
-  --stage-glow: rgba(47, 149, 255, 0.14);
+  --accent-soft: rgba(232, 130, 90, 0.12);
+  --accent-glow: rgba(232, 130, 90, 0.26);
+  --btn-bg: #f5f3ec;
+  --btn-ink: #181715;
+  --ok: #5fd3a0;
+  --warn: #ff7a66;
+  --amber: #e9b94f;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.45), 0 22px 44px -16px rgba(0, 0, 0, 0.6);
+  --dot: rgba(245, 243, 236, 0.06);
+  --nav-bg: rgba(38, 36, 33, 0.74);
+  --node-bg: #262421;
+  --stage-bg: #1e1d1a;
+  --stage-line: #35322d;
+  --stage-glow: rgba(232, 130, 90, 0.14);
 }
 
 [data-theme='light'] {
@@ -118,7 +119,7 @@
 
 /* ───────── Actor and status colours (additions; the brand palette above is unchanged) ─────────
    One colour per kind of actor: code is mint, an agent is sky, a person is the brand violet. */
-[data-theme='dark'] { --k-code: #3ed598; --k-agent: #a594ff; --k-person: #4aa3ff; --st-sky: #49b6ff; --st-grey: #8a8a92; --st-amber: #f2b84b; --st-ok: #3ed598; }
+[data-theme='dark'] { --k-code: #5fd3a0; --k-agent: #b4a6ff; --k-person: #f2966f; --st-sky: #6cc0f5; --st-grey: #a29e92; --st-amber: #e9b94f; --st-ok: #5fd3a0; }
 [data-theme='light'] { --k-code: #1a7651; --k-agent: #6a4fd8; --k-person: #0072e5; --st-sky: #0a6aa8; --st-grey: #5e6068; --st-amber: #9a6a00; --st-ok: #1a7651; }
 
 /* ───────── Tinted panels: one soft colour per surface, used by cards, bento tiles and case sections. Same five hues in both themes. ─────────
@@ -126,10 +127,10 @@
 [data-theme='light'] { --t-peach: #fde4d4; --t-lilac: #e7e4fc; --t-mint: #d9f1e5; --t-sky: #dbecfc; --t-butter: #fbf0c8;
   --ts-peach: #f0a67a; --ts-lilac: #9a8cf0; --ts-mint: #5cc79a; --ts-sky: #5aa9f0; --ts-butter: #e6c04a;
   --tg: linear-gradient(150deg, #ff9a62, #f2542d 70%); --tg-ink: #ffffff; --mesh-a: #ffd9c2; --mesh-b: #d9d2ff; --mesh-c: #cfe8ff; }
-[data-theme='dark'] { --t-peach: #2a1c15; --t-lilac: #1d1c34; --t-mint: #112620; --t-sky: #12202f; --t-butter: #292411;
-  --ts-peach: #e08a5c; --ts-lilac: #8d7cf0; --ts-mint: #46b88a; --ts-sky: #4a9ae8; --ts-butter: #d4ad3a;
-  --tg: linear-gradient(150deg, #e0622f, #b02a14 75%); --tg-ink: #ffffff; --mesh-a: #3a2116; --mesh-b: #24214a; --mesh-c: #123050; }
+[data-theme='dark'] { --t-peach: #2d2019; --t-lilac: #26222d; --t-mint: #1b2820; --t-sky: #1a2629; --t-butter: #2c2716;
+  --ts-peach: #e58f63; --ts-lilac: #9d8ff0; --ts-mint: #55c196; --ts-sky: #5aa6e6; --ts-butter: #d9b242;
+  --tg: linear-gradient(150deg, #e8825a, #b8431f 78%); --tg-ink: #ffffff; --mesh-a: #3b2519; --mesh-b: #2c2338; --mesh-c: #1d2a28; }
 
 /* Aux colours used by the editorial and studio blocks, mapped onto the one palette */
 [data-theme='light'] { --ed-blue: #005fc7; --ed-cyan: #0a7d95; --ed-panel: var(--bg-2); --ed-ink: #0b0c0f; }
-[data-theme='dark'] { --ed-blue: #4aa3ff; --ed-cyan: #7be4ed; --ed-panel: var(--surface); --ed-ink: #0b0c0f; }
+[data-theme='dark'] { --ed-blue: #f2966f; --ed-cyan: #7be4ed; --ed-panel: var(--surface); --ed-ink: #181715; }

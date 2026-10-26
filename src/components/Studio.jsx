@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Arrow, Button, LinkArrow } from './ui'
 import { CaseMock } from './mocks'
+import { MethodCircuit } from './Story'
 
 /* Grounded, interactive product illustrations. The mini UI is an illustration,
    not a screenshot or claim of live data. All headline outcomes come from Anjor's cases. */
@@ -101,24 +102,7 @@ export function DecisionStudio() {
           <span>03 · Measure the business outcome</span>
         </div>
       </div>
-      <div className={'st-method__board st-method__board--'+c.palette} data-reveal>
-        <div className="st-method__toolbar"><WindowDots/><span>PRODUCT DECISION MAP</span><span className="st-method__live">INTERACTIVE</span></div>
-        <div className="st-method__switch" role="group" aria-label="Switch system diagram">
-          {cases.map((s,i)=><button type="button" key={s.id} aria-pressed={active===i} onClick={()=>setActive(i)}>{s.short}</button>)}
-        </div>
-        <div className="st-method__headline" key={c.id}><small>THE PRODUCT PROBLEM / {c.n}</small><h3>{c.signal}</h3></div>
-        <div className="st-method__map" aria-label="Product decision flow">
-          <div className="st-method__node st-method__node--problem"><span>INPUT / FRICTION</span><b>{c.before}</b><small>Customer or operational signal</small></div>
-          <div className="st-method__wire" aria-hidden="true"><i /></div>
-          <div className="st-method__node st-method__node--decision"><span>DECISION / LOGIC</span><b>{c.after}</b><small>Product + platform + experience</small></div>
-          <div className="st-method__wire" aria-hidden="true"><i /></div>
-          <div className="st-method__node st-method__node--outcome"><span>OUTPUT / PROOF</span><b>{c.result}</b><small>{c.resultLabel}</small></div>
-        </div>
-        <div className="st-method__bottom">
-          <span>HYPOTHESIS → REQUIREMENTS → BUILD → MEASUREMENT</span>
-          <a href={'/work/'+c.slug}>Examine this decision <Arrow /></a>
-        </div>
-      </div>
+      <MethodCircuit cases={cases} active={active} setActive={setActive} Arrow={Arrow} />
     </div>
   )
 }

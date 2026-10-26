@@ -1,71 +1,84 @@
 import { BELIEFS, CERTS, EDU, journeyPage as P } from '../content'
-import { ArtCard } from '../components/Art'
-import { Sticky } from '../components/Sticky'
+import { SectionNav } from '../components/SectionNav'
 import { Cta, Head, LinkArrow, PageHero, Section } from '../components/ui'
+import { Icon } from '../components/icons'
+import { JourneyStage, useInView } from '../components/Story'
 import { PageMotion } from '../lib/PageMotion'
 
-/* Journey: three chapters as a sticky story. Text steps on the left, the roles of that chapter on the right. */
-function Roles({ ch }) {
+/* Journey: a route in three chapters. The chapter sits still on the left while its roles scroll past as boarding passes. */
+const TINT = ['peach', 'sky', 'lilac']
+
+function Ticket({ r }) {
   return (
-    <div className="jrn" aria-label={`Chapter ${ch.k}: ${ch.t}`}>
-      <div className="jrn__top"><span className="jrn__k">{ch.k}</span><span className="label">{ch.span}</span></div>
-      <ol className="jrn__roles">
-        {ch.roles.map((r) => (
-          <li key={r.role + r.when} className={`jrn__r${r.now ? ' is-now' : ''}`}>
-            <div className="jrn__h">
-              <span className="jrn__mono" aria-hidden="true">{r.mono}</span>
-              <div><h3 className="h-4">{r.role}</h3><p className="jrn__o">{r.org}</p></div>
-              <span className="label jrn__w">{r.now && <i />}{r.when}</span>
-            </div>
-            <p className="muted">{r.text}</p>
-            {r.stats && <ul className="jrn__st">{r.stats.map(([v, l]) => <li key={l}><b>{v}</b><span>{l}</span></li>)}</ul>}
-            {r.tags && <ul className="chips-sm">{r.tags.map((t) => <li key={t}>{t}</li>)}</ul>}
-            {r.to && <LinkArrow to={r.to}>{r.to === '/roqiva' ? 'Open ROQIVA' : 'Read the cases'}</LinkArrow>}
-          </li>
-        ))}
-      </ol>
-      <p className="jrn__l"><span className="label">The lesson</span>{ch.lesson}</p>
-    </div>
+    <li className={`tkt${r.now ? ' is-now' : ''}`}>
+      <div className="tkt__top">
+        <span className="tkt__mono" aria-hidden="true">{r.mono}</span>
+        <div><h3 className="h-4">{r.role}</h3><p className="tkt__org">{r.org}</p></div>
+        <span className="tkt__when label">{r.now && <i />}{r.when}</span>
+      </div>
+      <p className="tkt__text">{r.text}</p>
+      {r.stats && <ul className="tkt__stats">{r.stats.map(([v, l]) => <li key={l}><b>{v}</b><span>{l}</span></li>)}</ul>}
+      {(r.tags || r.to) && (
+        <div className="tkt__foot">
+          {r.tags && <ul className="chips-sm">{r.tags.map((t) => <li key={t}>{t}</li>)}</ul>}
+          {r.to && <LinkArrow to={r.to}>{r.to === '/roqiva' ? 'Open ROQIVA' : 'Read the cases'}</LinkArrow>}
+        </div>
+      )}
+    </li>
+  )
+}
+
+function Chapter({ ch, i }) {
+  const [ref, on] = useInView(0.12)
+  return (
+    <article id={`ch-${ch.k}`} ref={ref} className={`chp chp--${TINT[i]}${on ? ' is-in' : ''}`} aria-label={`Chapter ${ch.k}: ${ch.t}`}>
+      <div className="chp__side">
+        <span className="chp__num" aria-hidden="true">{ch.k}</span>
+        <p className="chp__meta"><span className="label">Chapter {ch.k}</span><span className="label">{ch.span}</span></p>
+        <h2 className="h-2">{ch.t}</h2>
+        <p className="lead">{ch.d}</p>
+        <blockquote className="chp__lesson"><span className="label">The lesson</span><p>{ch.lesson}</p></blockquote>
+      </div>
+      <ol className="chp__roles">{ch.roles.map((r) => <Ticket key={r.role + r.when} r={r} />)}</ol>
+    </article>
   )
 }
 
 export default function Journey() {
-  const items = P.chapters.map((ch) => ({
-    id: `ch-${ch.k}`,
-    eyebrow: `Chapter ${ch.k} · ${ch.span}`,
-    title: ch.t,
-    lead: ch.d,
-    visual: () => <Roles ch={ch} />,
-  }))
+  const nav = P.chapters.map((ch) => ({ id: `ch-${ch.k}`, label: `${ch.k} · ${ch.t}` }))
   return (
     <PageMotion routeKey="/journey">
-      <PageHero variant="journey" title={P.hero.title} lead={P.hero.lead}
-        visual={<figure className="portrait"><img src="/img/anjor.webp" width="447" height="721" alt="Anjor Tank" decoding="async" /></figure>} visualLive />
+      <PageHero variant="journey" eyebrow={P.hero.eyebrow} title={P.hero.title} lead={P.hero.lead} visual={<JourneyStage />} visualLive />
+      <SectionNav items={nav} label="Three chapters" />
 
-      <Section id="chapters" rule={false}><div className="v3-journey-intro"><span>EGGFIRST / NEIL PATEL DIGITAL</span><i aria-hidden="true"/><span>TRUEMEDS / GNC INDIA</span><i aria-hidden="true"/><span>ROQIVA / FOUNDING</span></div>
-        <Sticky label="Three chapters" items={items} />
+      <Section id="chapters" rule={false}>
+        <div className="trl">{P.chapters.map((ch, i) => <Chapter key={ch.k} ch={ch} i={i} />)}</div>
       </Section>
 
       <Section id="beliefs" tone="alt">
-        <Head title={P.beliefs.title} />
-        <ul className="acards acards--3">
+        <Head eyebrow={P.beliefs.eyebrow} title={P.beliefs.title} />
+        <ul className="blf">
           {BELIEFS.map((b, i) => (
-            <ArtCard key={b.t} icon={['layers', 'chart', 'database'][i]} label={`0${i + 1}`} t={b.t} d={b.d}>
+            <li key={b.t} className={`blf__c blf__c--${TINT[i]}`} data-reveal>
+              <span className="blf__n" aria-hidden="true">0{i + 1}</span>
+              <span className="blf__i"><Icon name={['layers', 'chart', 'database'][i]} size={26} /></span>
+              <h3 className="h-3">{b.t}</h3>
+              <p>{b.d}</p>
               <ul className="chips-sm">{b.chips.map((c) => <li key={c}>{c}</li>)}</ul>
-            </ArtCard>
+            </li>
           ))}
         </ul>
       </Section>
 
       <Section id="learning">
-        <div className="trio trio--2">
-          <div data-reveal>
+        <div className="pass">
+          <div className="pass__edu" data-reveal>
             <h2 className="label">Education</h2>
-            <ul className="plain">{EDU.map(([a, b]) => <li key={a}><b>{a}</b><span>{b}</span></li>)}</ul>
+            {EDU.map(([a, b], k) => <div key={a} className="dip" style={{ '--k': k }}><Icon name="docs" size={20} /><div><b>{a}</b><span>{b}</span></div></div>)}
           </div>
-          <div data-reveal>
+          <div className="pass__cert" data-reveal>
             <h2 className="label">Certifications</h2>
-            <ul className="plain">{CERTS.slice(0, 4).map((c) => <li key={c}>{c}</li>)}</ul>
+            <ul>{CERTS.slice(0, 4).map((c, k) => <li key={c} style={{ '--k': k }}><Icon name="check" size={15} />{c}</li>)}</ul>
           </div>
         </div>
       </Section>

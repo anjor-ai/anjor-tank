@@ -27,8 +27,8 @@ export default function Case() {
   const prev = CASES[(i - 1 + CASES.length) % CASES.length], next = CASES[(i + 1) % CASES.length]
   return (
     <PageMotion routeKey={route.path}>
-      <header className="phero phero--split cs__hero v3-casehero">
-        <div className="container phero__in">
+      <header className="phero ph phero--split cs__hero v3-casehero">
+        <div className="container phero__in ph__in">
           <div className="phero__copy">
             <p className="label eyebrow hero__a" style={{ '--i': 0 }}>{c.cat} · CASE STUDY</p>
             <h1 className="h-hero hero__a" style={{ '--i': 1 }}>{c.title}</h1>
@@ -36,7 +36,7 @@ export default function Case() {
             <ul className="cs__m hero__a" style={{ '--i': 3 }}>{c.metrics.map(([v, l]) => <li key={l}><Stat v={v} /><span>{l}</span></li>)}</ul>
             <ul className="ccd__tags hero__a" style={{ '--i': 4 }}>{c.chips.map((t) => <li key={t}>{t}</li>)}</ul>
           </div>
-          <div className="phero__vis cs__frame hero__a" style={{ '--i': 3 }}><div className="cs__stage"><CaseMock slug={c.slug} /></div></div>
+          <div className="phero__vis ph__stage cs__frame hero__a" style={{ '--i': 3 }}><div className="cs__stage"><CaseMock slug={c.slug} /></div></div>
         </div>
       </header>
 

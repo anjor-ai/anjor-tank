@@ -5,6 +5,7 @@ import { CaseCard, CaseModal, RoqivaFounder } from '../components/folio'
 import { WorkRing } from '../components/kinetic'
 import { JourneyRibbon, ConsultingPanel, LifePreview } from '../components/Editorial'
 import { PortfolioConsole, DecisionStudio, ProofBento } from '../components/Studio'
+import { HelloFlicker } from '../components/Story'
 import { PageMotion } from '../lib/PageMotion'
 
 /* Person → evidence → method → journey → consulting → founding → personality.
@@ -17,6 +18,7 @@ export default function Home() {
       <header className="ed-homehero">
         <div className="container">
           <div className="ed-homehero__copy">
+            <HelloFlicker />
             <p className="ed-homehero__crumb hero__a" style={{ '--i': 0 }}><span className="ed-dot" /><span className="label">ANJOR TANK · PRODUCT MANAGER · MUMBAI</span></p>
             <h1 className="h-hero hero__a" style={{ '--i': 1 }}><Rich text={h.title} /></h1>
             <p className="lead hero__a" style={{ '--i': 2 }}>I design consumer experiences, build the operational systems behind them, and measure what moves. Currently Product Manager at GNC India, founder of ROQIVA, and available for selective consulting.</p>

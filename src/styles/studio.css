@@ -33,7 +33,6 @@
 .ed-homehero__trail{justify-content:flex-start;gap:6px;margin-top:20px}
 .ed-homehero__trail span{padding:6px 9px;font:500 10px var(--font-mono);color:var(--text-2);border-radius:7px}
 .ed-homehero__desk{grid-column:2;grid-row:1 / span 2;margin:0;min-width:0;max-width:none;padding:clamp(10px,1.6vw,18px);border:1px solid #bbd9f6;border-radius:24px;background:radial-gradient(ellipse at 90% 8%,#ffe2d2 0%,transparent 48%),radial-gradient(ellipse at 8% 94%,#d3edff 0%,transparent 58%),linear-gradient(140deg,#aed7ff,#f4e1f0 88%);box-shadow:0 22px 48px rgba(13,57,114,.12)}
-[data-theme='dark'] .ed-homehero__desk{border-color:#42648e;background:radial-gradient(ellipse at 96% 5%,#6b4668,transparent 55%),linear-gradient(135deg,#284f87,#263048)}
 .ed-homehero__caption{grid-column:1;grid-row:2;align-self:start;margin:0;text-align:left;font:500 10px var(--font-mono);color:var(--text-3);letter-spacing:.045em}
 .ed-homehero .st-proof{grid-column:1 / -1;grid-row:3;margin-top:14px}
 .st-eyebrow{font:500 9px/1.4 var(--font-mono);letter-spacing:.065em;color:#798799;text-transform:uppercase}

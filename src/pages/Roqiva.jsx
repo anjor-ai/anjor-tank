@@ -1,3 +1,4 @@
+import { RoqivaStage } from '../components/Story'
 import { useEffect, useRef, useState } from 'react'
 import { SplitText } from 'gsap/SplitText'
 import { CASES, parts, roqiva as R, tracks, workflow } from '../content'
@@ -199,6 +200,7 @@ function Overview({ ready }) {
             <Button to={h.secondary.to} variant="ghost">{h.secondary.label}</Button>
           </div>
           <ul className="rqov__facts">{h.facts.map((f) => <li key={f}><Icon name="lock" size={12} />{f}</li>)}</ul>
+          <RoqivaStage />
         </div>
         <div className="rqov__grid">
           <div className="rqov__nums">

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { CASES, TAGS, work as P } from '../content'
 import { Cta, PageHero, Section } from '../components/ui'
 import { CaseCard } from '../components/folio'
-import { WorkHeroVisual } from '../components/Editorial'
+import { WorkStage } from '../components/Story'
 import { LinkArrow } from '../components/ui'
 import { PageMotion } from '../lib/PageMotion'
 
@@ -12,7 +12,7 @@ export default function Work() {
   const list = CASES.filter((c) => tag === 'All' || c.tag === tag)
   return (
     <PageMotion routeKey="/work">
-      <PageHero variant="work" title={P.hero.title} lead={P.hero.lead} visual={<WorkHeroVisual />}>
+      <PageHero variant="work" eyebrow={P.hero.eyebrow} title={P.hero.title} lead={P.hero.lead} visual={<WorkStage />} visualLive>
         <ul className="hero__facts label hero__a" style={{ '--i': 3 }}>{P.hero.facts.map((f) => <li key={f}>{f}</li>)}</ul>
       </PageHero>
       <Section id="cases" rule={false}><div className="v3-workintro"><div><h2 className="h-2">Explore the decisions behind the results.</h2><p className="lead">Six real systems across conversion, growth, search, platform and operations. Each case maps the problem, trade-offs, requirements and measurable outcomes.</p></div><div className="v3-workintro__aside">PRODUCT THINKING → SYSTEM DESIGN → BUSINESS OUTCOME <LinkArrow to="/hire">How I apply this in consulting</LinkArrow></div></div>

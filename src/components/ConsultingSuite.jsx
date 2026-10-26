@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { consulting, gtm } from '../content'
 import { Arrow, Button, LinkArrow, Rich } from './ui'
 import { FindingCard } from '../diagrams/FindingCard'
+import { LayerStack, OfferGlyph, PhaseGantt } from './Story'
 
 const lanes = [
   { key:'gtm', label:'GTM engineering', summary:'Turn fragmented demand into an instrumented journey.', accent:'blue',
@@ -23,6 +24,7 @@ export function SystemSuite() {
  return <div className="v3-suite">
    <div className="v3-suite__intro"><h2 className="h-2">One commercial system. <span className="em">Three connected layers.</span></h2>
      <p className="lead">GTM engineering creates the signals and customer journeys. RevOps makes the decisions and handoffs repeatable. ROQIVA is the product I am building to support that loop with governed intelligence.</p></div>
+   <div className="v3-suite__fig" data-reveal><LayerStack active={index} /></div>
    <div className="v3-suite__shell" data-reveal>
     <div className="v3-suite__tabs" role="group" aria-label="Explore connected capabilities">
       {lanes.map((x,i)=><button type="button" key={x.key} aria-pressed={i===index} onClick={()=>setIndex(i)}><span>0{i+1}</span><b>{x.label}</b><small>{i===2?'In development':'Consulting / available'}</small></button>)}
@@ -44,8 +46,9 @@ export function OfferBento() {
  const selected=gtm.services.slice(0,6)
  return <div className="v3-offers">
    <div className="v3-offers__intro"><h2 className="h-2">Start with the constraint, <span className="em">not a package.</span></h2><p>There is a practical entry point for every level of friction: diagnose a leak, build a missing operating loop, or partner through measurement.</p><LinkArrow to="/contact?intent=consult#brief">Talk through your problem</LinkArrow></div>
-   <div className="v3-offers__grid">{selected.map((o,i)=><article key={o.id} className={'v3-offer v3-offer--'+i}>
-     <span className="v3-offer__code">{o.code}</span><h3>{o.name}</h3><p>{o.line}</p><div className="v3-offer__flow">{o.flow.slice(0,4).map((f,j)=><span key={j}>{f}</span>)}</div>
+   <div className="v3-offers__grid">{selected.map((o,i)=><article key={o.id} className={'v3-offer v3-offer--'+i} data-reveal>
+     <div className="v3-offer__hd"><OfferGlyph id={o.id} /><span className="v3-offer__code">{o.code}</span></div><h3>{o.name}</h3><p>{o.line}</p>
+     <ol className="v3-offer__flow">{o.flow.slice(0,4).map((f,j)=><li key={j}>{f}</li>)}</ol>
      <div className="v3-offer__out"><span>YOU GET</span><b>{o.gets.slice(0,2).join(' · ')}</b></div>
    </article>)}</div>
  </div>
@@ -53,7 +56,7 @@ export function OfferBento() {
 export function EngagementBoard() {
  return <div className="v3-engage">
   <div><h2 className="h-2">From first question <span className="em">to a measured change.</span></h2><p className="lead">Engagement scope follows the problem. The twelve-week model is a reference process, not a guaranteed delivery promise.</p><Button to="/contact?intent=consult#brief">Bring a problem <Arrow /></Button></div>
-  <div className="v3-engage__track">{gtm.phases.map((p,i)=><div key={p.id}><span>0{i+1} / {p.weeks}</span><h3>{p.label}</h3><p>{p.does}</p><small>Output: {p.out}</small></div>)}</div>
+  <PhaseGantt /><div className="v3-engage__track">{gtm.phases.map((p,i)=><div key={p.id}><span>0{i+1} / {p.weeks}</span><h3>{p.label}</h3><p>{p.does}</p><small>Output: {p.out}</small></div>)}</div>
  </div>
 }
 export function FounderBridge() {
