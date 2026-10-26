@@ -1,7 +1,7 @@
 import { CASES, GLANCE, bridge } from '../content'
-import { Arrow, Button, Cta, DataTable, LinkArrow, Rich, Section } from '../components/ui'
+import { Cta, DataTable, Disclosure, LinkArrow, Rich, Section } from '../components/ui'
+import { CaseMock } from '../components/mocks'
 import { Icon } from '../components/icons'
-import { SectionNav } from '../components/SectionNav'
 import { PageMotion } from '../lib/PageMotion'
 import { useRoute } from '../lib/router'
 
@@ -39,7 +39,7 @@ export default function Case() {
   const g = GLANCE[c.slug]
   const br = bridge[c.slug]
   const prev = CASES[(i - 1 + CASES.length) % CASES.length], next = CASES[(i + 1) % CASES.length]
-  const nav = [...c.body.map((b) => ({ id: b.id, label: b.h })), { id: 'roqiva', label: 'In ROQIVA' }]
+  const main = c.body.filter((b) => ['decision', 'built'].includes(b.id)), more = c.body.filter((b) => !['decision', 'built'].includes(b.id))
   return (
     <PageMotion routeKey={route.path}>
       <header className="phero cs__hero">
@@ -53,7 +53,6 @@ export default function Case() {
         </div>
       </header>
 
-      <SectionNav items={nav} label="In this case" />
 
       <Section id="short" rule={false}>
         <div className="cs__quick">
@@ -75,13 +74,15 @@ export default function Case() {
             </dl>
           </aside>
           <div className="cs__main">
+            <CaseMock slug={c.slug} />
             {c.table && (
               <section className="cs__sec" data-reveal>
                 <h2 className="h-2">The numbers</h2>
                 <DataTable className="cs__tbl" cols={['Measure', 'Before', 'After', 'Change']} rows={c.table} caption="Results" />
               </section>
             )}
-            {c.body.map((b) => <Block key={b.id} b={b} />)}
+            {main.map((b) => <Block key={b.id} b={b} />)}
+            {more.length > 0 && <Disclosure summary="Read the full story">{more.map((b) => <Block key={b.id} b={b} />)}</Disclosure>}
             <section id="roqiva" className="cs__rq" data-reveal>
               <p className="label"><Icon name="branch" size={13} />What it became in ROQIVA</p>
               <h2 className="h-2">{br.became}</h2>
@@ -90,7 +91,6 @@ export default function Case() {
                 <div><dt className="label">Lane</dt><dd>{br.lane}</dd></div>
                 <div><dt className="label">Who in ROQIVA</dt><dd>{br.agent}</dd></div>
               </dl>
-              <p className="muted cs__note">The case is real. The check is the design intent of ROQIVA, a system still in development.</p>
               <LinkArrow to="/roqiva#origin">See where ROQIVA comes from</LinkArrow>
             </section>
           </div>
@@ -104,7 +104,7 @@ export default function Case() {
         </nav>
       </Section>
 
-      <Cta title="Want this *done on your system?*" lead="Tell me the number that will not move. I will reply with where I would look first." primary={{ label: 'Send a brief', to: '/contact?intent=consult#brief' }} secondary={{ label: 'See all cases', to: '/work' }} />
+      <Cta title="Want this *done on your system?*" lead="Tell me the number that will not move." primary={{ label: 'Send a brief', to: '/contact?intent=consult#brief' }} secondary={{ label: 'See all cases', to: '/work' }} />
     </PageMotion>
   )
 }

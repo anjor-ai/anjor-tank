@@ -6,7 +6,6 @@ import { App, seedPages } from './app'
 import Home from './pages/Home'
 import Work from './pages/Work'
 import Case from './pages/Case'
-import Gtm from './pages/Gtm'
 import Roqiva from './pages/Roqiva'
 import Journey from './pages/Journey'
 import Beyond from './pages/Beyond'
@@ -16,7 +15,7 @@ import Legal from './pages/Legal'
 import { CONTENT, CASES } from './content'
 
 seedPages({
-  '/': Home, '/work': Work, '/gtm': Gtm, '/roqiva': Roqiva, '/journey': Journey, '/beyond': Beyond, '/hire': Hire, '/contact': Contact, '/privacy': Legal,
+  '/': Home, '/work': Work, '/roqiva': Roqiva, '/journey': Journey, '/beyond': Beyond, '/hire': Hire, '/contact': Contact, '/privacy': Legal,
   ...Object.fromEntries(CASES.map((c) => [`/work/${c.slug}`, Case])),
 })
 

@@ -275,25 +275,6 @@ function Session() {
   )
 }
 
-function Asks() {
-  const T = P.asks
-  const pick = (intent) => { window.dispatchEvent(new CustomEvent('brief:intent', { detail: intent })); document.getElementById('brief')?.scrollIntoView({ behavior: 'smooth', block: 'start' }) }
-  return (
-    <Section id="asks" tone="band">
-      <Head eyebrow={T.eyebrow} title={T.title} />
-      <ul className="asks">
-        {T.items.map((t) => (
-          <li key={t.id} className="ask" data-track={t.id} data-reveal>
-            <h3 className="h-3">{t.t}</h3>
-            <p className="muted">{t.d}</p>
-            <button type="button" className="btn btn--ghost btn--sm" onClick={() => pick(t.intent)}>{t.cta}<Arrow /></button>
-          </li>
-        ))}
-      </ul>
-    </Section>
-  )
-}
-
 function BookDialog({ url, tabUrl, onClose }) {
   const closeRef = useRef(null)
   const panelRef = useRef(null)
@@ -332,24 +313,6 @@ function BookDialog({ url, tabUrl, onClose }) {
   )
 }
 
-// ── Who you will talk to ─────────────────────────────────────────────────────
-function WhoCard() {
-  const w = P.who
-  return (
-    <Section id="about" tone="alt">
-      <div className="split">
-        <Head eyebrow={w.label} title={w.h} lead={w.p}>
-          <dl className="cfacts">
-            <div><dt className="label">Email</dt><dd><a href={`mailto:${site.email}`}>{site.email}</a></dd></div>
-            <div><dt className="label">LinkedIn</dt><dd><a href={site.linkedin} target="_blank" rel="noopener noreferrer">anjor-tank ↗</a></dd></div>
-            <div><dt className="label">Based in</dt><dd>{site.location}</dd></div>
-          </dl>
-        </Head>
-        <figure className="portrait portrait--s"><img src="/img/anjor.webp" width="447" height="721" alt="Anjor Tank" loading="lazy" decoding="async" /></figure>
-      </div>
-    </Section>
-  )
-}
 
 export default function Contact() {
   const h = P.hero
@@ -364,12 +327,10 @@ export default function Contact() {
         <p className="ctrust hero__a" style={{ '--i': 4 }}><Icon name="shield" size={15} />{P.trust}</p>
       </PageHero>
       <Session />
-      <Asks />
       <Section id="brief" tone="alt">
         <Head eyebrow={P.brief.eyebrow} title={P.brief.h} />
         <div data-reveal><BriefBuilder /></div>
       </Section>
-      <WhoCard />
     </PageMotion>
   )
 }

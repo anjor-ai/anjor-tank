@@ -1,66 +1,38 @@
 import { useEffect, useRef, useState } from 'react'
-import { CASES, PROOF, bridge, fit as FIT, gtm } from '../content'
-import { Arrow, LinkArrow } from './ui'
+import { createPortal } from 'react-dom'
+import { CASES, bridge, fit as FIT, home, roqiva } from '../content'
+import { Arrow, Button, LinkArrow, Rich } from './ui'
 import { Icon } from './icons'
+import { CaseMock } from './mocks'
+import { WordReel } from '../art/Reel'
+import { HeroApp } from '../scenes/HeroApp'
 
-/* Portfolio building blocks shared by several pages: the numbers strip, "Where I fit", case cards, the journey leak strip. */
+/* Portfolio building blocks used on more than one page: the hello card, Where I fit, case cards with the quick view, the ROQIVA founder band. */
 
 const reduced = () => typeof window !== 'undefined' && window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches
-const ease = (t) => 1 - (1 - t) ** 3
 
-/** Runs 0 → 1 once when the element scrolls into view. Resolves at once under reduced motion and without IntersectionObserver. */
-export function useInView(ref, { threshold = 0.35 } = {}) {
-  const [on, setOn] = useState(false)
+/** The welcome: a greeting that changes language, the live time in Mumbai, and three lines on where I am now. */
+export function HelloCard() {
+  const H = home.hello
+  const [i, setI] = useState(0)
+  const [time, setTime] = useState('')
   useEffect(() => {
-    const el = ref.current
-    if (!el) return undefined
-    if (reduced() || typeof IntersectionObserver === 'undefined') { setOn(true); return undefined }
-    const io = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setOn(true); io.disconnect() } }, { threshold })
-    io.observe(el)
-    return () => io.disconnect()
-  }, [ref, threshold])
-  return on
-}
-
-function useCount(on, ms = 1400) {
-  const [p, setP] = useState(0)
-  useEffect(() => {
-    if (!on) return undefined
-    if (reduced()) { setP(1); return undefined }
-    let raf, t0
-    const tick = (t) => {
-      t0 = t0 ?? t
-      const k = Math.min(1, (t - t0) / ms)
-      setP(ease(k))
-      if (k < 1) raf = requestAnimationFrame(tick)
-    }
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
-  }, [on, ms])
-  return on ? p : 0
-}
-
-function Proof({ x, on }) {
-  const p = useCount(on)
-  const v = x.text ? x.text : `${x.pre || ''}${((x.from || 0) + ((x.to - (x.from || 0)) * p)).toFixed(x.dp || 0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}${x.suf || ''}`
-  const final = x.text ? x.text : `${x.pre || ''}${x.to.toFixed(x.dp || 0).replace(/\B(?=(\d{3})+(?!\d))/g, ',')}${x.suf || ''}`
+    const clock = () => setTime(new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: true }))
+    clock()
+    const c = setInterval(clock, 20000)
+    const g = reduced() ? null : setInterval(() => setI((x) => (x + 1) % H.greeting.length), 2400)
+    return () => { clearInterval(c); if (g) clearInterval(g) }
+  }, [H.greeting.length])
   return (
-    <li className="prf" data-reveal>
-      <a className="prf__a" href={`/work/${x.case}`}>
-        <span className="label prf__tag">{x.tag}</span>
-        <strong className="prf__v" aria-label={final}><span aria-hidden="true">{on ? v : final}</span></strong>
-        <p className="prf__l">{x.label}</p>
-        <span className="prf__go">Read the case<Arrow /></span>
-      </a>
-    </li>
+    <aside className="hlc" aria-label="Hello">
+      <figure className="hlc__ph"><img src="/img/anjor.webp" width="447" height="721" alt="Anjor Tank" decoding="async" /></figure>
+      <div className="hlc__b">
+        <p className="hlc__hi" aria-live="off"><span key={i} className="hlc__w">{H.greeting[i]}</span></p>
+        <p className="hlc__t label"><i />Mumbai{time ? ` · ${time}` : ''}</p>
+        <dl className="hlc__f">{H.facts.map(([k, v]) => <div key={k}><dt className="label">{k}</dt><dd>{v}</dd></div>)}</dl>
+      </div>
+    </aside>
   )
-}
-
-/** The four headline numbers, counting up when they come into view. Each one opens its case. */
-export function ProofStrip() {
-  const ref = useRef(null)
-  const on = useInView(ref)
-  return <ul className="prfs" ref={ref}>{PROOF.map((x) => <Proof key={x.label} x={x} on={on} />)}</ul>
 }
 
 /** "Where I fit": the seats on the left, the proof and the starting point for the chosen one on the right. */
@@ -92,69 +64,102 @@ export function WhereIFit({ initial = 0 }) {
         <h3 className="h-2">{s.seat}</h3>
         <p className="lead">{s.d}</p>
         <dl className="wif__dl">
-          <div><dt className="label">The proof</dt><dd>{s.proof}</dd></div>
-          <div><dt className="label">Where I would start</dt><dd>{s.start}</dd></div>
+          <div><dt className="label">Proof</dt><dd>{s.proof}</dd></div>
+          <div><dt className="label">Where I start</dt><dd>{s.start}</dd></div>
         </dl>
-        <LinkArrow to={c ? `/work/${c.slug}` : s.to}>{c ? `Read the case: ${c.title}` : s.to === '/gtm' ? 'See the practice' : 'See ROQIVA'}</LinkArrow>
+        <LinkArrow to={c ? `/work/${c.slug}` : s.to}>{c ? 'Read the case' : s.to === '/roqiva' ? 'See ROQIVA' : 'See the consulting'}</LinkArrow>
       </div>
     </div>
   )
 }
 
-/** One case, as a card: number, area, title, the line, the three numbers, and what it became in ROQIVA. */
-export function CaseCard({ c, compact = false }) {
+/** One case, as a card. With `onOpen` the card opens the quick view; the full case is always one link away. */
+export function CaseCard({ c, onOpen }) {
   const b = bridge[c.slug]
   return (
-    <li className={`ccd${compact ? ' ccd--c' : ''}`} data-reveal>
-      <a className="ccd__a" href={`/work/${c.slug}`}>
+    <li className="ccd" data-reveal>
+      <div className="ccd__a" onClick={onOpen ? () => onOpen(c.slug) : undefined}>
         <span className="ccd__top"><span className="ccd__n">{c.n}</span><span className="label">{c.cat}</span><span className="ccd__yr label">{c.year}</span></span>
         <h3 className="h-3">{c.title}</h3>
-        <p className="muted ccd__line">{c.line}</p>
         <ul className="ccd__m">{c.metrics.map(([v, l]) => <li key={l}><b>{v}</b><span>{l}</span></li>)}</ul>
-        {b && !compact && <p className="ccd__b"><span className="label">In ROQIVA</span>{b.became}</p>}
-        <span className="ccd__go">Open the case<Arrow /></span>
-      </a>
+        {b && !onOpen && <p className="ccd__b"><span className="label">In ROQIVA</span>{b.became}</p>}
+        <span className="ccd__acts">
+          {onOpen && <button type="button" className="ccd__go" onClick={(e) => { e.stopPropagation(); onOpen(c.slug) }}>Quick view<Icon name="eye" size={14} /></button>}
+          <a className="ccd__full" href={`/work/${c.slug}`} onClick={(e) => e.stopPropagation()}>Full case<Arrow /></a>
+        </span>
+      </div>
     </li>
   )
 }
 
-/** The journey as a column of eight stages; the stages where revenue leaks most are marked. Used in the home story. */
-export function LeakStrip() {
-  const hot = new Set(['search', 'availability', 'cart', 'payment', 'fulfilment'])
-  return (
-    <div className="lks" aria-label="Eight stages of the customer journey, five of them leaking">
-      <p className="label lks__cap">One customer journey · where revenue leaks</p>
-      <ol>
-        {gtm.journey.map((s, i) => (
-          <li key={s.id} className={hot.has(s.id) ? 'is-leak' : ''}>
-            <span className="lks__n">0{i + 1}</span>
-            <b>{s.label}</b>
-            <span className="lks__m">{s.mode}</span>
-            <span className="lks__b">{hot.has(s.id) ? s.breaks : 'Holds'}</span>
-          </li>
-        ))}
-      </ol>
-    </div>
+/** The quick view: the illustration, the three numbers and the problem, the call and the result, without leaving the page. */
+export function CaseModal({ slug, setSlug, onClose }) {
+  const i = CASES.findIndex((c) => c.slug === slug)
+  const c = CASES[i]
+  const ref = useRef(null)
+  useEffect(() => {
+    const prev = document.activeElement
+    document.body.style.overflow = 'hidden'
+    ref.current?.focus()
+    const key = (e) => {
+      if (e.key === 'Escape') onClose()
+      if (e.key === 'ArrowRight') setSlug(CASES[(i + 1) % CASES.length].slug)
+      if (e.key === 'ArrowLeft') setSlug(CASES[(i - 1 + CASES.length) % CASES.length].slug)
+      if (e.key === 'Tab') {
+        const f = [...document.querySelectorAll('.cqv button, .cqv a')]
+        if (!f.length) return
+        const first = f[0], last = f[f.length - 1]
+        if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus() }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus() }
+      }
+    }
+    window.addEventListener('keydown', key)
+    return () => { window.removeEventListener('keydown', key); document.body.style.overflow = ''; prev?.focus?.() }
+  }, [i, onClose, setSlug])
+  if (!c) return null
+  return createPortal(
+    <div className="cqv" role="dialog" aria-modal="true" aria-label={`Quick view: ${c.title}`} onMouseDown={(e) => { if (e.target === e.currentTarget) onClose() }}>
+      <div className="cqv__p">
+        <header className="cqv__h">
+          <div><p className="label">Case {c.n} · {c.cat} · {c.year}</p><h2 className="h-2" key={c.slug}>{c.title}</h2></div>
+          <button type="button" ref={ref} className="kbd cqv__x" onClick={onClose} aria-label="Close quick view">Esc</button>
+        </header>
+        <div className="cqv__b" key={c.slug}>
+          <p className="lead">{c.hook}</p>
+          <ul className="cs__m">{c.metrics.map(([v, l]) => <li key={l}><b>{v}</b><span>{l}</span></li>)}</ul>
+          <CaseMock slug={c.slug} />
+          <div className="cs__quick">
+            {[['Problem', c.quick.problem], ['The call', c.quick.call], ['Result', c.quick.result]].map(([k, v]) => <div key={k} className="cs__q"><p className="label">{k}</p><p>{v}</p></div>)}
+          </div>
+        </div>
+        <footer className="cqv__f">
+          <button type="button" className="chip" onClick={() => setSlug(CASES[(i - 1 + CASES.length) % CASES.length].slug)}>← Previous</button>
+          <Button to={`/work/${c.slug}`}>Open the full case<Arrow /></Button>
+          <button type="button" className="chip" onClick={() => setSlug(CASES[(i + 1) % CASES.length].slug)}>Next →</button>
+        </footer>
+      </div>
+    </div>,
+    document.body
   )
 }
 
-/** Three case numbers stacked like product cards. Used in the home story. */
-export function CaseStack() {
-  const pick = ['price-lock-checkout', 'sku-substitution-engine', 'ai-automation']
+/** The ROQIVA founder band. Full on the home page, with the live workspace; compact on the hire page. */
+export function RoqivaFounder({ compact = false }) {
+  const R = home.roqiva
   return (
-    <ul className="cstk" aria-label="Three of the seven cases">
-      {pick.map((slug) => {
-        const c = CASES.find((x) => x.slug === slug)
-        return (
-          <li key={slug}>
-            <a href={`/work/${slug}`}>
-              <span className="label">{c.n} · {c.tag}</span>
-              <b>{c.title}</b>
-              <span className="cstk__m">{c.metrics.map(([v, l]) => <span key={l}><i>{v}</i>{l}</span>)}</span>
-            </a>
-          </li>
-        )
-      })}
-    </ul>
+    <div className={`fdr${compact ? ' fdr--c' : ''}`} data-reveal>
+      <div className="fdr__id">
+        <p className="label fdr__eyebrow"><i className="rqh__live" />{R.eyebrow}</p>
+        <div className="fdr__name"><WordReel word="roq" size="foot" label={roqiva.name} /></div>
+        <h2 className="h-2 fdr__h"><Rich text={R.title} /></h2>
+        <p className="fdr__lead">{R.lead}</p>
+        <ul className="fdr__s">{R.stats.map(([v, l]) => <li key={l}><b>{v}</b><span>{l}</span></li>)}</ul>
+        <div className="fdr__btns">
+          <Button to={R.primary.to}>{R.primary.label}<Arrow /></Button>
+          <Button to={R.secondary.to} variant="ghost">{R.secondary.label}</Button>
+        </div>
+      </div>
+      {!compact && <div className="fdr__app" aria-label="ROQIVA workspace, sample data"><HeroApp brand="ROQIVA" /></div>}
+    </div>
   )
 }

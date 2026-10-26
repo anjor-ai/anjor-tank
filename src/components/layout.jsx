@@ -164,6 +164,7 @@ export function Footer() {
         </nav>
         <div className="foot__col">
           <p className="label">Talk</p>
+          <a href="/roqiva">ROQIVA walkthrough</a>
           <a href="/contact#brief">Send a brief</a>
           <a href="/contact#book">Book a call</a>
           <a href={`mailto:${site.email}`}>{site.email}</a>

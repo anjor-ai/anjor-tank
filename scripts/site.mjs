@@ -19,7 +19,7 @@ const cmd = process.argv[2]
 // public/ is copied into dist/ by Vite. These are the files the site cannot work without (preflight and check both look for them).
 // scripts/security.txt is templated into /.well-known/security.txt, and scripts/404.html into /404.html.
 const PUBLIC = ['theme-init.js', 'favicon.svg', 'favicon.ico', 'favicon-32.png', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png', 'og-image.jpg', 'hills-light.webp', 'hills-dark.webp', 'band-light.webp', 'band-dark.webp', 'sky-light.webp', 'sky-dark.webp']
-const PAGES = ['Home', 'Work', 'Case', 'Gtm', 'Roqiva', 'Journey', 'Beyond', 'Hire', 'Contact', 'Legal']
+const PAGES = ['Home', 'Work', 'Case', 'Roqiva', 'Journey', 'Beyond', 'Hire', 'Contact', 'Legal']
 const loadContent = () => import(pathToFileURL(join(root, 'src', 'content', 'index.js')).href)
 const read = (f) => readFileSync(f, 'utf8')
 const routeFile = (p) => (p === '/' ? join(dist, 'index.html') : join(dist, p.slice(1), 'index.html'))
@@ -76,13 +76,12 @@ function structuredData(c, SITE, r) {
     trail.push({ '@type': 'ListItem', position: trail.length + 1, name: r.label, item: url })
     page.push({ '@type': 'BreadcrumbList', '@id': `${url}#breadcrumb`, itemListElement: trail })
   }
-  if (r.path === '/gtm') {
+  if (r.path === '/hire') {
     page.push({
       '@type': 'Service', '@id': `${SITE}/#service`, name: 'GTM engineering and revenue operations', serviceType: 'Revenue systems for ecommerce and D2C teams', description: r.description,
       provider: { '@id': person }, audience: { '@type': 'Audience', audienceType: 'Ecommerce and D2C teams' },
       hasOfferCatalog: { '@type': 'OfferCatalog', name: 'Six offers', itemListElement: gtm.services.map((o) => ({ '@type': 'Offer', itemOffered: { '@type': 'Service', name: o.name, description: o.line } })) },
     })
-    page.push({ '@type': 'FAQPage', '@id': `${url}#faq`, mainEntity: gtm.faqs.map((f) => ({ '@type': 'Question', name: f.q, acceptedAnswer: { '@type': 'Answer', text: f.a } })) })
   }
   if (r.path === '/roqiva') {
     page.push({ '@type': 'SoftwareApplication', '@id': `${url}#software`, name: 'ROQIVA', applicationCategory: 'BusinessApplication', url, creator: { '@id': person }, description: r.description })
@@ -139,7 +138,6 @@ function llmsFull(c, SITE, pages) {
   const { site, routes, gtm } = c
   const L = [`# ${site.name}: full site content`, '', `> ${site.category}. ${site.tagline}`, '', `Source: ${SITE}. Generated from the live pages; product screens use sample data. ROQIVA is in development.`, '']
   for (const r of routes) L.push('---', '', `Page: ${SITE}${r.path === '/' ? '/' : r.path}`, `Title: ${r.title}`, `Last updated: ${r.updated}`, '', pages[r.path] || r.description, '')
-  L.push('---', '', '## GTM and RevOps: frequently asked questions (plain text)', '', ...gtm.faqs.flatMap((f) => [`### ${f.q}`, f.a, '']))
   return L.join('\n')
 }
 
@@ -182,7 +180,7 @@ async function postbuild() {
   const entryKey = Object.keys(mf).find((k) => mf[k].isEntry)
   const closure = (key, acc = new Set()) => { if (!key || acc.has(key) || !mf[key]) return acc; acc.add(key); (mf[key].imports || []).forEach((k) => closure(k, acc)); return acc }
   const inEntry = closure(entryKey)
-  const pageFile = { '/': 'src/pages/Home.jsx', '/work': 'src/pages/Work.jsx', '/gtm': 'src/pages/Gtm.jsx', '/roqiva': 'src/pages/Roqiva.jsx', '/journey': 'src/pages/Journey.jsx', '/beyond': 'src/pages/Beyond.jsx', '/hire': 'src/pages/Hire.jsx', '/contact': 'src/pages/Contact.jsx', '/privacy': 'src/pages/Legal.jsx' }
+  const pageFile = { '/': 'src/pages/Home.jsx', '/work': 'src/pages/Work.jsx', '/roqiva': 'src/pages/Roqiva.jsx', '/journey': 'src/pages/Journey.jsx', '/beyond': 'src/pages/Beyond.jsx', '/hire': 'src/pages/Hire.jsx', '/contact': 'src/pages/Contact.jsx', '/privacy': 'src/pages/Legal.jsx' }
   const pageKey = (path) => pageFile[path] || (path.startsWith('/work/') ? 'src/pages/Case.jsx' : undefined)
   const chunkPreloads = (path) => [...closure(pageKey(path))].filter((k) => !inEntry.has(k) && !base.includes(`/${mf[k].file}"`)).map((k) => `<link rel="modulepreload" crossorigin href="/${mf[k].file}">`)
 

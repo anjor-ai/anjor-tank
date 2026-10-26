@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { ALT, LOVES, PHOTOS, beyond as P } from '../content'
+import { ALT, PHOTOS, beyond as P } from '../content'
 import { Cta, Head, PageHero, Section } from '../components/ui'
 import { PageMotion } from '../lib/PageMotion'
 
@@ -63,12 +63,6 @@ export default function Beyond() {
         {open >= 0 && <Lightbox list={list} i={open} setI={setOpen} onClose={() => setOpen(-1)} />}
       </Section>
 
-      <Section id="loves" tone="alt">
-        <Head eyebrow={P.loves.eyebrow} title={P.loves.title} lead={P.loves.lead} />
-        <ul className="loves">
-          {LOVES.map(([t, d], i) => <li key={t} className="loves__c" data-reveal><span className="label">0{i + 1}</span><h3 className="h-4">{t}</h3><p className="muted">{d}</p></li>)}
-        </ul>
-      </Section>
 
       <Cta title="Say hello *about anything.*" lead="A kart track, a gig, a watch, a product problem. All fair game." primary={{ label: 'Say hello', to: '/contact#brief' }} secondary={{ label: 'See where I fit', to: '/hire' }} />
     </PageMotion>

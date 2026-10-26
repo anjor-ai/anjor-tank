@@ -14,7 +14,6 @@ const loaders = {
   '/': () => import('./pages/Home'),
   '/work': () => import('./pages/Work'),
   '/work/:slug': () => import('./pages/Case'),
-  '/gtm': () => import('./pages/Gtm'),
   '/roqiva': () => import('./pages/Roqiva'),
   '/journey': () => import('./pages/Journey'),
   '/beyond': () => import('./pages/Beyond'),

@@ -1,80 +1,40 @@
-// Page copy for the portfolio. Voice: first person, plain, verb-first headings, `*asterisks*` mark the highlighted words.
-// The story, in order: Proof (Work) → Practice (GTM & RevOps) → System (ROQIVA) → Path (Journey) → Person (Beyond) → Fit (Hire).
-// Every page ends by handing over to the next one (see `pager`).
+// Page copy for the portfolio. First person, plain, verb-first headings; `*asterisks*` mark the highlighted words.
+// The story, in order: Proof (Work) → Path (Journey) → Person (Beyond) → Hire (consulting and ROQIVA).
+// Every story page ends by handing over to the next one (see `pager`).
 
 import { site } from './site.js'
 
-// ═══════════ The story pager ═══════════
-// `from` is the page the visitor is on; the card names the page that comes next and why it follows.
 export const pager = {
-  '/work': { to: '/gtm', kicker: 'Next · Practice', title: 'Turn the pattern into *an offer.*', d: 'Seven fixes, one pattern: find the leak, fix the loop, prove the lift. GTM engineering and RevOps is that pattern, written down for other teams.' },
-  '/gtm': { to: '/roqiva', kicker: 'Next · System', title: 'Build the system that *does it for you.*', d: 'Doing this by hand is slow and it lives in one head. ROQIVA is the system I am building so the loop runs with evidence, gates and a person who decides.' },
-  '/roqiva': { to: '/journey', kicker: 'Next · Path', title: 'Follow the path that *led here.*', d: 'A system like this comes from somewhere. From dealer networks and campaigns, through payments and growth, to building ROQIVA.' },
-  '/journey': { to: '/beyond', kicker: 'Next · Person', title: 'Meet the person *behind the work.*', d: 'A path is also a person. Karts, techno, long drives and good food, and why they matter to how I build.' },
-  '/beyond': { to: '/hire', kicker: 'Next · Fit', title: 'See where I *fit on your team.*', d: 'That is the work, the system and the person. Here is the seat I would take, and how to start a conversation.' },
-  '/hire': { to: '/contact', kicker: 'Next · Talk', title: 'Start *a conversation.*', d: 'A role, a GTM or RevOps engagement, or ROQIVA. Send a short brief or book a time.' },
+  '/work': { to: '/journey', kicker: 'Next · Path', title: 'See how I *got here.*', d: 'Dealer networks and campaigns, then payments and growth, now ROQIVA.' },
+  '/journey': { to: '/beyond', kicker: 'Next · Person', title: 'Meet the person *behind the work.*', d: 'Karts, techno, long drives and good food.' },
+  '/beyond': { to: '/hire', kicker: 'Next · Hire', title: 'Work *with me.*', d: 'A role, a GTM and RevOps engagement, or ROQIVA.' },
+  '/hire': { to: '/contact', kicker: 'Next · Talk', title: 'Start *a conversation.*', d: 'Send a short brief or book a time.' },
+  '/roqiva': { to: '/contact', kicker: 'Next · Talk', title: 'Help shape *what ROQIVA does first.*', d: 'Follow along, or tell me the problem you would point it at.' },
 }
 
 // ═══════════ Home ═══════════
 export const home = {
-  hero: {
-    eyebrow: 'Anjor Tank · Product architect · Mumbai',
-    title: 'I find the revenue *leaking between your systems.* Now I am building ROQIVA to fix it.',
-    lead: 'From campaigns and dealer networks to payments, growth and platform product. I have owned checkout, coupons, search and internal tools from problem to measured result. ROQIVA is the governed system I am building from that work, and I am its founder.',
-    primary: { label: 'See the system I am building', to: '/roqiva' },
-    secondary: { label: 'Read the proof', to: '/work' },
-    facts: ['Product Manager · GNC India', 'Founder · ROQIVA, in development', 'Mumbai · remote'],
+  hello: {
+    greeting: ['Hello', 'नमस्ते', 'હેલો'],
+    title: 'I’m Anjor. I fix *revenue leaks* between systems.',
+    lead: 'Product manager at GNC India. Founder of ROQIVA, the system I am building to do it for everyone.',
+    primary: { label: 'See my work', to: '#work' },
+    secondary: { label: 'Say hello', to: '/contact' },
+    facts: [['Now', 'Product Manager, GNC India'], ['Building', 'ROQIVA, in development'], ['Before', 'Truemeds, 7 systems shipped']],
   },
-  proof: {
-    eyebrow: 'The numbers',
-    title: 'Start with *four numbers I can explain.*',
-    lead: 'Each one has a case study behind it: what was broken, what I decided, what shipped and what I would change.',
-    link: ['Read all seven cases', '/work'],
-  },
-  fit: {
-    eyebrow: 'Where I fit',
-    title: 'Pick *the seat you need.*',
-    lead: 'Six seats I can sit in, and what I would bring to each. I am at my best where they overlap.',
-    link: ['See results and experience', '/hire'],
-  },
-  thread: {
-    eyebrow: 'One story',
-    title: 'Fix it by hand. Write the method down. *Build the system.*',
-    lead: 'This site is one argument in three steps. Scroll through it, then open whichever step you care about.',
-    steps: [
-      { id: 'th-work', n: '01', eyebrow: 'Proof', title: 'Fix it *by hand.*', lead: 'At Truemeds I owned seven systems from the first problem to a measured result: a checkout that locks the price, a coupon engine, a substitution engine, growth loops, search, voice automation and internal ops.', link: ['Read the cases', '/work'] },
-      { id: 'th-gtm', n: '02', eyebrow: 'Practice', title: 'Write the method *down.*', lead: 'Every fix followed the same four moves. I turned them into GTM engineering and RevOps work for other consumer teams: five leaks, six offers, one process, and a holdout for every claim.', link: ['See GTM and RevOps', '/gtm'] },
-      { id: 'th-roq', n: '03', eyebrow: 'System', title: 'Build the system *that does it.*', lead: 'Doing this by hand lives in one head. ROQIVA is the system I am building so the loop runs with evidence, four human gates and no writes to your live tools.', link: ['Explore ROQIVA', '/roqiva'] },
-    ],
-  },
+  work: { eyebrow: 'Selected work', title: 'Seven systems. *Tap one for the quick view.*', link: ['All cases', '/work'] },
+  fit: { eyebrow: 'Where I fit', title: 'Pick *the seat you need.*', link: ['Hire me', '/hire'] },
   roqiva: {
-    eyebrow: 'The system I am building · In development',
-    title: 'ROQIVA turns the signals your tools capture *into decisions a person approves.*',
-    lead: 'Detectors find the data no decision reads. Agents draft the fix. People decide at four gates. It runs inside the brand’s own stack and writes nothing to a live tool. I am building it as a founder, and a company comes next.',
-    primary: { label: 'Open the ROQIVA page', to: '/roqiva' },
-    explore: 'Open a section',
-  },
-  gtm: {
-    eyebrow: 'GTM engineering and RevOps',
-    title: 'Five ways revenue leaks. *One method to close each.*',
-    lead: 'Most leaks sit between systems that nobody owns. These are the five I look for first, and the offer that closes each.',
-    link: ['See the full practice', '/gtm'],
-  },
-  work: {
-    eyebrow: 'Work',
-    title: 'Seven systems, *each with the numbers.*',
-    lead: 'Every case starts with the hook and ends with what I would do differently.',
-    link: ['See all cases', '/work'],
-  },
-  journey: {
-    eyebrow: 'Journey',
-    title: 'Three chapters, *one direction.*',
-    lead: 'Learn how demand is made. Ship the systems underneath it. Build the system that runs them.',
-    link: ['Follow the journey', '/journey'],
+    eyebrow: 'Founder · In development',
+    title: 'The system I am building. *A company comes next.*',
+    lead: 'It finds the signals your tools capture and no decision reads, drafts the fix, and waits for a person to approve it. It writes nothing to your live tools.',
+    stats: [['6', 'steps per work item'], ['4', 'human gates'], ['0', 'writes to live tools']],
+    primary: { label: 'Open the walkthrough', to: '/roqiva' },
+    secondary: { label: 'Help shape it', to: '/contact?intent=roqiva#brief' },
   },
   cta: {
     title: 'Bring me a number *that will not move.*',
-    lead: 'For a role, a GTM or RevOps engagement, or to follow ROQIVA. A short brief is enough.',
+    lead: 'A role, a GTM or RevOps engagement, or ROQIVA. A short brief is enough.',
     primary: { label: 'Send a brief', to: '/contact#brief' },
     secondary: { label: 'Book a time', to: '/contact#book' },
   },
@@ -86,78 +46,29 @@ export const fit = [
   { id: 'payments', seat: 'Payments PM', d: 'Checkout, price integrity, payment adoption and what happens when a payment fails.', proof: '77.2 → 89.7% prepaid order-to-delivery', start: 'Where failures are treated alike.', case: 'price-lock-checkout' },
   { id: 'platform', seat: 'Platform PM', d: 'Rule engines, catalogues, portals and the internal tools behind a consumer product.', proof: '45+ coupon combinations · 70,000+ SKUs re-indexed', start: 'Where operators work from spreadsheets.', case: 'sku-substitution-engine' },
   { id: 'ai', seat: 'AI PM', d: 'Automation and recommendation that start with the cheapest high-volume intent, and keep a person where it matters.', proof: '−20% cost per order · +11% substitution acceptance', start: 'Where cost follows volume, not complexity.', case: 'ai-automation' },
-  { id: 'gtm', seat: 'GTM engineer · RevOps', d: 'Signals, rules and suppression engineered once and reused, with every claim measured against a holdout.', proof: 'Five leaks, six offers, one process', start: 'Where the numbers differ in every tool.', to: '/gtm' },
+  { id: 'gtm', seat: 'GTM engineer · RevOps', d: 'Signals, rules and suppression engineered once and reused, with every claim measured against a holdout.', proof: 'Five leaks, six offers, one process', start: 'Where the numbers differ in every tool.', to: '/hire#consulting' },
   { id: 'founding', seat: 'Founding product', d: 'Zero to one in a small team: the problem, the architecture, the build and the measurement, owned end to end.', proof: 'ROQIVA, a system in development', start: 'Where the product does not exist yet.', to: '/roqiva' },
 ]
 
 // ═══════════ Work ═══════════
 export const work = {
   hero: {
-    eyebrow: 'Proof · The cases',
-    title: 'Read seven systems *I owned end to end.*',
-    lead: 'Payments, growth, search, AI and operations at a Series C online pharmacy. Each case follows the same shape, and each failure shape is one that ROQIVA is designed to watch for.',
+    eyebrow: 'Proof · Work',
+    title: 'Seven systems *I owned end to end.*',
+    lead: 'Payments, growth, search, AI and operations at a Series C online pharmacy.',
     facts: ['Truemeds · Dec 2023 – Jul 2026', 'Two pods · 12 engineers', 'Five systems built 0-to-1'],
-  },
-  list: { eyebrow: 'The cases', title: 'Choose *a system to open.*', lead: 'Filter by area. Each card shows the three numbers that moved.' },
-  bridge: {
-    eyebrow: 'The through-line',
-    title: 'Every case became *a check inside ROQIVA.*',
-    lead: 'The cases are real. The checks are the design intent of the system I am building: the failure shape from each case, written as something a detector can look for.',
-    cols: ['Case', 'The failure shape', 'In ROQIVA'],
-    link: ['See ROQIVA’s design', '/roqiva'],
-  },
-  how: {
-    eyebrow: 'How a case reads',
-    title: 'Every case follows *the same eight steps.*',
-    lead: 'The hook, the context, the problem, what made it hard, the decision, what was built, what changed, and what I would do differently.',
   },
 }
 
-// ═══════════ GTM engineering and RevOps ═══════════
-export const gtmPage = {
-  hero: {
-    eyebrow: 'Practice · GTM engineering and RevOps',
-    title: 'Find the leak. *Fix the loop.* Prove the lift.',
-    lead: 'Revenue operations and GTM engineering for consumer commerce, taken from systems I ran in production. I look for the revenue that leaks between your tools, build the fix, and measure the lift against a holdout.',
-    primary: { label: 'Bring me a number', to: '/contact?intent=consult#brief' },
-    secondary: { label: 'Book a time', to: '/contact#book' },
-    facts: ['Ecommerce and D2C', 'Healthtech', 'Marketplaces', 'Subscriptions'],
-  },
-  nav: [
-    { id: 'leaks', label: 'Five leaks' },
-    { id: 'journey', label: 'The journey' },
-    { id: 'offers', label: 'Six offers' },
-    { id: 'process', label: 'The process' },
-    { id: 'rules', label: 'The rules' },
-    { id: 'stack', label: 'The stack' },
-    { id: 'faq', label: 'Questions' },
-  ],
-  why: {
-    eyebrow: 'Why it works',
-    title: 'Five principles *the work follows.*',
-    lead: 'They are the same rules ROQIVA is built on, because they came from the same place.',
-  },
-  leaks: { eyebrow: 'What I solve', title: 'Name *the leak first.*', lead: 'Five ways consumer revenue slips away. Pick the sentence you recognise.' },
-  journey: { eyebrow: 'Where it breaks', title: 'Walk *eight stages of the journey.*', lead: 'From search to fulfilment. For each stage: what breaks, what I look at, and what the fix does.' },
-  offers: { eyebrow: 'What I offer', title: 'Six offers, *one ladder.*', lead: 'Start with the audit. Each step after it is a fixed-scope piece of work with a defined output, a timeline and a model.' },
-  process: { eyebrow: 'How it runs', title: 'Four phases, *from diagnosis to a running system.*', lead: 'What happens, what I need from you, and what you get at the end of each phase.' },
-  shapes: { eyebrow: 'Engagement shapes', title: 'Choose *how to work together.*' },
-  rules: { eyebrow: 'The guardrails', title: 'Hold the work to *four rules.*', lead: 'Least privilege, provenance, a way back, and a holdout. And a clear line on where AI is allowed to act.' },
-  stack: { eyebrow: 'The stack', title: 'Build on *the tools you already run.*', lead: 'No rip and replace. These are the commerce, payments, engagement, analytics, data, support and AI tools I engineer on.' },
-  versus: { eyebrow: 'How it differs', title: 'Compare *with the usual options.*', lead: 'Pick what you use today. What it does, what I do, and how they work together.' },
-  proof: {
-    eyebrow: 'Proof',
-    title: 'It comes from *systems that ran in production.*',
-    lead: 'Not a framework from a deck. The offers above are the shape of the work I did at Truemeds.',
-    link: ['Read the cases behind it', '/work'],
-  },
-  faq: { eyebrow: 'Questions', title: 'Ask *before you ask me.*' },
-  cta: {
-    title: 'Size your leak *in a 30-minute call.*',
-    lead: 'On your numbers, not a pitch. Tell me the metric that will not move and the tools that hold the data.',
-    primary: { label: 'Bring me a number', to: '/contact?intent=consult#brief' },
-    secondary: { label: 'Book a time', to: '/contact#book' },
-  },
+// ═══════════ Consulting (on the Hire page) ═══════════
+export const consulting = {
+  eyebrow: 'Consulting · GTM engineering and RevOps',
+  title: 'Find the leak. *Fix the loop.* Prove the lift.',
+  lead: 'For consumer commerce teams. I find where revenue leaks between your tools, build the fix, and measure the lift against a holdout.',
+  leaks: { title: 'Which leak *do you recognise?*' },
+  offers: { title: 'Six offers, *one ladder.*' },
+  process: { title: 'Four phases, *twelve weeks.*' },
+  cta: { label: 'Bring me a number', to: '/contact?intent=consult#brief' },
 }
 
 // ═══════════ ROQIVA page: the Origin section is in roqiva.js ═══════════
@@ -166,34 +77,29 @@ export const gtmPage = {
 export const journeyPage = {
   hero: {
     eyebrow: 'Path · Journey',
-    title: 'Follow the path *that led to ROQIVA.*',
-    lead: 'Three chapters: learn how demand is made, ship the systems underneath it, then build the system that runs them. Every role, with what I actually did.',
+    title: 'Three chapters, *one direction.*',
+    lead: 'Learn how demand is made. Ship the systems underneath it. Build the system that runs them.',
   },
   chapters: [
-    { k: 'I', t: 'Learn how demand is made', span: '2021 – 2023', d: 'Dealer networks, landing pages and campaign targeting. Three roles that taught me what a customer does between an ad and an order.',
-      lesson: 'Demand is made in the gap between an ad and an order, and that gap is full of systems nobody owns.',
+    { k: 'I', t: 'How demand is made', span: '2022 – 2023', d: 'Dealer networks, landing pages and campaigns.',
+      lesson: 'Demand is made in the gap between an ad and an order.',
       roles: [
-        { when: 'May – Jun 2021', role: 'Digital Marketing and Web Development Intern', org: '9LedgePro · Microsoft Partner Network', text: 'Ran an SEO audit, shipped 30+ posts and 10 blogs, and set a 40/40/20 low-medium-high competition keyword mix.' },
-        { when: 'Apr – Sep 2022', role: 'Client Services Associate', org: 'Eggfirst Advertising and Design · Goregaon', text: 'Primary contact for 15 Tata Motors dealers across Maharashtra. Wireframed 48 landing pages and a lead-management system, and planned about 100 campaigns.' },
-        { when: 'Sep – Dec 2023', role: 'Management Trainee', org: 'Neil Patel Digital India · Mumbai', text: 'Managed 6 clients across sectors, supported pitches that won new business and refined campaign targeting from consumer-behaviour data.' },
+        { when: 'Apr – Sep 2022', role: 'Client Services Associate', org: 'Eggfirst Advertising and Design', mono: 'EF', text: 'Primary contact for Tata Motors dealers across Maharashtra. Wireframed landing pages and a lead system.', stats: [['15', 'dealers'], ['48', 'landing pages'], ['~100', 'campaigns']] },
+        { when: 'Sep – Dec 2023', role: 'Management Trainee', org: 'Neil Patel Digital India', mono: 'NP', text: 'Ran client accounts and sharpened campaign targeting from consumer-behaviour data.', stats: [['6', 'clients']] },
       ] },
-    { k: 'II', t: 'Ship the systems underneath', span: 'Dec 2023 – Jul 2026', d: 'Two years and eight months at one company, owning five systems from first problem to measured result.',
-      lesson: 'When scale breaks a product it rarely breaks at the interface. It breaks in the systems and workflows underneath.',
+    { k: 'II', t: 'The systems underneath', span: 'Dec 2023 – now', d: 'Product roles where scale broke the workflows, not the interface.',
+      lesson: 'When scale breaks a product, it breaks in the systems underneath.',
       roles: [
-        { when: 'Dec 2023 – Jul 2026', role: 'Associate Product Manager', org: 'Truemeds · Mumbai', text: 'Co-managed two product pods of 12 engineers across payments and portals, with the engineering lead and a senior PM. Built five systems 0-to-1 and owned sprint planning, prioritisation, on-call rotation and delivery.',
-          tags: ['Payments', 'Growth', 'Search', 'Internal tools', 'Operations'], to: '/work' },
+        { when: 'Dec 2023 – Jul 2026', role: 'Associate Product Manager', org: 'Truemeds · Mumbai', mono: 'TM', text: 'Co-managed two pods across payments and portals. Owned sprint planning, prioritisation, on-call and delivery.', stats: [['2', 'pods'], ['12', 'engineers'], ['5', 'systems 0-to-1']], tags: ['Payments', 'Growth', 'Search', 'Internal tools'], to: '/work' },
+        { when: 'Oct 2026 – now', role: 'Product Manager', org: 'GNC India · Mumbai', mono: 'GN', now: true, text: 'Product manager at the consumer wellness brand, across ecommerce, growth and the platforms behind them.', stats: [['Oct', 'joined 2026']], tags: ['Ecommerce', 'D2C', 'Growth'] },
       ] },
-    { k: 'III', t: 'Build the system that runs them', span: '2026 – now', d: 'A product role at a consumer wellness brand, and ROQIVA, the system I am building and will found a company around.',
-      lesson: 'The loop I ran by hand can be made repeatable, as long as a person still decides what changes the business.',
+    { k: 'III', t: 'The system that runs them', span: '2026 – now', d: 'The loop I ran by hand, made repeatable.',
+      lesson: 'A system can run the loop, as long as a person decides what changes the business.',
       roles: [
-        { when: 'Oct 2026 – now', role: 'Product Manager', org: 'GNC India · OneGuardian Brands · Mumbai', text: 'Product manager at GNC India, the consumer wellness brand, across ecommerce, growth and the internal platforms behind them.', tags: ['Ecommerce', 'D2C', 'Growth', 'Platform'] },
-        { when: '2026 – now', role: 'Founder', org: 'ROQIVA · in development', text: 'Designing and building ROQIVA, a governed revenue-operations system for commerce and D2C: detectors, agents, four human gates and a Brain per brand. A company will be formed around it.', tags: ['Product architecture', 'Agents', 'RevOps', 'GTM engineering'], to: '/roqiva' },
+        { when: '2026 – now', role: 'Founder', org: 'ROQIVA · in development', mono: 'RQ', now: true, text: 'Designing and building a governed revenue system for commerce and D2C. A company will form around it.', stats: [['6', 'agents'], ['6', 'steps'], ['4', 'gates']], tags: ['Product architecture', 'Agents', 'RevOps'], to: '/roqiva' },
       ] },
   ],
-  edu: { eyebrow: 'Education', title: 'Study *what I use.*' },
-  certs: { eyebrow: 'Certifications', title: 'Keep *learning in public.*' },
-  skills: { eyebrow: 'Skills', title: 'Name *what I am strongest at.*' },
-  beliefs: { eyebrow: 'How I think', title: 'Hold *three beliefs about product.*', lead: 'They show up in every case, and in how ROQIVA is designed.' },
+  beliefs: { eyebrow: 'How I think', title: 'Three *beliefs about product.*' },
 }
 
 // ═══════════ Beyond work ═══════════
@@ -201,40 +107,31 @@ export const beyond = {
   hero: {
     eyebrow: 'Person · Beyond work',
     title: 'Meet the person *behind the work.*',
-    lead: 'I build for people who buy things they care about, so I pay attention to what I care about. Karts, loud rooms, back roads and a good meal.',
+    lead: 'Karts, loud rooms, back roads and a good meal.',
   },
   groups: ['All', 'Wander', 'Speed', 'Live'],
-  loves: { eyebrow: 'What I love', title: 'Notice *the things I notice.*', lead: 'Small, precise, well made. It is the same taste I bring to product.' },
 }
 
-// ═══════════ Hire ═══════════
+// ═══════════ Hire me ═══════════
 export const hire = {
   hero: {
-    eyebrow: 'Fit · Hire',
-    title: 'Hire a product architect *who has run the whole loop.*',
-    lead: 'I build the systems that turn customer signals into revenue. I find where revenue leaks, design the decision logic, wire it into the systems that act on it, and measure the lift with proper experiments.',
+    eyebrow: 'Hire me',
+    title: 'Three ways *to work with me.*',
+    lead: 'As a product manager on your team. As a consultant on your revenue leaks. Or alongside ROQIVA, the system I am building.',
     primary: { label: 'Start a conversation', to: '/contact?intent=job#brief' },
     secondary: { label: 'LinkedIn', href: site.linkedin },
-    open: { label: 'Open to', roles: ['Product Manager (growth, payments, platform, AI)', 'Product Architect or Technical Product Manager', 'GTM Engineer or revenue-systems roles'], where: 'India, or remote with US and global teams.' },
-  },
-  moves: {
-    eyebrow: 'How I work',
-    title: 'The same four moves, *every time.*',
-    lead: 'Different problems, one pattern. It is why the results below look so different and read so alike.',
-    items: [
-      ['Find the leak', 'Funnel analysis, SQL and time with the warehouse and support teams, to see where revenue actually escapes.'],
-      ['Design the rule', 'The decision logic written as states and exceptions an engineer can build, with the options I rejected on the page.'],
-      ['Wire it in', 'The web, app, API and internal tool that act on the rule, owned end to end with the engineering lead.'],
-      ['Prove the lift', 'Phased A/B releases against a baseline, then a write-up of what worked and what I would change.'],
+    ways: [
+      { n: '01', t: 'Join your team', d: 'Growth, payments, platform or AI product.', to: '#fit' },
+      { n: '02', t: 'Consult', d: 'GTM engineering and RevOps, from audit to running system.', to: '#consulting' },
+      { n: '03', t: 'Build with ROQIVA', d: 'Follow it, or help shape what it does first.', to: '#roqiva' },
     ],
+    where: 'India, or remote with global teams.',
   },
-  wins: { eyebrow: 'Results', title: 'Twelve numbers *I can explain.*', lead: 'Across payments, search, growth, AI and operations. Each has a case study or a clear owner behind it, and none depends on a single project.' },
-  fit: { eyebrow: 'Where I fit', title: 'Six seats, *and what I bring to each.*', lead: 'Choose one to see the proof behind it and where I would start.' },
-  xp: { eyebrow: 'Experience', title: 'Where I have *done the work.*', lead: 'Newest first. The full story is on the journey page.' },
-  strengths: ['Consumer product', 'Ecommerce and D2C', 'Growth product', 'RevOps', 'GTM engineering', 'Search and discovery', 'Checkout and payments', 'Retention and lifecycle', 'Fulfilment and logistics', 'CX', 'AI and automation', 'Product analytics', 'Experimentation', 'Revenue systems'],
+  fit: { eyebrow: 'Join your team', title: 'Pick *the seat you need.*' },
+  strengths: ['Consumer product', 'Ecommerce and D2C', 'Growth', 'RevOps', 'GTM engineering', 'Search', 'Checkout and payments', 'Lifecycle', 'AI and automation', 'Experimentation'],
   cta: {
-    title: 'Let’s talk *about the role.*',
-    lead: 'Tell me about the team and the problem. I will reply with where I would look first.',
+    title: 'Tell me *about the team.*',
+    lead: 'I reply myself, usually within two working days.',
     primary: { label: 'Start a conversation', to: '/contact?intent=job#brief' },
     secondary: { label: 'Book a time', to: '/contact#book' },
   },
@@ -245,7 +142,7 @@ export const contactPage = {
   hero: {
     eyebrow: 'Talk',
     title: 'Bring one problem. *Leave with a clearer next step.*',
-    lead: 'A role, a GTM or RevOps engagement, or a conversation about ROQIVA. Send a short brief or book a time. I reply myself, usually within two working days.',
+    lead: 'A role, a GTM or RevOps engagement, or ROQIVA. I reply myself, usually within two working days.',
   },
   trust: 'No production access is needed to talk. Anything later is scoped to the exports you approve.',
   book: {
@@ -259,26 +156,12 @@ export const contactPage = {
     ],
     bring: 'One problem and the tools involved. No deck, and no production access.',
   },
-  asks: {
-    eyebrow: 'What you can ask about',
-    title: 'Ask about the one that fits, *or let me suggest one.*',
-    items: [
-      { id: 'job', t: 'A role', d: 'Product Manager, Product Architect or revenue-systems roles in consumer tech, growth, payments, platform and AI.', cta: 'Ask about a role', intent: 'A role on your team' },
-      { id: 'consult', t: 'GTM engineering and RevOps', d: 'Size a leak, recover high-intent customers, bring customers back, or build the foundation underneath.', cta: 'Ask about GTM and RevOps', intent: 'A GTM or RevOps engagement' },
-      { id: 'roqiva', t: 'ROQIVA', d: 'The system I am building. Follow along, or help shape what it does first.', cta: 'Ask about ROQIVA', intent: 'ROQIVA: follow along or help shape it' },
-    ],
-  },
   brief: {
     h: 'Send a short brief *instead.*',
     eyebrow: 'Prefer to write first?',
     intents: ['A role on your team', 'A GTM or RevOps engagement', 'ROQIVA: follow along or help shape it', 'Just saying hello'],
     topics: ['A number that will not move', 'Checkout and payments', 'Search and discovery', 'Delivery and returns', 'Retention and CRM', 'Tracking I do not trust', 'Something else'],
     tools: ['CRM', 'Analytics', 'Payments', 'Order management', 'Support desk', 'Catalogue', 'Data warehouse'],
-  },
-  who: {
-    label: 'Who you will talk to',
-    h: 'Talk to *me,* not a sales team.',
-    p: 'I read every message. If something is not worth doing, I will tell you why.',
   },
 }
 
