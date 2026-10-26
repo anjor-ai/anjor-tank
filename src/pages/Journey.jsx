@@ -39,15 +39,15 @@ export default function Journey() {
   }))
   return (
     <PageMotion routeKey="/journey">
-      <PageHero variant="journey" eyebrow={P.hero.eyebrow} title={P.hero.title} lead={P.hero.lead}
+      <PageHero variant="journey" title={P.hero.title} lead={P.hero.lead}
         visual={<figure className="portrait"><img src="/img/anjor.webp" width="447" height="721" alt="Anjor Tank" decoding="async" /></figure>} visualLive />
 
-      <Section id="chapters" rule={false}>
+      <Section id="chapters" rule={false}><div className="v3-journey-intro"><span>EGGFIRST / NEIL PATEL DIGITAL</span><i aria-hidden="true"/><span>TRUEMEDS / GNC INDIA</span><i aria-hidden="true"/><span>ROQIVA / FOUNDING</span></div>
         <Sticky label="Three chapters" items={items} />
       </Section>
 
       <Section id="beliefs" tone="alt">
-        <Head eyebrow={P.beliefs.eyebrow} title={P.beliefs.title} />
+        <Head title={P.beliefs.title} />
         <ul className="acards acards--3">
           {BELIEFS.map((b, i) => (
             <ArtCard key={b.t} icon={['layers', 'chart', 'database'][i]} label={`0${i + 1}`} t={b.t} d={b.d}>

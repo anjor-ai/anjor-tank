@@ -33,7 +33,7 @@ export default function Home() {
       </header>
 
       <Section id="work" className="ed-work">
-        <Head eyebrow="SELECTED WORK / EVIDENCE" title="Not just features. *Products that changed the outcome.*" lead="Six detailed stories behind measurable results. Explore the illustrated cards, open a quick view, or dive into the system design." />
+        <Head title="Not just features. *Products that changed the outcome.*" lead="Six detailed stories behind measurable results. Explore the illustrated cards, open a quick view, or dive into the system design." />
         <WorkRing label="Selected work" items={CASES} render={(c) => <CaseCard c={c} onOpen={setOpen} />} />
         <p className="more" data-reveal><LinkArrow to="/work">Explore all six case studies</LinkArrow></p>
         {open && <CaseModal slug={open} setSlug={setOpen} onClose={() => setOpen('')} />}

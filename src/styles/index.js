@@ -17,3 +17,4 @@ import './motion.css'
 
 import './editorial.css'
 import './studio.css'
+import './portfolio-v3.css'
