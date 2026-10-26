@@ -1,0 +1,276 @@
+/* ═══════════ Showcase: gradient stages, app windows, output bodies, node diagrams ═══════════
+   One system: violet to void behind every stage, one window chrome, one chip, one set of edges. Nothing here hides content;
+   GSAP sets the hidden start states, so a reader without script or with reduced motion sees every window complete. */
+
+/* ───────── Stage ───────── */
+.stage { --stage-pad: clamp(14px, 3.2vw, 44px); position: relative; isolation: isolate; overflow: hidden; border-radius: var(--r-xl); padding: var(--stage-pad);
+  border: 1px solid var(--stage-line); background: radial-gradient(70% 55% at 50% -8%, var(--stage-glow), transparent 70%), var(--stage-bg); }
+.stage--soft { background: radial-gradient(60% 50% at 88% -10%, var(--stage-glow), transparent 70%), var(--stage-bg); }
+.stage__glow { position: absolute; z-index: -1; width: 52%; aspect-ratio: 1; border-radius: 50%; filter: blur(60px); pointer-events: none; opacity: 0.22; }
+.stage__glow--a { left: -12%; top: -30%; background: radial-gradient(circle, rgba(183, 169, 255, 0.55), transparent 65%); }
+.stage__glow--b { right: -14%; bottom: -34%; background: radial-gradient(circle, rgba(0, 131, 255, 0.5), transparent 65%); }
+.stage__grid { position: absolute; inset: 0; z-index: -1; pointer-events: none; opacity: 0.5;
+  background-image: radial-gradient(var(--dot) 1px, transparent 1px); opacity: 1; background-size: 24px 24px; -webkit-mask-image: radial-gradient(70% 70% at 50% 40%, #000, transparent); mask-image: radial-gradient(70% 70% at 50% 40%, #000, transparent); }
+.stage__in { position: relative; display: grid; gap: 16px; min-width: 0; }
+.stage__in > .win:only-child { margin-inline: auto; width: 100%; }
+.spanel__vis { padding: 12px; }
+.spanel__vis .win__body { padding: 12px; }
+
+.stage--pair .stage__in { grid-template-columns: repeat(2, minmax(0, 1fr)); align-items: start; }
+.stage--trio .stage__in { grid-template-columns: repeat(3, minmax(0, 1fr)); align-items: start; }
+.stage--span .stage__in > .win:nth-child(3) { grid-column: 1 / -1; }
+@media (max-width: 960px) { .stage--pair .stage__in, .stage--trio .stage__in { grid-template-columns: minmax(0, 1fr); } .stage--span .stage__in > .win:nth-child(3) { grid-column: auto; } }
+@media (max-width: 520px) { .stage { --stage-pad: 10px; border-radius: var(--r-lg); } }
+
+/* ───────── Window ───────── */
+.win { container: win / inline-size; margin: 0; display: flex; flex-direction: column; min-width: 0; border: 1px solid var(--line-2); border-radius: var(--r-lg); background: var(--surface); color: var(--text); text-align: left;
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset, 0 24px 60px -24px rgba(0, 0, 0, 0.6); overflow: hidden; }
+.win__bar { display: flex; align-items: center; gap: 14px; padding: 11px 16px; border-bottom: 1px solid var(--line); background: var(--bg-2); }
+.win__dots { display: inline-flex; gap: 6px; }
+.win__dots i { width: 9px; height: 9px; border-radius: 50%; background: var(--line-2); }
+.win__title { flex: 1; min-width: 0; font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.03em; color: var(--text-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.win__body { padding: clamp(14px, 2vw, 22px); min-width: 0; }
+.win__foot { padding: 11px 18px; border-top: 1px solid var(--line); background: var(--bg-2); text-transform: none; letter-spacing: 0.02em; }
+@media (max-width: 520px) { .win__badge { display: none; } .win__bar { padding: 10px 12px; } }
+
+/* ───────── Shared bits ───────── */
+
+/* ───────── 01 Detect ───────── */
+
+/* ───────── 02 Audit ───────── */
+
+/* ───────── 03 Decide ───────── */
+
+/* ───────── 04 Build ───────── */
+
+/* ───────── 05 Release ───────── */
+
+  
+
+ 
+
+/* ───────── 06 Measure ───────── */
+
+/* Brain log */
+
+/* Gate strip */
+
+ 
+
+/* ───────── The end-to-end player ───────── */
+
+.win--run .win__body { padding: 0; }
+
+/* With script, every output sits in one cell so the window keeps one height. Without it, they list in order. */
+
+@container win (max-width: 700px) { /* Heights follow the output on a small screen, so one tall output never leaves a gap under a short one. */ }
+
+/* ───────── Node diagrams ───────── */
+
+/* Lanes */
+
+ 
+
+/* Module stack */
+
+/* Boundary */
+
+/* Headings inside windows are plain labels in the page's flow, not document headings: no browser margins. */
+.win h4, .win h5 { margin: 0; }
+
+/* ───────── Stepper panels: the text, and the output it produces ───────── */
+.spanel { grid-template-columns: minmax(0, 1fr); }
+.spanel__vis { align-self: start; }
+@media (min-width: 961px) { .spanel { grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr); column-gap: clamp(18px, 2vw, 28px); align-items: start; padding: clamp(20px, 2.2vw, 28px); }
+  .spanel__txt { display: grid; gap: 16px; align-content: start; }
+  .spanel__does { font-size: 16px; line-height: 1.55; }
+  .spanel__facts { grid-template-columns: minmax(0, 1fr); }
+  .spanel__facts > div { padding: 12px 0 0; }
+  .spanel__facts > div + div { padding-left: 0; border-left: 0; } }
+@media (max-width: 960px) { .spanel__txt { display: grid; gap: 18px; } }
+
+.spanel__gate { display: block; }
+.spanel__gate .ico { display: inline; vertical-align: -2px; margin-right: 6px; }
+
+/* ───────── Agent sections: the head beside the artifact the agent writes ───────── */
+.agent__top { display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(20px, 3vw, 40px); align-items: start; }
+.agent__top .stage { --stage-pad: clamp(12px, 2vw, 24px); }
+
+/* ───────── Services: a track's diagram, under its lead ───────── */
+.track__vis { margin-bottom: clamp(24px, 3vw, 40px); }
+
+/* ───────── Home: the gap, the workflow rail ───────── */
+
+.flowwrap { display: grid; gap: 0; }
+.flowrail { display: none; }
+@media (min-width: 1181px) { .flowwrap { gap: 14px; }
+  .flowrail { position: relative; display: block; height: 34px; }
+  .flowrail svg { position: absolute; left: 0; right: 0; top: 50%; width: 100%; height: 10px; margin-top: -5px; overflow: visible; }
+  .flowrail__line { fill: none; stroke: var(--accent-text); stroke-width: 2; vector-effect: non-scaling-stroke; stroke-linecap: round; opacity: 0.8; }
+  .flowrail__step, .flowrail__gate { position: absolute; top: 50%; display: grid; place-items: center; transform: translate(-50%, -50%); }
+  .flowrail__step { width: 30px; height: 30px; border-radius: 50%; background: var(--accent-fill); color: #fff; font-family: var(--font-mono); font-size: 11px; box-shadow: 0 0 0 5px var(--accent-soft); }
+  .flowrail__gate { width: 20px; height: 20px; border-radius: 5px; background: var(--surface); border: 1.5px solid var(--k-person); color: var(--k-person); font-family: var(--font-mono); font-size: 9.5px; transform: translate(-50%, -50%) rotate(45deg); }
+  .flowrail__gate > * { transform: rotate(-45deg); } }
+
+/* ───────── Card thumbnails: what an agent writes, and what a track looks like ───────── */
+.mini { margin: calc(clamp(20px, 2.6vw, 30px) * -1) calc(clamp(20px, 2.6vw, 30px) * -1) 6px; padding: 18px 18px 0; height: 128px; overflow: hidden; background: radial-gradient(120% 100% at 20% 0%, #0083ff 0%, #3b2fa0 42%, #14141b 100%); border-bottom: 1px solid var(--line); }
+.mini__win { border: 1px solid var(--line-2); border-bottom: 0; border-radius: 12px 12px 0 0; background: var(--surface); box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.7); transform: translateY(0); transition: transform 0.45s var(--ease-out); }
+.agrid__link:hover .mini__win, .tcard:hover .mini__win { transform: translateY(-6px); }
+.mini__bar { display: flex; align-items: center; gap: 10px; padding: 7px 12px; border-bottom: 1px solid var(--line); font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.04em; color: var(--text-2); }
+.mini__bar .win__dots i { width: 6px; height: 6px; }
+.mini__rows { display: grid; gap: 6px; padding: 10px 12px 16px; }
+.mini__rows li { display: flex; align-items: center; gap: 8px; min-width: 0; font-size: 12px; color: var(--text-2); white-space: nowrap; }
+.mini__rows li span:not(.label):not(.mini__chip):not(.mini__skel) { overflow: hidden; text-overflow: ellipsis; }
+.mini__rows li.is-pick { color: var(--accent-text); }
+.mini__rows .label { font-size: 9.5px; }
+.mini__nodes { flex-wrap: wrap; }
+.mini__chip { display: inline-flex; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--line-2); font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-2); }
+.mini__chip--warn { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 50%, var(--line-2)); }
+.mini__skel { flex: 1; height: 5px; border-radius: 4px; background: var(--line); overflow: hidden; }
+.mini__skel i { display: block; height: 100%; background: var(--line-2); }
+.mini--track { display: grid; align-items: center; height: 146px; padding: 16px 18px; }
+.mini__lanes { display: grid; gap: 8px 6px; padding: 12px; border: 1px solid var(--line-2); border-radius: 12px; background: color-mix(in srgb, var(--surface) 92%, transparent); }
+.mini__dot { height: 14px; border-radius: 4px; background: var(--line-2); }
+.mini__dot--f { background: var(--accent-text); } .mini__dot--c { background: var(--k-person); border-radius: 50%; width: 14px; justify-self: center; } .mini__dot--b { background: var(--k-code); }
+.mini__stack { display: grid; gap: 6px; padding: 12px; border: 1px solid var(--line-2); border-radius: 12px; background: color-mix(in srgb, var(--surface) 92%, transparent); }
+.mini__layer { padding: 6px 10px; border-radius: 8px; border: 1px solid var(--line-2); font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-2); }
+.mini__layer--brain { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-text); }
+.mini__bound { display: flex; flex-wrap: wrap; gap: 6px; padding: 14px; border: 1.5px dashed color-mix(in srgb, var(--accent-text) 70%, var(--line-2)); border-radius: 14px; background: color-mix(in srgb, var(--surface) 92%, transparent); }
+.mini__bound .mini__chip { background: var(--bg-2); }
+.agrid__link { overflow: hidden; }
+.tcard { overflow: hidden; }
+
+
+/* ───────── Richer previews ───────── */
+.mini__find b { margin-left: auto; font: 600 12px var(--font-display); color: var(--text); }
+.mini__pill { flex: none; padding: 0 6px; border: 1px solid color-mix(in srgb, currentColor 40%, transparent); border-radius: 99px; font: 500 9px/1.6 var(--font-mono); font-style: normal; letter-spacing: 0.05em; text-transform: uppercase; }
+.mini__pill--sky { color: var(--st-sky); } .mini__pill--ok { color: var(--st-ok); } .mini__pill--grey { color: var(--st-grey); }
+.mini__ok { flex: none; color: var(--st-ok); }
+.mini__flow { gap: 0; }
+.mini__node { display: inline-flex; align-items: center; }
+.mini__arr { width: 14px; border-top: 1.5px solid var(--k-agent); margin: 0 4px; }
+.mini__warn { color: var(--st-amber) !important; font-size: 11px !important; }
+.mini__letter { flex: none; width: 16px; height: 16px; display: grid; place-items: center; border-radius: 5px; background: var(--bg-2); font: 600 9.5px var(--font-mono); color: var(--text-2); }
+.mini__rows li.is-pick .mini__letter { background: var(--accent-fill); color: #fff; }
+.mini__phones { gap: 8px !important; }
+.mini__ph { position: relative; display: grid; align-content: start; gap: 3px; width: 30px; height: 50px; padding: 6px 4px 0; border: 1px solid var(--line-2); border-radius: 6px; background: var(--surface); }
+.mini__ph i { display: block; height: 3px; border-radius: 2px; background: var(--line-2); }
+.mini__ph i:nth-child(2) { width: 70%; }
+.mini__ph .mini__cta { position: absolute; left: 4px; right: 4px; bottom: 5px; height: 5px; background: var(--accent-fill); }
+.mini__ph.is-warn { border-color: color-mix(in srgb, var(--warn) 55%, var(--line-2)); }
+.mini__ph small { position: absolute; left: calc(100% + 3px); bottom: 0; display: none; }
+.mini__seg { gap: 3px !important; height: 8px; }
+.mini__seg i { height: 100%; border-radius: 99px; } .mini__seg .is-p { background: var(--st-ok); } .mini__seg .is-f { background: var(--warn); } .mini__seg .is-u { background: var(--line-2); }
+
+/* Track previews: a packet runs through each */
+@keyframes mtRun { 0% { transform: translateX(0); opacity: 0; } 8% { opacity: 1; } 88% { opacity: 1; } 100% { transform: translateX(var(--run)); opacity: 0; } }
+.mtA, .mtB, .mtC { position: relative; padding: 12px; border: 1px solid var(--line-2); border-radius: 12px; background: color-mix(in srgb, var(--surface) 94%, transparent); }
+.mtA { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 6px 10px; }
+.mtA__lab { font: 500 9px var(--font-mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-3); }
+.mtA__row { display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); gap: 4px; align-items: center; justify-items: center; }
+.mtA__f { width: 100%; height: 12px; border-radius: 3px; background: color-mix(in srgb, var(--k-agent) 70%, transparent); }
+.mtA__g { width: 10px; height: 10px; transform: rotate(45deg); border-radius: 2px; background: var(--k-person); }
+.mtA__x { width: 4px; height: 4px; border-radius: 50%; background: var(--line-2); }
+.mtA__b { width: 100%; height: 12px; border-radius: 3px; border: 1px dashed var(--line-2); }
+.mtA__b.is-on { border: 0; background: color-mix(in srgb, var(--k-code) 75%, transparent); }
+.mtA__pk, .mtB__pk, .mtC__pk { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-fill); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-fill) 25%, transparent); animation: mtRun 3.6s cubic-bezier(.45, 0, .55, 1) infinite; }
+.mtA__pk { left: 70px; top: 14px; --run: calc(100% + 120px); }
+.mtA { --w: 100%; } .mtA__pk { --run: 210px; }
+.mtB { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto auto; align-items: center; gap: 10px; }
+.mtB__src { display: grid; gap: 4px; } .mtB__src i { width: 18px; height: 8px; border-radius: 3px; background: color-mix(in srgb, var(--k-code) 70%, transparent); }
+.mtB__ten { display: grid; gap: 4px; padding: 6px; border: 1px dashed color-mix(in srgb, var(--accent-text) 60%, var(--line-2)); border-radius: 8px; }
+.mtB__l { padding: 2px 6px; border-radius: 5px; border: 1px solid var(--line-2); font: 500 9px var(--font-mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-2); }
+.mtB__l--brain { border-color: var(--accent); background: var(--accent-soft); color: var(--accent-text); }
+.mtB__out { display: grid; gap: 4px; } .mtB__out span { padding: 2px 6px; border-radius: 5px; background: var(--bg-2); border: 1px solid var(--line-2); font: 500 9px var(--font-mono); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-2); }
+.mtB__stop { align-self: stretch; border-left: 1.5px dashed var(--warn); }
+.mtB__team { width: 22px; height: 22px; display: grid; place-items: center; border-radius: 50%; background: color-mix(in srgb, var(--k-person) 16%, transparent); color: var(--k-person); }
+.mtB__pk { left: 22px; top: 50%; margin-top: -4px; --run: 170px; }
+.mtC { display: flex; align-items: center; gap: 10px; padding: 10px; }
+.mtC__out { flex: none; padding: 4px 8px; border: 1px dashed var(--line-2); border-radius: 8px; font: 500 9px var(--font-mono); letter-spacing: 0.06em; color: var(--text-2); }
+.mtC__box { position: relative; display: flex; flex-wrap: wrap; gap: 5px; padding: 10px 10px 10px 26px; border: 1.5px dashed color-mix(in srgb, var(--accent-text) 70%, var(--line-2)); border-radius: 12px; background: color-mix(in srgb, var(--accent-fill) 5%, transparent); }
+.mtC__lock { position: absolute; left: -11px; top: 50%; width: 22px; height: 22px; margin-top: -11px; display: grid; place-items: center; border-radius: 50%; border: 1.5px solid var(--accent-text); background: var(--surface); color: var(--accent-text); }
+.mtC__pk { left: 30px; bottom: -4px; --run: 160px; background: var(--k-code); box-shadow: 0 0 0 4px color-mix(in srgb, var(--k-code) 22%, transparent); }
+@media (prefers-reduced-motion: reduce) { .mtA__pk, .mtB__pk, .mtC__pk { animation: none; display: none; } }
+
+/* ───────── Home-only agents: six condensed artifact cards ─────────
+   Keep the existing miniature artifact previews, but make them a small right-
+   hand visual instead of a 128px full-width strip above every card. */
+.agrid--compact {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  overflow: visible;
+}
+.agrid--compact .agrid__cell {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  background: var(--surface);
+  overflow: hidden;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+.agrid--compact .agrid__cell:hover {
+  border-color: var(--line-2);
+  box-shadow: 0 10px 28px -22px rgba(0, 80, 180, 0.32);
+}
+.agrid--compact .agrid__link {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 112px;
+  grid-template-rows: auto auto minmax(0, 1fr) auto;
+  column-gap: 12px;
+  row-gap: 5px;
+  padding: 18px;
+  min-height: 190px;
+  align-content: center;
+}
+.agrid--compact .agrid__link > .label:not(.agrid__meta) { grid-column: 1; grid-row: 1; }
+.agrid--compact .agrid__link > .h-3 { grid-column: 1; grid-row: 2; font-size: 19px; }
+.agrid--compact .agrid__verb {
+  grid-column: 1;
+  grid-row: 3;
+  font-size: 13.5px;
+  line-height: 1.45;
+  align-self: start;
+}
+.agrid--compact .agrid__meta {
+  grid-column: 1;
+  grid-row: 4;
+  align-self: end;
+  margin-top: 0;
+  font-size: 10px;
+  line-height: 1.5;
+}
+.agrid--compact .mini {
+  grid-column: 2;
+  grid-row: 1 / 5;
+  align-self: center;
+  margin: 0;
+  padding: 10px 0 0 8px;
+  width: 112px;
+  height: 114px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #092657, #1550ad 62%, #0e203c);
+}
+.agrid--compact .mini__win {
+  width: 188px;
+  max-width: none;
+  transform: scale(0.56);
+  transform-origin: top left;
+}
+.agrid--compact .agrid__link:hover .mini__win {
+  transform: translateY(-5px) scale(0.56);
+}
+@media (max-width: 960px) {
+  .agrid--compact { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 600px) {
+  .agrid--compact { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .agrid--compact .agrid__cell,
+  .agrid--compact .agrid__cell:last-child {
+    border: 1px solid var(--line) !important;
+  }
+  .agrid--compact .agrid__link { min-height: 165px; }
+}

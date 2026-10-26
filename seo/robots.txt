@@ -1,0 +1,67 @@
+# robots.txt for __SITE_URL__
+# Crawling and indexing are allowed everywhere. Source file: seo/robots.txt (copied to /robots.txt on build).
+# __SITE_URL__ is replaced with SITE_URL at build time.
+
+User-agent: *
+Allow: /
+
+# Search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+User-agent: DuckDuckBot
+Allow: /
+
+User-agent: Applebot
+Allow: /
+
+# AI search, answer and assistant crawlers: allowed on purpose, so the site can be found and cited in AI answers.
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: GPTBot
+Allow: /
+
+User-agent: Claude-SearchBot
+Allow: /
+
+User-agent: Claude-User
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Perplexity-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Applebot-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+# Owner choice: to allow search and answers but opt out of model training, change GPTBot, ClaudeBot, Google-Extended,
+# Applebot-Extended, CCBot, Meta-ExternalAgent, Bytespider and Amazonbot above to "Disallow: /". Search and answer bots stay allowed.
+
+Sitemap: __SITE_URL__/sitemap.xml

@@ -5,21 +5,262 @@
   "outputDirectory": "dist",
   "cleanUrls": true,
   "trailingSlash": false,
-  "redirects": [{ "source": "/architect", "destination": "/systems", "permanent": true }],
   "headers": [
     {
       "source": "/(.*)",
       "headers": [
-        { "key": "Content-Security-Policy", "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.web3forms.com; manifest-src 'self'; worker-src 'none'; media-src 'self'; form-action 'none'; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; upgrade-insecure-requests" },
-        { "key": "Strict-Transport-Security", "value": "max-age=31536000" },
-        { "key": "X-Content-Type-Options", "value": "nosniff" },
-        { "key": "X-Frame-Options", "value": "DENY" },
-        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
-        { "key": "Permissions-Policy", "value": "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), browsing-topics=()" },
-        { "key": "Cross-Origin-Opener-Policy", "value": "same-origin" }
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; connect-src 'self' https://api.web3forms.com; frame-src https://calendly.com; manifest-src 'self'; worker-src 'none'; media-src 'self'; form-action https://api.web3forms.com; base-uri 'none'; object-src 'none'; frame-ancestors 'none'; upgrade-insecure-requests"
+        },
+        {
+          "key": "Strict-Transport-Security",
+          "value": "max-age=31536000"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "accelerometer=(), camera=(), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), payment=(), usb=(), browsing-topics=()"
+        },
+        {
+          "key": "Cross-Origin-Opener-Policy",
+          "value": "same-origin"
+        },
+        {
+          "key": "X-Permitted-Cross-Domain-Policies",
+          "value": "none"
+        }
       ]
     },
-    { "source": "/assets/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }] },
-    { "source": "/img/(.*)", "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400, stale-while-revalidate=604800" }] }
+    {
+      "source": "/assets/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=31536000, immutable"
+        }
+      ]
+    },
+    {
+      "source": "/(favicon\\.ico|favicon\\.svg|favicon-32\\.png|logo-[a-z]+\\.(?:png|webp)|og-image\\.jpg|icon-192\\.png|icon-512\\.png|apple-touch-icon\\.png|anjor\\.jpg|anjor-sm\\.jpg|theme-init\\.js|opener\\.js|opener\\.mp4|opener-poster\\.jpg)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=86400, stale-while-revalidate=604800"
+        }
+      ]
+    },
+    {
+      "source": "/(sitemap\\.xml|robots\\.txt|llms\\.txt|site\\.webmanifest)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, stale-while-revalidate=86400"
+        }
+      ]
+    },
+    {
+      "source": "/(.+)\\.md",
+      "headers": [
+        {
+          "key": "Content-Type",
+          "value": "text/markdown; charset=utf-8"
+        },
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex, follow"
+        },
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=0, must-revalidate"
+        }
+      ]
+    },
+    {
+      "source": "/\\.well-known/(.*)",
+      "headers": [
+        {
+          "key": "Cache-Control",
+          "value": "public, max-age=3600, must-revalidate"
+        },
+        {
+          "key": "Content-Type",
+          "value": "text/plain; charset=utf-8"
+        }
+      ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/index",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/index.html",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/home",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/how-it-works",
+      "destination": "/platform",
+      "permanent": true
+    },
+    {
+      "source": "/how",
+      "destination": "/platform",
+      "permanent": true
+    },
+    {
+      "source": "/product",
+      "destination": "/platform",
+      "permanent": true
+    },
+    {
+      "source": "/system",
+      "destination": "/platform",
+      "permanent": true
+    },
+    {
+      "source": "/solutions",
+      "destination": "/platform",
+      "permanent": true
+    },
+    {
+      "source": "/example",
+      "destination": "/examples",
+      "permanent": true
+    },
+    {
+      "source": "/example-run",
+      "destination": "/examples",
+      "permanent": true
+    },
+    {
+      "source": "/case-study",
+      "destination": "/examples",
+      "permanent": true
+    },
+    {
+      "source": "/demo",
+      "destination": "/examples",
+      "permanent": true
+    },
+    {
+      "source": "/about",
+      "destination": "/company",
+      "permanent": true
+    },
+    {
+      "source": "/about-us",
+      "destination": "/company",
+      "permanent": true
+    },
+    {
+      "source": "/team",
+      "destination": "/company",
+      "permanent": true
+    },
+    {
+      "source": "/founders",
+      "destination": "/company",
+      "permanent": true
+    },
+    {
+      "source": "/book",
+      "destination": "/contact#book",
+      "permanent": true
+    },
+    {
+      "source": "/book-a-call",
+      "destination": "/contact#book",
+      "permanent": true
+    },
+    {
+      "source": "/schedule",
+      "destination": "/contact#book",
+      "permanent": true
+    },
+    {
+      "source": "/call",
+      "destination": "/contact#book",
+      "permanent": true
+    },
+    {
+      "source": "/brief",
+      "destination": "/contact#brief",
+      "permanent": true
+    },
+    {
+      "source": "/enquiry",
+      "destination": "/contact#brief",
+      "permanent": true
+    },
+    {
+      "source": "/get-in-touch",
+      "destination": "/contact",
+      "permanent": true
+    },
+    {
+      "source": "/contact-us",
+      "destination": "/contact",
+      "permanent": true
+    },
+    {
+      "source": "/privacy-policy",
+      "destination": "/privacy",
+      "permanent": true
+    },
+    {
+      "source": "/legal",
+      "destination": "/privacy",
+      "permanent": true
+    },
+    {
+      "source": "/security.txt",
+      "destination": "/.well-known/security.txt",
+      "permanent": true
+    },
+    {
+      "source": "/tracks",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/pricing",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/offer",
+      "destination": "/services",
+      "permanent": true
+    },
+    {
+      "source": "/agent",
+      "destination": "/agents",
+      "permanent": true
+    },
+    {
+      "source": "/workflow",
+      "destination": "/platform",
+      "permanent": true
+    }
   ]
 }

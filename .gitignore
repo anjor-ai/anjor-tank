@@ -1,5 +1,13 @@
 node_modules
 dist
+dist-ssr
 .vercel
 .DS_Store
 *.log
+
+# Generated SEO snapshots are produced from src/content at build time.
+# Keep authored SEO inputs (robots.txt, humans.txt, IndexNow key) in git.
+seo/sitemap.xml
+seo/llms.txt
+seo/llms-full.txt
+seo/pages/

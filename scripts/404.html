@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex,nofollow" />
+    <title>Page not found — __SITE_NAME__</title>
+    <link rel="icon" href="/favicon.ico" sizes="48x48" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <script src="/theme-init.js"></script>
+    <style>
+      :root { color-scheme: dark light; }
+      html[data-theme='dark'] { --bg: #0d0e10; --text: #ebe7e2; --muted: #8a8d99; }
+      html[data-theme='light'] { --bg: #f7f6f3; --text: #18191d; --muted: #5e6068; }
+      body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: var(--bg); color: var(--text); font-family: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif; }
+      main { max-width: 32rem; padding: 32px; display: grid; gap: 16px; }
+      small { color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; font-size: 12px; }
+      h1 { margin: 0; font-family: 'Space Grotesk', 'Helvetica Neue', Arial, sans-serif; font-size: clamp(34px, 6vw, 46px); line-height: 1.05; letter-spacing: -0.02em; }
+      p { margin: 0; color: var(--muted); line-height: 1.6; }
+      a { text-decoration: none; }
+      .logo { justify-self: start; margin-bottom: 8px; } .logo img { display: block; height: 28px; width: auto; }
+      html[data-theme='dark'] .logo img { filter: invert(1); }
+      a.btn { display: inline-block; justify-self: start; margin-top: 8px; padding: 12px 20px; border-radius: 999px; background: #6c56fa; color: #fff; font-weight: 600; }
+      a.btn:hover { filter: brightness(1.1); }
+      .pages { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-top: 8px; }
+      .pages a { display: inline-block; padding: 8px 0; margin: 0; background: none; color: var(--text); font-weight: 500; border-radius: 0; border-bottom: 1px solid var(--muted); }
+    </style>
+  </head>
+  <body>
+    <main>
+      <a href="/" class="logo"><img src="/logo-wordmark.png" width="881" height="96" alt="__SITE_NAME__ home" style="height:18px;width:auto" /></a>
+      <small>404</small>
+      <h1>That page does not exist.</h1>
+      <p>It may have moved, or the link is mistyped. Head back to a page that does.</p>
+      <a class="btn" href="/">Back to home</a>
+      <nav aria-label="Pages" class="pages"><!--links--></nav>
+    </main>
+  </body>
+</html>

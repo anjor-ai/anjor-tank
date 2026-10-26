@@ -1,5 +1,0 @@
-# Everything is public and meant to be found.
-User-agent: *
-Allow: /
-
-Sitemap: https://anjor-portfolio.vercel.app/sitemap.xml

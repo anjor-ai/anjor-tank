@@ -1,0 +1,8 @@
+/* TEAM */
+Founder: Anjor Tank
+
+/* SITE */
+Name: Anjor Tank — product architect building ROQIVA
+Standards: HTML5, CSS3, WCAG 2.2 AA, JSON-LD (schema.org)
+Components: React, Vite, GSAP
+Contact: __SITE_URL__/contact
