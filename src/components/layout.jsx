@@ -69,7 +69,7 @@ export function Nav() {
         </nav>
         <div className="nav__right">
           <ThemeToggle />
-          <Button to="/contact#book" size="sm" className="nav__cta" track="cta_book_nav">Book a call</Button>
+          <Button to="/contact?intent=consult#brief" size="sm" className="nav__cta" track="cta_consult_nav">Let's talk <Arrow /></Button>
           <button type="button" ref={btn} className="icon-btn nav__burger" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen((o) => !o)}>
             <span className={`burger${open ? ' is-open' : ''}`} aria-hidden><i /><i /></span>
           </button>
@@ -82,7 +82,7 @@ export function Nav() {
               <span className="label">0{i + 1}</span>{r.label}
             </a>
           ))}
-          <Button to="/contact#book" className="mmenu__cta" track="cta_book_menu">Book a call<Arrow /></Button>
+          <Button to="/contact?intent=consult#brief" className="mmenu__cta" track="cta_consult_menu">Discuss a project<Arrow /></Button>
         </nav>
       </div>
     </header>

@@ -17,7 +17,7 @@ export const home = {
   hello: {
     greeting: ['Hello', 'नमस्ते', 'હેલો'],
     title: 'I’m Anjor. I fix *revenue leaks* between systems.',
-    lead: 'Product manager at GNC India. Founder of ROQIVA, the system I am building to do it for everyone.',
+    lead: 'Product manager at GNC India. I work across ecommerce, growth, internal products and the systems behind a great customer experience.',
     primary: { label: 'See my work', to: '#work' },
     secondary: { label: 'Say hello', to: '/contact' },
     facts: [['Now', 'Product Manager, GNC India'], ['Building', 'ROQIVA, in development'], ['Before', 'Product Manager, Truemeds']],
@@ -72,7 +72,7 @@ export const work = {
   hero: {
     eyebrow: 'Proof · Work',
     title: 'Six systems *I owned end to end.*',
-    lead: 'Payments, growth, search, AI and operations at a Series C online pharmacy.',
+    lead: 'Each project starts with a customer or business problem, moves through real decisions and operating logic, and ends with a measurable result.',
     facts: ['Truemeds · Dec 2023 – Jul 2026', 'Two pods · 12 engineers', 'Five systems built 0-to-1'],
   },
 }
@@ -130,7 +130,7 @@ export const beyond = {
   hero: {
     eyebrow: 'Person · Beyond work',
     title: 'Meet the person *behind the work.*',
-    lead: 'Karts, loud rooms, back roads and a good meal.',
+    lead: 'I’m usually chasing a better lap, finding the longer route, listening to something loud or exploring a place I have never been.',
   },
   groups: ['All', 'Wander', 'Speed', 'Live'],
 }
@@ -139,13 +139,13 @@ export const beyond = {
 export const hire = {
   hero: {
     eyebrow: 'Hire me',
-    title: 'Three ways *to work with me.*',
-    lead: 'As a product manager on your team. As a consultant on your revenue leaks. Or alongside ROQIVA, the system I am building.',
-    primary: { label: 'Start a conversation', to: '/contact?intent=job#brief' },
+    title: 'Find the leak. *Build what fixes it.*',
+    lead: 'Product-led consulting for growth, conversion and operational bottlenecks. I also work in product teams, and I am founding ROQIVA.',
+    primary: { label: 'Discuss consulting', to: '/contact?intent=consult#brief' },
     secondary: { label: 'LinkedIn', href: site.linkedin },
     ways: [
-      { n: '01', t: 'Join your team', d: 'Growth, payments, platform or AI product.', to: '#fit' },
-      { n: '02', t: 'Consult', d: 'GTM engineering and RevOps, from audit to running system.', to: '#system' },
+      { n: '01', t: 'Consult', d: 'CRO, GTM engineering and RevOps — from diagnosis to system.', to: '#system' },
+      { n: '02', t: 'Join your team', d: 'Growth, payments, platform or AI product.', to: '#fit' },
       { n: '03', t: 'Build with ROQIVA', d: 'Follow it, or help shape what it does first.', to: '#roqiva' },
     ],
     where: 'India, or remote with global teams.',
@@ -164,8 +164,8 @@ export const hire = {
 export const contactPage = {
   hero: {
     eyebrow: 'Talk',
-    title: 'Bring one problem. *Leave with a clearer next step.*',
-    lead: 'A role, a GTM or RevOps engagement, or ROQIVA. I reply myself, usually within two working days.',
+    title: 'Tell me what is stuck. *Let’s build the next step.*',
+    lead: 'A growth bottleneck, a conversion problem, a product role, or a thought on ROQIVA. I reply myself, usually within two working days.',
   },
   trust: 'No production access is needed to talk. Anything later is scoped to the exports you approve.',
   book: {

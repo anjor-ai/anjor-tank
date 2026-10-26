@@ -318,7 +318,7 @@ export default function Contact() {
   const h = P.hero
   return (
     <PageMotion routeKey="/contact">
-      <PageHero eyebrow={h.eyebrow} title={h.title} lead={h.lead} visual={<BookCalendar />} visualLive>
+      <PageHero variant="contact" eyebrow={h.eyebrow} title={h.title} lead={h.lead} visual={<BookCalendar />} visualLive>
         <ul className="direct hero__a" style={{ '--i': 3 }}>
           <li><span className="label">Email</span><a href={`mailto:${site.email}`}>{site.email}</a></li>
           <li><span className="label">LinkedIn</span><a href={site.linkedin} target="_blank" rel="noopener noreferrer">anjor-tank ↗</a></li>

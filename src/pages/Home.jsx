@@ -1,67 +1,53 @@
 import { useState } from 'react'
-import { CASES, LAYERS, home } from '../content'
+import { CASES, home } from '../content'
 import { Arrow, Button, Cta, Head, LinkArrow, Rich, Section } from '../components/ui'
-import { CaseCard, CaseModal, HelloCard, RoqivaFounder, WhereIFit } from '../components/folio'
-import { Kinetic, LayerStack, Stat, WorkRing } from '../components/kinetic'
-import { SystemRail } from '../components/system'
+import { CaseCard, CaseModal, RoqivaFounder } from '../components/folio'
+import { WorkRing } from '../components/kinetic'
+import { ProductDesk, DecisionLab, JourneyRibbon, ConsultingPanel, LifePreview } from '../components/Editorial'
 import { PageMotion } from '../lib/PageMotion'
 
-/* Home: hello with the proof, the work as a ring of illustrated cases (each opens a quick view), the layers I build on,
-   the one system from client leak to ROQIVA, the founder band, where I fit. */
+/* Person → evidence → method → journey → consulting → founding → personality.
+   The illustrated work ring and its quick-view modal are deliberately preserved. */
 export default function Home() {
   const h = home.hello
   const [open, setOpen] = useState('')
   return (
     <PageMotion routeKey="/">
-      <header className="hero hero--hello">
-        <div className="container hero__in">
-          <div className="hero__copy">
-            <p className="label eyebrow hero__a" style={{ '--i': 0 }}>Hello · Anjor Tank · Mumbai</p>
+      <header className="ed-homehero">
+        <div className="container">
+          <div className="ed-homehero__copy">
+            <p className="ed-homehero__crumb hero__a" style={{ '--i': 0 }}><span className="ed-dot" /><span className="label">ANJOR TANK · PRODUCT MANAGER · MUMBAI</span></p>
             <h1 className="h-hero hero__a" style={{ '--i': 1 }}><Rich text={h.title} /></h1>
-            <p className="lead hero__a" style={{ '--i': 2 }}>{h.lead}</p>
+            <p className="lead hero__a" style={{ '--i': 2 }}>I design consumer experiences, build the operational systems behind them, and measure what moves. Currently Product Manager at GNC India, founder of ROQIVA, and available for selective consulting.</p>
             <div className="hero__btns hero__a" style={{ '--i': 3 }}>
-              <Button to={h.primary.to} track="cta_work_hero">{h.primary.label}<Arrow /></Button>
-              <Button to={h.secondary.to} variant="ghost">{h.secondary.label}</Button>
+              <Button to="/contact?intent=consult#brief" track="cta_consult_home">Discuss a project <Arrow /></Button>
+              <Button to="#work" variant="ghost">Explore the work</Button>
             </div>
-            <ul className="hpr hero__a" style={{ '--i': 4 }} aria-label="Results">
-              {h.proof.map(([v, l]) => <li key={l}><Stat v={v} /><span>{l}</span></li>)}
-            </ul>
-            <ul className="htg hero__a" style={{ '--i': 5 }} aria-label="What I work on">
-              {h.tags.map((t, k) => <li key={t} style={{ '--k': k }}>{t}</li>)}
-            </ul>
+            <div className="ed-homehero__trail hero__a" style={{ '--i': 4 }} aria-label="Product areas"><span>ECOMMERCE & GROWTH</span><span>PLATFORM & OPERATIONS</span><span>AI & AUTOMATION</span></div>
           </div>
-          <div className="hero__app hero__a" style={{ '--i': 3 }}><HelloCard /></div>
+          <div className="ed-homehero__desk hero__a" style={{ '--i': 5 }}><ProductDesk /></div>
+          <p className="ed-homehero__caption">SELECT AN AREA ABOVE TO SEE A REAL PRODUCT DECISION AND ITS OUTCOME.</p>
         </div>
       </header>
 
-      <Kinetic rows={home.band} />
-
-      <Section id="work">
-        <Head scrub eyebrow={home.work.eyebrow} title={home.work.title} />
+      <Section id="work" className="ed-work">
+        <Head eyebrow="SELECTED WORK / EVIDENCE" title="Not just features. *Products that changed the outcome.*" lead="Six detailed stories behind measurable results. Explore the illustrated cards, open a quick view, or dive into the system design." />
         <WorkRing label="Selected work" items={CASES} render={(c) => <CaseCard c={c} onOpen={setOpen} />} />
-        <p className="more" data-reveal><LinkArrow to={home.work.link[1]}>{home.work.link[0]}</LinkArrow></p>
+        <p className="more" data-reveal><LinkArrow to="/work">Explore all six case studies</LinkArrow></p>
         {open && <CaseModal slug={open} setSlug={setOpen} onClose={() => setOpen('')} />}
       </Section>
 
-      <Section id="layers" tone="alt">
-        <Head eyebrow={home.layers.eyebrow} title={home.layers.title} lead={home.layers.lead} />
-        <LayerStack layers={LAYERS} label="The four layers I build on" />
-      </Section>
+      <Section id="method" tone="alt"><DecisionLab /></Section>
 
-      <Section id="system">
-        <Head eyebrow={home.system.eyebrow} title={home.system.title} lead={home.system.lead} />
-        <SystemRail />
-      </Section>
+      <Section id="journey"><JourneyRibbon /></Section>
+
+      <Section id="consulting" tone="alt"><ConsultingPanel /></Section>
 
       <Section id="roqiva" tone="band"><RoqivaFounder /></Section>
 
-      <Section id="fit" tone="alt">
-        <Head eyebrow={home.fit.eyebrow} title={home.fit.title} />
-        <WhereIFit />
-        <p className="more" data-reveal><LinkArrow to={home.fit.link[1]}>{home.fit.link[0]}</LinkArrow></p>
-      </Section>
+      <Section id="beyond"><LifePreview /></Section>
 
-      <Cta {...home.cta} />
+      <Cta title="Bring a difficult problem. *Let's work out what moves it.*" lead="Consulting is the main door in. And if you are building a great product team, I am always open to the right conversation." primary={{label:'Discuss consulting',to:'/contact?intent=consult#brief'}} secondary={{label:'Talk about a product role',to:'/contact?intent=job#brief'}} />
     </PageMotion>
   )
 }

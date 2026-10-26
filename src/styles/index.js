@@ -14,3 +14,5 @@ import './roqiva.css'
 import './art.css'
 import './portfolio.css'
 import './motion.css'
+
+import './editorial.css'

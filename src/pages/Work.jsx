@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { CASES, TAGS, work as P } from '../content'
 import { Cta, PageHero, Section } from '../components/ui'
 import { CaseCard } from '../components/folio'
+import { WorkHeroVisual } from '../components/Editorial'
 import { PageMotion } from '../lib/PageMotion'
 
 /* Work: seven cases, filterable. Each card opens its full case. */
@@ -10,7 +11,7 @@ export default function Work() {
   const list = CASES.filter((c) => tag === 'All' || c.tag === tag)
   return (
     <PageMotion routeKey="/work">
-      <PageHero eyebrow={P.hero.eyebrow} title={P.hero.title} lead={P.hero.lead}>
+      <PageHero variant="work" eyebrow={P.hero.eyebrow} title={P.hero.title} lead={P.hero.lead} visual={<WorkHeroVisual />}>
         <ul className="hero__facts label hero__a" style={{ '--i': 3 }}>{P.hero.facts.map((f) => <li key={f}>{f}</li>)}</ul>
       </PageHero>
       <Section id="cases" rule={false}>

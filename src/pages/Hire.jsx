@@ -1,6 +1,7 @@
 import { TOOLS, consulting as C, hire as P } from '../content'
 import { Arrow, Button, Cta, Head, PageHero, Section } from '../components/ui'
 import { RoqivaFounder, WhereIFit } from '../components/folio'
+import { HireHeroVisual } from '../components/Editorial'
 import { Leaks, Phases } from '../components/gtm'
 import { SystemStory } from '../components/system'
 import { Kinetic } from '../components/kinetic'
@@ -12,7 +13,7 @@ export default function Hire() {
   const h = P.hero
   return (
     <PageMotion routeKey="/hire">
-      <PageHero eyebrow={h.eyebrow} title={h.title} lead={h.lead}>
+      <PageHero variant="hire" eyebrow={h.eyebrow} title={h.title} lead={h.lead} visual={<HireHeroVisual />}>
         <div className="hero__btns hero__a" style={{ '--i': 3 }}>
           <Button to={h.primary.to} track="cta_hire_hero">{h.primary.label}<Arrow /></Button>
           <Button href={h.secondary.href} variant="ghost">{h.secondary.label} ↗</Button>

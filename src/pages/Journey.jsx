@@ -39,7 +39,7 @@ export default function Journey() {
   }))
   return (
     <PageMotion routeKey="/journey">
-      <PageHero eyebrow={P.hero.eyebrow} title={P.hero.title} lead={P.hero.lead}
+      <PageHero variant="journey" eyebrow={P.hero.eyebrow} title={P.hero.title} lead={P.hero.lead}
         visual={<figure className="portrait"><img src="/img/anjor.webp" width="447" height="721" alt="Anjor Tank" decoding="async" /></figure>} visualLive />
 
       <Section id="chapters" rule={false}>

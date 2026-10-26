@@ -20,6 +20,10 @@ export function PageMotion({ routeKey, children }) {
       gsap.utils.toArray('[data-grow]', ref.current).forEach((el) => {
         gsap.fromTo(el, { scale: 0.93 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: el, start: 'top bottom', end: 'top 40%', scrub: 0.5 } })
       })
+      // A subtle depth shift on editorial graphics; scoped and disabled for reduced motion.
+      gsap.utils.toArray('[data-editorial-drift]', ref.current).forEach((el) => {
+        gsap.fromTo(el, { y: 14 }, { y: -14, ease: 'none', scrollTrigger: { trigger: el, start: 'top bottom', end: 'bottom top', scrub: 1 } })
+      })
       // Statements light up word by word as they cross the screen.
       gsap.utils.toArray('[data-scrub]', ref.current).forEach((h) => {
         gsap.fromTo(h.querySelectorAll('.sw-w'), { opacity: 0.16 }, { opacity: 1, ease: 'none', stagger: 0.08, scrollTrigger: { trigger: h, start: 'top 88%', end: 'top 48%', scrub: 0.4 } })
