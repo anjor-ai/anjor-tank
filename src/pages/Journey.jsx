@@ -1,11 +1,12 @@
-import { BELIEFS, EDU, SKILLS, journeyPage as P } from '../content'
+import { BELIEFS, EDU, journeyPage as P } from '../content'
 import { SectionNav } from '../components/SectionNav'
 import { Cta, Head, LinkArrow, PageHero, Section } from '../components/ui'
 import { Icon } from '../components/icons'
-import { EduPath, JourneyStage, useInView } from '../components/Story'
+import { EduPath, HelloFlicker, JourneyStage, useInView } from '../components/Story'
 import { PageMotion } from '../lib/PageMotion'
 
 /* Journey: a route in three chapters. The chapter sits still on the left while its roles scroll past as boarding passes. */
+const OPEN = [['Demand', 'I · HOW DEMAND IS MADE'], ['Systems', 'II · THE SYSTEMS UNDERNEATH'], ['ROQIVA', 'III · THE SYSTEM THAT RUNS THEM']]
 const TINT = ['peach', 'sky', 'lilac']
 
 function Ticket({ r }) {
@@ -48,7 +49,7 @@ export default function Journey() {
   const nav = P.chapters.map((ch) => ({ id: `ch-${ch.k}`, label: `${ch.k} · ${ch.t}` }))
   return (
     <PageMotion routeKey="/journey">
-      <PageHero variant="journey" eyebrow={P.hero.eyebrow} title={P.hero.title} lead={P.hero.lead} visual={<JourneyStage />} visualLive />
+      <PageHero variant="journey" eyebrow={P.hero.eyebrow} title={P.hero.title} lead={P.hero.lead} visual={<JourneyStage />} visualLive opener={<HelloFlicker words={OPEN} label="Demand, systems, ROQIVA" />} />
       <SectionNav items={nav} label="Three chapters" />
 
       <Section id="chapters" rule={false}>
@@ -71,8 +72,8 @@ export default function Journey() {
       </Section>
 
       <Section id="learning">
-        <Head eyebrow="Learning" title="Where the *foundations* came from." />
-        <EduPath edu={EDU} skills={SKILLS} />
+        <Head eyebrow="Education" title="Where the *foundations* came from." />
+        <EduPath edu={EDU} />
       </Section>
 
       <Cta title="Ask me *about any of it.*" lead="Pick a chapter, a case or a role." primary={{ label: 'Start a conversation', to: '/contact#brief' }} secondary={{ label: 'Hire me', to: '/hire' }} />

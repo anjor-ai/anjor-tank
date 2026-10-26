@@ -65,11 +65,12 @@ export function Head({ eyebrow, title, lead, as: Tag = 'h2', id, scrub = false, 
 }
 
 /** Hero for every page below the home page. The entrance is CSS (.hero__a), because the intro film pauses it until it closes. */
-export function PageHero({ eyebrow, title, lead, children, visual, visualLive = false, variant = '' }) {
+export function PageHero({ eyebrow, title, lead, children, opener, visual, visualLive = false, variant = '' }) {
   return (
     <header className={`phero ph${visual ? ' phero--split' : ''}${variant ? ' phero--' + variant : ''}`}>
       <div className="container phero__in ph__in">
         <div className="phero__copy ph__copy">
+          {opener}
           {eyebrow && <p className="ph__chip hero__a" style={{ '--i': 0 }}><i aria-hidden="true" /><span className="label">{eyebrow}</span></p>}
           <h1 className="h-hero hero__a" style={{ '--i': 1 }}><Rich text={title} /></h1>
           {lead && <p className="lead hero__a" style={{ '--i': 2 }}>{lead}</p>}
