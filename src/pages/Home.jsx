@@ -3,7 +3,8 @@ import { CASES, home } from '../content'
 import { Arrow, Button, Cta, Head, LinkArrow, Rich, Section } from '../components/ui'
 import { CaseCard, CaseModal, RoqivaFounder } from '../components/folio'
 import { WorkRing } from '../components/kinetic'
-import { ProductDesk, DecisionLab, JourneyRibbon, ConsultingPanel, LifePreview } from '../components/Editorial'
+import { JourneyRibbon, ConsultingPanel, LifePreview } from '../components/Editorial'
+import { PortfolioConsole, DecisionStudio, ProofBento } from '../components/Studio'
 import { PageMotion } from '../lib/PageMotion'
 
 /* Person → evidence → method → journey → consulting → founding → personality.
@@ -25,8 +26,9 @@ export default function Home() {
             </div>
             <div className="ed-homehero__trail hero__a" style={{ '--i': 4 }} aria-label="Product areas"><span>ECOMMERCE & GROWTH</span><span>PLATFORM & OPERATIONS</span><span>AI & AUTOMATION</span></div>
           </div>
-          <div className="ed-homehero__desk hero__a" style={{ '--i': 5 }}><ProductDesk /></div>
-          <p className="ed-homehero__caption">SELECT AN AREA ABOVE TO SEE A REAL PRODUCT DECISION AND ITS OUTCOME.</p>
+          <div className="ed-homehero__desk hero__a" style={{ '--i': 5 }}><PortfolioConsole /></div>
+          <p className="ed-homehero__caption">SELECT A SYSTEM IN THE WORKSPACE TO EXPLORE AN ACTUAL PRODUCT DECISION.</p>
+          <ProofBento />
         </div>
       </header>
 
@@ -37,7 +39,7 @@ export default function Home() {
         {open && <CaseModal slug={open} setSlug={setOpen} onClose={() => setOpen('')} />}
       </Section>
 
-      <Section id="method" tone="alt"><DecisionLab /></Section>
+      <Section id="method" tone="alt"><DecisionStudio /></Section>
 
       <Section id="journey"><JourneyRibbon /></Section>
 

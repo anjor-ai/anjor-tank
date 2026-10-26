@@ -16,3 +16,4 @@ import './portfolio.css'
 import './motion.css'
 
 import './editorial.css'
+import './studio.css'
