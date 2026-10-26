@@ -52,32 +52,32 @@
 [data-theme='dark'] {
   color-scheme: dark;
   /* Dark, after claude.com and openai.com: warm near-black, ivory text, quiet borders, clay as the one accent */
-  --bg: #141413;
-  --bg-2: #1a1918;
-  --surface: #1f1e1d;
-  --surface-2: #262624;
-  --line: #30302e;
-  --line-2: #3d3d3a;
-  --text: #faf9f5;
-  --text-2: #b0aea5;
-  --text-3: #8f8d85;
+  --bg: #0b0c0f;
+  --bg-2: #101216;
+  --surface: #15171c;
+  --surface-2: #1b1e24;
+  --line: #23262d;
+  --line-2: #303540;
+  --text: #f4f3ee;
+  --text-2: #b4b7bd;
+  --text-3: #8d9199;
   --accent: #2f95ff;
   --accent-fill: #0070e0; /* AA behind white text */
   --accent-text: #4aa3ff;
   --accent-ink: #ffffff;
   --accent-soft: rgba(47, 149, 255, 0.12);
   --accent-glow: rgba(47, 149, 255, 0.26);
-  --btn-bg: #faf9f5;
-  --btn-ink: #141413;
+  --btn-bg: #f4f3ee;
+  --btn-ink: #0b0c0f;
   --ok: #3ed598;
   --warn: #ff6b5a;
   --amber: #f2b84b;
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 12px 32px rgba(0, 0, 0, 0.4);
-  --dot: rgba(250, 249, 245, 0.05);
-  --nav-bg: rgba(20, 20, 19, 0.78);
-  --node-bg: #1f1e1d;
-  --stage-bg: #1a1918;
-  --stage-line: #30302e;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.5), 0 18px 40px -12px rgba(0, 0, 0, 0.55);
+  --dot: rgba(244, 243, 238, 0.06);
+  --nav-bg: rgba(21, 23, 28, 0.72);
+  --node-bg: #15171c;
+  --stage-bg: #101216;
+  --stage-line: #23262d;
   --stage-glow: rgba(47, 149, 255, 0.14);
 }
 
@@ -85,33 +85,33 @@
   color-scheme: light;
   /* Light, after any.do (with elevenlabs.io and clay.com): white, true black type, neutral greys, black pill buttons,
      one blue accent #0083ff (headline accents); a deeper blue for small text so it keeps AA contrast */
-  --bg: #ffffff;
-  --bg-2: #f6f7f9;
+  --bg: #f4f3ee;
+  --bg-2: #ecebe4;
   --surface: #ffffff;
-  --surface-2: #f6f7f9;
-  --line: #e8eaee;
-  --line-2: #dde0e5;
-  --text: #000000;
-  --text-2: #565b63;
-  --text-3: #6b7079;
+  --surface-2: #f8f7f3;
+  --line: #e4e2da;
+  --line-2: #d3d1c6;
+  --text: #0b0c0f;
+  --text-2: #4a4f57;
+  --text-3: #626872;
   --accent: #0083ff;
   --accent-fill: #0070e0; /* AA behind white text */
-  --accent-text: #0072e5;
+  --accent-text: #005fc7;
   --accent-head: #0083ff;
   --accent-ink: #ffffff;
   --accent-soft: rgba(0, 131, 255, 0.08);
   --accent-glow: rgba(0, 131, 255, 0.18);
-  --btn-bg: #000000;
+  --btn-bg: #0b0c0f;
   --btn-ink: #ffffff;
   --ok: #1a7651;
   --warn: #ce1500;
   --amber: #9a6a00;
-  --shadow: 0 1px 2px rgba(0, 0, 0, 0.04), 0 12px 32px rgba(0, 0, 0, 0.06);
-  --dot: rgba(0, 0, 0, 0.06);
-  --nav-bg: rgba(255, 255, 255, 0.8);
+  --shadow: 0 1px 2px rgba(20, 20, 10, 0.04), 0 18px 40px -14px rgba(20, 20, 10, 0.12);
+  --dot: rgba(11, 12, 15, 0.07);
+  --nav-bg: rgba(255, 255, 255, 0.74);
   --node-bg: #ffffff;
-  --stage-bg: #f6f7f9;
-  --stage-line: #e8eaee;
+  --stage-bg: #ecebe4;
+  --stage-line: #e4e2da;
   --stage-glow: rgba(0, 131, 255, 0.08);
 }
 
@@ -120,3 +120,12 @@
    One colour per kind of actor: code is mint, an agent is sky, a person is the brand violet. */
 [data-theme='dark'] { --k-code: #3ed598; --k-agent: #a594ff; --k-person: #4aa3ff; --st-sky: #49b6ff; --st-grey: #8a8a92; --st-amber: #f2b84b; --st-ok: #3ed598; }
 [data-theme='light'] { --k-code: #1a7651; --k-agent: #6a4fd8; --k-person: #0072e5; --st-sky: #0a6aa8; --st-grey: #5e6068; --st-amber: #9a6a00; --st-ok: #1a7651; }
+
+/* ───────── Tinted panels: one soft colour per surface, used by cards, bento tiles and case sections. Same five hues in both themes. ─────────
+   --t-*  the panel fill · --ts-*  the same hue, stronger, for numerals, dots and rules · --tg  the warm gradient tile (orange) */
+[data-theme='light'] { --t-peach: #fde4d4; --t-lilac: #e7e4fc; --t-mint: #d9f1e5; --t-sky: #dbecfc; --t-butter: #fbf0c8;
+  --ts-peach: #f0a67a; --ts-lilac: #9a8cf0; --ts-mint: #5cc79a; --ts-sky: #5aa9f0; --ts-butter: #e6c04a;
+  --tg: linear-gradient(150deg, #ff9a62, #f2542d 70%); --tg-ink: #ffffff; --mesh-a: #ffd9c2; --mesh-b: #d9d2ff; --mesh-c: #cfe8ff; }
+[data-theme='dark'] { --t-peach: #2a1c15; --t-lilac: #1d1c34; --t-mint: #112620; --t-sky: #12202f; --t-butter: #292411;
+  --ts-peach: #e08a5c; --ts-lilac: #8d7cf0; --ts-mint: #46b88a; --ts-sky: #4a9ae8; --ts-butter: #d4ad3a;
+  --tg: linear-gradient(150deg, #e0622f, #b02a14 75%); --tg-ink: #ffffff; --mesh-a: #3a2116; --mesh-b: #24214a; --mesh-c: #123050; }

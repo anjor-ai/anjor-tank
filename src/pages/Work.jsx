@@ -17,7 +17,7 @@ export default function Work() {
         <div className="chips-row" role="group" aria-label="Filter cases" data-reveal>
           {TAGS.map((t) => <button key={t} type="button" className="chip" aria-pressed={tag === t} onClick={() => setTag(t)}>{t}</button>)}
         </div>
-        <ul className="cgrid cgrid--3" aria-live="polite">{list.map((c) => <CaseCard key={c.slug} c={c} />)}</ul>
+        <ul className={`cgrid cgrid--3${tag === 'All' ? ' cgrid--bento' : ''}`} aria-live="polite">{list.map((c) => <CaseCard key={c.slug} c={c} />)}</ul>
       </Section>
       <Cta title="Want this *done on your system?*" lead="Tell me the number that will not move." primary={{ label: 'Send a brief', to: '/contact?intent=consult#brief' }} secondary={{ label: 'Hire me', to: '/hire' }} />
     </PageMotion>

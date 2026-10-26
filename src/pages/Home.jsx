@@ -23,14 +23,16 @@ export default function Home() {
               <Button to={h.primary.to} track="cta_work_hero">{h.primary.label}<Arrow /></Button>
               <Button to={h.secondary.to} variant="ghost">{h.secondary.label}</Button>
             </div>
-            <ul className="hpr hero__a" style={{ '--i': 4 }} aria-label="Results">
-              {h.proof.map(([v, l]) => <li key={l}><Stat v={v} /><span>{l}</span></li>)}
-            </ul>
-            <ul className="htg hero__a" style={{ '--i': 5 }} aria-label="What I work on">
+            <ul className="htg hero__a" style={{ '--i': 4 }} aria-label="What I work on">
               {h.tags.map((t, k) => <li key={t} style={{ '--k': k }}>{t}</li>)}
             </ul>
           </div>
-          <div className="hero__app hero__a" style={{ '--i': 3 }}><HelloCard /></div>
+          <div className="hero__app hero__a" style={{ '--i': 3 }}><div className="hstage"><HelloCard /></div></div>
+        </div>
+        <div className="container">
+          <ul className="hpr hero__a" style={{ '--i': 5 }} aria-label="Results">
+            {h.proof.map(([v, l]) => <li key={l}><Stat v={v} /><span>{l}</span></li>)}
+          </ul>
         </div>
       </header>
 

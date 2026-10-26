@@ -81,7 +81,7 @@ export function WhereIFit({ initial = 0 }) {
 export function CaseCard({ c, onOpen }) {
   const b = bridge[c.slug]
   return (
-    <li className="ccd" data-reveal>
+    <li className={`ccd ccd--t${(parseInt(c.n, 10) - 1) % 5}`} data-reveal>
       <div className="ccd__a" onClick={onOpen ? () => onOpen(c.slug) : undefined}>
         <div className="ccd__art" aria-hidden="true"><div className="ccd__mock"><CaseMock slug={c.slug} /></div></div>
         <span className="ccd__top"><span className="ccd__n">{c.n}</span><span className="label">{c.cat}</span><span className="ccd__yr label">{c.year}</span></span>
