@@ -105,7 +105,7 @@ function Opener() {
   useEffect(() => {
     const play = () => { if (window.matchMedia(MQ.motion).matches) setOn(true) }
     try {
-      if (!window.__OI_TEST__ && !window.location.pathname.startsWith('/roqiva') && sessionStorage.getItem('at-film-v2') !== '1') {
+      if (!window.__OI_TEST__ && !/^\/(roqiva|beyond)/.test(window.location.pathname) && sessionStorage.getItem('at-film-v2') !== '1') {
         play()
         sessionStorage.setItem('at-film-v2', '1')
       }

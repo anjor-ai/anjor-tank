@@ -28,6 +28,34 @@ export function PageMotion({ routeKey, children }) {
       gsap.utils.toArray('[data-scrub]', ref.current).forEach((h) => {
         gsap.fromTo(h.querySelectorAll('.sw-w'), { opacity: 0.16 }, { opacity: 1, ease: 'none', stagger: 0.08, scrollTrigger: { trigger: h, start: 'top 88%', end: 'top 48%', scrub: 0.4 } })
       })
+      // Section titles rise out of a mask; the hairline in the label draws itself.
+      gsap.utils.toArray('.k-h, .v-feat__h, .v-cta__h', ref.current).forEach((h) => {
+        gsap.fromTo(h, { clipPath: 'inset(0% 0% 100% 0%)', y: 28 }, { clipPath: 'inset(0% 0% -20% 0%)', y: 0, duration: 1.1, ease: 'expo.out', clearProps: 'clipPath', scrollTrigger: { trigger: h, start: 'top 90%', once: true } })
+      })
+      gsap.utils.toArray('.k-rule i', ref.current).forEach((i) => {
+        gsap.fromTo(i, { scaleX: 0 }, { scaleX: 1, duration: 1.4, ease: 'expo.inOut', scrollTrigger: { trigger: i, start: 'top 92%', once: true } })
+      })
+      // Paintings drift against the scroll; the window on them settles from a slight tilt; floating cards ride at their own depth.
+      gsap.utils.toArray('[data-v-paint]', ref.current).forEach((img) => {
+        gsap.fromTo(img, { yPercent: -4 }, { yPercent: 4, ease: 'none', scrollTrigger: { trigger: img.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } })
+      })
+      gsap.utils.toArray('[data-v-win]', ref.current).forEach((w) => {
+        if (w.getBoundingClientRect().top < window.innerHeight) return // already on screen: leave it settled
+        gsap.fromTo(w, { y: 70, rotateX: 9, transformPerspective: 1400, transformOrigin: '50% 100%' }, { y: 0, rotateX: 0, ease: 'none', scrollTrigger: { trigger: w.closest('[data-v-panel]') || w, start: 'top bottom', end: 'top 45%', scrub: 0.6 } })
+      })
+      gsap.utils.toArray('[data-v-float]', ref.current).forEach((f) => {
+        const d = Number(f.dataset.vFloat) || 1
+        gsap.fromTo(f, { y: 30 * d }, { y: -18 * d, ease: 'none', scrollTrigger: { trigger: f.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } })
+      })
+      gsap.utils.toArray('[data-v-seq]', ref.current).forEach((list) => {
+        gsap.fromTo(list.children, { autoAlpha: 0, y: 14 }, { autoAlpha: 1, y: 0, duration: 0.6, stagger: 0.12, ease: 'expo.out', scrollTrigger: { trigger: list, start: 'top 88%', once: true } })
+      })
+      gsap.utils.toArray('[data-v-pop]', ref.current).forEach((el) => {
+        gsap.fromTo(el, { scale: 0.86, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.9, delay: 0.5, ease: 'back.out(1.8)', scrollTrigger: { trigger: el, start: 'top 90%', once: true } })
+      })
+      gsap.utils.toArray('[data-v-draw]', ref.current).forEach((p) => {
+        gsap.fromTo(p, { drawSVG: '0%' }, { drawSVG: '100%', duration: 1.8, delay: 0.8, ease: 'expo.inOut', scrollTrigger: { trigger: p, start: 'top 92%', once: true } })
+      })
       // Fonts, diagrams and tables settle after first paint and move everything below them: measure again.
       const fix = () => ScrollTrigger.refresh()
       document.fonts?.ready.then(fix)

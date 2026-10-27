@@ -75,6 +75,14 @@ export const ALT = {
   paddle: 'Silhouette kneeling on a paddleboard on a lake at golden hour', 'kart-night': 'A go-kart cornering under floodlights at night', rainier: 'A snow-capped mountain above a dark pine forest and a lake',
   laser: 'Teal laser beams across a dark arena above a packed crowd', 'city-detour': 'Standing outside a wood-fronted building on a city street', waterfall: 'Looking toward a waterfall over rocks and green hills',
 };
+/* Beyond work: what I read and watch. Only titles Anjor has named; add more here and the page grows with them. */
+export const SHELF = [
+  { t: 'AI Engineering', s: 'Building Applications with Foundation Models', a: 'Chip Huyen', p: 'O’Reilly' },
+];
+export const WATCHLIST = [
+  { t: 'Mobile Suit Gundam', k: 'Mecha', n: 'Franchise since 1979', art: 'orbit' },
+  { t: 'Code Geass', s: 'Lelouch of the Rebellion', k: 'Mecha', n: 'First aired 2006', art: 'wave' },
+];
 export const LOVES = [
   ['F1', 'Karts on weekends, a racing sim in between, and a strong opinion about tyre strategy.'],
   ['EDM and techno', 'Loud rooms, good sound, and lasers over a crowd.'],

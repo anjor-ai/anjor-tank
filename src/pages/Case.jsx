@@ -6,6 +6,7 @@ import { Stat } from '../components/kinetic'
 import { Architecture, Chevrons, Findings, Impact, Leakage, Lenses, Measure, Part, Playbook, Shift, Stairs, Summary } from '../components/casekit'
 import { Icon } from '../components/icons'
 import { Chip, KSection, TINTS, Tile } from '../components/kit'
+import { PAINTS, Paint } from '../components/paint'
 import { PageMotion } from '../lib/PageMotion'
 import { useRoute } from '../lib/router'
 
@@ -37,9 +38,9 @@ export default function Case() {
             <ul className="k-big">{c.metrics.map(([v, l]) => <li key={l}><b><Stat v={v} /></b><span>{l}</span></li>)}</ul>
             <ul className="k-chips">{c.chips.map((t) => <li key={t}><Chip>{t}</Chip></li>)}</ul>
           </div>
-          <Tile tint={tint} className="k-chero__vis" reveal={false}>
-            <div className="k-chero__mock"><CaseMock slug={c.slug} /></div>
-          </Tile>
+          <Paint name={PAINTS[(parseInt(c.n, 10) - 1) % PAINTS.length]} fit="bleed" className="v-chero">
+            <div className="v-chero__mock"><CaseMock slug={c.slug} /></div>
+          </Paint>
         </div>
       </header>
 

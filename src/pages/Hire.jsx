@@ -3,6 +3,7 @@ import { Button, Cta, LinkArrow } from '../components/ui'
 import { Icon } from '../components/icons'
 import { Chip, Dot, Flow, Gantt, KHead, KSection, ListTabs, StepTabs, TINTS, Tile, Win } from '../components/kit'
 import { RoqivaFounder } from '../components/folio'
+import { AppWin, Paint } from '../components/paint'
 import { PageMotion } from '../lib/PageMotion'
 
 /* Hire: what I build, how a project runs, who it fits. Every widget below is an illustration and is labelled as one. */
@@ -50,12 +51,12 @@ export default function Hire() {
             <p className="k-actions"><Button to="/contact?intent=consult#brief">Discuss a project <Icon name="arrow" size={15} /></Button><LinkArrow to="#system">Explore the system</LinkArrow></p>
             <small className="k-hhero__n"><Dot tone="ok" /> Open to the right product role, too. <a href="/contact?intent=job#brief">Let’s talk ↗</a></small>
           </div>
-          <Tile tint="peach" className="k-hhero__vis">
+          <Paint name="dusk" className="k-hhero__vis v-hhero">
             <Flow label="Signals flow into a decision layer, which produces three outputs"
               left={[{ label: 'Product', icon: 'grid' }, { label: 'CRM', icon: 'users' }, { label: 'Analytics', icon: 'chart' }]}
               hub={{ label: 'Decision layer', sub: 'rules · guardrails · holdout' }}
               right={[{ label: 'Find the leak', icon: 'search' }, { label: 'Fix the loop', icon: 'bolt' }, { label: 'Prove the lift', icon: 'check' }]} />
-          </Tile>
+          </Paint>
         </div>
       </header>
 
@@ -90,10 +91,13 @@ export default function Hire() {
               </div>
             )}
           </StepTabs></Tile>
-          <Tile tint="butter" className="k-c5 k-proc__g">
-            <Gantt rows={rows} from={0} to={12} ticks={[0, 3, 6, 9, 12]} labelW={112} caption="Project phases across twelve weeks" />
-            <p className="k-cap">Weeks from kickoff</p>
-          </Tile>
+          <div className="k-c5" data-reveal>
+            <Paint name="noon" className="v-road k-proc__g">
+              <AppWin title="Twelve weeks" tag="Weeks from kickoff">
+                <Gantt rows={rows} from={0} to={12} ticks={[0, 3, 6, 9, 12]} labelW={112} caption="Project phases across twelve weeks" />
+              </AppWin>
+            </Paint>
+          </div>
         </div>
       </KSection>
 

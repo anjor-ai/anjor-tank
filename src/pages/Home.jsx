@@ -2,9 +2,9 @@ import { useState } from 'react'
 import { home as content } from '../content'
 import { Arrow, Button, Cta, LinkArrow, Rich, Section } from '../components/ui'
 import { CaseModal, RoqivaFounder } from '../components/folio'
-import { HomeWorkbench } from '../components/NextHome'
 import { KHead, KSection } from '../components/kit'
-import { BeyondDoors, CareerSection, ConsultSection, ThinkingSection, WorkBento } from '../components/sections'
+import { CareerSection, ConsultSection, ThinkingSection } from '../components/sections'
+import { BeyondBand, CaseShowcase, HeroTrace } from '../components/v4'
 import { PageMotion } from '../lib/PageMotion'
 
 export default function Home() {
@@ -17,13 +17,13 @@ export default function Home() {
     <p>I design consumer experiences, build the systems behind them, and measure what moves. Currently at GNC India, founding ROQIVA, and open to selective consulting.</p>
     <div className="atelier-actions"><Button to="/contact?intent=consult#brief" track="cta_consult_home">Discuss a project <Arrow/></Button><LinkArrow to="#work">Explore the work</LinkArrow></div><button className="replay-film" type="button" onClick={()=>window.dispatchEvent(new Event('replay-site-film'))}>▷ Replay the opening film</button>
    </div>
-   <HomeWorkbench/>
+   <HeroTrace/>
    <div className="atelier-experience"><span>Experience across</span><b>Truemeds</b><b>GNC India</b><b>Neil Patel Digital</b><span>Commerce · Growth · Operations</span></div>
   </div></header>
 
   <KSection id="work">
    <KHead n="01" label="Selected work" tag="Six systems" title="Not just features." sub="Products that changed the outcome." lead="Six detailed stories behind measurable results. Open a quick view, or dive into the system design." />
-   <WorkBento onOpen={setOpen} />
+   <CaseShowcase onOpen={setOpen} />
    <p className="k-more" data-reveal><LinkArrow to="/work">Explore all six case studies</LinkArrow></p>
    {open && <CaseModal slug={open} setSlug={setOpen} onClose={()=>setOpen('')}/>}
   </KSection>
@@ -32,7 +32,7 @@ export default function Home() {
   <CareerSection/>
   <ConsultSection/>
   <Section id="roqiva" tone="band"><RoqivaFounder/></Section>
-  <BeyondDoors/>
+  <BeyondBand/>
 
   <Cta title="Bring a difficult problem. *Let's work out what moves it.*" lead="Consulting is the main door in. And if you are building a great product team, I am always open to the right conversation." primary={{label:'Discuss consulting',to:'/contact?intent=consult#brief'}} secondary={{label:'Talk about a product role',to:'/contact?intent=job#brief'}}/>
  </PageMotion>

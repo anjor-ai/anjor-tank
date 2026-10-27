@@ -4,6 +4,7 @@ import { Icon } from '../components/icons'
 import { AsciiArt } from '../art/AsciiArt'
 import { Chip, Dot, Gantt, KHead, KSection, TINTS, Tile, Win } from '../components/kit'
 import { CAREER_ROWS, NOW } from '../components/sections'
+import { AppWin, Paint } from '../components/paint'
 import { PageMotion } from '../lib/PageMotion'
 
 /* Journey: where I started, what each role added, and what the work taught me. One roadmap, three chapters, the principles, the foundations. */
@@ -104,9 +105,13 @@ export default function Journey() {
 
       <KSection id="timeline" tone="soft">
         <KHead n="01" label="A widening field of view" tag="2018 to now" title="Each role adds" sub="another dimension." lead="Demand. Product. Systems. Founding. Learning and work on one timeline." />
-        <Tile className="k-road" reveal>
-          <Gantt rows={ROWS} from={2018} to={2027} ticks={[2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027]} now={NOW} labelW={190} caption="Learning and work on one timeline, 2018 to now" />
-        </Tile>
+        <div data-reveal>
+          <Paint name="meadow" className="v-road v-road--wide">
+            <AppWin title="Learning and work · one timeline" tag="2018 to now">
+              <Gantt rows={ROWS} from={2018} to={2027} ticks={[2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027]} now={NOW} labelW={190} caption="Learning and work on one timeline, 2018 to now" />
+            </AppWin>
+          </Paint>
+        </div>
       </KSection>
 
       <KSection id="chapters">

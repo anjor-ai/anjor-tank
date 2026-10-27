@@ -1,6 +1,7 @@
 import { useId, useState } from 'react'
 import { actors, status as statusMap, site } from '../content'
 import { Icon } from './icons'
+import { AppWin, Paint } from './paint'
 
 /** The site logo: the name in the display face, in the text colour of the theme. */
 export function Wordmark() {
@@ -160,18 +161,33 @@ export function Disclosure({ summary, children, open = false }) {
 }
 
 /** Closing call to action used at the foot of every page. */
+/* ───────────── The closing panel used on every page ───────────── */
 export function Cta({ title, lead, primary, secondary, badges }) {
   return (
-    <Section tone="alt" className="cta">
-      <div className="cta__in" data-reveal>
-        <h2 className="h-2"><Rich text={title} /></h2>
-        {lead && <p className="lead">{lead}</p>}
-        <div className="cta__btns">
-          <Button to={primary.to} track={`cta_${primary.to.replace(/\W+/g, '_')}`}>{primary.label}<Arrow /></Button>
-          {secondary && <Button to={secondary.to} variant="ghost">{secondary.label}</Button>}
+    <section className="v-cta-sec">
+      <div className="container">
+        <div className="v-cta" data-reveal>
+          <div className="v-cta__copy">
+            <h2 className="v-cta__h"><Rich text={title} /></h2>
+            {lead && <p>{lead}</p>}
+            <div className="v-cta__btns">
+              <Button to={primary.to} track={`cta_${primary.to.replace(/\W+/g, '_')}`}>{primary.label}<Arrow /></Button>
+              {secondary && <Button to={secondary.to} variant="ghost">{secondary.label}</Button>}
+            </div>
+            {badges && <ul className="v-cta__badges">{badges.map((b) => <li key={b}>{b}</li>)}</ul>}
+          </div>
+          <Paint name="meadow" fit="bleed" className="v-cta__paint">
+            <AppWin title="New brief" tag="Takes two minutes" className="v-cta__win">
+              <div className="v-brief" aria-hidden="true">
+                <p className="v-brief__f"><small>What should move</small><span>Prepaid conversion<i className="v-caret" /></span></p>
+                <p className="v-brief__f"><small>Where it leaks</small><span className="is-chips"><em>Checkout</em><em>Payments</em><em>Fulfilment</em></span></p>
+                <p className="v-brief__f"><small>Tools involved</small><span className="is-chips"><em>Shopify</em><em>CleverTap</em><em>Mixpanel</em></span></p>
+                <span className="v-brief__send">Send brief <Icon name="arrow" size={13} /></span>
+              </div>
+            </AppWin>
+          </Paint>
         </div>
-        {badges && <ul className="cta__badges label">{badges.map((b) => <li key={b}>{b}</li>)}</ul>}
       </div>
-    </Section>
+    </section>
   )
 }
