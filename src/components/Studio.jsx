@@ -11,7 +11,7 @@ const cases = [
     tag: 'PAYMENTS / CUSTOMER TRUST', signal: 'A customer commits to an order, but the final price might still change.',
     decision: 'Make payment and price commitment feel predictable.', result: '+12.5pp',
     resultLabel: 'prepaid order-to-delivery conversion',
-    secondary: '−1.9% RTO', before: 'Price uncertainty', after: 'Price Lock + payment clarity',
+    secondary: '−1.9pp RTO', before: 'Price uncertainty', after: 'Price Lock + payment clarity',
     palette: 'blue'
   },
   {

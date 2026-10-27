@@ -1,5 +1,5 @@
 /* Portfolio visual system v3
-   Matches Meshhetu's Space Grotesk/IBM Plex Sans/IBM Plex Mono, black/white
+   Matches the site's Space Grotesk/IBM Plex Sans/IBM Plex Mono, black/white
    surfaces and electric-blue accent. Colorful stages are contained illustrations.
    Every module is static-first, responsive and reduced-motion aware. */
 
@@ -112,7 +112,7 @@
 .ccd__a:hover .ccd__mock{transform:scale(.59)}
 .ccd__a .ccd__acts{margin-top:auto}
 
-/* Visual, actionable decision diagram: patterned after Meshhetu's animated system windows. */
+/* Visual, actionable decision diagram: animated system windows. */
 .st-method{display:grid;grid-template-columns:minmax(0,.72fr) minmax(0,1.28fr);gap:clamp(24px,4vw,60px);align-items:center}
 .st-method__copy{max-width:430px}
 .st-method__copy .h-2{margin:13px 0}

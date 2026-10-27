@@ -27,3 +27,4 @@ import './atelier.css'
 import './impact.css'
 
 import './composition.css'
+import './kit.css'

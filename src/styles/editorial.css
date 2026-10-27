@@ -1,5 +1,5 @@
 /* The editorial layer: asymmetric story composition, product-led interactivity, accessible motion.
-   Uses existing Space Grotesk / IBM typography and the Meshhetu blue family. */
+   Uses existing Space Grotesk / IBM typography. */
 .ed-micro {font:500 10px/1.5 var(--font-mono);letter-spacing:.13em;text-transform:uppercase;color:var(--text-3)}
 .ed-dot{width:8px;height:8px;border-radius:50%;display:inline-block;background:#58dccc;box-shadow:0 0 0 4px rgba(88,220,204,.12);flex:none}
 .ed-homehero {padding:clamp(58px,8vw,100px) 0 36px;position:relative;overflow:hidden;isolation:isolate}

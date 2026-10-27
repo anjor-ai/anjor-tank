@@ -11,12 +11,12 @@ export const CASES = [
     title: 'Checkout redesign and Price Lock',
     line: 'A checkout flow became a trust, payment and fulfilment system.',
     hook: 'The customer had already decided to buy. The checkout still gave them reasons to doubt the order, and the doubt showed up later as cancellations and RTO.',
-    metrics: [['+12.5pp', 'Prepaid conversion'], ['−1.9%', 'RTO'], ['−3.3%', 'Cancellations']],
+    metrics: [['+12.5pp', 'Prepaid conversion'], ['−1.9pp', 'RTO'], ['−3.3pp', 'Cancellations']],
     chips: ['Payments', 'Price certainty', 'Fulfilment'],
     quick: {
       problem: 'Price uncertainty, hidden payment options and unclear commitment cues made prepaid hard and cancellations likely after intent already existed.',
       call: 'Treat checkout as a conversion operating layer: confirm the price, lock it, surface prepaid at the right moment, and hand clean orders to operations.',
-      result: 'Prepaid order-to-delivery rose 77.2 → 89.7% (+12.5pp), with RTO down 1.9% and cancellations down 3.3%.',
+      result: 'Prepaid order-to-delivery rose 77.2 → 89.7% (+12.5pp), with RTO down 1.9pp and cancellations down 3.3pp.',
     },
     summary: {
       head: 'A checkout redesign that treated payment intent as a system, not a screen.',
@@ -108,7 +108,7 @@ export const CASES = [
     impact: {
       head: 'Stronger prepaid adoption with lower downstream leakage.',
       lead: 'The project improved both conversion and operational quality.',
-      rows: [['77.2 → 89.7%', 'Prepaid order-to-delivery', '+12.5pp'], ['RTO', 'Lower return-to-origin leakage', '−1.9%'], ['Cancellations', 'Lower customer cancellation risk', '−3.3%']],
+      rows: [['77.2 → 89.7%', 'Prepaid order-to-delivery', '+12.5pp'], ['RTO', 'Lower return-to-origin leakage', '−1.9pp'], ['Cancellations', 'Lower customer cancellation risk', '−3.3pp']],
       proves: 'Checkout is one of the highest-leverage product surfaces in ecommerce. It sits where intent, trust, payment and fulfilment meet.',
       drove: [['Price Lock', 'Core mechanism', 'Trust and pricing certainty']],
     },

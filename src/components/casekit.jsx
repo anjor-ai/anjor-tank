@@ -1,106 +1,117 @@
-import { useRef } from 'react'
-import { gsap, MQ, useGSAP } from '../lib/motion'
+import { Icon } from './icons'
 import { Stat } from './kinetic'
-import { Arrow, Rich } from './ui'
+import { Arrow } from './ui'
+import { Chip, KHead, StepTabs, TINTS, Tile, Timeline, Win, pad } from './kit'
 
-/* The visual parts of a case study. Each part of the PDF is drawn as a diagram, not set as text:
-   problem → four cards · diagnosis → four findings · shift → six stages on a line · architecture → six parts
-   workflow → chevrons · requirements → four lenses · measurement → one number and its guardrails · rollout → stairs · impact → numbers. */
+/* The eleven parts of a case study, each drawn as a small product window or a bento rather than set as text:
+   problem → a leak log · diagnosis → an investigation timeline · shift → six step tabs · architecture → six tiles
+   workflow → a pipeline · requirements → four lenses · measurement → one number and its guardrails · rollout → stairs · impact → numbers. */
 
-const pad = (n) => String(n).padStart(2, '0')
-
-/** Section head used by every part: the part number, its name, the PDF's headline, and one line under it. */
-export function Part({ id, n, name, head, lead, children }) {
+/** Section head used by every part: the part number, its name, the PDF's headline and the line under it. */
+export function Part({ n, name, head, lead, children }) {
   return (
-    <div id={id} className="cz">
-      <header className="cz__h" data-reveal>
-        <p className="label cz__k"><span>{pad(n)}</span>{name}</p>
-        <h2 className="h-2">{head}</h2>
-        {lead && <p className="lead">{lead}</p>}
-      </header>
+    <>
+      <KHead n={pad(n)} label={name} title={head} lead={lead} />
       {children}
+    </>
+  )
+}
+
+/** Summary: the one number, then the four facts, with the role beside them. */
+export function Summary({ S, g, tint }) {
+  return (
+    <div className="k-bento k-bento--sum">
+      <Tile tint={tint} className="k-c8 k-sum__m">
+        <p className="k-tile__k"><span>Primary business metric</span></p>
+        <h3>{S.metric}</h3>
+      </Tile>
+      <Tile className="k-c4 k-r2 k-glance">
+        <p className="k-tile__k"><span>At a glance</span></p>
+        <dl>
+          <div><dt>My role</dt><dd>{g.role}</dd></div>
+          <div><dt>Worked with</dt><dd>{g.team}</dd></div>
+          <div><dt>Built on</dt><dd><ul className="k-chips">{g.stack.map((x) => <li key={x}><Chip>{x}</Chip></li>)}</ul></dd></div>
+        </dl>
+      </Tile>
+      {[['Product surface', S.surface], ['System built', S.system]].map(([k, v]) => <Tile key={k} className="k-c4"><p className="k-tile__k"><span>{k}</span></p><p className="k-fact">{v}</p></Tile>)}
+      <Tile tint="soft" className="k-c8"><p className="k-tile__k"><span>Why it matters</span></p><p className="k-fact">{S.why}</p></Tile>
     </div>
   )
 }
 
-/** Problem: four leaks, each with a large faint numeral. */
+/** Problem: a leak log. */
 export function Leakage({ items }) {
   return (
-    <ul className="czq">
-      {items.map((it, k) => (
-        <li key={it.t} data-reveal><span className="czq__n" aria-hidden="true">{pad(k + 1)}</span><h3 className="h-4">{it.t}</h3><p>{it.d}</p></li>
-      ))}
-    </ul>
-  )
-}
-
-/** Diagnosis: four findings, joined by a line that fills as it scrolls in. */
-export function Findings({ steps }) {
-  const ref = useRef(null)
-  useGSAP(() => {
-    const mm = gsap.matchMedia()
-    mm.add(MQ.motion, () => {
-      const l = ref.current.querySelector('.czf__line i')
-      if (l) gsap.fromTo(l, { scaleX: 0 }, { scaleX: 1, ease: 'none', transformOrigin: '0 50%', scrollTrigger: { trigger: ref.current, start: 'top 80%', end: 'bottom 55%', scrub: 0.5 } })
-    })
-    return () => mm.revert()
-  }, { scope: ref })
-  return (
-    <div className="czf" ref={ref}>
-      <span className="czf__line" aria-hidden="true"><i /></span>
+    <Win title="Where the journey leaked" tag={`${items.length} leaks`} className="k-leaks" id="leaks">
       <ol>
-        {steps.map((s, k) => (
-          <li key={s.t} data-reveal><span className="czf__dot" aria-hidden="true" /><p className="label">Finding {pad(k + 1)}</p><h3 className="h-4">{s.t}</h3><p>{s.d}</p></li>
+        {items.map((it, k) => (
+          <li key={it.t} style={{ '--c': `var(--ts-${TINTS[k % TINTS.length]})` }}>
+            <span className="k-leaks__n">{pad(k + 1)}</span>
+            <div><h3>{it.t}</h3><p>{it.d}</p></div>
+            <Chip tone="warn">Leak</Chip>
+          </li>
         ))}
       </ol>
-    </div>
+    </Win>
   )
 }
 
-/** Shift: six stages on one line, then the move and the line that sums it up. */
-export function Shift({ s }) {
-  const ref = useRef(null)
-  useGSAP(() => {
-    const mm = gsap.matchMedia()
-    mm.add(MQ.motion, () => {
-      const l = ref.current.querySelector('.czs__line i')
-      const nodes = gsap.utils.toArray('.czs__n', ref.current)
-      if (l) gsap.fromTo(l, { scaleX: 0 }, { scaleX: 1, ease: 'none', transformOrigin: '0 50%', scrollTrigger: { trigger: ref.current, start: 'top 75%', end: 'bottom 60%', scrub: 0.5 } })
-      nodes.forEach((n, k) => gsap.fromTo(n, { scale: 0.6, autoAlpha: 0.3 }, { scale: 1, autoAlpha: 1, ease: 'back.out(2)', duration: 0.5, scrollTrigger: { trigger: ref.current, start: `top ${78 - k * 3}%`, once: true } }))
-    })
-    return () => mm.revert()
-  }, { scope: ref })
+/** Diagnosis: the findings, in the order they were found. */
+export function Findings({ steps }) {
   return (
-    <div ref={ref}>
-      <div className="czs">
-        <span className="czs__line" aria-hidden="true"><i /></span>
-        <ol>{s.stages.map((x, k) => <li key={x.t}><span className="czs__n">{k + 1}</span><h3 className="h-4">{x.t}</h3><p>{x.d}</p></li>)}</ol>
-      </div>
-      <div className="czs__move" data-reveal>
-        <p className="label">The strategic move</p>
-        <p className="czs__m">{s.move}</p>
+    <Win title="Diagnosis" tag={`${steps.length} findings`} className="k-find">
+      <Timeline items={steps.map((s, k) => ({ t: s.t, s: s.d, r: `FINDING ${pad(k + 1)}`, now: k === steps.length - 1 }))} />
+    </Win>
+  )
+}
+
+/** Shift: six stages as step tabs, then the move. */
+export function Shift({ s }) {
+  return (
+    <div className="k-shift">
+      <StepTabs steps={s.stages.map((x) => ({ label: x.t }))} label="Stages of the shift">
+        {(st, k) => (
+          <Tile tint={TINTS[k % TINTS.length]} className="k-shift__p" reveal={false}>
+            <p className="k-tile__k"><b>{pad(k + 1)}</b>Stage {k + 1} of {s.stages.length}</p>
+            <h3>{s.stages[k].t}</h3>
+            <p>{s.stages[k].d}</p>
+            <span className="k-shift__bar" aria-hidden="true">{s.stages.map((_, j) => <i key={j} className={j <= k ? 'is-on' : ''} />)}</span>
+          </Tile>
+        )}
+      </StepTabs>
+      <Tile tint="ink" className="k-move">
+        <p className="k-tile__k"><span>The strategic move</span></p>
+        <h3>{s.move}</h3>
         <blockquote>{s.quote}</blockquote>
-      </div>
+      </Tile>
     </div>
   )
 }
 
-/** Architecture: six numbered parts, then the principle. */
+/** Architecture: six parts, then the principle. */
 export function Architecture({ a }) {
   return (
-    <div>
-      <ul className="cza">{a.parts.map((p, k) => <li key={p.t} data-reveal><span className="cza__n">{pad(k + 1)}</span><h3 className="h-4">{p.t}</h3><p>{p.d}</p></li>)}</ul>
-      <p className="cza__p" data-reveal><span className="label">Principle</span>{a.principle}</p>
+    <div className="k-bento">
+      {a.parts.map((p, k) => (
+        <Tile key={p.t} tint={k % 3 === 0 ? TINTS[(k / 3) % TINTS.length] : undefined} className="k-c4 k-part">
+          <p className="k-tile__k"><b>{pad(k + 1)}</b></p>
+          <h3>{p.t}</h3><p>{p.d}</p>
+        </Tile>
+      ))}
+      <Tile tint="soft" className="k-c12 k-principle"><span className="k-tile__k"><span>Principle</span></span><p>{a.principle}</p></Tile>
     </div>
   )
 }
 
-/** Workflow: five chevrons in a row, each with its one line. */
+/** Workflow: five nodes on one line. */
 export function Chevrons({ steps }) {
   return (
-    <ol className="czw">
+    <ol className="k-pipe" style={{ '--n': steps.length }}>
       {steps.map((s, k) => (
-        <li key={s.t} data-reveal><span className="czw__c"><b>{k + 1}</b>{s.t}</span><p>{s.d}</p></li>
+        <li key={s.t} data-reveal>
+          <span className="k-pipe__n">{k + 1}</span>
+          <h3>{s.t}</h3><p>{s.d}</p>
+        </li>
       ))}
     </ol>
   )
@@ -109,27 +120,34 @@ export function Chevrons({ steps }) {
 /** Requirements: four lenses. */
 export function Lenses({ items }) {
   return (
-    <ul className="czl">
-      {items.map(([k, v], i) => <li key={k} data-reveal><span className="label">{pad(i + 1)} · {k}</span><p>{v}</p></li>)}
-    </ul>
+    <div className="k-bento">
+      {items.map(([k, v], i) => (
+        <Tile key={k} tint={TINTS[i % TINTS.length]} className="k-c6 k-lens">
+          <p className="k-tile__k"><b>{pad(i + 1)}</b>{k}</p>
+          <p className="k-lens__t">{v}</p>
+        </Tile>
+      ))}
+    </div>
   )
 }
 
-/** Measurement: one primary number on the left, the guardrails and the cuts on the right. */
+/** Measurement: one primary number, the guardrails and the cuts. */
 export function Measure({ m }) {
   return (
-    <div className="czm">
-      <div className="czm__p" data-reveal>
-        <p className="label">Primary success metric</p>
-        <h3 className="czm__t">{m.primary[0]}</h3>
+    <div className="k-bento">
+      <Tile tint="ink" className="k-c5 k-r2 k-prim">
+        <p className="k-tile__k"><Icon name="target" size={14} /><span>Primary success metric</span></p>
+        <h3>{m.primary[0]}</h3>
         <p>{m.primary[1]}</p>
-      </div>
-      <div className="czm__g" data-reveal>
-        <p className="label">Guardrail metrics</p>
-        <ul className="czm__c czm__c--g">{m.guard.map((g) => <li key={g}>{g}</li>)}</ul>
-        <p className="label">Cut by</p>
-        <ul className="czm__c">{m.seg.map((g) => <li key={g}>{g}</li>)}</ul>
-      </div>
+      </Tile>
+      <Tile className="k-c7">
+        <p className="k-tile__k"><Icon name="shield" size={14} /><span>Guardrail metrics</span></p>
+        <ul className="k-chips k-chips--lg">{m.guard.map((g) => <li key={g}><Chip tone="ok">{g}</Chip></li>)}</ul>
+      </Tile>
+      <Tile className="k-c7">
+        <p className="k-tile__k"><Icon name="layers" size={14} /><span>Cut by</span></p>
+        <ul className="k-chips k-chips--lg">{m.seg.map((g) => <li key={g}><Chip>{g}</Chip></li>)}</ul>
+      </Tile>
     </div>
   )
 }
@@ -137,8 +155,12 @@ export function Measure({ m }) {
 /** Rollout: five steps that climb. */
 export function Stairs({ steps }) {
   return (
-    <ol className="czr">
-      {steps.map((s, k) => <li key={s.t} data-reveal style={{ '--k': k }}><span className="czr__n">{k + 1}</span><h3 className="h-4">{s.t}</h3><p>{s.d}</p></li>)}
+    <ol className="k-stairs" style={{ '--n': steps.length }}>
+      {steps.map((s, k) => (
+        <li key={s.t} data-reveal style={{ '--k': k }} className={`k-stairs__s k-stairs__s--${TINTS[k % TINTS.length]}`}>
+          <b>{k + 1}</b><h3>{s.t}</h3><p>{s.d}</p>
+        </li>
+      ))}
     </ol>
   )
 }
@@ -146,16 +168,19 @@ export function Stairs({ steps }) {
 /** Impact: the numbers (they count up), what they prove, what drove them. */
 export function Impact({ i }) {
   return (
-    <div className="czi">
-      <ul className="czi__n">
-        {i.rows.map(([v, l, t]) => <li key={l} data-reveal><Stat v={v} className="czi__v" /><span>{l}</span>{t && <small className="label">{t}</small>}</li>)}
-      </ul>
-      <div className="czi__x" data-reveal>
-        <p className="label">What this proves</p>
-        <p className="czi__pv">{i.proves}</p>
-        <p className="label">What drove it</p>
-        <ul className="czi__d">{i.drove.map(([a, b]) => <li key={a}><b>{a}</b>{b && <span>{b}</span>}</li>)}</ul>
-      </div>
+    <div className="k-bento">
+      {i.rows.map(([v, l, t], k) => (
+        <Tile key={l} tint={TINTS[k % TINTS.length]} className="k-c4 k-num">
+          <b><Stat v={v} /></b>
+          <span>{l}</span>
+          {t && <Chip>{t}</Chip>}
+        </Tile>
+      ))}
+      <Tile tint="ink" className="k-c6 k-proves"><p className="k-tile__k"><span>What this proves</span></p><h3>{i.proves}</h3></Tile>
+      <Tile className="k-c6">
+        <p className="k-tile__k"><span>What drove it</span></p>
+        <ul className="k-drove">{i.drove.map(([a, b]) => <li key={a}><Icon name="check" size={15} /><div><b>{a}</b>{b && <span>{b}</span>}</div></li>)}</ul>
+      </Tile>
     </div>
   )
 }
@@ -163,19 +188,15 @@ export function Impact({ i }) {
 /** Playbook: where else it fits, and how an engagement would run. */
 export function Playbook({ p }) {
   return (
-    <div className="czp" data-reveal>
-      <div>
-        <p className="label">Client fit</p>
-        <ul className="czm__c">{p.uses.map((u) => <li key={u}>{u}</li>)}</ul>
-      </div>
-      <div>
-        <p className="label">Best engagement shape</p>
-        <ol className="czp__s">
-          {p.shape.map(([w, t], k) => <li key={t}>{k > 0 && <Arrow />}<span><b>{w}</b>{t}</span></li>)}
-        </ol>
-      </div>
+    <div className="k-bento">
+      <Tile tint="sky" className="k-c5">
+        <p className="k-tile__k"><span>Client fit</span></p>
+        <ul className="k-chips k-chips--lg">{p.uses.map((u) => <li key={u}><Chip>{u}</Chip></li>)}</ul>
+      </Tile>
+      <Tile className="k-c7">
+        <p className="k-tile__k"><span>Best engagement shape</span></p>
+        <ol className="k-shape">{p.shape.map(([w, t], k) => <li key={t}>{k > 0 && <Arrow />}<span><b>{w}</b>{t}</span></li>)}</ol>
+      </Tile>
     </div>
   )
 }
-
-export { Rich }
