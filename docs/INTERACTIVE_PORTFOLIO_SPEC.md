@@ -23,3 +23,7 @@ Product explorer becomes a single-column screen and outcome on mobile, with the 
 
 ## Release scope
 One commit to preview and one Git-triggered deployment. All visual iteration happens locally before the branch update.
+
+## Component composition update
+
+Product selector changes the adjacent editorial decision, measured result, case destination, interface and colored stage. Consulting cards retain native scope disclosures; their workflow previews are illustrative, not live controls. The new geometric SVG scenes are decorative and static. Original opening film and Beyond Work chapter interactions remain intact.

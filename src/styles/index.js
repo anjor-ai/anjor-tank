@@ -25,3 +25,5 @@ import './next-finish.css'
 import './atelier.css'
 
 import './impact.css'
+
+import './composition.css'

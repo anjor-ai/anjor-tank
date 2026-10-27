@@ -28,3 +28,11 @@ Retain the homepage case carousel and quick view, homepage ROQIVA, final CTA, fo
 
 ## Verification and release
 Inspect Home, Consulting, Journey and Beyond Work in desktop/mobile layouts and both themes. Check the opener, selectors and restored photo rail. Run npm run verify and git diff --check. Publish the complete change set with one preview branch update and its single Git-triggered Vercel deployment. Do not manually redeploy or push main.
+
+## Editorial composition refinement
+
+The final `composition.css` layer establishes warm paper backgrounds, charcoal and sage contrast, with peach and lavender confined to illustration stages. Headlines use a larger, lighter scale. ProductStudio is a two-part composition: an editorial decision and outcome panel beside a substantial product interface. Rotation and small floating hero cards have been removed.
+
+Consulting offerings use six distinct, explicitly illustrative workflow previews. Method, architecture and career chapter visuals use reusable code-native geometric studies in `EngineeringArt.jsx`: an isometric structure, an orbital system and layered interface planes. Retain the opener, ASCII artwork elsewhere, case carousel and Beyond Work scenes.
+
+On narrow screens, scenes stack below the editorial copy. Workflow provenance remains visible, controls retain semantic buttons and native disclosures, and geometry remains decorative to assistive technology.
