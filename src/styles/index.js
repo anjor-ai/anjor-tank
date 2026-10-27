@@ -23,3 +23,5 @@ import './next-home.css'
 import './next-finish.css'
 
 import './atelier.css'
+
+import './impact.css'

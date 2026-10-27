@@ -1,34 +1,30 @@
-# Portfolio visual system — 27 October 2026
+# Portfolio design system
 
 ## Direction
-A welcoming product-management portfolio with the restraint of Linear and Vercel, the editorial clarity of Claude, and Clay's approachable product storytelling. Reference screenshots informed layered product surfaces, clear typographic hierarchy, a portrait-led story, and connected system illustrations. Do not copy third-party logos, copy, or product screens.
-
-Consulting remains the primary contact path; a product role is secondary. ROQIVA is Anjor's founder-led product in development. Do not add family references or outbound Meshhetu links.
+Expressive, precise and welcoming. Simple typography should frame substantial illustration and interaction rather than remove them. Use the supplied references for layered product screens, dimensional compositions, illustrated bento panels, editorial photography and distinct visual rhythms.
 
 ## Preserved experiences
-Keep the homepage case-study carousel and quick-view modal, homepage ROQIVA component, final CTA, footer, Work page and Contact page. Their composition and behavior are retained. Shared palette tokens may update their inherited colors.
+Retain the homepage case carousel and quick view, homepage ROQIVA, final CTA, footer, Work and Contact pages. Restore the signature opening film and Beyond Work's original illustrated experiences. Do not replace these with plain text rows or static photo grids.
 
-## Visual decisions
-- Light: #fcfcfd canvas, white surfaces, #171a21 text, #3459bf accent text.
-- Dark: #101114 canvas, #1a1c22 surfaces, #f0f1f5 text, #a9baff accent text.
-- Use blue sparingly for active states, connectors, and affordances. No ambient orange/purple page wash.
-- Space Grotesk headings (500), IBM Plex Sans body, IBM Plex Mono only where numbering helps.
-- Product-page headings cap at 40px. Beyond Work uses a larger editorial hero. Supporting text must remain readable; technical annotations are secondary.
-- New component corners: 8–12px. Prefer separators and open editorial layouts to nested cards.
-- New sections: 64px desktop, 42px mobile. Center headings when the underlying composition is centered.
-- Keep diagrams concrete: customer signal → product decision → measured outcome. Metrics are from existing case studies, not invented demo telemetry.
+## Palette and composition
+- Shared light and dark tokens remain the basis: neutral surfaces, blue emphasis, strong contrast.
+- Larger illustration panels use restrained navy, sage, blue and violet. Photo sections carry their own natural color.
+- Layer product screens, smaller signal cards and evidence panels over an unfilled wireframe stage.
+- Hero typography may reach 58px on Home and 82px on Beyond Work; mobile sizes and wrapping are explicit.
+- Keep meaningful labels readable, borders fine, shadows localized and radii consistent within a component.
 
 ## Components
-`NextHome.jsx`: selectable product scene, question-led methodology, portrait and compact career timeline, connected growth illustration.
-`NextPages.jsx`: consulting architecture selector, native service disclosures, delivery process, complete visible career chronology, product principles.
-`atelier.css`: final shared palette and isolated component rules; fixed import order in styles/index.js.
-`PageMotion`: route-scoped reveal effects with reduced-motion support. No full-screen site intro gate.
+- Home: centered introduction, three-state product explorer using the real case-study mock components, animated signal illustrations, measured outcomes, and three illustrated method cards.
+- Consulting: connected intelligence illustration, three selectable architecture layers, six illustrated service cards with native expandable scope, four illustrated delivery stages.
+- Journey: portrait composition, career altitude diagram, illustrated chapters and principle cards. All career content remains accessible without switching tabs.
+- Beyond Work: photographic hero with three manual scene selectors, contour lines and compass; original polaroid collage, topographic photo rail, racing telemetry and music visualizer. All 15 original photos retained. Decorative telemetry is explicitly labelled illustrative.
 
-## Interactions and accessibility
-Selectors are native buttons with aria-pressed. Service and delivery disclosures use native details/summary. All actions work without hover. Case-state changes update the corresponding case link. Reduced-motion disables decorative motion. SVG connectors are decorative; explanatory text is available in HTML.
+## Motion and access
+- The original SiteFilm plays once per session (except the standalone ROQIVA intro), with Skip and Escape controls. Home offers replay.
+- Do not stack a second Beyond Work intro over the site film.
+- Respect reduced-motion preferences; the film and replay control are omitted in that mode.
+- Canvas illustrations pause offscreen and in background tabs using the existing art engine.
+- Native buttons expose selection with aria-pressed; native details expose expanded state. Images have descriptive alt text; decorative diagrams are hidden from assistive technology.
 
-## Validation and publication
-Run production build, static checks and internal-link validation. Inspect Home, Consulting, Journey and a case study in-browser, plus mobile-width layouts and both themes. Preserve the approved pages and interactions. Push one commit to preview; allow only its Git-triggered deployment. Do not push main or trigger an extra manual deployment.
-
-## Beyond Work — revised scope
-The October 27 request explicitly redesigns Beyond Work. Use warm stone, muted olive, real adventure photography, three editorial photo chapters, and a 2.6-second inline opener with a Skip control. Play once per session, omit under reduced motion, and never lock scrolling. Remove simulated telemetry from personal photos. Product scenes use SVG wireframe geometry and an ASCII signal instead of generic decorative stars.
+## Verification and release
+Inspect Home, Consulting, Journey and Beyond Work in desktop/mobile layouts and both themes. Check the opener, selectors and restored photo rail. Run npm run verify and git diff --check. Publish the complete change set with one preview branch update and its single Git-triggered Vercel deployment. Do not manually redeploy or push main.

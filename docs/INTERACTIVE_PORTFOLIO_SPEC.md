@@ -1,36 +1,25 @@
-# Interactive portfolio components
+# Interactive portfolio specification
 
-## Purpose
-Help a visitor understand Anjor's product decisions and consulting approach, inspect the evidence, and open a relevant case study or contact path.
+## Goal
+Present Anjor's product, systems and founding work through illustrated experiences, preserving the personality of the original portfolio and the approved work carousel, ROQIVA component, CTA and footer.
 
-## Inputs and states
-- Home illustration: Checkout (default), Discovery, Retention.
-- Product thinking: three independent problem selections, Checkout default.
-- Consulting architecture: GTM engineering (default), Revenue operations, ROQIVA.
-- Services: six independent native disclosures; first initially open.
-- Delivery: four independent native input/output disclosures; all initially closed.
-- Theme: existing shared light/dark preference.
+## Home product explorer
+Three button-selected cases: Checkout, Discovery and Retention. Each updates the input signal, case-study mock, decision, outcome and case link together. Sample UI data remains labelled; reported outcome metrics come from the existing portfolio content. The result link opens the matching full case. No automatic advancement.
 
-## Logic and outputs
-Selection changes local React state only. Home and methodology values are fixed presentations of existing case metrics, not forecasts: +12.5pp prepaid conversion, +9% search-to-order, approximately 1,100 additional repeat orders/day. Each selection points to its matching case. Consulting selections explain each layer and link to contact or the ROQIVA walkthrough. ROQIVA is explicitly in development.
+## Opening film
+Restore the existing kinetic name, ASCII screen cuts and closing signature. Activate after hydration, once per session under the at-film-v2 key; never auto-play on the standalone ROQIVA route. Skip/click/Escape exits. Replay on Home dispatches the replay-site-film event. Reduced motion omits playback and replay. Clean up listeners and scroll lock on unmount.
 
-## UX, interactions and edge cases
-Native keyboard-operable buttons expose pressed state. Links remain regular route URLs. Services and delivery use details/summary so their content remains in HTML and keyboard-accessible. No timers auto-switch the user's selection. State resets on route remount. Responsive layouts stack below 760px; narrow illustration composition keeps its outcome separate from explanatory text. Reduced-motion removes connector animation and transitions. No backend, user data, persisted prototype state, or fabricated live status.
+## Consulting
+Three native architecture selection buttons update the illustration, explanatory text and destination. Six illustrated service cards expose engagement scope using native details/summary. Four delivery stages expose inputs and deliverables. No external submission occurs until the existing Contact flow.
 
-## Measurement
-Existing CTA tracking is retained on the homepage consulting link. Existing route analytics and error reporting remain. No additional tracking provider or personal data collection is introduced.
+## Journey
+All career chapters and roles remain visible. Anchor links jump to chapters. The career altitude diagram and chapter illustrations add visual context without hiding content behind tabs.
 
-## Technical notes
-NextHome.jsx and NextPages.jsx share GrowthMap; CSS in atelier.css. PageMotion owns GSAP reveals, scoped to each route. Components support server-rendered snapshots. Dark/light use shared tokens. Approved carousel and modal implementations are unchanged.
+## Beyond Work
+Three manual hero selectors update image, heading, selected state and destination anchor. The original WanderScene, SpeedScene and LiveScene render their existing illustrated experiences. Wander supports horizontal scrolling and previous/next buttons. Photos retain captions and alt text. Racing telemetry is decorative, not a claim about actual lap performance. Music animation is visual only; no autoplay audio. The original polaroid component and radar remain.
 
-## Changelog
-2026-10-27: Replaced repeated workspace/card patterns with layered decision scene, editorial questions, connected growth illustration, service disclosures and visible career chronology. Removed blocking site intro. Added responsive and reduced-motion rules.
+## Responsive and motion behavior
+Product explorer becomes a single-column screen and outcome on mobile, with the decorative side signal card omitted. Service cards become one column. Beyond hero selectors stack vertically. Canvas engine uses IntersectionObserver and document visibility to stop unnecessary drawing; reduced motion draws a still frame. CSS motion follows the same preference.
 
-## Backlog
-User review of the visual direction; no additional functionality promised or enabled.
-
-## Beyond Work opening and photo chapters
-- Opening states: settled on SSR; optional intro after hydration; settled after 2.6 seconds or Skip. Session storage prevents repeat playback. Reduced-motion users see no intro.
-- Explore and chapter links use native anchors; all 15 original photographs remain visible in three responsive chapters.
-- No scroll lock, fabricated lap metrics, or auto-advancing photo gallery.
-- Decorative SVG and ASCII artwork is hidden from assistive technology.
+## Release scope
+One commit to preview and one Git-triggered deployment. All visual iteration happens locally before the branch update.

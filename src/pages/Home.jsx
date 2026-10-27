@@ -15,7 +15,7 @@ export default function Home() {
     <div className="atelier-identity"><span>AT</span><p>Anjor Tank<small>Product manager. Systems thinker. Builder.</small></p></div>
     <h1><Rich text={content.hello.title}/></h1>
     <p>I design consumer experiences, build the systems behind them, and measure what moves. Currently at GNC India, founding ROQIVA, and open to selective consulting.</p>
-    <div className="atelier-actions"><Button to="/contact?intent=consult#brief" track="cta_consult_home">Discuss a project <Arrow/></Button><LinkArrow to="#work">Explore the work</LinkArrow></div>
+    <div className="atelier-actions"><Button to="/contact?intent=consult#brief" track="cta_consult_home">Discuss a project <Arrow/></Button><LinkArrow to="#work">Explore the work</LinkArrow></div><button className="replay-film" type="button" onClick={()=>window.dispatchEvent(new Event('replay-site-film'))}>▷ Replay the opening film</button>
    </div>
    <HomeWorkbench/>
    <div className="atelier-experience"><span>Experience across</span><b>Truemeds</b><b>GNC India</b><b>Neil Patel Digital</b><span>Commerce · Growth · Operations</span></div>
