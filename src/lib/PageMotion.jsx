@@ -43,5 +43,5 @@ export function PageMotion({ routeKey, children }) {
     })
     return () => mm.revert()
   }, { scope: ref, dependencies: [routeKey], revertOnUpdate: true })
-  return <div ref={ref} className="pagemotion">{children}</div>
+  return <div ref={ref} className="pagemotion" data-route={routeKey}>{children}</div>
 }

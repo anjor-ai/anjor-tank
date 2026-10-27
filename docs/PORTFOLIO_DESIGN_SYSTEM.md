@@ -1,28 +1,34 @@
-# Portfolio design system — October 2026
+# Portfolio visual system — 27 October 2026
 
-## Goal
-This site is a product manager's portfolio, not a SaaS landing page. It should tell a continuous story: Anjor's point of view → grounded case-study proof → product decision-making → professional journey → consulting → ROQIVA (founder-led, in development) → personality → contact. Consulting is the primary conversion path; product-role conversations are secondary.
+## Direction
+A welcoming product-management portfolio with the restraint of Linear and Vercel, the editorial clarity of Claude, and Clay's approachable product storytelling. Reference screenshots informed layered product surfaces, clear typographic hierarchy, a portrait-led story, and connected system illustrations. Do not copy third-party logos, copy, or product screens.
 
-## Visual references translated into design rules
-- **Meshhetu / orchestration-intelligence**: Space Grotesk headings, IBM Plex Sans body, IBM Plex Mono technical labels, neutral canvas, blue accent, product windows, graphs, animation conventions. Shared variables in `src/styles/tokens.css`; the final overrides are in `src/styles/studio.css`.
-- **Lendro / Hypfury-style split hero**: compact left editorial copy, substantial product illustration right, with an actionable path below.
-- **Monopol / dashboard bento**: evidence in different card sizes and weights; do not duplicate one oversized card rhythm.
-- **Micro UI illustrations**: product states, decision paths, and samples inside responsive windows; annotate sample data.
-- **Alternating cards and portfolio masonry**: use asymmetry in the journey cards and photo grid; do not arbitrarily center every header.
+Consulting remains the primary contact path; a product role is secondary. ROQIVA is Anjor's founder-led product in development. Do not add family references or outbound Meshhetu links.
 
-## Layout and density
-- Base section padding: `--section-y: clamp(38px,4.9vw,70px)` on desktop, `clamp(31px,8.5vw,48px)` on mobile. Do not return to 120px section gutters without a specific visual reason.
-- Home hero: left content, right interactive case workspace; short factual proof strip below.
-- Selected Work: **centered header** because the rotating card interaction is centered. Preserve the ring and quick-view modal.
-- Method: left explanation, right selectable illustrated decision diagram with actual case-study outcomes.
-- Journey: offset 2×2 cards using distinct treatment, not a long unbroken text column.
-- Consulting: rich, tangible workflow window, strong consulting CTA, soft job CTA.
-- ROQIVA: Anjor's founder-led product in development; no Meshhetu outbound hyperlink or references to relatives.
+## Preserved experiences
+Keep the homepage case-study carousel and quick-view modal, homepage ROQIVA component, final CTA, footer, Work page and Contact page. Their composition and behavior are retained. Shared palette tokens may update their inherited colors.
 
-## Engineering and integrity
-- New interactive components live in `src/components/Studio.jsx`; styles in `src/styles/studio.css` (last in CSS import order).
-- Keep sample UI distinctly illustrative. Do not invent revenue values, customer counts, actual usage charts, or promises about ROQIVA's status.
-- Buttons and tabs must change real state; visible UI works without hover. Respect `prefers-reduced-motion`.
-- Reuse case data and illustrations from `src/components/mocks.jsx` and source case pages.
-- Preserve existing route navigation, semantic HTML and SSR.
-- Build with `npm run verify` when local CI is available. No hidden links to private repositories or external ROQIVA/Meshhetu sites.
+## Visual decisions
+- Light: #fcfcfd canvas, white surfaces, #171a21 text, #3459bf accent text.
+- Dark: #101114 canvas, #1a1c22 surfaces, #f0f1f5 text, #a9baff accent text.
+- Use blue sparingly for active states, connectors, and affordances. No ambient orange/purple page wash.
+- Space Grotesk headings (500), IBM Plex Sans body, IBM Plex Mono only where numbering helps.
+- Product-page headings cap at 40px. Beyond Work uses a larger editorial hero. Supporting text must remain readable; technical annotations are secondary.
+- New component corners: 8–12px. Prefer separators and open editorial layouts to nested cards.
+- New sections: 64px desktop, 42px mobile. Center headings when the underlying composition is centered.
+- Keep diagrams concrete: customer signal → product decision → measured outcome. Metrics are from existing case studies, not invented demo telemetry.
+
+## Components
+`NextHome.jsx`: selectable product scene, question-led methodology, portrait and compact career timeline, connected growth illustration.
+`NextPages.jsx`: consulting architecture selector, native service disclosures, delivery process, complete visible career chronology, product principles.
+`atelier.css`: final shared palette and isolated component rules; fixed import order in styles/index.js.
+`PageMotion`: route-scoped reveal effects with reduced-motion support. No full-screen site intro gate.
+
+## Interactions and accessibility
+Selectors are native buttons with aria-pressed. Service and delivery disclosures use native details/summary. All actions work without hover. Case-state changes update the corresponding case link. Reduced-motion disables decorative motion. SVG connectors are decorative; explanatory text is available in HTML.
+
+## Validation and publication
+Run production build, static checks and internal-link validation. Inspect Home, Consulting, Journey and a case study in-browser, plus mobile-width layouts and both themes. Preserve the approved pages and interactions. Push one commit to preview; allow only its Git-triggered deployment. Do not push main or trigger an extra manual deployment.
+
+## Beyond Work — revised scope
+The October 27 request explicitly redesigns Beyond Work. Use warm stone, muted olive, real adventure photography, three editorial photo chapters, and a 2.6-second inline opener with a Skip control. Play once per session, omit under reduced motion, and never lock scrolling. Remove simulated telemetry from personal photos. Product scenes use SVG wireframe geometry and an ASCII signal instead of generic decorative stars.

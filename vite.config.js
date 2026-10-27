@@ -8,6 +8,7 @@ import react from '@vitejs/plugin-react'
 // npm run build -> dist/  (real URLs, one HTML file per route, for Vercel)
 export default defineConfig(({ isSsrBuild }) => ({
   base: '/',
+  server: { allowedHosts: ['terminal.local'] },
   publicDir: 'public',
   plugins: [react()],
   build: {

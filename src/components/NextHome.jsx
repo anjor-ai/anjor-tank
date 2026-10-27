@@ -1,51 +1,37 @@
 import { useState } from 'react'
 import { Arrow, Button, LinkArrow } from './ui'
+import { Wireframe, AsciiSignal } from './Wireframe'
 
-const examples = [
- {name:'Checkout',slug:'price-lock-checkout',headline:'A price you can trust.',problem:'An order might change after the customer pays.',decision:'Preserve the committed price',result:'+12.5pp',metric:'prepaid conversion',flow:['Order intent','Price Lock','Warehouse change','Rule applied','Payment kept']},
- {name:'Discovery',slug:'search-discovery',headline:'Understand the intent.',problem:'A typo should not become a lost order.',decision:'Predict and repair the query',result:'+9.0%',metric:'search-to-order conversion',flow:['Customer query','Intent detected','Query expanded','Results ranked','Product found']},
- {name:'Retention',slug:'retention-reminders',headline:'Find the right moment.',problem:'A returning customer misses the right reorder window.',decision:'Trigger a timely reminder',result:'~1,100',metric:'additional repeat orders / day',flow:['Order placed','Cadence inferred','Reminder sent','Reorder action','Repeat order']}
+const cases = [
+ {name:'Checkout',slug:'price-lock-checkout',title:'A price you can trust.',question:'What happens when an order changes after payment?',decision:'Keep the promise made at checkout.',result:'+12.5pp',metric:'prepaid conversion',input:'Order modified',rule:'Committed price preserved',output:'Customer confidence',symbol:'↗'},
+ {name:'Discovery',slug:'search-discovery',title:'Intent, understood.',question:'Should a typo ever become a lost order?',decision:'Understand the query before ranking the results.',result:'+9%',metric:'search-to-order conversion',input:'Imperfect query',rule:'Intent matched & results ranked',output:'The right product',symbol:'⌕'},
+ {name:'Retention',slug:'retention-reminders',title:'The right moment.',question:'When does a reminder become genuinely useful?',decision:'Match the reminder to the reorder window.',result:'~1,100',metric:'additional repeat orders / day',input:'Previous purchase',rule:'Reorder cadence identified',output:'A timely reminder',symbol:'↻'}
 ]
-export function HomeWorkbench() {
- const [active,setActive] = useState(0)
- const d=examples[active]
- return <div className="nx-workbench" aria-label="Interactive product portfolio">
-   <div className="nx-workbench__chrome"><b>✳ ANJOR <span>/ PRODUCT WORKSPACE</span></b><small><i/> INTERACTIVE</small></div>
-   <div className="nx-workbench__tabs" role="group" aria-label="Explore selected product systems">{examples.map((x,i)=><button type="button" key={x.slug} aria-pressed={i===active} onClick={()=>setActive(i)}><span>0{i+1}</span> {x.name}</button>)}</div>
-   <div className="nx-workbench__body" key={d.slug}>
-      <div className="nx-workbench__left"><span className="nx-kicker">PRODUCT DECISION / 0{active+1}</span><h2>{d.headline}</h2><p>{d.problem}</p>
-       <div className="nx-workbench__window"><div className="nx-workbench__windowbar"><span>Illustrative decision path</span><span>● ● ●</span></div>
-        <div className="nx-workbench__paths">{d.flow.map((s,i)=><div key={s}><small>0{i+1}</small><strong>{s}</strong><i/></div>)}</div>
-       </div>
-      </div>
-      <aside className="nx-workbench__right"><div><span className="nx-kicker">SYSTEM LOGIC</span><h3>{d.decision}</h3><p>Evidence → decision → measured result.</p></div><div className="nx-workbench__result"><span>BUSINESS IMPACT</span><b>{d.result}</b><small>{d.metric}</small></div></aside>
-   </div>
-   <a className="nx-workbench__bottom" href={'/work/'+d.slug}>Explore the {d.name.toLowerCase()} case study <span>↗</span></a>
+
+function DecisionScene({ item, compact=false }) {
+ return <div className={`atelier-scene${compact?' atelier-scene--compact':''}`}>
+  <div className="atelier-scene__grid" aria-hidden="true"/>
+  <svg className="atelier-scene__wires" viewBox="0 0 620 430" fill="none" aria-hidden="true"><path d="M75 135H215Q240 135 240 160V215H310M310 215V300Q310 320 340 320H555"/><path className="atelier-wire-light" d="M75 135H215Q240 135 240 160V215H310M310 215V300Q310 320 340 320H555"/></svg>
+  <div className="atelier-signal"><span className="atelier-icon">{item.symbol}</span><div><small>Customer signal</small><strong>{item.input}</strong></div></div>
+  <div className="atelier-decision" key={item.slug}><div className="atelier-windowbar"><span><i/> Product decision</span><span>↗</span></div><div className="atelier-decision__body"><div className="atelier-orb" aria-hidden="true"><Wireframe/></div><h3>{item.title}</h3><p>{item.rule}</p><div className="atelier-confirm"><span>✓</span>{item.output}</div></div></div>
+  <a className="atelier-result" href={'/work/'+item.slug}><span>Measured outcome <Arrow/></span><b>{item.result}</b><small>{item.metric}</small></a>
+  <span className="atelier-caption">Illustrated system · real case-study outcome</span>
  </div>
 }
-export function ProductThinking() {
- const [active,setActive] = useState(0),d=examples[active]
- return <div className="nx-thinking">
-  <div className="nx-thinking__copy"><h2 className="h-2">A great interface is just <span className="em">the visible part.</span></h2><p className="lead">The product is the decision beneath it. I work across the customer experience, the systems that deliver it, and the metrics that reveal whether it worked.</p><LinkArrow to="/work">Explore the decisions behind the results</LinkArrow></div>
-  <div className="nx-thinking__app"><div className="nx-thinking__menu" role="group" aria-label="Choose a system">{examples.map((e,i)=><button key={e.slug} type="button" aria-pressed={active===i} onClick={()=>setActive(i)}>{e.name}<span>0{i+1}</span></button>)}</div>
-   <div className="nx-thinking__detail" key={d.slug}><div className="nx-thinking__bar"><span>ANATOMY OF A PRODUCT DECISION</span><span>CASE 0{active+1}</span></div><h3>{d.problem}</h3><div className="nx-thinking__flow">{d.flow.slice(0,4).map((s,i)=><div key={s}><span>0{i+1}</span><b>{s}</b></div>)}</div><div className="nx-thinking__impact"><div><small>THE PRODUCT DECISION</small><strong>{d.decision}</strong></div><div><small>MEASURABLE RESULT</small><strong>{d.result}</strong><span>{d.metric}</span></div></div><a href={'/work/'+d.slug}>Examine the full case <span>↗</span></a></div>
-  </div>
- </div>
+export function HomeWorkbench(){
+ const [active,setActive]=useState(0)
+ return <div className="atelier-workbench"><div className="atelier-switch" role="group" aria-label="Explore product decisions">{cases.map((x,i)=><button key={x.slug} type="button" aria-pressed={active===i} onClick={()=>setActive(i)}>{x.name}</button>)}</div><DecisionScene item={cases[active]}/></div>
 }
-const career = [
- {period:'2022—23',org:'Eggfirst / Neil Patel Digital',h:'Understand demand.',body:'Customers, campaigns and the distance between a message and an order.'},
- {period:'2023—26',org:'Truemeds',h:'Build what delivers it.',body:'Payments, search, operations and retention — the systems underneath commerce.'},
- {period:'2026—now',org:'GNC India / ROQIVA',h:'Own the whole loop.',body:'D2C product management and an independent revenue intelligence product in development.'}
-]
-export function CareerFeature() {
- return <div className="nx-career"><div className="nx-career__top"><div><h2 className="h-2">From understanding demand to <span className="em">building what delivers it.</span></h2><p className="lead">Different roles. One growing curiosity about how products and businesses really work.</p><LinkArrow to="/journey">Follow my journey</LinkArrow></div><figure><img src="/img/anjor.webp" width="447" height="721" alt="Anjor Tank" loading="lazy"/><figcaption>ALWAYS CURIOUS.</figcaption></figure></div><div className="nx-career__row">{career.map((c,i)=><a href="/journey" key={c.period} className={'nx-career__tile nx-career__tile--'+i}><span>{c.period} <b>0{i+1}</b></span><h3>{c.h}</h3><p>{c.body}</p><footer>{c.org}<span>↗</span></footer></a>)}</div></div>
+export function ProductThinking(){
+ const [active,setActive]=useState(0),item=cases[active]
+ return <div className="atelier-thinking"><header className="atelier-heading" data-reveal><h2>A great interface is just<br/><span>the visible part.</span></h2><p>The product is the decision beneath it. I connect customer experience with the systems that deliver it—and the metrics that prove it worked.</p></header><div className="atelier-thinking__layout"><div className="atelier-thinking__questions" role="group" aria-label="Explore product thinking">{cases.map((c,i)=><button type="button" key={c.slug} aria-pressed={active===i} onClick={()=>setActive(i)}><span>0{i+1}</span><div><h3>{c.question}</h3><p>{c.decision}</p></div><Arrow/></button>)}</div><div className="atelier-blueprint" key={item.slug}><div className="atelier-blueprint__top"><span>{item.name}</span><small>From friction to outcome</small></div><ol>{[['Customer',item.input],['System',item.rule],['Experience',item.output]].map(([label,value],i)=><li key={label}><span className="atelier-blueprint__dot">{i===2?'✓':'0'+(i+1)}</span><div><small>{label}</small><strong>{value}</strong></div></li>)}</ol><a href={'/work/'+item.slug}><b>{item.result}</b><span>{item.metric}</span><Arrow/></a></div></div></div>
 }
-const trinity=[
- {name:'GTM engineering',title:'Find the leak.',desc:'Trace real customer intent across acquisition, search, checkout and CRM.',nodes:['Signal','Journey','Conversion']},
- {name:'RevOps',title:'Fix the loop.',desc:'Make scattered data, owners, rules and handoffs part of one operating system.',nodes:['Data','Decision','Workflow']},
- {name:'ROQIVA',title:'Make it repeatable.',desc:'My founder-led product in development: detect, draft, approve and monitor.',nodes:['Detect','Review','Monitor']}
-]
+export function CareerFeature(){
+ return <div className="atelier-career"><figure><img src="/img/anjor.webp" width="447" height="721" alt="Anjor Tank" loading="lazy"/><figcaption>Anjor Tank <span>Curiosity is the through line.</span></figcaption></figure><div className="atelier-career__copy"><h2>From understanding demand<br/><span>to building what delivers it.</span></h2><p>Different roles. One growing curiosity about how products and businesses really work.</p><ol>{[['2022–23','Understand demand.','Eggfirst · Neil Patel Digital'],['2023–26','Build what delivers it.','Truemeds · Product & operations'],['Now','Own the whole loop.','GNC India · Founding ROQIVA']].map(([date,title,org])=><li key={date}><small>{date}</small><div><h3>{title}</h3><p>{org}</p></div></li>)}</ol><LinkArrow to="/journey">The story so far</LinkArrow></div></div>
+}
+export function GrowthMap(){
+ return <div className="atelier-growth" aria-label="Signals connect through GTM engineering and RevOps to measured outcomes, with ROQIVA in development"><div className="atelier-growth__sources">{['Product','CRM','Analytics'].map((s,i)=><span key={s}><i>{['◈','▤','⌁'][i]}</i>{s}</span>)}</div><div className="atelier-growth__connector" aria-hidden="true"><i/><i/><i/></div><div className="atelier-growth__core"><AsciiSignal/><div><strong>One operating loop.</strong><small>Signal → decision → execution</small></div></div><div className="atelier-growth__branches"><div><span>01</span><b>GTM engineering</b><small>Find the leak.</small></div><div><span>02</span><b>RevOps</b><small>Connect the handoffs.</small></div></div><div className="atelier-growth__product"><span>ROQIVA</span><small>Intelligence layer · in development</small><Arrow/></div></div>
+}
 export function ConsultingFeature(){
- const [active,setActive]=useState(0),x=trinity[active]
- return <div className="nx-consult"><div className="nx-consult__copy"><h2 className="h-2">Growth often breaks <span className="em">between tools.</span></h2><p className="lead">My consulting work combines GTM engineering and RevOps: discover where the commercial journey leaks, engineer the missing operating loop, and prove the lift.</p><div><Button to="/hire">Explore consulting <Arrow/></Button><LinkArrow to="/contact?intent=consult#brief">Discuss a project</LinkArrow></div></div><div className="nx-consult__panel"><div className="nx-consult__options" role="group" aria-label="Explore connected growth systems">{trinity.map((t,i)=><button type="button" key={t.name} aria-pressed={active===i} onClick={()=>setActive(i)}><span>0{i+1}</span>{t.name}</button>)}</div><div className="nx-consult__stage" key={x.name}><span className="nx-kicker">ANJOR / GROWTH OPERATING SYSTEM</span><h3>{x.title}</h3><p>{x.desc}</p><div className="nx-consult__nodes">{x.nodes.map((n,i)=><div key={n}><small>0{i+1}</small><b>{n}</b></div>)}</div><small>{active===2?'FOUNDER-LED PRODUCT · IN DEVELOPMENT':'CONSULTING · AVAILABLE NOW'}</small></div></div></div>
+ return <div className="atelier-consult"><div className="atelier-consult__copy"><h2>Growth often breaks<br/><span>between tools.</span></h2><p>My consulting work combines GTM engineering and RevOps: find where the commercial journey leaks, engineer the missing operating loop, and prove the lift.</p><div className="atelier-actions"><Button to="/hire">Explore consulting <Arrow/></Button><LinkArrow to="/contact?intent=consult#brief">Discuss a project</LinkArrow></div></div><GrowthMap/></div>
 }

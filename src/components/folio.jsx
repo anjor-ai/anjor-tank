@@ -78,10 +78,10 @@ export function WhereIFit({ initial = 0 }) {
 }
 
 /** One case, as a card: the illustration, the number, the tags. With `onOpen` the card opens the quick view; the full case is always one link away. */
-export function CaseCard({ c, onOpen }) {
+export function CaseCard({ c, onOpen, as: Tag = 'li' }) {
   const b = bridge[c.slug]
   return (
-    <li className={`ccd ccd--t${(parseInt(c.n, 10) - 1) % 5}`} data-reveal>
+    <Tag className={`ccd ccd--t${(parseInt(c.n, 10) - 1) % 5}`} data-reveal>
       <div className="ccd__a" onClick={onOpen ? () => onOpen(c.slug) : undefined}>
         <div className="ccd__art" aria-hidden="true"><div className="ccd__mock"><CaseMock slug={c.slug} /></div></div>
         <span className="ccd__top"><span className="ccd__n">{c.n}</span><span className="label">{c.cat}</span><span className="ccd__yr label">{c.year}</span></span>
@@ -94,7 +94,7 @@ export function CaseCard({ c, onOpen }) {
           <a className="ccd__full" href={`/work/${c.slug}`} onClick={(e) => e.stopPropagation()}>Full case<Arrow /></a>
         </span>
       </div>
-    </li>
+    </Tag>
   )
 }
 

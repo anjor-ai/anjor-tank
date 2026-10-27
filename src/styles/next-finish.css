@@ -2,12 +2,5 @@
 .nx-role>div{max-width:730px}.nx-role .lead{margin-top:12px;max-width:55ch}.nx-role .btn{flex:none}
 .nx-education{display:grid;grid-template-columns:minmax(0,.5fr) minmax(0,1.5fr);gap:clamp(22px,5vw,70px);align-items:center}
 .nx-education>div:first-child .lead{max-width:34ch;margin-top:15px}
-.nx-homehero .nx-workbench__tabs button:focus-visible,.nx-thinking button:focus-visible,.nx-consult button:focus-visible,.nx-architecture button:focus-visible,.nx-delivery button:focus-visible,.nx-archive button:focus-visible{outline:2px solid var(--accent);outline-offset:-3px}
-.nx-homehero__view:focus-within,.nx-thinking__app:focus-within,.nx-architecture__shell:focus-within{border-color:var(--accent)}
-[data-theme='dark'] .nx-career__tile--2{background:#25334b}
-[data-theme='dark'] .nx-thinking__impact>div+div{background:#152337}
-[data-theme='dark'] .nx-hirehero__hub{background:#101929}
-[data-theme='dark'] .nx-consult{background:#0e1623}
-[data-theme='dark'] .nx-consult__panel{background:#18253b}
 @media(max-width:900px){.nx-role{flex-direction:column;align-items:start}.nx-education{grid-template-columns:1fr}}
 @media(max-width:640px){.nx-role{padding:20px}.nx-education .edu{grid-template-columns:1fr}}

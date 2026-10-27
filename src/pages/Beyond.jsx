@@ -1,56 +1,55 @@
-import { beyond as P } from '../content'
-import { Cta, PageHero, Section } from '../components/ui'
-import { BeyondStage, LiveScene, Radar, SCENES, SpeedScene, WanderScene, photosOf } from '../components/Story'
+import { useEffect, useState } from 'react'
+import { ALT } from '../content'
+import { Arrow, Cta, Section } from '../components/ui'
+import { Radar, SCENES, photosOf } from '../components/Story'
 import { PageMotion } from '../lib/PageMotion'
 
-/* Beyond work: an expedition in three stops. Each stop has its own landscape and its own way of showing the photos. */
-
-const SCENE_VIEW = { Wander: WanderScene, Speed: SpeedScene, Live: LiveScene }
+const COVERS = { Wander: 'rainier', Speed: 'kart-pov', Live: 'lights-red' }
 
 export default function Beyond() {
-  return (
-    <PageMotion routeKey="/beyond">
-      <PageHero variant="beyond" eyebrow={P.hero.eyebrow} title={P.hero.title} lead={P.hero.lead} visual={<BeyondStage />} visualLive />
+  const [opening, setOpening] = useState(false)
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
+    try {
+      if (sessionStorage.getItem('beyond-opening-seen')) return
+      sessionStorage.setItem('beyond-opening-seen', '1')
+    } catch { /* The page still works when storage is unavailable. */ }
+    setOpening(true)
+    const timer = setTimeout(() => setOpening(false), 2600)
+    return () => clearTimeout(timer)
+  }, [])
 
-      <Section id="route" rule={false}>
-        <div className="v3-beyond-intro"><div><h2 className="h-2">Outside the roadmap.</h2><p className="lead">Some things are better experienced than described. These are the moments that keep me curious.</p></div><span>THREE STOPS ↓</span></div>
-        <ol className="stops" data-reveal>
-          {SCENES.map((s) => {
-            const L = photosOf(s.g)
-            return (
-              <li key={s.g}>
-                <a href={`#scene-${s.g.toLowerCase()}`} className="stop">
-                  <img src={`/img/adventure/${L[0].src}.webp`} alt="" loading="lazy" decoding="async" />
-                  <span className="stop__k">STOP {s.k}</span>
-                  <b>{s.g}</b>
-                  <small>{s.lede}</small>
-                  <em>{String(L.length).padStart(2, '0')} photos</em>
-                </a>
-              </li>
-            )
-          })}
-        </ol>
-      </Section>
+  return <PageMotion routeKey="/beyond">
+    <header className={`field-hero${opening ? ' is-opening' : ''}`}>
+      <div className="field-hero__photo"><img src="/img/adventure/rainier.webp" alt={ALT.rainier} fetchpriority="high" /></div>
+      <div className="field-hero__copy">
+        <span className="field-label">Anjor, beyond work / field notes</span>
+        <h1>Take the<br/><em>long way.</em></h1>
+        <p>Out of office. Into the moment.<br/>Mountains, back roads, a better lap—and the next live set.</p>
+        <a className="field-explore" href="#route" onClick={() => setOpening(false)}>Explore the other side <Arrow/></a>
+        <span className="field-hero__note">01 / Mount Rainier <span>A mountain worth the drive.</span></span>
+      </div>
+      {opening && <div className="field-opening"><span aria-hidden="true">Less screen time.<br/><em>More stories.</em></span><button type="button" onClick={() => setOpening(false)}>Skip intro ↗</button></div>}
+    </header>
 
-      {SCENES.map((s) => {
-        const Scene = SCENE_VIEW[s.g]
-        return (
-          <section key={s.g} id={`scene-${s.g.toLowerCase()}`} className={`bsc bsc--${s.g.toLowerCase()}`} aria-labelledby={`bsc-${s.g}`}>
-            <div className="container">
-              <header className="bsc__head" data-reveal>
-                <span className="bsc__k">STOP {s.k}</span>
-                <h2 className="h-2" id={`bsc-${s.g}`}>{s.g}<span> · {s.lede}</span></h2>
-                <p className="lead">{s.sub}</p>
-              </header>
-              <Scene />
-            </div>
-          </section>
-        )
-      })}
+    <Section id="route" className="field-route" rule={false}>
+      <header className="field-section-head" data-reveal><div><span className="field-label">A few things that keep me curious</span><h2>Life doesn’t follow a roadmap.</h2></div><p>Some things are better experienced than described.<br/>Pick a direction. See where it goes.</p></header>
+      <nav className="field-stops" aria-label="Explore beyond work">{SCENES.map(s => <a href={`#scene-${s.g.toLowerCase()}`} key={s.g}>
+        <img src={`/img/adventure/${COVERS[s.g]}.webp`} alt="" loading="lazy"/>
+        <span className="field-stops__number">0{s.k.slice(-1)} / {String(photosOf(s.g).length).padStart(2,'0')} frames</span>
+        <div><h3>{s.g}</h3><p>{s.lede}</p></div><Arrow/>
+      </a>)}</nav>
+    </Section>
 
-      <Section id="radar" tone="alt"><Radar /></Section>
-
-      <Cta title="Say hello *about anything.*" lead="A kart track, a gig, a watch, a product problem. All fair game." primary={{ label: 'Say hello', to: '/contact#brief' }} secondary={{ label: 'See where I fit', to: '/hire' }} />
-    </PageMotion>
-  )
+    {SCENES.map(s => <section id={`scene-${s.g.toLowerCase()}`} className={`field-chapter field-chapter--${s.g.toLowerCase()}`} key={s.g} aria-labelledby={`field-${s.g}`}>
+      <div className="container"><header className="field-section-head" data-reveal><div><span className="field-label">Chapter {s.k}</span><h2 id={`field-${s.g}`}>{s.g}<span> / {s.lede}</span></h2></div><p>{s.sub}</p></header>
+        <div className="field-photos">{photosOf(s.g).map((p,i) => <figure key={p.src} className={i===0?'field-photo--lead':''}>
+          <img src={`/img/adventure/${p.src}.webp`} width={p.w} height="998" alt={ALT[p.src]} loading="lazy" decoding="async"/>
+          <figcaption><span>{String(i+1).padStart(2,'0')}</span>{p.cap}</figcaption>
+        </figure>)}</div>
+      </div>
+    </section>)}
+    <Section id="radar" className="field-radar"><header className="field-section-head"><h2>Also on my radar.</h2><span className="field-label">Always curious</span></header><Radar/></Section>
+    <Cta title="Say hello *about anything.*" lead="A kart track, a gig, a watch, a product problem. All fair game." primary={{label:'Say hello',to:'/contact#brief'}} secondary={{label:'See where I fit',to:'/hire'}}/>
+  </PageMotion>
 }

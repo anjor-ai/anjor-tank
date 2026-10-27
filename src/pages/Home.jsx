@@ -10,27 +10,27 @@ import { PageMotion } from '../lib/PageMotion'
 export default function Home() {
  const [open,setOpen]=useState('')
  return <PageMotion routeKey="/">
-  <header className="nx-homehero"><div className="container nx-homehero__inner">
-   <div className="nx-homehero__copy">
-    <div className="nx-homehero__identity"><i/> ANJOR TANK · PRODUCT MANAGER</div>
-    <h1 className="h-hero"><Rich text={content.hello.title}/></h1>
-    <p className="lead">I design consumer experiences, build the operational systems behind them, and measure what moves. Currently Product Manager at GNC India, founder of ROQIVA, and available for selective consulting.</p>
-    <div className="hero__btns"><Button to="/contact?intent=consult#brief" track="cta_consult_home">Discuss a project <Arrow/></Button><Button to="#work" variant="ghost">Explore the work</Button></div>
-    <div className="nx-homehero__proof"><span>Ecommerce & growth</span><span>Platforms & operations</span><span>AI & automation</span></div>
+  <header className="atelier-hero"><div className="container">
+   <div className="atelier-hero__intro">
+    <div className="atelier-identity"><span>AT</span><p>Anjor Tank<small>Product manager. Systems thinker. Builder.</small></p></div>
+    <h1><Rich text={content.hello.title}/></h1>
+    <p>I design consumer experiences, build the systems behind them, and measure what moves. Currently at GNC India, founding ROQIVA, and open to selective consulting.</p>
+    <div className="atelier-actions"><Button to="/contact?intent=consult#brief" track="cta_consult_home">Discuss a project <Arrow/></Button><LinkArrow to="#work">Explore the work</LinkArrow></div>
    </div>
-   <div className="nx-homehero__view"><HomeWorkbench/></div>
+   <HomeWorkbench/>
+   <div className="atelier-experience"><span>Experience across</span><b>Truemeds</b><b>GNC India</b><b>Neil Patel Digital</b><span>Commerce · Growth · Operations</span></div>
   </div></header>
 
   <Section id="work" className="ed-work">
    <Head title="Not just features. *Products that changed the outcome.*" lead="Six detailed stories behind measurable results. Explore the illustrated cards, open a quick view, or dive into the system design." />
-   <WorkRing label="Selected work" items={CASES} render={(c)=><CaseCard c={c} onOpen={setOpen}/>} />
+   <WorkRing label="Selected work" items={CASES} render={(c)=><CaseCard as="article" c={c} onOpen={setOpen}/>} />
    <p className="more" data-reveal><LinkArrow to="/work">Explore all six case studies</LinkArrow></p>
    {open && <CaseModal slug={open} setSlug={setOpen} onClose={()=>setOpen('')}/>}
   </Section>
 
-  <Section id="method" tone="alt"><ProductThinking/></Section>
-  <Section id="journey"><CareerFeature/></Section>
-  <Section id="consulting" tone="alt"><ConsultingFeature/></Section>
+  <Section id="method" className="atelier-section"><ProductThinking/></Section>
+  <Section id="journey" className="atelier-section"><CareerFeature/></Section>
+  <Section id="consulting" className="atelier-section atelier-section--tint"><ConsultingFeature/></Section>
   <Section id="roqiva" tone="band"><RoqivaFounder/></Section>
   <Section id="beyond"><BeyondTeaser/></Section>
 
