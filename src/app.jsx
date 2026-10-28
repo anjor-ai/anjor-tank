@@ -113,6 +113,12 @@ function Opener() {
     window.addEventListener('replay-site-film', play)
     return () => window.removeEventListener('replay-site-film', play)
   }, [])
+  // While the film plays, page heroes hold their entrance and run it once the film clears.
+  useEffect(() => {
+    const r = document.documentElement
+    if (on) r.setAttribute('data-film', '')
+    else r.removeAttribute('data-film')
+  }, [on])
   return on ? <SiteFilm onDone={() => { setOn(false); requestAnimationFrame(() => ScrollTrigger.refresh()) }} /> : null
 }
 

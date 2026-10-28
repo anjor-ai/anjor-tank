@@ -16,6 +16,13 @@ export const pager = {
 export const home = {
   hello: {
     greeting: ['Hello', 'नमस्ते', 'હેલો'],
+    // The hero greeting cycles through these: [word, language, BCP-47 tag]. Mumbai first, then the world.
+    hellos: [
+      ['Hello', 'English', 'en'], ['नमस्ते', 'Hindi', 'hi'], ['નમસ્તે', 'Gujarati', 'gu'], ['नमस्कार', 'Marathi', 'mr'],
+      ['Hola', 'Spanish', 'es'], ['Bonjour', 'French', 'fr'], ['こんにちは', 'Japanese', 'ja'], ['Ciao', 'Italian', 'it'],
+      ['வணக்கம்', 'Tamil', 'ta'], ['Olá', 'Portuguese', 'pt'], ['안녕하세요', 'Korean', 'ko'], ['Hallo', 'German', 'de'],
+      ['مرحبا', 'Arabic', 'ar'], ['নমস্কার', 'Bengali', 'bn'],
+    ],
     title: 'I’m Anjor. I fix *revenue leaks* between systems.',
     lead: 'Product manager at GNC India. I work across ecommerce, growth, internal products and the systems behind a great customer experience.',
     primary: { label: 'See my work', to: '#work' },
@@ -164,7 +171,7 @@ export const hire = {
 export const contactPage = {
   hero: {
     eyebrow: 'Talk',
-    title: 'Tell me what is stuck. *Let’s build the next step.*',
+    title: 'Tell me ==what is stuck==. *Let’s build the next step.*',
     lead: 'A growth bottleneck, a conversion problem, a product role, or a thought on ROQIVA. I reply myself, usually within two working days.',
   },
   trust: 'No production access is needed to talk. Anything later is scoped to the exports you approve.',

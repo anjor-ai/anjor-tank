@@ -1,5 +1,5 @@
 import { gtm } from '../content'
-import { Button, Cta, LinkArrow } from '../components/ui'
+import { Button, Cta, Kin, LinkArrow } from '../components/ui'
 import { Icon } from '../components/icons'
 import { Chip, Dot, Gantt, KHead, KSection, ListTabs, StepTabs, TINTS, Tile, Win } from '../components/kit'
 import { RoqivaFounder } from '../components/folio'
@@ -49,7 +49,7 @@ export default function Hire() {
         <div className="container k-jhero__in">
           <div className="k-jhero__copy">
             <p className="k-rule"><b>[00]</b><span>Selective consulting</span><i /><small>/ Hire</small></p>
-            <h1>Build the systems<br /><em>behind growth.</em></h1>
+            <h1 data-kin data-kin-hero><Kin text="Build the ==systems==" /><br /><em><Kin text="behind growth." /></em></h1>
             <p className="k-lead">I work where your product, CRM, analytics and operations meet. GTM engineering finds the leak. RevOps fixes the loop. ROQIVA is the product I’m founding to make the method repeatable.</p>
             <p className="k-actions"><Button to="/contact?intent=consult#brief">Discuss a project <Icon name="arrow" size={15} /></Button><LinkArrow to="#system">Explore the system</LinkArrow></p>
             <small className="k-hhero__n"><Dot tone="ok" /> Open to the right product role, too. <a href="/contact?intent=job#brief">Let’s talk ↗</a></small>
@@ -61,17 +61,17 @@ export default function Hire() {
       </header>
 
       <KSection id="story">
-        <KHead n="01" label="The idea" tag="Scroll through one decision" title="One decision," sub="five stages." lead="One customer, one refill window, five stages. This is the loop I build for clients, and the loop ROQIVA is designed to run." />
+        <KHead n="01" label="The idea" tag="Scroll through one decision" title="One decision," sub="==five stages==." lead="One customer, one refill window, five stages. This is the loop I build for clients, and the loop ROQIVA is designed to run." />
         <ScrollStory />
       </KSection>
 
       <KSection id="build" tone="soft">
-        <KHead n="02" label="What gets built" tag="Moving parts" title="Signals in, decisions out," sub="and a person at every gate that matters." lead="Events from the tools you already run resolve to one customer, detectors find the leak, a decision layer chooses the action, and a held-back group proves the lift." />
+        <KHead n="02" label="What gets built" tag="Moving parts" title="Signals in, ==decisions out==," sub="and a person at every gate that matters." lead="Events from the tools you already run resolve to one customer, detectors find the leak, a decision layer chooses the action, and a held-back group proves the lift." />
         <div className="v-cmap__solo" data-reveal><ConsultMapScene /></div>
       </KSection>
 
       <KSection id="system">
-        <KHead n="03" label="One commercial system" tag="Three connected layers" title="From the first signal" sub="to the next measured outcome." lead="Each layer solves a different part of the same problem." />
+        <KHead n="03" label="One commercial system" tag="Three connected layers" title="From the first signal" sub="to the next ==measured outcome==." lead="Each layer solves a different part of the same problem." />
         <ListTabs items={LAYERS} label="Explore the architecture">
           {(l, i) => (
             <Tile tint={l.tint} reveal={false} className="k-layer">
@@ -86,12 +86,12 @@ export default function Hire() {
       </KSection>
 
       <KSection id="consulting" tone="soft">
-        <KHead n="04" label="Engagements" tag="Six ways to start" title="Start with" sub="the constraint." lead="A focused audit or a production-ready workflow: I scope the work around what has to change." />
+        <KHead n="04" label="Engagements" tag="Six ways to start" title="Start with" sub="the ==constraint==." lead="A focused audit or a production-ready workflow: I scope the work around what has to change." />
         <div className="k-bento">{gtm.services.slice(0, 6).map((s, i) => <Service key={s.id} s={s} i={i} />)}</div>
       </KSection>
 
       <KSection id="process">
-        <KHead n="05" label="How a project runs" tag="Twelve weeks, typically" title="Less theatre." sub="More shipped decisions." lead="Find the problem, define the guardrails, build the fix, and measure its effect. Timelines depend on scope." />
+        <KHead n="05" label="How a project runs" tag="Twelve weeks, typically" title="Less theatre." sub="More ==shipped decisions==." lead="Find the problem, define the guardrails, build the fix, and measure its effect. Timelines depend on scope." />
         <div className="k-bento">
           <Tile className="k-c7 k-proc"><StepTabs steps={gtm.phases} label="Project phases">
             {(p) => (
@@ -113,7 +113,7 @@ export default function Hire() {
       </KSection>
 
       <KSection id="fit" tone="soft">
-        <KHead n="06" label="Fit check" tag="Before we talk" title="Who this is for," sub="and who it is not." />
+        <KHead n="06" label="Fit check" tag="Before we talk" title="Who this is ==for==," sub="and who it is not." />
         <div className="k-bento">
           <Tile tint="mint" className="k-c6 k-fit"><h3>A good fit</h3><ul>{gtm.fitCheck.good.map((x) => <li key={x}><Icon name="check" size={15} />{x}</li>)}</ul></Tile>
           <Tile className="k-c6 k-fit k-fit--no"><h3>Not what I do</h3><ul>{gtm.fitCheck.not.map((x) => <li key={x}><span aria-hidden="true">–</span>{x}</li>)}</ul></Tile>
@@ -129,7 +129,7 @@ export default function Hire() {
         </Tile>
       </KSection>
 
-      <Cta title="Bring a real constraint. *Let's design the next move.*" lead="Start with the problem and the tools involved. A short brief is enough." primary={{ label: 'Discuss consulting', to: '/contact?intent=consult#brief' }} secondary={{ label: 'Talk about a product role', to: '/contact?intent=job#brief' }} />
+      <Cta title="Bring a ==real constraint==. *Let's design the next move.*" lead="Start with the problem and the tools involved. A short brief is enough." primary={{ label: 'Discuss consulting', to: '/contact?intent=consult#brief' }} secondary={{ label: 'Talk about a product role', to: '/contact?intent=job#brief' }} />
     </PageMotion>
   )
 }

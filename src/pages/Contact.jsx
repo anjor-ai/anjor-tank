@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { contactPage as P, site } from '../content'
 import { Icon } from '../components/icons'
-import { Arrow, Button, Head, Rich, Section } from '../components/ui'
+import { Arrow, Button, Head, Kin, Section } from '../components/ui'
 import { ArtCard } from '../components/Art'
 import { PageMotion } from '../lib/PageMotion'
 import { track } from '../lib/track'
@@ -235,7 +235,7 @@ export default function Contact() {
         <div className="container">
           <div className="ct__head">
             <p className="k-rule"><b>[00]</b><span>Talk</span><i /><small>/ Two ways in</small></p>
-            <h1 className="ct__h"><Rich text={h.title} /></h1>
+            <h1 className="ct__h" data-kin data-kin-hero><Kin text={h.title} /></h1>
             <p className="k-lead">{h.lead}</p>
           </div>
           <div className="ct__grid">

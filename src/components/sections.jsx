@@ -39,7 +39,7 @@ export function MethodTrio() {
 export function ThinkingSection() {
   return (
     <KSection id="method" tone="soft">
-      <KHead n="02" label="How I think" tag="Product decisions" title="A great interface is just" sub="the visible part." lead="The product is the decision beneath it. I connect customer experience with the systems that deliver it, and the metrics that prove it worked." />
+      <KHead n="02" label="How I think" tag="Product decisions" title="A great interface is just" sub="the ==visible part==." lead="The product is the decision beneath it. I connect customer experience with the systems that deliver it, and the metrics that prove it worked." />
       <ListTabs items={THINK} label="Product decisions">
         {(s) => (
           <Paint name={s.paint} fit="bleed" className="v-think">
@@ -62,7 +62,7 @@ export function CareerSection() {
   const t = useClock()
   return (
     <KSection id="journey">
-      <KHead n="03" label="The story so far" tag="Three chapters" title="From understanding demand" sub="to building what delivers it." lead="Different roles. One growing curiosity about how products and businesses really work." />
+      <KHead n="03" label="The story so far" tag="Three chapters" title="From understanding demand" sub="to ==building what delivers it==." lead="Different roles. One growing curiosity about how products and businesses really work." />
       <div className="v-career">
         <Tile className="k-photo" reveal>
           <img src="/img/anjor.webp" width="447" height="721" alt="Anjor Tank" loading="lazy" decoding="async" />
@@ -95,7 +95,7 @@ export function CareerSection() {
 export function ConsultSection() {
   return (
     <KSection id="consulting" tone="soft">
-      <KHead n="04" label="Consulting" tag="GTM engineering and RevOps" title="Growth often breaks" sub="between tools." lead="My consulting work combines GTM engineering and RevOps: find where the commercial journey leaks, engineer the missing operating loop, and prove the lift." />
+      <KHead n="04" label="Consulting" tag="GTM engineering and RevOps" title="Growth often breaks" sub="==between tools==." lead="My consulting work combines GTM engineering and RevOps: find where the commercial journey leaks, engineer the missing operating loop, and prove the lift." />
       <div className="v-cmap">
         <div className="v-cmap__side">
           <Tile className="v-consult__c"><p className="v-k"><b>01</b>GTM engineering</p><h3>Find the leak.</h3><p>Instrument the journey, recover intent and connect acquisition with conversion.</p></Tile>

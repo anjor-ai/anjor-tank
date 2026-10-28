@@ -17,7 +17,7 @@ export default function Work() {
         <ul className="hero__facts label hero__a" style={{ '--i': 3 }}>{P.hero.facts.map((f) => <li key={f}>{f}</li>)}</ul>
       </PageHero>
       <KSection id="cases">
-        <KHead n="01" label="All six systems" tag="Product thinking to business outcome" title="Explore the decisions" sub="behind the results." lead="Six real systems across conversion, growth, search, platform and operations. Each case maps the problem, trade-offs, requirements and measurable outcomes.">
+        <KHead n="01" label="All six systems" tag="Product thinking to business outcome" title="Explore the ==decisions==" sub="behind the results." lead="Six real systems across conversion, growth, search, platform and operations. Each case maps the problem, trade-offs, requirements and measurable outcomes.">
           <LinkArrow to="/hire">How I apply this in consulting</LinkArrow>
         </KHead>
         <div className="k-filter" role="group" aria-label="Filter cases" data-reveal>
@@ -27,7 +27,7 @@ export default function Work() {
           {list.map((c) => <CaseCard key={c.slug} c={c} k={parseInt(c.n, 10) - 1} />)}
         </div>
       </KSection>
-      <Cta topic="work" title="Want this *done on your system?*" lead="Tell me the number that will not move." primary={{ label: 'Send a brief', to: '/contact?intent=consult#brief' }} secondary={{ label: 'Hire me', to: '/hire' }} />
+      <Cta topic="work" title="Want this *done on ==your system==?*" lead="Tell me the number that will not move." primary={{ label: 'Send a brief', to: '/contact?intent=consult#brief' }} secondary={{ label: 'Hire me', to: '/hire' }} />
     </PageMotion>
   )
 }

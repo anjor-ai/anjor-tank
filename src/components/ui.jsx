@@ -3,6 +3,8 @@ import { actors, status as statusMap, site } from '../content'
 import { Icon } from './icons'
 import { Paint } from './paint'
 import { BriefThread } from './v5'
+import { Kin } from './kin'
+export { Kin }
 
 /** The site logo: the name in the display face, in the text colour of the theme. */
 export function Wordmark() {
@@ -39,9 +41,12 @@ export function Section({ id, tone, rule = true, className = '', children }) {
 /** Section header: mono eyebrow, verb-first title, short lead. Left aligned, always. */
 /** Headings mark their highlighted words with *asterisks* in the content. */
 export function Rich({ text }) {
-  if (typeof text !== 'string' || !text.includes('*')) return text
-  return text.split('*').map((p, i) => (i % 2 ? <span key={i} className="em">{p}</span> : p))
+  if (typeof text !== 'string' || !/[*=]/.test(text)) return text
+  return text.split(/(==[^=]+==)/).map((seg, j) => seg.startsWith('==') && seg.endsWith('==') && seg.length > 4
+    ? <mark key={`h${j}`} className="kin-hl">{seg.slice(2, -2)}</mark>
+    : seg.split('*').map((p, i) => (i % 2 ? <span key={`${j}-${i}`} className="em">{p}</span> : p)))
 }
+
 /** The same heading split into words for the scroll-lit statement, keeping the highlighted words. */
 function scrubWords(text) {
   const out = []
@@ -169,7 +174,7 @@ export function Cta({ title, lead, primary, secondary, badges, topic }) {
       <div className="container">
         <div className="v-cta" data-reveal>
           <div className="v-cta__copy">
-            <h2 className="v-cta__h"><Rich text={title} /></h2>
+            <h2 className="v-cta__h" data-kin><Kin text={title} /></h2>
             {lead && <p>{lead}</p>}
             <div className="v-cta__btns">
               <Button to={primary.to} track={`cta_${primary.to.replace(/\W+/g, '_')}`}>{primary.label}<Arrow /></Button>

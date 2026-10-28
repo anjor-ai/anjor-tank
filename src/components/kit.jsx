@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { Icon } from './icons'
+import { Kin } from './kin'
 
 /* ═══════════════════════════════════════════════════════════════════════════
    The component kit. Every section below a page hero is composed from these, and styled in one file (styles/kit.css).
@@ -27,7 +28,7 @@ export function KHead({ n, label, tag, title, sub, lead, as: Tag = 'h2', classNa
   return (
     <header className={cx('k-head', className)} data-reveal>
       {label && <p className="k-rule">{n && <b>[{n}]</b>}<span>{label}</span><i />{tag && <small>/ {tag}</small>}</p>}
-      <Tag className="k-h">{title}{sub && <> <em>{sub}</em></>}</Tag>
+      <Tag className="k-h" data-kin><Kin text={title} />{sub && <> <em><Kin text={sub} /></em></>}</Tag>
       {lead && <p className="k-lead">{lead}</p>}
       {children}
     </header>

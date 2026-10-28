@@ -29,7 +29,19 @@ export function PageMotion({ routeKey, children }) {
         gsap.fromTo(h.querySelectorAll('.sw-w'), { opacity: 0.16 }, { opacity: 1, ease: 'none', stagger: 0.08, scrollTrigger: { trigger: h, start: 'top 88%', end: 'top 48%', scrub: 0.4 } })
       })
       // Section titles rise out of a mask; the hairline in the label draws itself.
-      gsap.utils.toArray('.k-h, .v-feat__h, .v-cta__h', ref.current).forEach((h) => {
+      // Kinetic headings: each word rises out of its own mask, then the ==highlighted== words take the accent
+      // (the stroke sweeps under them, the ink changes colour, the words give one small emphasis bounce).
+      gsap.utils.toArray('[data-kin]:not([data-kin-hero])', ref.current).forEach((h) => {
+        const tl = gsap.timeline({ scrollTrigger: { trigger: h, start: 'top 88%', toggleActions: 'play none none none' } })
+        tl.fromTo(h.querySelectorAll('.kw__i'), { yPercent: 110, rotate: 5 }, { yPercent: 0, rotate: 0, duration: 0.95, ease: 'eOut', stagger: 0.05, clearProps: 'transform' })
+        h.querySelectorAll('mark.kin-hl').forEach((m, j) => {
+          const to = getComputedStyle(m).color, from = getComputedStyle(m.parentElement).color
+          const at = j ? '<0.1' : '>-0.2'
+          tl.fromTo(m, { '--hl': 0, color: from }, { '--hl': 1, color: to, duration: 0.8, ease: 'eInOut', clearProps: 'color' }, at)
+          tl.to(m.querySelectorAll('.kw__i'), { keyframes: [{ scale: 1.07, yPercent: -6, duration: 0.18, ease: 'eOut' }, { scale: 1, yPercent: 0, duration: 0.5, ease: 'eSpring' }], stagger: 0.04, transformOrigin: '50% 85%', clearProps: 'transform' }, '<0.25')
+        })
+      })
+      gsap.utils.toArray('.k-h:not([data-kin]), .v-feat__h, .v-cta__h:not([data-kin])', ref.current).forEach((h) => {
         gsap.fromTo(h, { clipPath: 'inset(0% 0% 100% 0%)', y: 28 }, { clipPath: 'inset(0% 0% -20% 0%)', y: 0, duration: 1.1, ease: 'expo.out', clearProps: 'clipPath', scrollTrigger: { trigger: h, start: 'top 90%', once: true } })
       })
       gsap.utils.toArray('.k-rule i', ref.current).forEach((i) => {

@@ -1,5 +1,5 @@
 import { BELIEFS, EDU, journeyPage, roqiva } from '../content'
-import { Cta, LinkArrow } from '../components/ui'
+import { Cta, Kin, LinkArrow } from '../components/ui'
 import { Icon } from '../components/icons'
 import { AsciiCanvas } from '../components/ascii'
 import { Chip, Dot, KHead, KSection, TINTS, Tile, Win } from '../components/kit'
@@ -87,7 +87,7 @@ export default function Journey() {
         <div className="container k-jhero__in">
           <div className="k-jhero__copy">
             <p className="k-rule"><b>[00]</b><span>The story so far</span><i /><small>/ Path</small></p>
-            <h1>Three chapters.<br /><em>One widening perspective.</em></h1>
+            <h1 data-kin data-kin-hero><Kin text="Three chapters." /><br /><em><Kin text="One ==widening perspective==." /></em></h1>
             <p className="k-lead">From understanding how demand is made, to building the systems underneath it, to founding a product that connects the two.</p>
             <a className="k-jnow" href="/roqiva"><span className="k-jnow__k"><Dot tone="accent" />Right now</span><b>Founder, ROQIVA</b><em>In development · alongside Product Manager, GNC India</em><Icon name="arrow" size={15} /></a>
             <nav className="k-jhero__nav" aria-label="Career chapters">{CHAPTERS.map((c) => <a key={c.k} href={`#chapter-${c.i}`}><b>{c.k}</b>{c.t}<Icon name="arrow" size={14} /></a>)}</nav>
@@ -100,7 +100,7 @@ export default function Journey() {
       </header>
 
       <KSection id="timeline" tone="soft">
-        <KHead n="01" label="A widening field of view" tag="Now, back to 2018" title="Each role adds" sub="another dimension." lead="Demand. Product. Systems. Founding. Learning and work on one timeline." />
+        <KHead n="01" label="A widening field of view" tag="Now, back to 2018" title="Each role adds" sub="another ==dimension==." lead="Demand. Product. Systems. Founding. Learning and work on one timeline." />
         <div data-reveal>
           <Paint name="meadow" className="v-road v-road--wide" tilt={false}>
             <CareerGraph withLearning />
@@ -109,12 +109,12 @@ export default function Journey() {
       </KSection>
 
       <KSection id="chapters">
-        <KHead n="02" label="Three chapters" tag="Latest first" title="The loop I am building now," sub="and what each role before it added." />
+        <KHead n="02" label="Three chapters" tag="Latest first" title="The loop I am ==building now==," sub="and what each role before it added." />
         <div className="k-chaps">{CHAPTERS.map((c) => <Chapter key={c.k} c={c} i={c.i} />)}</div>
       </KSection>
 
       <KSection id="beliefs" tone="soft">
-        <KHead n="03" label="Principles" tag="What stayed constant" title="What the work" sub="taught me." lead="The principles that stayed with me while the systems and responsibilities changed." />
+        <KHead n="03" label="Principles" tag="What stayed constant" title="What the work" sub="==taught me==." lead="The principles that stayed with me while the systems and responsibilities changed." />
         <ul className="k-dm">
           {BELIEFS.map((b, i) => (
             <li key={b.t} className="k-dm__c" data-reveal>
@@ -130,7 +130,7 @@ export default function Journey() {
       </KSection>
 
       <KSection id="learning">
-        <KHead n="04" label="Education" tag="NMIMS, Mumbai" title="The foundations" sub="behind the work." lead="A continuous education in customers, commerce and how complex products scale." />
+        <KHead n="04" label="Education" tag="NMIMS, Mumbai" title="The ==foundations==" sub="behind the work." lead="A continuous education in customers, commerce and how complex products scale." />
         <div className="k-bento">
           {EDU.map(([a, b], i) => {
             const [deg, ...field] = a.split(' · ')
@@ -147,7 +147,7 @@ export default function Journey() {
         </div>
       </KSection>
 
-      <Cta title="Ask me *about any of it.*" lead="Pick a chapter, a case or a role." primary={{ label: 'Start a conversation', to: '/contact#brief' }} secondary={{ label: 'Hire me', to: '/hire' }} />
+      <Cta title="Ask me *about ==any of it==.*" lead="Pick a chapter, a case or a role." primary={{ label: 'Start a conversation', to: '/contact#brief' }} secondary={{ label: 'Hire me', to: '/hire' }} />
     </PageMotion>
   )
 }

@@ -401,7 +401,7 @@ export default function Beyond() {
             </ol>
           </div>
         </section>
-        <Cta title="Say hello *about anything.*" lead="A kart track, a gig, a book, a product problem. All fair game." primary={{ label: 'Say hello', to: '/contact#brief' }} secondary={{ label: 'See where I fit', to: '/hire' }} />
+        <Cta title="Say hello *about ==anything==.*" lead="A kart track, a gig, a book, a product problem. All fair game." primary={{ label: 'Say hello', to: '/contact#brief' }} secondary={{ label: 'See where I fit', to: '/hire' }} />
       </div>
     </PageMotion>
   )
