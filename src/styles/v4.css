@@ -176,22 +176,9 @@
 @media (max-width: 680px) { .v-grid { grid-template-columns: minmax(0, 1fr); } .v-card__mock { width: 470px; } }
 
 /* ─────────────── Feature row ─────────────── */
-.v-feat { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); gap: clamp(24px, 5vw, 80px); align-items: center; }
-.v-feat + .v-feat { margin-top: clamp(48px, 7vw, 100px); }
-.v-feat--flip { grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr); }
-.v-feat--flip .v-feat__copy { order: 2; }
-.v-feat__copy { display: grid; gap: 16px; align-content: center; min-width: 0; }
 .v-feat__h { margin: 0; font: 500 clamp(26px, 2.8vw, 34px)/1.1 var(--font-display); letter-spacing: -0.03em; color: var(--text); }
-.v-feat__lead { margin: 0; font: 400 16px/1.6 var(--font-body); color: var(--text-2); max-width: 46ch; }
-.v-feat__pts { list-style: none; margin: 4px 0; padding: 0; display: grid; gap: 12px; }
-.v-feat__pts li { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 12px; align-items: center; font: 400 15px/1.45 var(--font-body); color: var(--text); }
-.v-feat__pts li > span { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; background: var(--surface); box-shadow: var(--v-shadow); color: var(--text-2); }
-.v-feat__paint { min-height: clamp(360px, 36vw, 500px); }
-@media (max-width: 900px) { .v-feat, .v-feat--flip { grid-template-columns: minmax(0, 1fr); } .v-feat--flip .v-feat__copy { order: 0; } }
 
 /* Kit pieces placed on paintings */
-.v-paint .k-flow { width: min(100%, 640px); background: rgba(255, 255, 255, 0.82); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 20px; box-shadow: var(--v-win-shadow); padding: 12px; }
-[data-theme='dark'] .v-paint .k-flow { background: rgba(28, 30, 27, 0.82); }
 .v-paint .k-gantt { width: 100%; }
 .v-paint .v-win .k-gantt__track { background: var(--surface-2); }
 
@@ -234,17 +221,7 @@
 .v-cta__badges li { padding: 6px 10px; border-radius: 999px; background: var(--bg-2); font: 500 11px/1 var(--font-mono); color: var(--text-2); }
 .v-cta__paint { min-height: 380px; border-radius: var(--v-r); }
 .v-cta__paint .v-paint__stage { padding: 52px 0 0 52px; }
-.v-cta__win { border-bottom-left-radius: 0; border-bottom-right-radius: 0; max-width: 520px; }
-.v-brief { display: grid; gap: 12px; padding: 4px 2px 12px; }
-.v-brief__f { display: grid; gap: 6px; margin: 0; }
-.v-brief__f small { font: 500 10px/1 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-3); }
-.v-brief__f > span { display: flex; align-items: center; gap: 6px; min-height: 38px; padding: 0 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--surface-2); font: 400 13.5px/1 var(--font-body); color: var(--text); }
-.v-brief__f .is-chips { flex-wrap: wrap; padding: 6px; }
-.v-brief__f em { font-style: normal; padding: 6px 9px; border-radius: 7px; background: var(--surface); border: 1px solid var(--line); font: 500 12px/1 var(--font-display); }
-.v-caret { width: 1.5px; height: 16px; background: var(--accent); animation: v-blink 1s steps(2) infinite; }
 @keyframes v-blink { 50% { opacity: 0; } }
-.v-brief__send { justify-self: start; display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; padding: 10px 14px; border-radius: 10px; background: #1d1e1b; color: #fff; font: 500 13px/1 var(--font-display); }
-[data-theme='dark'] .v-brief__send { background: #eeeee8; color: #1d1e1b; }
 @media (max-width: 900px) { .v-cta { grid-template-columns: minmax(0, 1fr); padding: 14px; } .v-cta__copy { padding: 18px 12px 6px; } .v-cta__paint { min-height: 320px; } .v-cta__paint .v-paint__stage { padding: 36px 0 0 24px; } }
 
 /* ─────────────── Home sections on paintings ─────────────── */
@@ -265,22 +242,14 @@
 
 @media (prefers-reduced-motion: reduce) {
   .v-paint__stage, .v-float { transform: none !important; transition: none !important; }
-  .v-show__bar, .v-trace__ring::after, .v-caret { animation: none !important; }
+  .v-show__bar, .v-trace__ring::after { animation: none !important; }
   .v-show__paint, .v-show__mock, .v-metric { animation: none !important; }
 }
 
 /* Consulting on Home */
-.v-consult { display: grid; grid-template-columns: minmax(0, 1fr); gap: 16px; }
-.v-consult__paint { min-height: 440px; }
-.v-consult__side { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; }
-@media (max-width: 640px) { .v-consult__side { grid-template-columns: minmax(0, 1fr); } }
 .v-consult__c { display: grid; gap: 10px; align-content: start; padding: 26px !important; }
 .v-consult__c h3 { margin: 6px 0 0; font: 500 24px/1.15 var(--font-display); letter-spacing: -0.025em; color: var(--text); }
 .v-consult__c p:last-child { margin: 0; font: 400 15px/1.55 var(--font-body); color: var(--text-2); }
-.v-consult__bar { grid-column: 1 / -1; }
-.v-road__go { margin: 14px 0 0; }
-.k-career__road { min-width: 0; }
-@media (max-width: 900px) { .v-consult { grid-template-columns: minmax(0, 1fr); } .v-consult__paint { min-height: 340px; } }
 
 /* Case hero and Work hero on paintings */
 .v-chero { min-height: clamp(380px, 34vw, 480px); }
@@ -289,7 +258,6 @@
 .v-chero__mock .mk { border-radius: 14px 14px 0 0; border: 0; box-shadow: var(--v-win-shadow); }
 .v-workhero { min-height: 0; width: 100%; }
 .v-workhero .v-paint__stage { padding: clamp(20px, 3vw, 40px); }
-.hero--work .hero__visual > .v-workhero { box-shadow: var(--v-shadow); }
 @media (max-width: 640px) { .v-chero__mock { width: 480px; } }
 .v-road--wide { min-height: 0; }
 .v-road--wide .v-paint__stage { padding: clamp(20px, 4vw, 56px); }
@@ -319,7 +287,7 @@
 }
 
 /* Grids whose single column must never grow past the screen */
-.v-paint, .k-chero__copy, .k-head, .v-feat__copy, .v-cta__copy, .k-jhero__copy, .v-show__stage, .k-chap__card { grid-template-columns: minmax(0, 1fr); }
+.v-paint, .k-chero__copy, .k-head, .v-cta__copy, .k-jhero__copy, .v-show__stage, .k-chap__card { grid-template-columns: minmax(0, 1fr); }
 .k-chero__copy > *, .v-paint__stage > * { min-width: 0; }
 .k-chips { flex-wrap: wrap; }
 .rqor__who .label { white-space: normal; }
@@ -348,7 +316,7 @@
 
 /* Career graph */
 .cg { --cg-ink: var(--text); width: 100%; border-radius: 16px; background: var(--surface); box-shadow: var(--v-win-shadow); overflow: hidden; color: var(--text); }
-.v-win .cg, .cg--flat { box-shadow: none; border-radius: 0; }
+.v-win .cg { box-shadow: none; border-radius: 0; }
 .cg__top { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 16px; padding: 12px 18px; border-bottom: 1px solid var(--line); background: var(--surface-2); font: 500 11px/1.3 var(--font-mono); color: var(--text-3); }
 .cg__cmd b { color: var(--accent); margin-right: 6px; }
 .cg__legend { display: inline-flex; align-items: center; gap: 6px 10px; flex-wrap: wrap; }
@@ -592,7 +560,6 @@
 /* Hire: layer art */
 .k-layer__art { position: relative; aspect-ratio: 16 / 7; margin: 4px 0 6px; border-radius: 14px; overflow: hidden; background: radial-gradient(90% 80% at 50% 45%, #1b1f1a, #0c0d0c 75%); }
 .k-layer__art canvas { position: absolute; inset: 0; width: 100%; height: 100%; --ascii-ink: #e9e6dc; --ascii-accent: #8fa8ff; }
-.v-hire-wf .v-paint__stage { padding: clamp(12px, 2.4vw, 32px); }
 
 .v-career__row .k-map { max-height: 150px; width: auto; justify-self: end; }
 .v-career__row .k-now h3 { margin: 10px 0 14px; }
@@ -603,8 +570,6 @@
   .mmenu__link { font-size: 24px; }
 }
 @media (max-width: 900px) { .nav .nav__in { position: relative; z-index: 2; } .mmenu { z-index: 1; } }
-
-
 
 /* ASCII palette: ink, accent, dim, warn */
 .v-mx__cv, .k-layer__art canvas, .k-dm__cv { --ascii-ink: #ece9df; --ascii-accent: #9fb0ff; --ascii-dim: #6f6d65; --ascii-warn: #f0b45a; }
@@ -635,7 +600,6 @@
 .an.is-run .an__g { font-family: var(--font-mono); font-weight: 500; color: var(--accent); }
 .an__sp { display: inline-block; width: 0.28em; }
 /* The footer no longer carries the name art */
-.foot__horizon { display: none; }
 
 /* ─────────────── Home hero: one fold carries the claim, the proof and the system ─────────────── */
 .atelier-hero > .container.v-hero { display: grid; grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.08fr); column-gap: clamp(24px, 3.4vw, 56px); align-items: center; }

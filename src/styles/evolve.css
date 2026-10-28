@@ -63,110 +63,20 @@ body::before { background: radial-gradient(60% 40% at 85% -5%, color-mix(in srgb
 .cta__badges li::before { color: #fff; }
 
 /* ───────── Home hero: copy, a product frame on a colour mesh, a bento row of numbers ───────── */
-.hero--hello { padding-block: clamp(16px, 2.4vw, 32px) clamp(40px, 5vw, 72px); }
-.hero--hello::before, .hero--hello::after { display: none; }
-.hero--hello .hero__in { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: clamp(24px, 3vw, 48px); }
-.hero--hello .h-hero { max-width: 16ch; }
-.hero--hello .hero__copy { gap: 22px; }
-.hstage { position: relative; display: grid; place-items: center; min-height: 540px; padding: clamp(60px, 6vw, 84px) clamp(16px, 3vw, 40px); border: 1px solid var(--line); border-radius: var(--panel-r); overflow: hidden;
-  background: radial-gradient(60% 55% at 14% 12%, var(--mesh-a), transparent 72%), radial-gradient(60% 65% at 88% 22%, var(--mesh-b), transparent 72%), radial-gradient(75% 55% at 50% 108%, var(--mesh-c), transparent 72%), var(--surface-2); }
-.hstage::after { content: ''; position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(var(--dot) 1px, transparent 1px); background-size: 22px 22px; -webkit-mask-image: radial-gradient(70% 70% at 50% 50%, #000, transparent); mask-image: radial-gradient(70% 70% at 50% 50%, #000, transparent); }
-.hstage .hlw { position: static; padding: 0; width: 100%; display: grid; place-items: center; }
-.hstage .hlc { max-width: 500px; width: 100%; background: color-mix(in srgb, var(--surface) 90%, transparent); backdrop-filter: blur(16px); border-color: color-mix(in srgb, var(--text) 10%, transparent); box-shadow: 0 40px 80px -32px rgba(10, 10, 30, 0.45); border-radius: 30px; }
-.hstage .hfl { position: absolute; inset: 0; z-index: 3; }
-.hstage .hfl li { background: var(--surface); box-shadow: var(--shadow); }
-.hstage .hfl__0 { left: 5%; top: 6%; }
-.hstage .hfl__1 { right: 5%; top: 12%; left: auto; }
-.hstage .hfl__2 { left: 8%; right: auto; bottom: 6%; top: auto; }
-.hero--hello .hero__rail { margin-top: clamp(16px, 2vw, 24px); }
-.hpr { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(10px, 1.4vw, 16px); margin: clamp(16px, 2vw, 24px) 0 0; border: 0; }
-.hpr li, .hpr li + li { position: relative; overflow: hidden; align-content: end; min-height: 128px; padding: 20px 22px; border: 1px solid color-mix(in srgb, var(--text) 8%, transparent); border-radius: 28px; background: var(--surface); transition: transform 0.35s var(--ease-out); }
-.hpr li:hover { transform: translateY(-4px); }
-.hpr li::after { content: ''; position: absolute; right: -24px; top: -24px; width: 96px; height: 96px; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--ts, var(--accent)) 55%, transparent), transparent 70%); }
-.hpr li:nth-child(1) { background: var(--tg); border-color: transparent; --ts: #fff; }
-.hpr li:nth-child(2) { background: var(--t-lilac); --ts: var(--ts-lilac); }
-.hpr li:nth-child(3) { background: var(--t-mint); --ts: var(--ts-mint); }
-.hpr li:nth-child(4) { background: var(--t-sky); --ts: var(--ts-sky); }
-.hpr b { position: relative; z-index: 1; font-size: clamp(28px, 3.2vw, 40px); }
-.hpr span { position: relative; z-index: 1; font-size: 13px; color: var(--text-2); }
-.hpr li:nth-child(1) b { color: #fff; } .hpr li:nth-child(1) span { color: rgba(255, 255, 255, 0.9); }
-.htg li { background: var(--surface); }
-.htg li:first-child { background: var(--text); border-color: var(--text); color: var(--bg); }
-@media (max-width: 1000px) {
-  .hero--hello .hero__in { grid-template-columns: minmax(0, 1fr); }
-  .hstage { min-height: 0; }
-}
-@media (max-width: 760px) {
-  .hpr { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .hstage { padding: 56px 14px 60px; border-radius: 28px; }
-  .hstage .hfl__1 { top: 3%; right: 4%; } .hstage .hfl__0 { display: none; }
-  .hstage .hfl li { font-size: 12px; padding: 7px 11px; }
-}
 
 /* Kinetic type: lose the rules, keep the movement */
-.kin { border-block: 0; padding-block: clamp(8px, 1.4vw, 20px); }
-.kin__r.is-fill { color: transparent; -webkit-text-stroke-color: var(--accent-text); }
 
 /* ───────── Case cards: one tint each, the product picture on top, a pill to open the case ───────── */
-.ccd--t0 { --tint: var(--t-peach); --ts: var(--ts-peach); }
-.ccd--t1 { --tint: var(--t-lilac); --ts: var(--ts-lilac); }
-.ccd--t2 { --tint: var(--t-mint); --ts: var(--ts-mint); }
-.ccd--t3 { --tint: var(--t-sky); --ts: var(--ts-sky); }
-.ccd--t4 { --tint: var(--t-butter); --ts: var(--ts-butter); }
-.ccd__a { border-radius: 34px; border-color: color-mix(in srgb, var(--ts) 32%, transparent); background: var(--tint); box-shadow: none; }
-.ccd__a:hover { border-color: color-mix(in srgb, var(--ts) 80%, transparent); box-shadow: 0 24px 50px -28px color-mix(in srgb, var(--ts) 70%, transparent); }
-.ccd__art { border-bottom: 0; background: radial-gradient(90% 100% at 50% 0%, color-mix(in srgb, var(--ts) 40%, transparent), transparent 75%); }
-.ccd__top .ccd__n { padding: 3px 9px; border-radius: 999px; background: var(--text); color: var(--bg); }
-.ccd__m { border-top-color: color-mix(in srgb, var(--ts) 35%, transparent); }
-.ccd__m span { color: var(--text-2); }
-.ccd__tags li { background: color-mix(in srgb, var(--surface) 72%, transparent); border-color: color-mix(in srgb, var(--ts) 40%, transparent); color: var(--text-2); }
-.ccd__b { background: color-mix(in srgb, var(--surface) 70%, transparent); }
-.ccd__go { background: color-mix(in srgb, var(--surface) 75%, transparent); border-color: color-mix(in srgb, var(--ts) 45%, transparent); color: var(--text); }
-.ccd__full { padding: 9px 16px; border-radius: 999px; background: var(--text); color: var(--bg); transition: transform 0.25s var(--ease-out); }
-.ccd__full:hover { color: var(--bg); transform: translateX(2px); }
-.ccd__mock { transform: scale(var(--ms, 0.62)); }
-.ccd__a:hover .ccd__mock { transform: scale(calc(var(--ms, 0.62) + 0.04)); }
-.cwr__c .ccd__a { box-shadow: 0 34px 70px -40px rgba(10, 10, 30, 0.5); }
-.cwr__c.is-front .ccd__a { border-color: var(--ts); box-shadow: 0 0 0 1px var(--ts), 0 34px 80px -30px color-mix(in srgb, var(--ts) 60%, transparent); }
-.cwr__ctl .chip { width: 42px; height: 42px; justify-content: center; padding: 0; }
 
 /* Work page: a bento of six, wide and narrow cards in turn */
-.cgrid--bento { grid-template-columns: repeat(12, minmax(0, 1fr)); gap: clamp(12px, 1.6vw, 20px); }
-.cgrid--bento > li { grid-column: span 7; --ms: 0.84; }
-.cgrid--bento > li:nth-child(4n+2), .cgrid--bento > li:nth-child(4n+3) { grid-column: span 5; --ms: 0.68; }
-.cgrid--bento > li:nth-child(4n+4) { grid-column: span 7; --ms: 0.84; }
-.cgrid--bento > li .ccd__art { height: 300px; }
-@media (max-width: 1000px) { .cgrid--bento > li, .cgrid--bento > li:nth-child(n) { grid-column: span 6; --ms: 0.62; } .cgrid--bento > li .ccd__art { height: 208px !important; } }
-@media (max-width: 680px) { .cgrid--bento > li, .cgrid--bento > li:nth-child(n) { grid-column: 1 / -1; } }
 
 /* ───────── System rail, layers, where I fit, founder ───────── */
-.sysr ol { gap: clamp(10px, 1.4vw, 16px); }
-.sysr li { padding: 26px 24px 28px; min-height: 200px; border: 0; border-radius: 30px; background: var(--t-peach); }
-.sysr li:nth-child(2) { background: var(--t-lilac); } .sysr li:nth-child(3) { background: var(--t-mint); }
-.sysr li.is-end { background: var(--tg); }
-.sysr__n { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--surface); color: var(--text); box-shadow: 0 0 0 1px var(--line); }
-.sysr li.is-end .sysr__n { background: rgba(255, 255, 255, 0.22); color: #fff; box-shadow: none; }
-.sysr__a { background: var(--surface); }
-.lyr__l li { border: 1px solid transparent; border-left-width: 1px; border-radius: 20px; padding: 16px 20px; }
-.lyr__l li.is-on { background: var(--surface); border-color: var(--line-2); box-shadow: var(--shadow); }
-.lyr__v { border-radius: var(--panel-r); background: radial-gradient(60% 60% at 50% 40%, var(--mesh-b), transparent 75%), var(--surface-2); border: 1px solid var(--line); }
-.wif { gap: clamp(10px, 1.4vw, 16px); }
-.wif__tab { padding: 15px 18px; border-radius: 999px; background: var(--surface); }
-.wif__tab[aria-selected='true'] { background: var(--text); border-color: var(--text); color: var(--bg); }
-.wif__tab[aria-selected='true'] .wif__n, .wif__tab[aria-selected='true'] svg { color: var(--bg); }
-.wif__panel { border: 0; border-radius: var(--panel-r); background: radial-gradient(70% 90% at 100% 0%, var(--t-sky), transparent 70%), var(--surface); box-shadow: inset 0 0 0 1px var(--line); }
 .fdr { border-radius: var(--panel-r); background: radial-gradient(60% 80% at 100% 0%, rgba(47, 149, 255, 0.28), transparent 65%), radial-gradient(50% 70% at 0% 100%, rgba(150, 110, 255, 0.2), transparent 65%), #0e1014; }
 
 /* ───────── Sticky stories (Hire, Journey): the picture sits on a mesh stage ───────── */
-.stk--wide .stk__pin { padding: clamp(12px, 1.8vw, 24px); border: 1px solid var(--line); border-radius: var(--panel-r); background: radial-gradient(60% 50% at 10% 0%, var(--mesh-a), transparent 72%), radial-gradient(60% 55% at 100% 100%, var(--mesh-c), transparent 72%), var(--surface-2); }
-.stk__prog i.is-on { background: var(--text); }
-.sysv { border-radius: 24px; background: var(--surface); box-shadow: var(--shadow); }
-.jrn { border: 0; border-radius: 28px; box-shadow: var(--shadow); }
-.jrn__r { border-radius: 22px; }
-.jrn__mono { border-radius: 14px; }
 
 /* ───────── Shared cards ───────── */
-.acard, .cells, .disc, .callout, .tbl { border-radius: var(--r-lg); }
+.acard { border-radius: var(--r-lg); }
 .acard { border-color: transparent; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); }
 .acards > li:nth-child(5n+1) .acard__art { background: radial-gradient(80% 100% at 50% 0%, var(--t-peach), transparent 78%), var(--bg-2); }
 .acards > li:nth-child(5n+2) .acard__art { background: radial-gradient(80% 100% at 50% 0%, var(--t-lilac), transparent 78%), var(--bg-2); }
@@ -174,10 +84,7 @@ body::before { background: radial-gradient(60% 40% at 85% -5%, color-mix(in srgb
 .acards > li:nth-child(5n+4) .acard__art { background: radial-gradient(80% 100% at 50% 0%, var(--t-sky), transparent 78%), var(--bg-2); }
 .acards > li:nth-child(5n) .acard__art { background: radial-gradient(80% 100% at 50% 0%, var(--t-butter), transparent 78%), var(--bg-2); }
 .acard__art { border-bottom: 0; height: 180px; }
-.cells { border: 0; box-shadow: inset 0 0 0 1px var(--line); }
-.cs__q, .cs__pn a, .cs__side { border-radius: 26px; }
-.cs__pn a { background: var(--surface); }
-.cs__rq { border-radius: var(--panel-r); background: radial-gradient(60% 80% at 100% 0%, rgba(47, 149, 255, 0.26), transparent 65%), #0e1014; }
+.cs__q { border-radius: 26px; }
 
 /* ───────── Page heroes below the home page ───────── */
 .phero { padding-block: clamp(20px, 3vw, 44px) clamp(36px, 4.4vw, 64px); }
@@ -189,74 +96,8 @@ body::before { background: radial-gradient(60% 40% at 85% -5%, color-mix(in srgb
 .portrait img { border-radius: var(--panel-r); }
 
 /* ───────── Case study page ───────── */
-.phero--split.cs__hero .phero__in { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); }
-.cs__hero .h-hero { max-width: 18ch; }
-.cs__stage { padding: clamp(14px, 2vw, 28px); border: 1px solid var(--line); border-radius: var(--panel-r); overflow: hidden;
-  background: radial-gradient(70% 60% at 12% 0%, var(--mesh-a), transparent 72%), radial-gradient(70% 60% at 100% 100%, var(--mesh-c), transparent 72%), var(--surface-2); }
-.cs__hero .cs__m { gap: 10px; margin-top: 4px; }
-.cs__hero .cs__m li { min-width: 120px; padding: 14px 18px; border: 1px solid var(--line); border-radius: 22px; background: var(--surface); }
-.cs__hero .cs__m li:first-child { background: var(--tg); border-color: transparent; }
-.cs__hero .cs__m li:first-child b, .cs__hero .cs__m li:first-child span { color: #fff; }
-.cs__hero .ccd__tags li { background: var(--surface); }
-@media (max-width: 1000px) { .phero--split.cs__hero .phero__in { grid-template-columns: minmax(0, 1fr); } .cs__hero .phero__vis { max-width: none; } }
 
 /* Each of the eleven parts is a rounded panel; the white cards sit on it */
-.pagemotion:has(.cz) .sec { padding-block: clamp(8px, 1vw, 12px); background: none !important; margin-inline: 0; border-radius: 0; border-top: 0; }
-.pagemotion:has(.cz) .sec--band { background-image: none !important; }
-.pagemotion:has(.cz) .cta.sec--alt { padding-block: clamp(48px, 7vw, 96px); margin-inline: clamp(8px, 1.2vw, 16px); background: var(--tg) !important; }
-.cz { padding: clamp(24px, 4vw, 60px); border: 1px solid color-mix(in srgb, var(--pt, var(--text)) 10%, var(--line)); border-radius: var(--panel-r); background: var(--pn, var(--surface)); }
-#summary .cz { --pn: var(--t-sky); --pt: var(--ts-sky); }
-#problem .cz { --pn: var(--t-peach); --pt: var(--ts-peach); }
-#diagnosis .cz { --pn: var(--surface); }
-#shift .cz { --pn: var(--t-lilac); --pt: var(--ts-lilac); }
-#architecture .cz { --pn: var(--surface); }
-#workflow .cz { --pn: var(--t-mint); --pt: var(--ts-mint); }
-#requirements .cz { --pn: var(--surface); }
-#measurement .cz { --pn: var(--t-butter); --pt: var(--ts-butter); }
-#rollout .cz { --pn: var(--surface); }
-#impact .cz { --pn: var(--t-peach); --pt: var(--ts-peach); }
-#playbook .cz { --pn: var(--surface); }
-.cz__k span { background: var(--text); color: var(--bg); }
-.cz__h .h-2 { max-width: 26ch; }
-.czx__f > div, .czq li, .cza li, .czr li, .czi__x, .czm__g, .czp .czm__c li { border-color: color-mix(in srgb, var(--text) 8%, transparent); }
-.czx__f > div, .czq li, .cza li, .czr li, .czi__x { background: var(--surface); border-radius: 24px; }
-.czx__f > div:first-child { background: var(--tg); border-color: transparent; color: #fff; }
-.czx__f > div:first-child .label { color: rgba(255, 255, 255, 0.82); }
-.czx__a { border-radius: 24px; }
-.czq__n { -webkit-text-stroke-color: var(--ts, var(--accent-text)); color: transparent; }
-.czq li:nth-child(1) { --ts: var(--ts-peach); } .czq li:nth-child(2) { --ts: var(--ts-lilac); } .czq li:nth-child(3) { --ts: var(--ts-mint); } .czq li:nth-child(4) { --ts: var(--ts-butter); }
-.czq li::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 5px; background: var(--ts); }
-.czf__dot { background: var(--surface); border-color: var(--text); }
-.czf__line i, .czs__line i { background: var(--text); }
-.czf li { padding: 34px 22px 22px; border-radius: 24px; background: var(--surface); margin-top: 8px; }
-.czf__dot { top: -8px; left: 22px; }
-.czf__line { display: none; }
-.czs__n { background: var(--text); color: var(--bg); box-shadow: 0 0 0 6px color-mix(in srgb, var(--text) 10%, transparent); }
-.czs__move { border: 0; border-radius: 28px; background: #0e1014; color: #f4f3ee; }
-.czs__move .label { color: #8fc2ff; } .czs__m { color: #fff; } .czs__move blockquote { color: #c4c7ce; border-color: var(--ts-lilac); }
-.cza li:nth-child(1) { background: var(--t-peach); } .cza li:nth-child(4) { background: var(--t-sky); }
-.cza__n { background: var(--text); color: var(--bg); }
-.cza__p { border: 0; border-radius: 22px; background: var(--surface); }
-.czw__c { background: var(--text); color: var(--bg); }
-.czw__c b { background: color-mix(in srgb, var(--bg) 24%, transparent); }
-.czl li { border: 0; border-radius: 26px; }
-.czl li:nth-child(1) { background: var(--t-peach); } .czl li:nth-child(2) { background: var(--t-lilac); } .czl li:nth-child(3) { background: var(--t-mint); } .czl li:nth-child(4) { background: var(--t-sky); }
-.czm { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); gap: 12px; }
-.czm__p { border-radius: 30px; color: #f4f3ee; background: radial-gradient(70% 70% at 80% 100%, rgba(47, 149, 255, 0.55), transparent 70%), #0e1014; }
-.czm__p .label { color: #8fc2ff; } .czm__t { color: #fff; } .czm__p p { color: #c4c7ce; }
-.czm__g { border: 0; border-radius: 30px; background: var(--surface); }
-.czm__c--g li { background: var(--t-sky); }
-.czr li { border-radius: 24px; }
-.czr li:nth-child(1) { background: var(--t-butter); } .czr li:nth-child(2) { background: var(--t-peach); } .czr li:nth-child(3) { background: var(--t-lilac); } .czr li:nth-child(4) { background: var(--t-mint); } .czr li:last-child { background: var(--t-sky); }
-.czr__n { background: var(--text); color: var(--bg); }
-.czi__n li { border: 0; border-radius: 26px; }
-.czi__n li:nth-child(1) { background: var(--tg); } .czi__n li:nth-child(1) .czi__v, .czi__n li:nth-child(1) span, .czi__n li:nth-child(1) small { color: #fff; }
-.czi__n li:nth-child(2) { background: var(--t-lilac); } .czi__n li:nth-child(3) { background: var(--t-mint); } .czi__n li:nth-child(4) { background: var(--t-sky); } .czi__n li:nth-child(5) { background: var(--t-butter); } .czi__n li:nth-child(6) { background: var(--surface); }
-.czi__v { color: var(--text); }
-.czi__d li { background: var(--t-peach); }
-.czp__s li > span { border: 0; border-radius: 20px; background: var(--t-butter); }
-.czp__s b { color: var(--text); }
-.czm__c li { background: var(--surface); }
 
 /* The case's section bar floats like the nav */
 .snav { top: calc(var(--nav-h) - 2px); width: calc(100% - 24px); max-width: 1080px; margin: 0 auto; border: 1px solid var(--line); border-radius: 999px; background: var(--nav-bg); box-shadow: var(--shadow); }
@@ -265,7 +106,7 @@ body::before { background: radial-gradient(60% 40% at 85% -5%, color-mix(in srgb
 /* ───────── Contact: readable calendar, softer cards ───────── */
 .bcal__day:not([disabled]) { background: var(--accent-soft); font-weight: 500; }
 .bcal__day[disabled] { opacity: 0.6; color: var(--text-3); background: none; }
-.bwin, .bcal, .pcard { border-radius: 28px; }
+.bwin, .bcal { border-radius: 28px; }
 .ask { border-radius: 26px; }
 
 /* ───────── Footer ───────── */
@@ -275,7 +116,6 @@ body::before { background: radial-gradient(60% 40% at 85% -5%, color-mix(in srgb
 @media (max-width: 900px) { .nav .nav__in { padding-left: 14px; } .nav__links { display: none; } }
 @media (max-width: 760px) {
   .sec--alt, .sec--band { margin-inline: 6px; border-radius: 28px; }
-  .cz { padding: 22px 16px; border-radius: 28px; }
   .cta.sec--alt { margin-inline: 6px; }
   .snav { width: calc(100% - 12px); }
 }
@@ -293,31 +133,15 @@ body::before { background: radial-gradient(60% 40% at 85% -5%, color-mix(in srgb
 @media (max-width: 760px) { .phero:not(.cs__hero) .phero__in { padding: 22px 18px; border-radius: 28px; } .ways { grid-template-columns: minmax(0, 1fr); } }
 
 /* Hire: the leak, offer and phase panels */
-.vt__tab, .jm__rail > *, .ph__seg { border-radius: 18px; }
-.vt__panel, .jm__panel, .ph__panel, .offer, .grd__c, .aib__c, .shp__c { border-radius: 26px; }
-.vt__tab[aria-selected='true'] { background: var(--text); border-color: var(--text); color: var(--bg); }
-.vt__tab[aria-selected='true'] .vt__n { color: var(--bg); }
-.vt__panel { background: radial-gradient(70% 90% at 100% 0%, var(--t-peach), transparent 70%), var(--surface); }
+.offer { border-radius: 26px; }
 
 /* Contrast fixes found by the scan */
-.vt__tab[aria-selected='true'] *, .wif__tab[aria-selected='true'] * { color: var(--bg) !important; }
-.ccd__b .label { color: var(--text-2); }
 [data-theme='dark'] .ha__av, [data-theme='dark'] .art__av { color: #06121f; }
 .mk__flow li.is-end { color: var(--text); }
 @media (max-width: 760px) { .phero p > .btn, p > .btn { white-space: normal; } }
 .sec--alt + .sec--alt, .sec--alt + .sec--band, .sec--band + .sec--alt { margin-top: 12px; }
 
-.ed-homehero { overflow: clip; }
-
 /* Journey ribbon: the four cards take the shared tints, so they follow the theme */
-.ed-journey__timeline li { border-radius: 26px; border: 0 !important; color: var(--text); }
-.ed-journey__timeline li:nth-child(1) { background: var(--t-peach); color: var(--text); }
-.ed-journey__timeline li:nth-child(2) { background: var(--t-lilac); color: var(--text); }
-.ed-journey__timeline li:nth-child(3) { background: var(--t-mint); color: var(--text); }
-.ed-journey__timeline li:nth-child(4) { background: #0e1014; color: #f4f3ee; }
-.ed-journey__timeline li:nth-child(1) .label, .ed-journey__timeline li:nth-child(2) .label, .ed-journey__timeline li:nth-child(3) .label { color: var(--text-2); }
-.ed-journey__timeline li p { opacity: 1; color: var(--text-2); }
-.ed-journey__timeline li:nth-child(4) p, .ed-journey__timeline li:nth-child(4) .label { color: #b7c0cf; }
 
 [data-theme='light'] .ha__pill--sky, [data-theme='light'] .status--sky { color: #075a8c; }
 [data-theme='light'] .ha__pill--ok { color: #11633f; }

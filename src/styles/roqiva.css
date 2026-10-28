@@ -1,7 +1,6 @@
 /* ROQIVA: the page laid out as the tool. One app window (sidebar + content) over the ROQIVA terrain, always dark, plus the
    intro (film / word reel). Start states for motion are set in JS, so without JS or with reduced motion everything is visible. */
 
-
 /* ═══════════ Backdrop ═══════════ */
 .roq { position: relative; isolation: isolate; padding: clamp(40px, 11vh, 120px) 0 clamp(260px, 58vh, 620px); background: #141413; } /* the long bottom lets the horizon, the wordmark and the launch show once the window has passed */
 .rqbd { position: absolute; inset: 0; z-index: -1; overflow: clip; pointer-events: none; } /* clip, not hidden: hidden would stop the sticky layer from sticking */
@@ -246,7 +245,6 @@
 .rqw__img { position: absolute; inset: 0; z-index: -2; overflow: hidden; }
 .rqw__img { background: #141413; }
 .rqw__img .artcv { position: absolute; inset: 0; }
-.rqw__card--1::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(180deg, rgba(16, 16, 15, 0.1) 0%, rgba(16, 16, 15, 0.5) 40%, rgba(16, 16, 15, 0.94) 100%); }
 .rqw__card--2 { justify-content: flex-start; background: rgba(255, 255, 255, 0.035); }
 .rqw__card--2 .rqw__img { position: relative; inset: auto; z-index: 0; height: 230px; margin: 10px 10px 0; border-radius: 16px; }
 .rqw__top { position: absolute; top: 0; left: 0; right: 0; z-index: 1; display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; }
@@ -318,10 +316,8 @@
   .rqban__l { white-space: normal; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
   .rqban__k { transform: none; }
   .rqw__card { min-height: 0; }
-  .rqw__card--1 { padding-top: 220px; }
   .rqw__stats { grid-template-columns: minmax(0, 1fr); gap: 10px; }
   .rqw__stats > div + div { padding-left: 0; border-left: 0; }
-  .rqpg__bar { min-height: 46px; }
 }
 
 /* ═══════════ The intro (scenes/RoqivaIntro.jsx): the film on a direct visit, the word reel on arrival from another page ═══════════ */
@@ -365,9 +361,7 @@ html.rq-lock, html.rq-lock body { overflow: hidden; }
 .rqf__skip { position: absolute; right: 20px; bottom: 20px; z-index: 2; padding: 9px 16px; border: 1px solid rgba(250, 249, 245, 0.25); border-radius: 999px; background: rgba(20, 20, 19, 0.55); color: #faf9f5; font: 500 13px var(--font-body); cursor: pointer; backdrop-filter: blur(8px); }
 .rqf__skip:hover { background: #faf9f5; color: #141413; }
 /* the reel on arrival */
-.rqf--reel { display: grid; place-items: center; }
-.rqf--reel .rl { width: min(86vw, 980px); font-size: min(22vw, 250px); color: #faf9f5; }
-.rqf__l .rqf__scr, .rqf--reel .rl__tile, .rqf__c2 .rqf__scr--in { background: #262624; box-shadow: inset 0 0 0 2px rgba(250, 249, 245, 0.18); }
+.rqf__l .rqf__scr, .rqf__c2 .rqf__scr--in { background: #262624; box-shadow: inset 0 0 0 2px rgba(250, 249, 245, 0.18); }
 /* Portrait screens: the stage's central 1000 px is what shows, so the type is resized and the lines stack */
 .rqf--tall .rqf__word { font-size: 190px; }
 .rqf--tall .rqf__line { flex-direction: column; gap: 0.06em; font-size: 180px; }

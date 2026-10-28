@@ -19,8 +19,6 @@ import './studio.css'
 import './portfolio-v3.css'
 import './evolve.css'
 import './premium.css'
-import './next-home.css'
-import './next-finish.css'
 
 import './atelier.css'
 

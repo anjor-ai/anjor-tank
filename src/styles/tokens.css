@@ -116,7 +116,6 @@
   --stage-glow: rgba(0, 131, 255, 0.08);
 }
 
-
 /* ───────── Actor and status colours (additions; the brand palette above is unchanged) ─────────
    One colour per kind of actor: code is mint, an agent is sky, a person is the brand violet. */
 [data-theme='dark'] { --k-code: #5fd3a0; --k-agent: #b4a6ff; --k-person: #f2966f; --st-sky: #6cc0f5; --st-grey: #a29e92; --st-amber: #e9b94f; --st-ok: #5fd3a0; }
