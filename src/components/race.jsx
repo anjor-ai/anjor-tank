@@ -161,48 +161,84 @@ function Hud({ sectors }) {
   )
 }
 
-/** The console: one game featured large, the shelf of fifteen under it. Hover or focus picks; it also cycles on its own. */
+const CATS = ['All', 'Action', 'Shooter', 'RPG', 'Horror', 'Strategy']
+const clock = () => new Date().toLocaleTimeString('en-IN', { timeZone: 'Asia/Kolkata', hour: '2-digit', minute: '2-digit', hour12: false })
+
+/** The console: a home screen in the manner of a games console. One game featured large with its facts,
+    category tabs that filter the shelf, a shelf of fifteen, and a dock. Hover or focus picks; it also cycles on its own. */
 export function Play() {
+  const [cat, setCat] = useState('All')
+  const list = GAMES.filter((g) => cat === 'All' || g.c === cat)
   const [i, setI] = useState(0)
   const [hold, setHold] = useState(false)
+  const [time, setTime] = useState('')
   const ref = useRef(null)
   const shelf = useRef(null)
+  const g = list[Math.min(i, list.length - 1)]
+  useEffect(() => { setTime(clock()); const t = setInterval(() => setTime(clock()), 30000); return () => clearInterval(t) }, [])
+  useEffect(() => { setI(0) }, [cat])
   useEffect(() => {
     if (hold || reduced()) return undefined
     const el = ref.current
     let vis = false
     const io = new IntersectionObserver(([e]) => { vis = e.isIntersecting }, { threshold: 0.3 })
     io.observe(el)
-    const t = setInterval(() => { if (vis) setI((n) => (n + 1) % GAMES.length) }, 3200)
+    const t = setInterval(() => { if (vis) setI((n) => (n + 1) % list.length) }, 4200)
     return () => { clearInterval(t); io.disconnect() }
-  }, [hold])
+  }, [hold, list.length])
   useEffect(() => {
     const s = shelf.current, b = s?.children[i]
-    if (s && b) s.scrollTo({ left: b.offsetLeft - s.clientWidth / 2 + b.clientWidth / 2, behavior: reduced() ? 'auto' : 'smooth' })
-  }, [i])
-  const g = GAMES[i]
+    if (s && b) s.scrollTo({ left: b.offsetLeft - 40, behavior: reduced() ? 'auto' : 'smooth' })
+  }, [i, cat])
+  const move = (d) => setI((n) => (n + d + list.length) % list.length)
   return (
-    <section id="scene-play" ref={ref} className="bx-ch bx-play" aria-labelledby="bx-h-play" data-chapter="06 Play" onPointerEnter={() => setHold(true)} onPointerLeave={() => setHold(false)}>
-      <div className="ps__bg" aria-hidden="true">{GAMES.map((x, k) => <img key={x.slug} src={`/img/games/${x.slug}.webp`} alt="" loading="lazy" decoding="async" className={k === i ? 'is-on' : ''} />)}</div>
-      <div className="container ps">
+    <section id="scene-play" ref={ref} className="bx-ch bx-play" aria-labelledby="bx-h-play" data-chapter="06 Play">
+      <div className="container">
         <header className="bx-ch__head ps__head">
           <p className="bx-ch__k"><b>06</b>Chapter · {GAMES.length} on the shelf</p>
           <h2 id="bx-h-play" className="bx-h"><span>Play.</span> <em>One more save before bed.</em></h2>
         </header>
+      </div>
+      <div className="ps" onPointerEnter={() => setHold(true)} onPointerLeave={() => setHold(false)}>
+        <div className="ps__bg" aria-hidden="true">{GAMES.map((x) => <img key={x.slug} src={`/img/games/${x.slug}.webp`} alt="" loading="lazy" decoding="async" className={x.slug === g.slug ? 'is-on' : ''} />)}<span className="ps__scan" /></div>
+        <div className="ps__status" aria-hidden="true">
+          <span>{time || '--:--'}</span>
+          <span className="ps__icons"><i className="ps__ic ps__ic--wifi" /><i className="ps__ic ps__ic--bell" /><i className="ps__ic ps__ic--pad" /></span>
+          <span className="ps__user"><b>AT</b>Anjor</span>
+        </div>
+        <nav className="ps__tabs" aria-label="Filter games by category">
+          {CATS.map((c) => <button key={c} type="button" aria-pressed={cat === c} onClick={() => setCat(c)}>{c}<small>{c === 'All' ? GAMES.length : GAMES.filter((x) => x.c === c).length}</small></button>)}
+        </nav>
         <div className="ps__feat" aria-live="polite">
-          <p className="ps__tag">Now playing</p>
-          <h3 key={g.slug} className="ps__t">{g.t}</h3>
-          <p className="ps__g"><span>{g.g}</span><span>{String(i + 1).padStart(2, '0')} / {GAMES.length}</span></p>
+          <div className="ps__copy">
+            <p className="ps__tag">{cat === 'All' ? 'In my library' : cat}</p>
+            <h3 key={g.slug} className="ps__t">{g.t}</h3>
+            <dl className="ps__facts">
+              <div><dt>Genre</dt><dd>{g.g}</dd></div>
+              <div><dt>Studio</dt><dd>{g.st}</dd></div>
+              <div><dt>First released</dt><dd>{g.y}</dd></div>
+            </dl>
+          </div>
+          <div className="ps__start">
+            <p><span>Shelf position</span><b>{String(GAMES.indexOf(g) + 1).padStart(2, '0')} / {GAMES.length}</b></p>
+            <span className="ps__prog"><i key={g.slug + hold} className={hold ? 'is-held' : ''} /></span>
+            <div className="ps__nav">
+              <button type="button" onClick={() => move(-1)} aria-label="Previous game">‹</button>
+              <button type="button" className="ps__next" onClick={() => move(1)}>Next title <span aria-hidden="true">›</span></button>
+            </div>
+          </div>
         </div>
         <div ref={shelf} className="ps__shelf" role="group" aria-label="Games I play">
-          {GAMES.map((x, k) => (
+          {list.map((x, k) => (
             <button key={x.slug} type="button" className={`ps__tile${k === i ? ' is-on' : ''}`} aria-pressed={k === i} onClick={() => setI(k)} onMouseEnter={() => setI(k)} onFocus={() => setI(k)}>
               <span className="ps__art"><img src={`/img/games/${x.slug}.webp`} alt="" loading="lazy" decoding="async" /><b>{x.t}</b></span>
+              <span className="ps__cap">{x.c}</span>
             </button>
           ))}
         </div>
-        <p className="bx-note">Cover art is original and abstract, made for this page. No official artwork is used.</p>
+        <div className="ps__dock" aria-hidden="true">{['◆', '♪', '◎', '⌂', '☺', '⚙', '⏻'].map((d, k) => <i key={k} className={k === 3 ? 'is-on' : ''}>{d}</i>)}</div>
       </div>
+      <div className="container"><p className="bx-note">Cover art is original and abstract, made for this page. No official artwork is used.</p></div>
     </section>
   )
 }

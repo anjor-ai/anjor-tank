@@ -245,7 +245,58 @@ function tools(g, t) {
   })
 }
 
-const SCENES = { find, decide, loop, signals, handoff, gate, layers, compound, tools }
+/* ─────────── Orbit: a space colony turning, two beams trading fire across the dark. Abstract, no machines drawn. ─────────── */
+function orbit(g, t) {
+  const { C, R } = g
+  for (let k = 0; k < 90; k++) { const x = (k * 37) % C, y = (k * 53) % R; g.cell(x, y, (k + Math.floor(t * 2)) % 9 ? '.' : '+', 0.3 + ((k * 7) % 5) / 10, 2) }
+  // the colony: a long cylinder seen at an angle, rings turning
+  const cx = Math.round(C * 0.3), cy = Math.round(R * 0.55)
+  for (let i = -10; i <= 10; i++) for (let a = 0; a < Math.PI * 2; a += 0.35) {
+    const x = cx + i * 1.4 + Math.cos(a + t * 0.8) * 1.2, y = cy - i * 0.35 + Math.sin(a + t * 0.8) * 2.4
+    const front = Math.sin(a + t * 0.8) > 0
+    g.cell(Math.round(x), Math.round(y), front ? '#' : ':', front ? 0.75 : 0.35, 0)
+  }
+  // two beams crossing the frame
+  const T = t % 4
+  const shots = [[C * 0.95, R * 0.15, C * 0.45, R * 0.7, 0], [C * 0.1, R * 0.2, C * 0.85, R * 0.8, 1.6]]
+  shots.forEach(([x0, y0, x1, y1, at]) => {
+    const p = (T - at) / 0.9
+    if (p < 0 || p > 1.4) return
+    for (let k = 0; k < 14; k++) {
+      const q = Math.min(1, p) - k * 0.025
+      if (q < 0 || q > 1) continue
+      g.cell(Math.round(x0 + (x1 - x0) * q), Math.round(y0 + (y1 - y0) * q), k === 0 ? '*' : '-', 1 - k * 0.06, 1)
+    }
+    if (p >= 1 && p < 1.4) { const r = (p - 1) * 10; for (let a = 0; a < 6.28; a += 0.5) g.cell(Math.round(x1 + Math.cos(a) * r), Math.round(y1 + Math.sin(a) * r * 0.5), '+', 1 - (p - 1) * 2, 3) }
+  })
+  g.text(2, R - 2, `UC  ${String(Math.floor(t * 3) % 100).padStart(2, '0')}:${String(Math.floor(t * 41) % 60).padStart(2, '0')}  SIGNAL LOCK`, 0.6, 2)
+}
+
+/* ─────────── Chess: an endgame plays out; the last move is a checkmate. ─────────── */
+function chess(g, t) {
+  const { C, R } = g
+  const T = t % 9
+  const sq = Math.max(2, Math.min(Math.floor((C - 4) / 16), Math.floor((R - 3) / 8)))
+  const cw = sq * 2, ox = Math.round((C - 8 * cw) / 2), oy = 1
+  for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) {
+    const dark = (r + c) % 2
+    for (let dy = 0; dy < sq; dy++) for (let dx = 0; dx < cw; dx++) if (dark) g.cell(ox + c * cw + dx, oy + r * sq + dy, '.', 0.28, 2)
+  }
+  const at = (c, r, ch, b, tn) => g.cell(ox + c * cw + Math.floor(cw / 2), oy + r * sq + Math.floor(sq / 2), ch, b, tn)
+  // pieces: white rook, white king, black king; the rook slides to give mate
+  const moves = [[0, 6], [0, 1], [7, 1], [7, 0]]
+  const step = Math.min(moves.length - 1, Math.floor(T / 1.6))
+  const [rc, rr] = moves[step]
+  at(5, 2, 'K', 0.95, 0) // white king
+  at(rc, rr, 'R', 1, 1)
+  at(5, 0, 'k', 0.9, 3) // black king
+  if (T > 5.2) {
+    for (let c = 0; c < 8; c++) at(c, 0, c === 5 ? 'k' : '=', c === 5 ? 1 : 0.5, 3)
+    g.text(Math.round(C / 2) - 5, R - 1, type('CHECKMATE.', (T - 5.2) * 14), 1, 1)
+  } else g.text(Math.round(C / 2) - 9, R - 1, `move ${step + 1}: rook to ${'abcdefgh'[rc]}${8 - rr}`, 0.6, 2)
+}
+
+const SCENES = { orbit, chess, find, decide, loop, signals, handoff, gate, layers, compound, tools }
 
 export function AsciiCanvas({ scene = 'find', className, label }) {
   const ref = useRef(null)

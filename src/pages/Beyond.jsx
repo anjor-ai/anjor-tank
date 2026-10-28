@@ -1,11 +1,12 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ALT, LOVES, SHELF, WATCHLIST } from '../content'
 import { Cta } from '../components/ui'
 import { Icon } from '../components/icons'
 import { SCENES, photosOf } from '../components/Story'
 import BeyondFilm, { Book } from '../scenes/BeyondFilm'
 import { MQ, gsap, ScrollTrigger, useGSAP } from '../lib/motion'
-import { Finish, Play, RaceHud, StartLights, TrackBand } from '../components/race'
+import { Finish, Play, RaceHud, StartLights } from '../components/race'
+import { AsciiCanvas } from '../components/ascii'
 import { PageMotion } from '../lib/PageMotion'
 
 /* Beyond work. Deliberately a different room from the rest of the site: dark, photographic, condensed display type,
@@ -161,7 +162,6 @@ function Live() {
         </div>
         <p className="bx-note">Visual rhythm study · no audio plays</p>
       </div>
-      <div className="bx-marquee" aria-hidden="true"><div>{[0, 1].map((r) => <span key={r}>{L.map((p) => <em key={p.src}>{p.cap.replace('.', '')} <b>✶</b></em>)}</span>)}</div></div>
     </section>
   )
 }
@@ -208,6 +208,41 @@ function DotArt({ kind }) {
   )
 }
 
+/** The screening room: one title on the big screen as a live ASCII scene, the other queued beside it. */
+function Screening() {
+  const [i, setI] = useState(0)
+  const w = WATCHLIST[i]
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+    const t = setTimeout(() => setI((n) => (n + 1) % WATCHLIST.length), 9000)
+    return () => clearTimeout(t)
+  }, [i])
+  return (
+    <div className="sr">
+      <div className="sr__screen">
+        <div className="sr__top"><span className="sr__rec"><i />Now screening</span><span>{String(i + 1).padStart(2, '0')} / {String(WATCHLIST.length).padStart(2, '0')}</span></div>
+        <AsciiCanvas key={w.art} scene={w.art} className="sr__cv" label={`An abstract animated scene for ${w.t}`} />
+        <div className="sr__info">
+          <h3 key={w.t}>{w.t}{w.s && <small>{w.s}</small>}</h3>
+          <dl><div><dt>Studio</dt><dd>{w.st}</dd></div><div><dt>First aired</dt><dd>{w.y}</dd></div><div><dt>Genre</dt><dd>{w.tags.join(' · ')}</dd></div></dl>
+        </div>
+        <div className="sr__bar" aria-hidden="true"><span className="sr__play">▶</span><span className="sr__track"><i key={i} /></span><span className="sr__q">HD · SUB</span></div>
+      </div>
+      <ol className="sr__queue" aria-label="Watchlist">
+        {WATCHLIST.map((x, k) => (
+          <li key={x.t}>
+            <button type="button" className={k === i ? 'is-on' : ''} aria-pressed={k === i} onClick={() => setI(k)}>
+              <span className="sr__thumb"><DotArt kind={x.art === 'chess' ? 'wave' : 'orbit'} /></span>
+              <span className="sr__qt"><small>{k === i ? 'Playing' : 'Up next'}</small><b>{x.t}</b><em>{x.st} · {x.y}</em></span>
+            </button>
+          </li>
+        ))}
+        <li className="sr__note">Scenes are abstract and drawn for this page. No artwork from either series is used.</li>
+      </ol>
+    </div>
+  )
+}
+
 function Watch() {
   const panels = [
     ['kart-pov', 'Eyes on the apex.'], ['kart-night', 'Night session.'], ['paddle', 'Golden hour, flat water.'], ['rainier', 'A mountain worth the drive.'],
@@ -229,17 +264,7 @@ function Watch() {
           ))}
         </div>
         <p className="bx-note bx-note--ink">Panels: my own photographs, inked and screentoned</p>
-        <ul className="bx-wl">
-          {WATCHLIST.map((w) => (
-            <li key={w.t} className="bx-wl__c">
-              <div className="bx-wl__art"><DotArt kind={w.art} /></div>
-              <div className="bx-wl__b">
-                <h3>{w.t}{w.s && <small>{w.s}</small>}</h3>
-                <ul>{[w.k, w.n].map((x) => <li key={x}>{x}.</li>)}</ul>
-              </div>
-            </li>
-          ))}
-        </ul>
+        <Screening />
       </div>
     </section>
   )
@@ -297,7 +322,7 @@ export default function Beyond() {
       if (book) gsap.fromTo(book, { rotateY: -42, rotateX: 8 }, { rotateY: 18, rotateX: -4, ease: 'none', scrollTrigger: { trigger: '.bx-read', start: 'top bottom', end: 'bottom top', scrub: 0.8 } })
       // Watch: panels slam in, one after another.
       gsap.fromTo(q('.bx-panel'), { clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)' }, { clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)', duration: 0.7, stagger: 0.14, ease: 'expo.inOut', scrollTrigger: { trigger: '.bx-manga', start: 'top 75%', once: true } })
-      gsap.fromTo(q('.bx-dots circle'), { scale: 0, transformOrigin: '50% 50%' }, { scale: 1, duration: 0.5, ease: 'back.out(2)', stagger: { each: 0.0015, from: 'random' }, scrollTrigger: { trigger: '.bx-wl', start: 'top 85%', once: true } })
+      gsap.fromTo(q('.bx-dots circle'), { scale: 0, transformOrigin: '50% 50%' }, { scale: 1, duration: 0.5, ease: 'back.out(2)', stagger: { each: 0.0015, from: 'random' }, scrollTrigger: { trigger: '.sr__queue', start: 'top 85%', once: true } })
       // The chapter readout on the right edge.
       // The play shelf rises in; the featured title swaps with a short wipe (CSS).
       gsap.fromTo(q('.ps__tile'), { y: 40, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.8, stagger: 0.04, ease: 'expo.out', scrollTrigger: { trigger: '.ps__shelf', start: 'top 92%', once: true } })
@@ -359,17 +384,11 @@ export default function Beyond() {
           </div>
         </section>
 
-        <TrackBand sector={1} name="Wander" />
         <Wander />
-        <TrackBand sector={2} name="Speed" />
         <Speed />
-        <TrackBand sector={3} name="Live" />
         <Live />
-        <TrackBand sector={4} name="Read" />
         <Read />
-        <TrackBand sector={5} name="Watch" />
         <Watch />
-        <TrackBand sector={6} name="Play" />
         <Play />
         <Finish />
 

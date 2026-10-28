@@ -80,26 +80,26 @@ export const SHELF = [
   { t: 'AI Engineering', s: 'Building Applications with Foundation Models', a: 'Chip Huyen', p: 'O’Reilly' },
 ];
 export const WATCHLIST = [
-  { t: 'Mobile Suit Gundam', k: 'Mecha', n: 'Franchise since 1979', art: 'orbit' },
-  { t: 'Code Geass', s: 'Lelouch of the Rebellion', k: 'Mecha', n: 'First aired 2006', art: 'wave' },
+  { t: 'Mobile Suit Gundam', k: 'Mecha', n: 'Franchise since 1979', st: 'Sunrise', y: '1979', tags: ['Mecha', 'Space opera', 'War drama'], art: 'orbit' },
+  { t: 'Code Geass', s: 'Lelouch of the Rebellion', k: 'Mecha', n: 'First aired 2006', st: 'Sunrise', y: '2006', tags: ['Mecha', 'Strategy', 'Psychological'], art: 'chess' },
 ];
 /* Beyond work: what I play. Titles and genres only; the cover art on the page is original and abstract, made for this site. */
 export const GAMES = [
-  { slug: 'wuthering-waves', t: 'Wuthering Waves', g: 'Open-world action RPG' },
-  { slug: 'halo', t: 'Halo', g: 'First-person shooter' },
-  { slug: 'god-of-war', t: 'God of War', g: 'Action adventure' },
-  { slug: 'assassins-creed', t: 'Assassin’s Creed', g: 'Open-world action' },
-  { slug: 'warframe', t: 'Warframe', g: 'Online action' },
-  { slug: 'call-of-duty', t: 'Call of Duty', g: 'First-person shooter' },
-  { slug: 'doom', t: 'DOOM', g: 'First-person shooter' },
-  { slug: 'ghost-of-tsushima', t: 'Ghost of Tsushima', g: 'Open-world action' },
-  { slug: 'resident-evil', t: 'Resident Evil', g: 'Survival horror' },
-  { slug: 'silent-hill', t: 'Silent Hill', g: 'Psychological horror' },
-  { slug: 'civilization', t: 'Civilization', g: 'Turn-based strategy' },
-  { slug: 'batman', t: 'Batman', g: 'Action adventure' },
-  { slug: 'spider-man', t: 'Spider-Man', g: 'Action adventure' },
-  { slug: 'elden-ring', t: 'Elden Ring', g: 'Action RPG' },
-  { slug: 'the-last-of-us', t: 'The Last of Us', g: 'Action adventure' },
+  { slug: 'wuthering-waves', st: 'Kuro Games', y: '2024', c: 'RPG', t: 'Wuthering Waves', g: 'Open-world action RPG' },
+  { slug: 'halo', st: 'Bungie', y: '2001', c: 'Shooter', t: 'Halo', g: 'First-person shooter' },
+  { slug: 'god-of-war', st: 'Santa Monica Studio', y: '2005', c: 'Action', t: 'God of War', g: 'Action adventure' },
+  { slug: 'assassins-creed', st: 'Ubisoft', y: '2007', c: 'Action', t: 'Assassin’s Creed', g: 'Open-world action' },
+  { slug: 'warframe', st: 'Digital Extremes', y: '2013', c: 'Shooter', t: 'Warframe', g: 'Online action' },
+  { slug: 'call-of-duty', st: 'Infinity Ward', y: '2003', c: 'Shooter', t: 'Call of Duty', g: 'First-person shooter' },
+  { slug: 'doom', st: 'id Software', y: '1993', c: 'Shooter', t: 'DOOM', g: 'First-person shooter' },
+  { slug: 'ghost-of-tsushima', st: 'Sucker Punch', y: '2020', c: 'Action', t: 'Ghost of Tsushima', g: 'Open-world action' },
+  { slug: 'resident-evil', st: 'Capcom', y: '1996', c: 'Horror', t: 'Resident Evil', g: 'Survival horror' },
+  { slug: 'silent-hill', st: 'Konami', y: '1999', c: 'Horror', t: 'Silent Hill', g: 'Psychological horror' },
+  { slug: 'civilization', st: 'MicroProse', y: '1991', c: 'Strategy', t: 'Civilization', g: 'Turn-based strategy' },
+  { slug: 'batman', st: 'Rocksteady', y: '2009', c: 'Action', t: 'Batman', g: 'Action adventure' },
+  { slug: 'spider-man', st: 'Insomniac Games', y: '2018', c: 'Action', t: 'Spider-Man', g: 'Action adventure' },
+  { slug: 'elden-ring', st: 'FromSoftware', y: '2022', c: 'RPG', t: 'Elden Ring', g: 'Action RPG' },
+  { slug: 'the-last-of-us', st: 'Naughty Dog', y: '2013', c: 'Action', t: 'The Last of Us', g: 'Action adventure' },
 ];
 export const LOVES = [
   ['F1', 'Karts on weekends, a racing sim in between, and a strong opinion about tyre strategy.'],
