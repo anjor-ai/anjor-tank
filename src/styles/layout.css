@@ -49,17 +49,6 @@
 
 /* ───────── Footer ───────── */
 .foot { position: relative; isolation: isolate; overflow: clip; border-top: 1px solid var(--line); background: var(--bg); color: var(--text); }
-.foot__in { position: relative; display: grid; grid-template-columns: 1.4fr 1fr 1.2fr 1.2fr; gap: 40px; padding-block: 56px 36px; }
-.foot__brand { display: grid; gap: 14px; align-content: start; }
-.foot__col { display: grid; gap: 0; align-content: start; font-size: 14.5px; }
-.foot__col .label { margin-bottom: 6px; }
-.foot__col a { color: var(--text-2); padding-block: 6px; width: fit-content; overflow-wrap: anywhere; transition: color 0.2s; }
-.foot__col a:hover { color: var(--accent-text); }
-.foot__base { position: relative; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; padding-block: 20px 28px; border-top: 1px solid var(--line); }
-.foot__copy { display: flex; align-items: center; gap: 10px; }
-.foot__legal { text-decoration: underline; text-underline-offset: 3px; padding-block: 6px; }
-@media (max-width: 900px) { .foot__in { grid-template-columns: 1fr 1fr; } .foot__brand { grid-column: 1 / -1; } }
-@media (max-width: 520px) { .foot__in { grid-template-columns: 1fr; gap: 28px; } }
 .nav__link--new { display: inline-flex; align-items: center; gap: 6px; }
 .nav__dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-fill); box-shadow: 0 0 0 3px var(--accent-soft); }
 /* The AT keycap, left of the existing animated wordmark. */

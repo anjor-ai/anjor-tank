@@ -233,11 +233,15 @@ export default function Contact() {
     <PageMotion routeKey="/contact">
       <header className="ct">
         <div className="container">
-          <div className="ct__head">
-            <p className="k-rule"><b>[00]</b><span>Talk</span><i /><small>/ Two ways in</small></p>
-            <h1 className="ct__h" data-kin data-kin-hero><Kin text={h.title} /></h1>
-            <p className="k-lead">{h.lead}</p>
+          <div className="s-head ct__head">
+            <div className="s-head__l">
+              <p className="s-label"><b>00</b><span>Talk</span><em>Two ways in</em></p>
+              <h1 className="ct__h" data-kin data-kin-hero><Kin text={h.title} /></h1>
+            </div>
+            <div className="s-head__r"><p className="s-lead">{h.lead}</p></div>
           </div>
+          <div className="ct__easel">
+          <img className="ct__paint" src="/img/paint/dawn.webp" alt="" width="1600" height="1000" decoding="async" />
           <div className="ct__grid">
             <QuickBrief />
             <div className="ct__book">
@@ -248,6 +252,7 @@ export default function Contact() {
                 <li><span>LinkedIn</span><a href={site.linkedin} target="_blank" rel="noopener noreferrer">anjor-tank ↗</a></li>
               </ul>
             </div>
+          </div>
           </div>
           <p className="ctrust"><Icon name="shield" size={15} />{P.trust}</p>
         </div>

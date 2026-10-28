@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { footer, pager, routes, site } from '../content'
 import { useRoute } from '../lib/router'
+import { MQ, gsap, useGSAP } from '../lib/motion'
 import { useTheme } from '../lib/theme'
 import { Icon } from './icons'
 import { BrandMark } from './BrandMark'
@@ -18,7 +19,7 @@ function ThemeToggle() {
 }
 
 /** Elements made inert while the full-screen mobile menu is open, so Tab and screen readers stay inside it. */
-const BEHIND_MENU = ['.skip-link', '#main', '.foot']
+const BEHIND_MENU = ['.skip-link', '#main', '.ft']
 
 export function Nav() {
   const { route } = useRoute()
@@ -149,34 +150,44 @@ export function StoryPager() {
 
 export function Footer() {
   const story = routes.filter((r) => r.story)
+  const ref = useRef(null)
+  // The signature move: the name at the foot grows into place as the page closes (scroll-linked, under 8%).
+  useGSAP(() => {
+    const mm = gsap.matchMedia()
+    mm.add(MQ.motion, () => {
+      gsap.fromTo('[data-ft-name]', { scale: 0.93, yPercent: 12 }, { scale: 1, yPercent: 0, ease: 'none', scrollTrigger: { trigger: ref.current, start: 'top bottom', end: 'bottom bottom', scrub: 0.6 } })
+    })
+    return () => mm.revert()
+  }, { scope: ref })
   return (
-    <footer className="foot">
-      <div className="container foot__in">
-        <div className="foot__brand">
-          <a href="/" className="foot__logo"><BrandMark className="nav__mark" decorative /><Wordmark /></a>
-          <p className="muted">{footer.line}</p>
-          <p className="label">{site.category}</p>
+    <footer className="ft" ref={ref}>
+      <div className="container ft__in">
+        <div className="ft__brand">
+          <a href="/" className="ft__logo"><BrandMark className="nav__mark" decorative /><Wordmark /></a>
+          <p>{footer.line}</p>
+          <p className="ft__cat">{site.category}</p>
         </div>
-        <nav className="foot__col" aria-label="The story">
-          <p className="label">The story</p>
-          {story.map((r, i) => <a key={r.path} href={r.path}><span className="foot__n">0{i + 1}</span>{r.label}</a>)}
+        <nav className="ft__col" aria-label="The story">
+          <p className="ft__k">The story</p>
+          {story.map((r, i) => <a key={r.path} href={r.path}><span>0{i + 1}</span>{r.label}</a>)}
         </nav>
-        <div className="foot__col">
-          <p className="label">Talk</p>
+        <div className="ft__col">
+          <p className="ft__k">Talk</p>
           <a href="/roqiva">ROQIVA walkthrough</a>
           <a href="/contact#brief">Send a brief</a>
           <a href="/contact#book">Book a call</a>
           <a href={`mailto:${site.email}`}>{site.email}</a>
           <a href={site.linkedin} target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
         </div>
-        <div className="foot__col">
-          <p className="label">Right now</p>
-          <p className="muted">Product Manager at GNC India. Building ROQIVA, in development. {footer.how}</p>
+        <div className="ft__col">
+          <p className="ft__k">Right now</p>
+          <p>Product Manager at GNC India. Building ROQIVA, in development. {footer.how}</p>
         </div>
       </div>
-      <div className="container foot__base">
-        <p className="label foot__copy"><span>© {new Date().getFullYear()} {site.name} · <a className="foot__legal" href="/privacy">Privacy</a></span></p>
-        <p className="label">{footer.note}</p>
+      <div className="ft__name" aria-hidden="true"><span data-ft-name>{site.name}</span></div>
+      <div className="container ft__base">
+        <p><span>© {new Date().getFullYear()} {site.name} · <a href="/privacy">Privacy</a></span></p>
+        <p>{footer.note}</p>
       </div>
     </footer>
   )

@@ -87,11 +87,6 @@ body::before { background: radial-gradient(60% 40% at 85% -5%, color-mix(in srgb
 .cs__q { border-radius: 26px; }
 
 /* ───────── Page heroes below the home page ───────── */
-.phero { padding-block: clamp(20px, 3vw, 44px) clamp(36px, 4.4vw, 64px); }
-.phero::before { height: 520px; background: radial-gradient(45% 60% at 78% 0%, var(--mesh-b), transparent 70%), radial-gradient(40% 50% at 8% 10%, var(--mesh-a), transparent 70%); opacity: 0.55; }
-.phero .h-hero { max-width: 22ch; }
-.hero__facts li { padding: 5px 12px; border: 1px solid var(--line-2); border-radius: 999px; background: var(--surface); }
-.hero__facts li::before { display: none; }
 .portrait { border: 0; border-radius: var(--panel-r); box-shadow: var(--shadow); }
 .portrait img { border-radius: var(--panel-r); }
 
@@ -121,16 +116,13 @@ body::before { background: radial-gradient(60% 40% at 85% -5%, color-mix(in srgb
 }
 
 /* Page heroes without a product picture sit in one soft panel */
-.phero:not(.cs__hero)::before { display: none; }
-.phero:not(.cs__hero) .phero__in { padding: clamp(26px, 4.6vw, 64px); border: 1px solid var(--line); border-radius: var(--panel-r);
-  background: radial-gradient(60% 90% at 100% 0%, var(--mesh-b), transparent 70%), radial-gradient(55% 80% at 0% 100%, var(--mesh-a), transparent 70%), var(--surface); }
 .ways { max-width: none; gap: 12px; margin-top: 10px; }
 .ways a { padding: 18px 20px 20px; border: 0; border-radius: 24px; background: var(--t-peach); gap: 6px; }
 .ways li:nth-child(2) a { background: var(--t-lilac); } .ways li:nth-child(3) a { background: var(--t-mint); }
 .ways a:hover { transform: translateY(-4px); }
 .ways b { font-size: 18px; }
 .ways a > span:last-child { color: var(--text-2); }
-@media (max-width: 760px) { .phero:not(.cs__hero) .phero__in { padding: 22px 18px; border-radius: 28px; } .ways { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 760px) { .ways { grid-template-columns: minmax(0, 1fr); } }
 
 /* Hire: the leak, offer and phase panels */
 .offer { border-radius: 26px; }
@@ -138,7 +130,7 @@ body::before { background: radial-gradient(60% 40% at 85% -5%, color-mix(in srgb
 /* Contrast fixes found by the scan */
 [data-theme='dark'] .ha__av, [data-theme='dark'] .art__av { color: #06121f; }
 .mk__flow li.is-end { color: var(--text); }
-@media (max-width: 760px) { .phero p > .btn, p > .btn { white-space: normal; } }
+@media (max-width: 760px) { p > .btn { white-space: normal; } }
 .sec--alt + .sec--alt, .sec--alt + .sec--band, .sec--band + .sec--alt { margin-top: 12px; }
 
 /* Journey ribbon: the four cards take the shared tints, so they follow the theme */

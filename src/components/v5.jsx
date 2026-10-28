@@ -242,7 +242,7 @@ export function CaseDock({ items }) {
     const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) setActive(e.target.id) }), { rootMargin: '-40% 0px -55% 0px' })
     sec.forEach((el) => io.observe(el))
     const vis = () => {
-      const first = sec[0], foot = document.querySelector('.foot')
+      const first = sec[0], foot = document.querySelector('.ft')
       const top = first ? first.getBoundingClientRect().top : 0
       const fb = foot ? foot.getBoundingClientRect().top : 1e9
       setShow(top < window.innerHeight * 0.6 && fb > window.innerHeight)

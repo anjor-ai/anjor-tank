@@ -1,13 +1,6 @@
 /* Editorial composition: warm paper, substantial product scenes, precise geometry. */
 [data-theme='light']{--bg:#f8f7f4;--bg-2:#efeee9;--surface:#fff;--surface-2:#f0efeb;--line:#e1dfd9;--line-2:#d0cec7;--text:#242522;--text-2:#60635d;--text-3:#74766f;--nav-bg:#f8f7f4ef;--mesh-a:#eaece5;--mesh-b:#e8e6e0;--accent-text:#436555;--accent-head:#436555;--btn-bg:#252722}
-[data-theme='dark']{--bg:#141613;--bg-2:#1a1d19;--surface:#20231f;--surface-2:#252923;--line:#343a31;--line-2:#464d42;--text:#efefe9;--text-2:#bbc1b6;--text-3:#9fa797;--nav-bg:#141613ef;--mesh-a:#252e27;--mesh-b:#30352a;--accent-text:#b3c7ac;--accent-head:#b3c7ac}
-.atelier-hero{padding-top:58px;background:var(--bg)}
-.atelier-hero__intro{max-width:880px;padding-bottom:40px}
-.atelier-hero h1{font-size:clamp(40px,5.3vw,72px);font-weight:400;line-height:1.04;letter-spacing:-.065em;max-width:20ch}
-.atelier-hero h1 .em{color:var(--text-3)}
-.atelier-hero__intro>p{font-size:16px;max-width:65ch;margin-top:25px;line-height:1.7}
-.atelier-identity{margin-bottom:27px}.atelier-actions .btn{border-radius:50px;padding:14px 24px}.replay-film{font-size:10px;margin-top:22px}
-.atelier-experience{padding-block:30px;margin-top:32px}.atelier-experience b{font-size:18px}.chapter-art{background:#1b211b}
+[data-theme='dark']{--bg:#141613;--bg-2:#1a1d19;--surface:#20231f;--surface-2:#252923;--line:#343a31;--line-2:#464d42;--text:#efefe9;--text-2:#bbc1b6;--text-3:#9fa797;--nav-bg:#141613ef;--mesh-a:#252e27;--mesh-b:#30352a;--accent-text:#b3c7ac;--accent-head:#b3c7ac}.chapter-art{background:#1b211b}
 /* Service offerings are illustrated with tangible workflow compositions. */.chapter-art{height:250px}
-@media(max-width:760px){.atelier-hero{padding-top:30px}.atelier-hero h1{font-size:43px;max-width:17ch}.atelier-hero__intro{padding-bottom:26px}.atelier-hero__intro>p{font-size:14px}.atelier-experience{padding-block:22px;gap:20px}.atelier-experience b{font-size:14px}.chapter-art{height:230px}}
-/* Keep workflow provenance visible inside the illustration frame. */.atelier-hero h1 .em{margin-inline-end:.12em}
+@media(max-width:760px){.chapter-art{height:230px}}
+/* Keep workflow provenance visible inside the illustration frame. */

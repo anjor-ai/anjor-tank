@@ -4,8 +4,6 @@
   background: radial-gradient(50% 60% at 72% 10%, var(--stage-glow), transparent 70%); }
 .hero .h-hero { max-width: 13ch; }
 .hero .lead { max-width: 44ch; color: var(--text-2); }
-.hero__facts { display: flex; flex-wrap: wrap; gap: 6px 22px; margin-top: 4px; }
-.hero__facts li::before { content: '·'; margin-right: 8px; color: var(--accent-text); }
 @media (max-width: 1080px) { .hero .h-hero { max-width: 16ch; } }
 
 /* Compact handoff from the methodology to the ROQIVA product section.

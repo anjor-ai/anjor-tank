@@ -1,7 +1,5 @@
-import { useId, useState } from 'react'
 import { actors, status as statusMap, site } from '../content'
 import { Icon } from './icons'
-import { Paint } from './paint'
 import { BriefThread } from './v5'
 import { Kin } from './kin'
 export { Kin }
@@ -71,19 +69,19 @@ export function Head({ eyebrow, title, lead, as: Tag = 'h2', id, scrub = false, 
   )
 }
 
-/** Hero for every page below the home page. The entrance is CSS (.hero__a), because the intro film pauses it until it closes. */
-export function PageHero({ eyebrow, title, lead, children, opener, visual, visualLive = false, variant = '' }) {
+/** The page hero below the home page: the same split stage as the home page. Words on paper at the left,
+    the page's window on a painting at the right (when there is one). Title highlights use ==x== and *x*. */
+export function PageHero({ eyebrow, label, title, lead, children, visual, visualLive = false, variant = '' }) {
   return (
-    <header className={`phero ph${visual ? ' phero--split' : ''}${variant ? ' phero--' + variant : ''}`}>
-      <div className="container phero__in ph__in">
-        <div className="phero__copy ph__copy">
-          {opener}
-          {eyebrow && <p className="ph__chip hero__a" style={{ '--i': 0 }}><i aria-hidden="true" /><span className="label">{eyebrow}</span></p>}
-          <h1 className="h-hero hero__a" style={{ '--i': 1 }}><Rich text={title} /></h1>
-          {lead && <p className="lead hero__a" style={{ '--i': 2 }}>{lead}</p>}
+    <header className={`p-hero${visual ? '' : ' p-hero--solo'}${variant ? ' p-hero--' + variant : ''}`}>
+      <div className="p-hero__in">
+        <div className="p-hero__copy">
+          {(label || eyebrow) && <p className="s-label">{label || <span>{eyebrow}</span>}</p>}
+          <h1 className="p-hero__t" data-kin data-kin-hero><Kin text={title} /></h1>
+          {lead && <p className="p-hero__lead">{lead}</p>}
           {children}
         </div>
-        {visual && <div className="phero__vis ph__stage hero__a" style={{ '--i': 3 }} aria-hidden={visualLive ? undefined : 'true'}>{visual}</div>}
+        {visual && <div className="p-hero__stage" aria-hidden={visualLive ? undefined : 'true'}>{visual}</div>}
       </div>
     </header>
   )
@@ -103,89 +101,22 @@ export function Actor({ kind, label }) {
   return <span className={`actor actor--${kind}`} title={a.d}><i aria-hidden="true" />{label || a.label}</span>
 }
 
-/** Accessible accordion. `items` are { id, q, body }. One panel open at a time. */
-export function Accordion({ items, first = -1, label }) {
-  const [open, setOpen] = useState(first)
-  const base = useId()
-  return (
-    <div className="acc" role="group" aria-label={label}>
-      {items.map((it, i) => {
-        const on = open === i
-        return (
-          <div key={it.id || it.q} className={`acc__item${on ? ' is-open' : ''}`}>
-            <h3 className="acc__h">
-              <button type="button" className="acc__btn" aria-expanded={on} aria-controls={`${base}-p${i}`} id={`${base}-b${i}`} onClick={() => setOpen(on ? -1 : i)}>
-                <span className="acc__q">{it.q}</span>
-                {it.tag && <span className="label acc__tag">{it.tag}</span>}
-                <span className="acc__ico" aria-hidden />
-              </button>
-            </h3>
-            <div className="acc__panel" id={`${base}-p${i}`} role="region" aria-labelledby={`${base}-b${i}`}>
-              <div><div className="acc__body">{it.body ?? <p className="muted">{it.a}</p>}</div></div>
-            </div>
-          </div>
-        )
-      })}
-    </div>
-  )
-}
-
-/** A table that scrolls sideways on a small screen instead of breaking the page. First column is the row header. */
-export function DataTable({ cols, rows, caption, className = '' }) {
-  return (
-    <div className={`tbl ${className}`.trim()} role="region" aria-label={caption} tabIndex={0}>
-      <table>
-        {caption && <caption className="sr-only">{caption}</caption>}
-        <thead><tr>{cols.map((c, i) => <th key={i} scope="col">{c}</th>)}</tr></thead>
-        <tbody>
-          {rows.map((r, i) => (
-            <tr key={i}>{r.map((c, j) => (j === 0 ? <th key={j} scope="row">{c}</th> : <td key={j} data-label={typeof cols[j] === 'string' ? cols[j] : undefined}>{c}</td>))}</tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  )
-}
-
-/** A short list with check marks. */
-export function CheckList({ items }) {
-  return (
-    <ul className="checks">
-      {items.map((t) => <li key={t}><Icon name="check" size={15} /><span>{t}</span></li>)}
-    </ul>
-  )
-}
-
-/** A native disclosure for secondary detail. Closed by default, keyboard accessible with no script. */
-export function Disclosure({ summary, children, open = false }) {
-  return (
-    <details className="disc" open={open}>
-      <summary><span>{summary}</span><span className="acc__ico" aria-hidden /></summary>
-      <div className="disc__body">{children}</div>
-    </details>
-  )
-}
-
-/** Closing call to action used at the foot of every page. */
-/* ───────────── The closing panel used on every page ───────────── */
+/* ───────────── The closing panel: a painting edge to edge, the words on paper, the brief thread on the painting ───────────── */
 export function Cta({ title, lead, primary, secondary, badges, topic }) {
   return (
-    <section className="v-cta-sec">
-      <div className="container">
-        <div className="v-cta" data-reveal>
-          <div className="v-cta__copy">
-            <h2 className="v-cta__h" data-kin><Kin text={title} /></h2>
-            {lead && <p>{lead}</p>}
-            <div className="v-cta__btns">
-              <Button to={primary.to} track={`cta_${primary.to.replace(/\W+/g, '_')}`}>{primary.label}<Arrow /></Button>
-              {secondary && <Button to={secondary.to} variant="ghost">{secondary.label}</Button>}
-            </div>
-            {badges && <ul className="v-cta__badges">{badges.map((b) => <li key={b}>{b}</li>)}</ul>}
+    <section className="cl">
+      <div className="cl__in">
+        <img className="cl__paint" src="/img/paint/meadow.webp" alt="" width="1600" height="1000" loading="lazy" decoding="async" data-v-paint />
+        <div className="cl__copy" data-reveal>
+          <h2 className="cl__h" data-kin><Kin text={title} /></h2>
+          {lead && <p>{lead}</p>}
+          <div className="cl__btns">
+            <Button to={primary.to} track={`cta_${primary.to.replace(/\W+/g, '_')}`}>{primary.label}<Arrow /></Button>
+            {secondary && <Button to={secondary.to} variant="ghost">{secondary.label}</Button>}
           </div>
-          <Paint name="meadow" fit="bleed" className="v-cta__paint">
-            <BriefThread topic={topic} />
-          </Paint>
+          {badges && <ul className="cl__badges">{badges.map((b) => <li key={b}>{b}</li>)}</ul>}
         </div>
+        <div className="cl__win" data-reveal><BriefThread topic={topic} /></div>
       </div>
     </section>
   )

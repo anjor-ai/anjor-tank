@@ -2,8 +2,7 @@ import { BELIEFS, EDU, journeyPage, roqiva } from '../content'
 import { Cta, Kin, LinkArrow } from '../components/ui'
 import { Icon } from '../components/icons'
 import { AsciiCanvas } from '../components/ascii'
-import { Chip, Dot, KHead, KSection, TINTS, Tile, Win } from '../components/kit'
-import { Paint } from '../components/paint'
+import { Chip, Dot, Easel, KHead, KSection, Tile, Win } from '../components/kit'
 import { CareerGraph } from '../components/v5'
 import { PageMotion } from '../lib/PageMotion'
 
@@ -50,49 +49,50 @@ function RoqivaSteps() {
   )
 }
 
+const CH_PAINT = ['dawn', 'noon', 'night']
+
 function Chapter({ c, i }) {
-  const tint = TINTS[i % TINTS.length]
   const tags = c.roles.flatMap((r) => r.tags || []).slice(0, 4)
   return (
-    <Tile tint={i === 2 ? 'ink' : tint} className={`k-chap${i === 2 ? ' k-chap--founder' : ''}`} id={`chapter-${i}`}>
-      <div className="k-chap__card">
-        <p className="k-tile__k"><b>{c.k}</b>{c.span}{i === 2 && <span className="k-chap__now"><Dot tone="accent" />Now · founder</span>}</p>
+    <article className={`jc${i === 2 ? ' jc--founder' : ''}`} id={`chapter-${i}`}>
+      <Tile tint={i === 2 ? 'ink' : undefined} className="jc__card">
+        <p className="s-k"><b>{c.k}</b>{c.span}{i === 2 && <span className="jc__now"><Dot tone="accent" />Now · founder</span>}</p>
         <h2>{c.t}</h2>
-        <p className="k-chap__d">{c.d}</p>
-        <ul className="k-roles">
+        <p className="jc__d">{c.d}</p>
+        <ul className="jc__roles">
           {c.roles.map((r) => (
             <li key={r.role + r.when}>
-              <span className="k-mono" aria-hidden="true">{r.mono}</span>
+              <span className="jc__mono" aria-hidden="true">{r.mono}</span>
               <div>
                 <small>{r.org} · {r.when}{r.now && <Dot tone="ok" />}</small>
                 <b>{r.role}</b>
                 <p>{r.text}</p>
-                <dl className="k-stats">{r.stats.map(([v, l]) => <div key={l}><dt>{v}</dt><dd>{l}</dd></div>)}</dl>
+                <dl className="jc__stats">{r.stats.map(([v, l]) => <div key={l}><dt>{v}</dt><dd>{l}</dd></div>)}</dl>
                 {r.to && <LinkArrow to={r.to}>{r.to === '/roqiva' ? 'Explore ROQIVA' : 'Explore the work'}</LinkArrow>}
               </div>
             </li>
           ))}
         </ul>
         <blockquote>{c.lesson}</blockquote>
-      </div>
-      <div className="k-chap__vis">{i === 0 ? <Wireframes /> : i === 1 ? <Pods tags={tags} /> : <RoqivaSteps />}</div>
-    </Tile>
+      </Tile>
+      <Easel paint={CH_PAINT[i]} fit="center" className="jc__vis">{i === 0 ? <Wireframes /> : i === 1 ? <Pods tags={tags} /> : <RoqivaSteps />}</Easel>
+    </article>
   )
 }
 
 export default function Journey() {
   return (
     <PageMotion routeKey="/journey">
-      <header className="k-jhero">
-        <div className="container k-jhero__in">
-          <div className="k-jhero__copy">
-            <p className="k-rule"><b>[00]</b><span>The story so far</span><i /><small>/ Path</small></p>
-            <h1 data-kin data-kin-hero><Kin text="Three chapters." /><br /><em><Kin text="One ==widening perspective==." /></em></h1>
-            <p className="k-lead">From understanding how demand is made, to building the systems underneath it, to founding a product that connects the two.</p>
-            <a className="k-jnow" href="/roqiva"><span className="k-jnow__k"><Dot tone="accent" />Right now</span><b>Founder, ROQIVA</b><em>In development · alongside Product Manager, GNC India</em><Icon name="arrow" size={15} /></a>
-            <nav className="k-jhero__nav" aria-label="Career chapters">{CHAPTERS.map((c) => <a key={c.k} href={`#chapter-${c.i}`}><b>{c.k}</b>{c.t}<Icon name="arrow" size={14} /></a>)}</nav>
+      <header className="p-hero p-hero--journey">
+        <div className="p-hero__in">
+          <div className="p-hero__copy">
+            <p className="s-label"><b>00</b><span>The story so far</span><em>Path</em></p>
+            <h1 className="p-hero__t" data-kin data-kin-hero><Kin text="Three chapters." /><br /><em><Kin text="One ==widening perspective==." /></em></h1>
+            <p className="p-hero__lead">From understanding how demand is made, to building the systems underneath it, to founding a product that connects the two.</p>
+            <a className="j-now" href="/roqiva"><span className="j-now__k"><Dot tone="accent" />Right now</span><b>Founder, ROQIVA</b><em>In development · alongside Product Manager, GNC India</em><Icon name="arrow" size={15} /></a>
+            <nav className="j-nav" aria-label="Career chapters">{CHAPTERS.map((c) => <a key={c.k} href={`#chapter-${c.i}`}><b>{c.k}</b>{c.t}<Icon name="arrow" size={14} /></a>)}</nav>
           </div>
-          <figure className="k-jhero__ph">
+          <figure className="p-hero__stage j-photo">
             <img src="/img/anjor.webp" width="447" height="721" alt="Anjor Tank" fetchpriority="high" />
             <figcaption><b>Always curious.</b><span>Always building.</span></figcaption>
           </figure>
@@ -101,28 +101,29 @@ export default function Journey() {
 
       <KSection id="timeline" tone="soft">
         <KHead n="01" label="A widening field of view" tag="Now, back to 2018" title="Each role adds" sub="another ==dimension==." lead="Demand. Product. Systems. Founding. Learning and work on one timeline." />
-        <div data-reveal>
-          <Paint name="meadow" className="v-road v-road--wide" tilt={false}>
-            <CareerGraph withLearning />
-          </Paint>
-        </div>
+        <Easel paint="meadow" fit="center" className="j-road"><CareerGraph withLearning /></Easel>
       </KSection>
 
       <KSection id="chapters">
         <KHead n="02" label="Three chapters" tag="Latest first" title="The loop I am ==building now==," sub="and what each role before it added." />
-        <div className="k-chaps">{CHAPTERS.map((c) => <Chapter key={c.k} c={c} i={c.i} />)}</div>
+        <div className="jcs">{CHAPTERS.map((c) => <Chapter key={c.k} c={c} i={c.i} />)}</div>
       </KSection>
 
       <KSection id="beliefs" tone="soft">
         <KHead n="03" label="Principles" tag="What stayed constant" title="What the work" sub="==taught me==." lead="The principles that stayed with me while the systems and responsibilities changed." />
-        <ul className="k-dm">
+        <ul className="mt">
           {BELIEFS.map((b, i) => (
-            <li key={b.t} className="k-dm__c" data-reveal>
-              <div className="k-dm__art"><AsciiCanvas scene={['layers', 'compound', 'tools'][i % 3]} className="k-dm__cv" label={`Animated drawing: ${b.t}`} /></div>
-              <div className="k-dm__b">
-                <span>{String(i + 1).padStart(2, '0')}</span>
+            <li key={b.t} className="mt__c" data-reveal>
+              <div className="mt__art">
+                <img src={`/img/paint/${['dusk', 'dawn', 'meadow'][i % 3]}.webp`} alt="" width="1600" height="1000" loading="lazy" decoding="async" />
+                <div className="mt__win">
+                  <span className="mt__bar" aria-hidden="true"><i /><i /><i /><b>{String(i + 1).padStart(2, '0')}</b></span>
+                  <AsciiCanvas scene={['layers', 'compound', 'tools'][i % 3]} className="mt__cv" label={`Animated drawing: ${b.t}`} />
+                </div>
+              </div>
+              <div className="mt__b">
                 <h3>{b.t}</h3><p>{b.d}</p>
-                <ul>{b.chips.map((x) => <li key={x}>{x}.</li>)}</ul>
+                <ul className="mt__chips">{b.chips.map((x) => <li key={x}>{x}.</li>)}</ul>
               </div>
             </li>
           ))}
@@ -136,11 +137,11 @@ export default function Journey() {
             const [deg, ...field] = a.split(' · ')
             const [school, yrs] = b.split(' · ')
             return (
-              <Tile key={a} tint={i ? 'sky' : 'butter'} className="k-c6 k-edu">
-                <p className="k-tile__k"><b>0{i + 1}</b>{yrs}</p>
+              <Tile key={a} tint={i ? undefined : 'ink'} className="k-c6 j-edu">
+                <p className="s-k"><b>0{i + 1}</b>{yrs}</p>
                 <h3>{deg}</h3>
                 <p>{field.join(' · ')}</p>
-                <p className="k-edu__s"><Icon name="pin" size={14} />{school}</p>
+                <p className="j-edu__s"><Icon name="pin" size={14} />{school}</p>
               </Tile>
             )
           })}

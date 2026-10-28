@@ -14,30 +14,48 @@ export const pad = (n) => String(n).padStart(2, '0')
 /** The five tints, in the order cases use them. */
 export const TINTS = ['peach', 'lilac', 'mint', 'sky', 'butter']
 
-/** A page section on the shared grid. `tone` is '', 'soft' (a quiet second background) or 'dark'. */
+/** A page section on the shared grid. `tone` is '' (paper), 'soft' (the second paper) or 'ink' (a dark field). */
 export function KSection({ id, tone, className, children }) {
   return (
-    <section id={id} className={cx('k-sec', tone && `k-sec--${tone}`, className)}>
+    <section id={id} className={cx('s-sec', tone && `s-sec--${tone === 'dark' ? 'ink' : tone}`, className)}>
       <div className="container">{children}</div>
     </section>
   )
 }
 
-/** Section header. A hairline label ("[01] SELECTED WORK ——— / SIX SYSTEMS"), the two-tone title and one line under it. */
+/** A section head. Left: the number and the name of the section, then the heading (kinetic, with ==highlights==).
+    Right, on the heading's baseline: the lead and anything passed as children (a link). The tag rides with the name. */
 export function KHead({ n, label, tag, title, sub, lead, as: Tag = 'h2', className, children }) {
+  const side = lead || children
   return (
-    <header className={cx('k-head', className)} data-reveal>
-      {label && <p className="k-rule">{n && <b>[{n}]</b>}<span>{label}</span><i />{tag && <small>/ {tag}</small>}</p>}
-      <Tag className="k-h" data-kin><Kin text={title} />{sub && <> <em><Kin text={sub} /></em></>}</Tag>
-      {lead && <p className="k-lead">{lead}</p>}
-      {children}
+    <header className={cx('s-head', !side && 's-head--solo', className)} data-reveal>
+      <div className="s-head__l">
+        {label && <p className="s-label">{n && <b>{n}</b>}<span>{label}</span>{tag && <em>{tag}</em>}</p>}
+        <Tag className="s-h" data-kin><Kin text={title} />{sub && <> <em><Kin text={sub} /></em></>}</Tag>
+      </div>
+      {side && <div className="s-head__r">{lead && <p className="s-lead">{lead}</p>}{children}</div>}
     </header>
   )
 }
 
-/** A bento tile. `tint` is one of peach, lilac, mint, sky, butter, ink. */
+/** A card. Words sit on paper: plain white by default, `ink` for the one dark card in a group, `soft` for the second paper.
+    The five old pastel tints all map to paper; colour now comes from the paintings that hold the windows. */
 export function Tile({ tint, className, as: Tag = 'div', reveal = true, children, ...rest }) {
-  return <Tag className={cx('k-tile', tint && `k-tile--${tint}`, className)} {...(reveal ? { 'data-reveal': true } : {})} {...rest}>{children}</Tag>
+  const tone = tint === 'ink' ? 's-card--ink' : tint === 'soft' ? 's-card--soft' : ''
+  return <Tag className={cx('s-card', tone, className)} {...(reveal ? { 'data-reveal': true } : {})} {...rest}>{children}</Tag>
+}
+
+/** A window on a painting: the house component. The window sits inset from the top-left and runs off the right and bottom. */
+export function Easel({ paint = 'dawn', fit = 'bleed', className, children, floats }) {
+  return (
+    <div className={cx('s-easel', className)} data-reveal>
+      <div className={cx('v-paint', `v-paint--${fit}`)} data-v-panel>
+        <img className="v-paint__img" src={`/img/paint/${paint}.webp`} alt="" width="1600" height="1000" loading="lazy" decoding="async" data-v-paint />
+        <div className="v-paint__stage">{children}</div>
+        {floats}
+      </div>
+    </div>
+  )
 }
 
 /** A product window: traffic lights, a mono title, an optional right-hand tag. */

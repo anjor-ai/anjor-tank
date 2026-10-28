@@ -3,5 +3,3 @@
 @keyframes routeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
 /* Hero entrance: a CSS animation. `both` keeps the start state until it plays. */
-.hero__a { animation: heroIn 0.9s var(--ease-out) both; animation-delay: calc(var(--i, 0) * 90ms); }
-@keyframes heroIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }

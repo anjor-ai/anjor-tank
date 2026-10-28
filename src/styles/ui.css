@@ -23,16 +23,6 @@
 .tag { display: inline-flex; padding: 3px 10px; border-radius: 999px; border: 1px solid var(--line-2); font-size: 13px; color: var(--text-2); }
 
 /* ───────── Page heroes ───────── */
-.phero { position: relative; overflow: clip; padding-block: clamp(32px, 4.4vw, 68px) clamp(40px, 5vw, 76px); }
-.phero::before { content: ''; position: absolute; inset: 0 0 auto; height: 560px; pointer-events: none; background: radial-gradient(45% 60% at 78% 0%, var(--stage-glow), transparent 70%); }
-.phero__in { position: relative; display: grid; grid-template-columns: minmax(0, 1fr); gap: clamp(28px, 4vw, 56px); align-items: center; }
-.phero__copy { display: grid; gap: 22px; justify-items: start; }
-.phero__in .lead { max-width: 60ch; color: var(--text-2); }
-.phero .h-hero { max-width: 20ch; }
-.phero--split .phero__in { grid-template-columns: minmax(0, 1fr) minmax(0, 0.92fr); }
-.phero--split .h-hero { max-width: 16ch; }
-.phero__vis { min-width: 0; }
-@media (max-width: 1000px) { .phero--split .phero__in { grid-template-columns: minmax(0, 1fr); } .phero__vis { max-width: 560px; } }
 
 /* ───────── Accordion ───────── */
 

@@ -12,19 +12,15 @@
   --fs-lead:clamp(15px,1.3vw,18px);
 }
 .sec {padding-block:var(--section-y)}
-.phero{padding-block:clamp(26px,3vw,46px) clamp(34px,3.8vw,55px)}
-.phero__copy {gap:15px}
 .head {margin-bottom:clamp(20px,2.4vw,30px)}
 .pager{padding-block:20px 0}
 .more{margin-top:20px}
-.foot__in{padding-block:38px 25px;gap:26px}
 
 /* First fold: left copy, a richly illustrated product workspace on the right. */
 
 /* Selected work: middle-justified title belongs with a centered carousel. */
 
 /* Visual, actionable decision diagram: animated system windows. */
-@keyframes st-signal{0%{left:0;opacity:.2}70%{left:100%;opacity:1}100%{left:100%;opacity:0}}
 
 /* Four chapters as compact, staggered product cards, not a long text-only list. */
 
@@ -36,13 +32,8 @@
 .fdr__btns{margin-top:8px}
 
 /* Refine smaller heroes and varied page composition. */
-.phero--work .phero__vis{background:linear-gradient(135deg,#e1eeff,#eaf5fc);padding:14px;border-radius:24px}
-.phero--hire .phero__vis{background:linear-gradient(140deg,#dce7ff,#ffe8df);padding:14px;border-radius:24px}
-.phero--beyond .phero__vis{background:linear-gradient(140deg,#d8ebff,#ebdefb);padding:14px;border-radius:24px}
-.phero--journey .portrait{max-width:290px}
 
 /* Polish and accessibility. */
 @media(max-width:640px){
  :root{--section-y:clamp(31px,8.5vw,48px)}
- .phero--work .phero__vis,.phero--hire .phero__vis,.phero--beyond .phero__vis{padding:8px}
 }

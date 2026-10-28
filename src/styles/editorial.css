@@ -1,26 +1,11 @@
 /* The editorial layer: asymmetric story composition, product-led interactivity, accessible motion.
    Uses existing Space Grotesk / IBM typography. */
 /* Every chapter takes a different posture. No artificial uniform centre grid. */
-.phero--work .phero__in,.phero--hire .phero__in,.phero--beyond .phero__in{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.82fr);align-items:center;gap:clamp(28px,5vw,70px)}
-.phero--work .h-hero{max-width:14ch}
-.phero--hire{background:radial-gradient(ellipse at 92% 0%,var(--accent-soft),transparent 54%)}
-.phero--hire .phero__copy{order:2}
-.phero--hire .phero__vis{order:1}
-.phero--beyond .phero__in{grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr)}
-.phero--beyond .phero__copy{align-self:end;padding-bottom:40px}
-.phero--journey .phero__in{grid-template-columns:minmax(0,1.1fr) minmax(0,.7fr)}
-.phero--contact .phero__copy{max-width:660px}
-.phero--contact{background:radial-gradient(circle at 10% 10%,var(--accent-soft),transparent 48%)}
 /* The founder product is not an external company promotion. Match the system palette. */
 .fdr{background:radial-gradient(circle at 90% 0%,rgba(38,118,234,.25),transparent 50%),#08162c;border-color:#265582;color:#f0f8ff}
 .fdr__h,.fdr__name .rl--roq{color:#f2f8ff}
 .fdr__name .rl__tile{background:#142f54}
 .fdr__lead{color:#bbd2ee}.fdr__eyebrow{color:#93c1ea}
 /* Preserve legibility and only animate on capable devices. */
-@media(max-width:960px){
- .phero--work .phero__in,.phero--hire .phero__in,.phero--beyond .phero__in{grid-template-columns:1fr}
- .phero--hire .phero__copy,.phero--hire .phero__vis{order:unset}
- .phero--beyond .phero__copy{align-self:auto;padding:0}
-}
 
 /* Type and section alignments create a deliberate visual rhythm. */

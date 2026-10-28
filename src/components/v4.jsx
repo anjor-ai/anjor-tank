@@ -1,10 +1,9 @@
 import { useEffect, useState } from 'react'
 import { CASES } from '../content'
 import { Icon } from './icons'
-import { Arrow, Button, LinkArrow, Rich } from './ui'
+import { Arrow, Button, LinkArrow } from './ui'
 import { CaseMock } from './mocks'
 import { Stat } from './kinetic'
-import { cx } from './kit'
 import { AppWin, Float, PAINTS, Paint } from './paint'
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -55,38 +54,42 @@ export function HeroTrace() {
   )
 }
 
-/* ───────────── Work showcase: six systems, one stage ───────────── */
-export function CaseShowcase({ onOpen, auto = 7000 }) {
+/* ───────────── Work showcase: a quiet ledger beside one sticky stage ─────────────
+   Pointing at a row (or focusing it, or tapping it) puts that system's window on the painting.
+   It pages through on its own until the visitor touches it, then it is theirs. */
+export function CaseShowcase({ onOpen, auto = 6500 }) {
   const [i, setI] = useState(0)
-  const [hold, setHold] = useState(false)
+  const [mine, setMine] = useState(false)
   const c = CASES[i]
   useEffect(() => {
-    if (hold || typeof window === 'undefined' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
+    if (mine || typeof window === 'undefined' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
     const t = setTimeout(() => setI((n) => (n + 1) % CASES.length), auto)
     return () => clearTimeout(t)
-  }, [i, hold, auto])
+  }, [i, mine, auto])
+  const pick = (k) => { setMine(true); setI(k) }
   return (
-    <div className="v-show" onPointerEnter={() => setHold(true)} onPointerLeave={() => setHold(false)} onFocus={() => setHold(true)} onBlur={() => setHold(false)}>
-      <div className="v-show__list" role="tablist" aria-label="Six systems">
+    <div className="wl">
+      <div className="wl__list" role="tablist" aria-label="Six systems">
         {CASES.map((x, k) => (
-          <button key={x.slug} type="button" role="tab" aria-selected={k === i} aria-controls="v-show-stage" className={k === i ? 'is-on' : ''} onClick={() => setI(k)} style={{ '--auto': `${auto}ms` }}>
+          <button key={x.slug} type="button" role="tab" aria-selected={k === i} aria-controls="wl-stage" className={k === i ? 'is-on' : ''}
+            onClick={() => pick(k)} onMouseEnter={() => pick(k)} onFocus={() => pick(k)} style={{ '--auto': `${auto}ms` }} data-reveal>
             <small>{x.n}</small>
             <span><b>{x.title}</b><em>{x.cat}</em></span>
             <strong>{x.metrics[0][0]}</strong>
-            {k === i && !hold && <i className="v-show__bar" aria-hidden="true" />}
+            {k === i && !mine && <i className="wl__bar" aria-hidden="true" />}
           </button>
         ))}
       </div>
-      <div className="v-show__stage" id="v-show-stage" role="tabpanel" aria-live="polite">
-        <Paint name={PAINTS[i % PAINTS.length]} fit="bleed" key={c.slug} className="v-show__paint">
-          <div className="v-show__mock"><CaseMock slug={c.slug} /></div>
-          <Float className="v-metric" depth={1.8}>
+      <div className="wl__stage" id="wl-stage" role="tabpanel" aria-live="polite">
+        <Paint name={PAINTS[i % PAINTS.length]} fit="bleed" key={c.slug} className="wl__paint">
+          <div className="wl__mock"><CaseMock slug={c.slug} /></div>
+          <Float className="wl__metric" depth={1.8}>
             {c.metrics.slice(0, 2).map(([v, l]) => <span key={l}><b><Stat v={v} /></b><small>{l}</small></span>)}
           </Float>
         </Paint>
-        <div className="v-show__foot">
+        <div className="wl__foot">
           <p><b>{c.title}.</b> {c.line}</p>
-          <p className="v-show__acts">
+          <p className="wl__acts">
             {onOpen && <button type="button" className="v-btn-q" onClick={() => onOpen(c.slug)}><Icon name="eye" size={14} />Quick view</button>}
             <LinkArrow to={`/work/${c.slug}`}>Read the case</LinkArrow>
           </p>
@@ -96,37 +99,22 @@ export function CaseShowcase({ onOpen, auto = 7000 }) {
   )
 }
 
-/** A case as a card: words on top, the product on a painting underneath. The whole card links to the case. */
+/** A case as a card: the system's window on a painting with its numbers floating over it, the words on paper beneath.
+    The whole card links to the case. */
 export function CaseCard({ c, k = 0 }) {
   return (
-    <article className="v-card" data-reveal>
-      <a className="v-card__a" href={`/work/${c.slug}`} aria-label={`${c.title}: read the case`} />
-      <div className="v-card__top">
-        <p className="v-k"><b>{c.n}</b>{c.cat}</p>
-        <h3>{c.title}</h3>
-        <ul className="v-card__m">{c.metrics.slice(0, 2).map(([v, l]) => <li key={l}><b><Stat v={v} /></b><span>{l}</span></li>)}</ul>
-      </div>
-      <Paint name={PAINTS[k % PAINTS.length]} fit="bleed" className="v-card__paint" tilt={false}>
-        <div className="v-card__mock"><CaseMock slug={c.slug} /></div>
+    <article className="cc" data-reveal>
+      <a className="cc__a" href={`/work/${c.slug}`} aria-label={`${c.title}: read the case`} />
+      <Paint name={PAINTS[k % PAINTS.length]} fit="bleed" className="cc__paint" tilt={false}>
+        <div className="cc__mock"><CaseMock slug={c.slug} /></div>
+        <ul className="cc__m">{c.metrics.slice(0, 2).map(([v, l]) => <li key={l}><b><Stat v={v} /></b><span>{l}</span></li>)}</ul>
       </Paint>
-      <span className="v-card__go">Read the case<Arrow /></span>
-    </article>
-  )
-}
-
-/* ───────────── A feature row: words on one side, a painted stage on the other ───────────── */
-export function Feature({ k, title, sub, lead, points, link, paint = 'noon', flip, fit = 'center', children, className }) {
-  return (
-    <div className={cx('v-feat', flip && 'v-feat--flip', className)}>
-      <div className="v-feat__copy" data-reveal>
-        {k && <p className="v-k">{k}</p>}
-        <h3 className="v-feat__h">{title}{sub && <em> {sub}</em>}</h3>
-        {lead && <p className="v-feat__lead">{lead}</p>}
-        {points && <ul className="v-feat__pts">{points.map(([icon, t]) => <li key={t}><span><Icon name={icon} size={14} /></span>{t}</li>)}</ul>}
-        {link}
+      <div className="cc__body">
+        <p className="cc__k"><b>{c.n}</b>{c.cat}</p>
+        <h3>{c.title}</h3>
+        <span className="cc__go">Read the case<i><Icon name="ne" size={15} /></i></span>
       </div>
-      <Paint name={paint} fit={fit} className="v-feat__paint">{children}</Paint>
-    </div>
+    </article>
   )
 }
 

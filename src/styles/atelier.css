@@ -3,24 +3,11 @@
 [data-theme='dark'] { --bg:#101114;--bg-2:#15171c;--surface:#1a1c22;--surface-2:#20232b;--line:#2b2e37;--line-2:#3e4350;--text:#f0f1f5;--text-2:#b0b5c1;--text-3:#929aaa;--accent:#9baeff;--accent-fill:#3459bf;--accent-text:#a9baff;--accent-head:#a9baff;--accent-soft:#9baeff0d;--accent-glow:#9baeff20;--btn-bg:#f0f1f5;--btn-ink:#15171c;--nav-bg:#101114ec;--node-bg:#1a1c22;--stage-bg:#15171c;--stage-line:#2b2e37;--stage-glow:#9baeff12;--ed-blue:#a9baff;--mesh-a:#1a2030;--mesh-b:#1b2031;--mesh-c:#182329;--at-stage:#161b27;--at-glass:#1b1f29ed;--at-shadow:0 2px 4px #0002,0 22px 60px -24px #000b; }
 body::before,[data-theme='dark'] body::before{background:none;display:none}
 /* Deliberately quiet emphasis and consistent type, capped at 40px. */
-.atelier-hero h1{font:500 clamp(30px,3.4vw,40px)/1.13 var(--font-display);letter-spacing:-.05em;text-wrap:balance}
-.atelier-hero h1 .em{color:var(--text-3);background:none;-webkit-text-fill-color:currentColor}
-.atelier-actions{display:flex;align-items:center;gap:24px;flex-wrap:wrap}.atelier-actions .btn{border-radius:8px;min-height:44px;padding:12px 18px;font-size:13px;box-shadow:none}.atelier-actions .link-arrow{font-size:13px;color:var(--text-2)}
-.atelier-hero{padding:56px 0 0;background:var(--bg)}.atelier-hero>.container{display:grid;grid-template-columns:.9fr 1.1fr;column-gap:32px;align-items:center}.atelier-hero__intro{max-width:510px;padding-block:20px}
-.atelier-identity{display:flex;align-items:center;gap:12px;margin-bottom:28px}.atelier-identity>span{width:38px;height:38px;display:grid;place-items:center;border:1px solid var(--line-2);border-radius:50%;font:500 12px var(--font-display);background:var(--surface)}.atelier-identity p{font-size:13px;font-weight:500}.atelier-identity small{display:block;margin-top:2px;font-size:11px;font-weight:400;color:var(--text-3)}
-.atelier-hero__intro>p{font-size:16px;line-height:1.7;color:var(--text-2);margin:20px 0 26px;max-width:45ch}
-.atelier-experience{grid-column:1/-1;display:flex;align-items:center;gap:42px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:24px 0;margin-top:32px}.atelier-experience span{font-size:11px;color:var(--text-3)}.atelier-experience b{font:500 16px var(--font-display);letter-spacing:-.03em}.atelier-experience span:last-child{margin-left:auto}
 /* Keep quiet surfaces on the remaining journey blocks. */
 [class*='atelier-'] button:focus-visible,[class*='atelier-'] a:focus-visible,[class*='atelier-'] summary:focus-visible{outline:2px solid var(--accent-text);outline-offset:5px}
-@media(min-width:1500px){.atelier-hero>.container{column-gap:65px}}
-@media(max-width:1000px){.atelier-hero>.container{grid-template-columns:1fr 1fr;column-gap:24px}.atelier-hero__intro>p{font-size:14px}.atelier-experience{gap:25px}.atelier-experience span:last-child{display:none}}
-@media(max-width:760px){.atelier-hero{padding-top:22px}.atelier-hero>.container{grid-template-columns:1fr}.atelier-hero__intro{max-width:590px;padding:15px 0 27px}.atelier-identity{margin-bottom:22px}.atelier-hero__intro>p{font-size:15px;max-width:48ch}.atelier-hero h1{max-width:22ch}.atelier-experience{margin-top:25px;padding:20px 0;gap:20px;flex-wrap:wrap}.atelier-experience>span:first-child{width:100%}.atelier-experience b{font-size:14px}}
-@media(max-width:420px){.atelier-actions{gap:18px}.atelier-actions .link-arrow{font-size:12px}}
 /* Flatten page-level wrappers; use the illustration, not an oversized rounded section, as the focal point. */
 .pagemotion[data-route='/hire']>.sec--alt,.pagemotion[data-route='/journey']>.sec--alt{margin-inline:0;border-radius:0;background:var(--surface-2);border-top:1px solid var(--line)}
 .pagemotion[data-route^='/work/'] .sec--alt{margin-inline:0;border-radius:0;background:var(--surface-2)}
-.pagemotion[data-route^='/work/'] .ph__in{background:transparent;border:0;border-radius:0;box-shadow:none;padding-block:35px}
-.pagemotion[data-route^='/work/'] .ph__stage{border-radius:12px;background:var(--at-stage);border:1px solid var(--line);box-shadow:var(--at-shadow)}
 .pagemotion[data-route^='/work/'] .cs__m{border-radius:0;background:transparent;border:0;border-top:1px solid var(--line);padding-top:18px}
 .pagemotion[data-route^='/work/'] .cs__m li{background:transparent;box-shadow:none;border-radius:0}
 

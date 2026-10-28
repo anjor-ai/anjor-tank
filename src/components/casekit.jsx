@@ -22,19 +22,19 @@ export function Summary({ S, g, tint }) {
   return (
     <div className="k-bento k-bento--sum">
       <Tile tint={tint} className="k-c8 k-sum__m">
-        <p className="k-tile__k"><span>Primary business metric</span></p>
+        <p className="s-k"><span>Primary business metric</span></p>
         <h3>{S.metric}</h3>
       </Tile>
       <Tile className="k-c4 k-r2 k-glance">
-        <p className="k-tile__k"><span>At a glance</span></p>
+        <p className="s-k"><span>At a glance</span></p>
         <dl>
           <div><dt>My role</dt><dd>{g.role}</dd></div>
           <div><dt>Worked with</dt><dd>{g.team}</dd></div>
           <div><dt>Built on</dt><dd><ul className="k-chips">{g.stack.map((x) => <li key={x}><Chip>{x}</Chip></li>)}</ul></dd></div>
         </dl>
       </Tile>
-      {[['Product surface', S.surface], ['System built', S.system]].map(([k, v]) => <Tile key={k} className="k-c4"><p className="k-tile__k"><span>{k}</span></p><p className="k-fact">{v}</p></Tile>)}
-      <Tile tint="soft" className="k-c8"><p className="k-tile__k"><span>Why it matters</span></p><p className="k-fact">{S.why}</p></Tile>
+      {[['Product surface', S.surface], ['System built', S.system]].map(([k, v]) => <Tile key={k} className="k-c4"><p className="s-k"><span>{k}</span></p><p className="k-fact">{v}</p></Tile>)}
+      <Tile tint="soft" className="k-c8"><p className="s-k"><span>Why it matters</span></p><p className="k-fact">{S.why}</p></Tile>
     </div>
   )
 }
@@ -72,7 +72,7 @@ export function Shift({ s }) {
       <StepTabs steps={s.stages.map((x) => ({ label: x.t }))} label="Stages of the shift">
         {(st, k) => (
           <Tile tint={TINTS[k % TINTS.length]} className="k-shift__p" reveal={false}>
-            <p className="k-tile__k"><b>{pad(k + 1)}</b>Stage {k + 1} of {s.stages.length}</p>
+            <p className="s-k"><b>{pad(k + 1)}</b>Stage {k + 1} of {s.stages.length}</p>
             <h3>{s.stages[k].t}</h3>
             <p>{s.stages[k].d}</p>
             <span className="k-shift__bar" aria-hidden="true">{s.stages.map((_, j) => <i key={j} className={j <= k ? 'is-on' : ''} />)}</span>
@@ -80,7 +80,7 @@ export function Shift({ s }) {
         )}
       </StepTabs>
       <Tile tint="ink" className="k-move">
-        <p className="k-tile__k"><span>The strategic move</span></p>
+        <p className="s-k"><span>The strategic move</span></p>
         <h3>{s.move}</h3>
         <blockquote>{s.quote}</blockquote>
       </Tile>
@@ -94,11 +94,11 @@ export function Architecture({ a }) {
     <div className="k-bento">
       {a.parts.map((p, k) => (
         <Tile key={p.t} tint={k % 3 === 0 ? TINTS[(k / 3) % TINTS.length] : undefined} className="k-c4 k-part">
-          <p className="k-tile__k"><b>{pad(k + 1)}</b></p>
+          <p className="s-k"><b>{pad(k + 1)}</b></p>
           <h3>{p.t}</h3><p>{p.d}</p>
         </Tile>
       ))}
-      <Tile tint="soft" className="k-c12 k-principle"><span className="k-tile__k"><span>Principle</span></span><p>{a.principle}</p></Tile>
+      <Tile tint="soft" className="k-c12 k-principle"><span className="s-k"><span>Principle</span></span><p>{a.principle}</p></Tile>
     </div>
   )
 }
@@ -123,7 +123,7 @@ export function Lenses({ items }) {
     <div className="k-bento">
       {items.map(([k, v], i) => (
         <Tile key={k} tint={TINTS[i % TINTS.length]} className="k-c6 k-lens">
-          <p className="k-tile__k"><b>{pad(i + 1)}</b>{k}</p>
+          <p className="s-k"><b>{pad(i + 1)}</b>{k}</p>
           <p className="k-lens__t">{v}</p>
         </Tile>
       ))}
@@ -136,16 +136,16 @@ export function Measure({ m }) {
   return (
     <div className="k-bento">
       <Tile tint="ink" className="k-c5 k-r2 k-prim">
-        <p className="k-tile__k"><Icon name="target" size={14} /><span>Primary success metric</span></p>
+        <p className="s-k"><Icon name="target" size={14} /><span>Primary success metric</span></p>
         <h3>{m.primary[0]}</h3>
         <p>{m.primary[1]}</p>
       </Tile>
       <Tile className="k-c7">
-        <p className="k-tile__k"><Icon name="shield" size={14} /><span>Guardrail metrics</span></p>
+        <p className="s-k"><Icon name="shield" size={14} /><span>Guardrail metrics</span></p>
         <ul className="k-chips k-chips--lg">{m.guard.map((g) => <li key={g}><Chip tone="ok">{g}</Chip></li>)}</ul>
       </Tile>
       <Tile className="k-c7">
-        <p className="k-tile__k"><Icon name="layers" size={14} /><span>Cut by</span></p>
+        <p className="s-k"><Icon name="layers" size={14} /><span>Cut by</span></p>
         <ul className="k-chips k-chips--lg">{m.seg.map((g) => <li key={g}><Chip>{g}</Chip></li>)}</ul>
       </Tile>
     </div>
@@ -176,9 +176,9 @@ export function Impact({ i }) {
           {t && <Chip>{t}</Chip>}
         </Tile>
       ))}
-      <Tile tint="ink" className="k-c6 k-proves"><p className="k-tile__k"><span>What this proves</span></p><h3>{i.proves}</h3></Tile>
+      <Tile tint="ink" className="k-c6 k-proves"><p className="s-k"><span>What this proves</span></p><h3>{i.proves}</h3></Tile>
       <Tile className="k-c6">
-        <p className="k-tile__k"><span>What drove it</span></p>
+        <p className="s-k"><span>What drove it</span></p>
         <ul className="k-drove">{i.drove.map(([a, b]) => <li key={a}><Icon name="check" size={15} /><div><b>{a}</b>{b && <span>{b}</span>}</div></li>)}</ul>
       </Tile>
     </div>
@@ -190,11 +190,11 @@ export function Playbook({ p }) {
   return (
     <div className="k-bento">
       <Tile tint="sky" className="k-c5">
-        <p className="k-tile__k"><span>Client fit</span></p>
+        <p className="s-k"><span>Client fit</span></p>
         <ul className="k-chips k-chips--lg">{p.uses.map((u) => <li key={u}><Chip>{u}</Chip></li>)}</ul>
       </Tile>
       <Tile className="k-c7">
-        <p className="k-tile__k"><span>Best engagement shape</span></p>
+        <p className="s-k"><span>Best engagement shape</span></p>
         <ol className="k-shape">{p.shape.map(([w, t], k) => <li key={t}>{k > 0 && <Arrow />}<span><b>{w}</b>{t}</span></li>)}</ol>
       </Tile>
     </div>

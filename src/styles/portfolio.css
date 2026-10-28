@@ -34,8 +34,6 @@
 .pager__go { display: inline-flex; align-items: center; gap: 8px; margin-top: 4px; font: 600 14px var(--font-display); color: var(--accent-text); }
 
 /* ───── footer extras ───── */
-.foot__logo { display: inline-flex; align-items: center; gap: 9px; }
-.foot__n { display: inline-block; width: 28px; font: 500 11px var(--font-mono); color: var(--text-3); letter-spacing: 0.08em; }
 
 /* ───── proof strip ───── */
 
