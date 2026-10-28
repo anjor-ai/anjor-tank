@@ -4,7 +4,6 @@ import { home, roqiva as R, site, workflow } from '../content'
 import { gsap } from '../lib/motion'
 import { DotCanvas } from '../art/ArtCanvas'
 import { ANJOR_TILES, SCENES } from '../art/cards'
-import { WordReel } from '../art/Reel'
 
 /* How ROQIVA opens. Never mounted under reduced motion; both are skippable (button, Esc, or a click).
    - RoqivaFilm: on a direct visit or a reload. About eleven seconds, after the two reference films: kinetic type with hard colour
@@ -19,7 +18,7 @@ import { WordReel } from '../art/Reel'
        8.6  the promise  the hero line, word by word; then the ROQIVA name, small, with its status
       10.6  hand-over    the frame wipes up and the page is underneath
      Everything is laid out on a 1600 × 900 stage, scaled to the screen (portrait screens use the central 1000 px).
-   - RoqivaReel: on arriving from another page of the site. The ROQIVA word reel, once, then the frame wipes up. About 2 s. */
+   It plays every time the ROQIVA page loads. */
 
 const plain = (s) => s.replace(/\*/g, '')
 const STEPS = workflow.steps.map((s, k) => ({ n: s.n, name: s.name, art: ['signals', 'find', 'decide', 'agent', 'check', 'prove'][k] }))
@@ -173,26 +172,6 @@ export function RoqivaFilm({ onReveal, onDone }) {
   )
 }
 
-export function RoqivaReel({ onReveal, onDone }) {
-  const ref = useRef(null)
-  const gone = useRef(false)
-  const out = () => {
-    if (gone.current) return
-    gone.current = true
-    onReveal?.()
-    gsap.to(ref.current, { clipPath: 'inset(0 0 100% 0)', duration: 0.6, ease: 'expo.inOut', onComplete: onDone })
-  }
-  useIntro(ref, { onSkip: out })
-  useEffect(() => { gsap.fromTo(ref.current.querySelector('.rl'), { autoAlpha: 0, y: 30 }, { autoAlpha: 1, y: 0, duration: 0.35, ease: 'expo.out' }) }, [])
-  return createPortal(
-    <div className="rqf rqf--reel" ref={ref} onClick={out} role="presentation">
-      <div className="rqf__bg" />
-      <WordReel word="roq" size="intro" once onDone={out} label={R.name} />
-      <button type="button" className="rqf__skip" onClick={(e) => { e.stopPropagation(); out() }}>Skip</button>
-    </div>,
-    document.body,
-  )
-}
 
 /* ───────── The portfolio's own opening: once per visit, on a direct load. About seven seconds, after the ROQIVA film.
      0.0  ANJOR TANK   the name rises in; each letter turns into a small screen of the work and back

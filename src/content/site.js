@@ -53,7 +53,7 @@ export const routes = [
   { path: '/hire', label: 'Hire me', type: 'WebPage', updated: '2026-10-26', story: true, step: 'Hire',
     title: `Hire me — ${site.name}`,
     description: 'Explore product-led consulting with Anjor Tank for conversion, GTM engineering and RevOps, alongside product management roles and founding ROQIVA.' },
-  { path: '/roqiva', label: 'ROQIVA', hidden: true, parent: '/hire', type: 'WebPage', updated: '2026-10-26', badge: 'In development',
+  { path: '/roqiva', label: 'ROQIVA', parent: '/hire', type: 'WebPage', updated: '2026-10-26', badge: 'In development',
     title: `ROQIVA — the revenue system Anjor Tank is building`,
     description: 'ROQIVA is a governed revenue-operations system in development: it finds unread signals, drafts the fix, and waits for a person to approve it.' },
   { path: '/contact', label: 'Contact', type: 'ContactPage', updated: '2026-10-26',

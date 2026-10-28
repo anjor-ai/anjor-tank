@@ -14,7 +14,7 @@ import { Stage, useWide } from '../showcase/primitives'
 import { HeroApp } from '../scenes/HeroApp'
 import { AuditScene, DecideScene, MonitorScene, ReleaseScene } from '../scenes/FlowScenes'
 import { BuildStage } from '../scenes/BuildStage'
-import { RoqivaFilm, RoqivaReel } from '../scenes/RoqivaIntro'
+import { RoqivaFilm } from '../scenes/RoqivaIntro'
 import { AsciiCanvas, DotCanvas } from '../art/ArtCanvas'
 import { asciiLaunch, blueprint, COL, deploy, dust, stars } from '../art/space'
 
@@ -476,13 +476,13 @@ const RULE_ART = ['agent', 'check', 'shield', 'ship', 'brain']
 
 export default function Roqiva() {
   useForcedTheme('dark')
-  // How the page opens: the film on a direct visit or a reload, the word reel when arriving from another page of the site,
-  // nothing under reduced motion. The window opens when the intro hands over.
+  // How the page opens: the product film, every time the page loads (a direct visit or arriving from another page),
+  // nothing under reduced motion. The window opens when the film hands over.
   const [intro, setIntro] = useState(() => {
     try {
       if (!window.matchMedia(MQ.motion).matches) return null
       if (window.__OI_TEST__ && sessionStorage.getItem('rq-film') === '1') return null // test runs skip it
-      return window.__oiNav ? 'reel' : 'film'
+      return 'film'
     } catch (e) { return null }
   })
   const [ready, setReady] = useState(() => !intro)
@@ -522,7 +522,6 @@ export default function Roqiva() {
     <PageMotion routeKey="/roqiva">
       <div className="roq" ref={shell} data-z={z !== 1 ? '' : undefined} style={{ '--z': z }}>
         {intro === 'film' && <RoqivaFilm onReveal={reveal} onDone={finish} />}
-        {intro === 'reel' && <RoqivaReel onReveal={reveal} onDone={finish} />}
         <Backdrop />
         <div className="rqt" data-rail={rail ? 'true' : undefined}>
           <Sidebar cur={cur} rail={rail} onToggle={toggleRail} />

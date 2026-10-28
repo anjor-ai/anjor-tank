@@ -1,7 +1,9 @@
 import { Arrow, Button, LinkArrow } from './ui'
 import { CaseMock } from './mocks'
-import { Dot, DotMap, Flow, Gantt, KHead, KSection, ListTabs, Tile, useClock } from './kit'
+import { Dot, DotMap, KHead, KSection, ListTabs, Tile, useClock } from './kit'
 import { AppWin, Float, Paint } from './paint'
+import { AsciiCanvas } from './ascii'
+import { CareerGraph, Workflow } from './v5'
 
 /* Home sections composed from the kit and the painted stages: how I think, the story so far, consulting. */
 
@@ -14,45 +16,19 @@ const THINK = [
   { slug: 'retention-reminders', title: 'When does a reminder become genuinely useful?', sub: 'Match the reminder to the reorder window.', tint: 'mint', paint: 'meadow', result: '~1,100', metric: 'additional repeat orders a day', rule: 'Reorder cadence identified' },
 ]
 
-/** Three dotted-grid cards with line art: find, decide, close the loop. One accent element each. */
-function MethodArt({ kind }) {
-  const cube = (x, y, s, on) => (
-    <g key={`${x}-${y}`} className={on ? 'is-on' : ''}>
-      <path d={`M${x} ${y - s} L${x + s * 0.87} ${y - s / 2} L${x} ${y} L${x - s * 0.87} ${y - s / 2}Z`} />
-      <path d={`M${x - s * 0.87} ${y - s / 2} V${y + s / 2} L${x} ${y + s} V${y}`} />
-      <path d={`M${x + s * 0.87} ${y - s / 2} V${y + s / 2} L${x} ${y + s}`} />
-    </g>
-  )
-  if (kind === 'find') return (
-    <svg viewBox="0 0 240 150" aria-hidden="true">
-      {[104, 80, 56].map((y, i) => <path key={y} className={i === 1 ? 'is-fill' : ''} d={`M120 ${y - 24} L180 ${y} L120 ${y + 24} L60 ${y}Z`} />)}
-      <path className="is-dash" d="M120 20 V122" /><circle className="is-dot" cx="120" cy="80" r="5.5" />
-    </svg>
-  )
-  if (kind === 'decide') return (
-    <svg viewBox="0 0 240 150" aria-hidden="true">
-      <path className="is-dash" d="M120 72 L66 100 M120 72 L174 100 M120 72 V34" />
-      {cube(120, 56, 20, true)}{cube(60, 112, 18, false)}{cube(180, 112, 18, false)}
-    </svg>
-  )
-  return (
-    <svg viewBox="0 0 240 150" aria-hidden="true">
-      <circle className="is-dash" cx="120" cy="75" r="46" />
-      {[[120, 29], [166, 75], [120, 121], [74, 75]].map(([x, y]) => <rect key={`${x}${y}`} x={x - 7} y={y - 7} width="14" height="14" rx="4" />)}
-      <g className="k-orbit"><circle className="is-dot" cx="166" cy="75" r="5.5" /></g>
-    </svg>
-  )
-}
-
+/** How I work, as three instrument cards: each runs a small ASCII scene of the idea (scan, branch, loop). */
 export function MethodTrio() {
-  const items = [['find', 'Find the real problem.', 'Follow the friction across the journey, not just the screen.'], ['decide', 'Make the difficult call.', 'Turn the evidence into a decision with clear guardrails.'], ['loop', 'Close the loop.', 'Ship, measure the outcome, and use it to shape the next move.']]
+  const items = [['find', 'Find the real problem.', 'Follow the friction across the journey, not just the screen.', 'Scan'], ['decide', 'Make the difficult call.', 'Turn the evidence into a decision with clear guardrails.', 'Branch'], ['loop', 'Close the loop.', 'Ship, measure the outcome, and use it to shape the next move.', 'Loop']]
   return (
-    <ul className="k-trio">
-      {items.map(([k, t, d], i) => (
-        <li key={k} className="k-art" data-reveal>
-          <span className="k-art__n">{String(i + 1).padStart(2, '0')}</span>
-          <div className="k-art__fig"><MethodArt kind={k} /></div>
-          <h3>{t}</h3><p>{d}</p>
+    <ul className="v-mx">
+      {items.map(([k, t, d, m], i) => (
+        <li key={k} className="v-mx__c" data-reveal>
+          <div className="v-mx__art">
+            <AsciiCanvas scene={k} className="v-mx__cv" label={`An animated drawing: ${t}`} />
+            <span className="v-mx__hud" aria-hidden="true"><b>{String(i + 1).padStart(2, '0')}</b>{m}<i /></span>
+            <span className="v-mx__br" aria-hidden="true" />
+          </div>
+          <div className="v-mx__b"><h3>{t}</h3><p>{d}</p></div>
         </li>
       ))}
     </ul>
@@ -80,43 +56,34 @@ export function ThinkingSection() {
 
 /* ───────── The story so far: a roadmap, a photo, where I am now ───────── */
 
-export const CAREER_ROWS = [
-  { label: 'Eggfirst', sub: 'Client services · 2022', a: 2022.25, b: 2022.75, tone: 'butter' },
-  { label: 'Neil Patel Digital', sub: 'Management trainee · 2023', a: 2023.67, b: 2023.95, tone: 'sky' },
-  { label: 'Truemeds', sub: 'Associate PM · 2023 to 2026', a: 2023.92, b: 2026.5, tone: 'peach' },
-  { label: 'GNC India', sub: 'Product Manager · Oct 2026', a: 2026.75, b: 2026.82, tone: 'mint', open: true },
-  { label: 'ROQIVA', sub: 'Founder · in development', a: 2026.0, b: 2026.82, tone: 'accent', open: true },
-]
-export const NOW = 2026.82
 
 export function CareerSection() {
   const t = useClock()
   return (
     <KSection id="journey">
       <KHead n="03" label="The story so far" tag="Three chapters" title="From understanding demand" sub="to building what delivers it." lead="Different roles. One growing curiosity about how products and businesses really work." />
-      <div className="k-bento k-bento--career">
-        <Tile className="k-c4 k-r2 k-photo" reveal>
+      <div className="v-career">
+        <Tile className="k-photo" reveal>
           <img src="/img/anjor.webp" width="447" height="721" alt="Anjor Tank" loading="lazy" decoding="async" />
           <p className="k-photo__cap"><b>Anjor Tank</b><span>Curiosity is the through line.</span></p>
         </Tile>
-        <div className="k-c8 k-career__road" data-reveal>
+        <div className="v-career__g" data-reveal>
           <Paint name="noon" className="v-road">
-            <AppWin title="Roles on one timeline" tag="2022 to now">
-              <Gantt rows={CAREER_ROWS} from={2022} to={2027} ticks={[2022, 2023, 2024, 2025, 2026, 2027]} now={NOW} caption="Roles on one timeline, 2022 to now" />
-              <p className="v-road__go"><LinkArrow to="/journey">The story so far</LinkArrow></p>
-            </AppWin>
+            <CareerGraph />
           </Paint>
         </div>
-        <Tile tint="mint" className="k-c4 k-now">
-          <p className="k-tile__k"><Dot />Right now</p>
-          <h3>Product Manager, GNC India.</h3>
-          <p>Founding ROQIVA, a system in development.</p>
-        </Tile>
-        <Tile tint="lilac" className="k-c4 k-where">
-          <p className="k-tile__k"><span>Based in</span></p>
-          <DotMap city="Mumbai" caption="Dotted map with a pin on Mumbai" />
-          <p className="k-where__t"><b>Mumbai</b><span>{t || 'India'}</span></p>
-        </Tile>
+        <div className="v-career__row">
+          <Tile tint="mint" className="k-now">
+            <p className="k-tile__k"><Dot />Right now</p>
+            <h3>Founder of ROQIVA. Product Manager, GNC India.</h3>
+            <p><LinkArrow to="/journey">The story so far</LinkArrow></p>
+          </Tile>
+          <Tile tint="lilac" className="k-where">
+            <p className="k-tile__k"><span>Based in</span></p>
+            <DotMap city="Mumbai" caption="Dotted map with a pin on Mumbai" />
+            <p className="k-where__t"><b>Mumbai</b><span>{t || 'India'}</span></p>
+          </Tile>
+        </div>
       </div>
     </KSection>
   )
@@ -129,11 +96,8 @@ export function ConsultSection() {
     <KSection id="consulting" tone="soft">
       <KHead n="04" label="Consulting" tag="GTM engineering and RevOps" title="Growth often breaks" sub="between tools." lead="My consulting work combines GTM engineering and RevOps: find where the commercial journey leaks, engineer the missing operating loop, and prove the lift." />
       <div className="v-consult">
-        <Paint name="dusk" className="v-consult__paint">
-          <Flow label="Product, CRM and analytics signals flow into one decision layer, then into finding the leak, fixing the loop and proving the lift"
-            left={[{ icon: 'grid', label: 'Product' }, { icon: 'users', label: 'CRM' }, { icon: 'chart', label: 'Analytics' }]}
-            hub={{ label: 'Decision layer', sub: 'GTM · RevOps' }}
-            right={[{ icon: 'search', label: 'Find the leak' }, { icon: 'bolt', label: 'Fix the loop' }, { icon: 'check', label: 'Prove the lift' }]} />
+        <Paint name="dusk" className="v-consult__paint" tilt={false}>
+          <Workflow />
         </Paint>
         <div className="v-consult__side">
           <Tile className="v-consult__c"><p className="v-k"><b>01</b>GTM engineering</p><h3>Find the leak.</h3><p>Instrument the journey, recover intent and connect acquisition with conversion.</p></Tile>

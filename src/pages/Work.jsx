@@ -27,7 +27,7 @@ export default function Work() {
           {list.map((c) => <CaseCard key={c.slug} c={c} k={parseInt(c.n, 10) - 1} />)}
         </div>
       </KSection>
-      <Cta title="Want this *done on your system?*" lead="Tell me the number that will not move." primary={{ label: 'Send a brief', to: '/contact?intent=consult#brief' }} secondary={{ label: 'Hire me', to: '/hire' }} />
+      <Cta topic="work" title="Want this *done on your system?*" lead="Tell me the number that will not move." primary={{ label: 'Send a brief', to: '/contact?intent=consult#brief' }} secondary={{ label: 'Hire me', to: '/hire' }} />
     </PageMotion>
   )
 }

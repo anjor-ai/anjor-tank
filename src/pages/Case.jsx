@@ -1,6 +1,6 @@
 import { CASES, GLANCE, bridge } from '../content'
 import { Cta, LinkArrow } from '../components/ui'
-import { SectionNav } from '../components/SectionNav'
+import { ArchWire, CaseDock, DashWire, Storyboard } from '../components/v5'
 import { CaseMock } from '../components/mocks'
 import { Stat } from '../components/kinetic'
 import { Architecture, Chevrons, Findings, Impact, Leakage, Lenses, Measure, Part, Playbook, Shift, Stairs, Summary } from '../components/casekit'
@@ -44,16 +44,16 @@ export default function Case() {
         </div>
       </header>
 
-      <SectionNav items={NAV} label="This case" />
+      <CaseDock items={NAV} />
 
       <KSection id="summary"><Part n={1} name="Executive summary" head={S.head}><Summary S={S} g={g} tint={tint} /></Part></KSection>
       <KSection id="problem" tone="soft"><Part n={2} name="The problem" head={c.problem.head} lead={c.problem.lead}><Leakage items={c.problem.items} /></Part></KSection>
       <KSection id="diagnosis"><Part n={3} name="Diagnosis" head={c.diagnosis.head} lead={c.diagnosis.lead}><Findings steps={c.diagnosis.steps} /></Part></KSection>
       <KSection id="shift" tone="soft"><Part n={4} name="The strategic shift" head={c.shift.head} lead={c.shift.lead}><Shift s={c.shift} /></Part></KSection>
-      <KSection id="architecture"><Part n={5} name="Solution architecture" head={c.arch.head} lead={c.arch.lead}><Architecture a={c.arch} /></Part></KSection>
-      <KSection id="workflow" tone="soft"><Part n={6} name="Workflow logic" head={c.flow.head} lead={c.flow.lead}><Chevrons steps={c.flow.steps} /></Part></KSection>
+      <KSection id="architecture"><Part n={5} name="Solution architecture" head={c.arch.head} lead={c.arch.lead}><ArchWire parts={c.arch.parts} /><Architecture a={c.arch} /></Part></KSection>
+      <KSection id="workflow" tone="soft"><Part n={6} name="Workflow logic" head={c.flow.head} lead={c.flow.lead}><Storyboard steps={c.flow.steps} /><Chevrons steps={c.flow.steps} /></Part></KSection>
       <KSection id="requirements"><Part n={7} name="Product requirements" head={c.reqs.head}><Lenses items={c.reqs.items} /></Part></KSection>
-      <KSection id="measurement" tone="soft"><Part n={8} name="Measurement design" head={c.measure.head} lead={c.measure.lead}><Measure m={c.measure} /></Part></KSection>
+      <KSection id="measurement" tone="soft"><Part n={8} name="Measurement design" head={c.measure.head} lead={c.measure.lead}><Measure m={c.measure} /><DashWire m={c.measure} /></Part></KSection>
       <KSection id="rollout"><Part n={9} name="Rollout and governance" head={c.rollout.head} lead={c.rollout.lead}><Stairs steps={c.rollout.steps} /></Part></KSection>
       <KSection id="impact" tone="soft"><Part n={10} name="Impact" head={c.impact.head} lead={c.impact.lead}><Impact i={c.impact} /></Part></KSection>
       <KSection id="playbook"><Part n={11} name="Reusable playbook" head={c.playbook.head} lead={c.playbook.lead}><Playbook p={c.playbook} /></Part></KSection>
@@ -76,7 +76,7 @@ export default function Case() {
         </nav>
       </KSection>
 
-      <Cta title="Want this *done on your system?*" lead="Tell me the number that will not move." primary={{ label: 'Send a brief', to: '/contact?intent=consult#brief' }} secondary={{ label: 'See all cases', to: '/work' }} />
+      <Cta topic="work" title="Want this *done on your system?*" lead="Tell me the number that will not move." primary={{ label: 'Send a brief', to: '/contact?intent=consult#brief' }} secondary={{ label: 'See all cases', to: '/work' }} />
     </PageMotion>
   )
 }

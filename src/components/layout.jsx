@@ -66,8 +66,9 @@ export function Nav() {
           ))}
         </nav>
         <div className="nav__right">
-          <ThemeToggle />
+          <span className="nav__theme"><ThemeToggle /></span>
           <Button to="/contact?intent=consult#brief" size="sm" className="nav__cta" track="cta_consult_nav">Let's talk <Arrow /></Button>
+          <Button to="/contact#brief" size="sm" className="nav__cta-m" track="cta_contact_nav_mobile">Get in touch</Button>
           <button type="button" ref={btn} className="icon-btn nav__burger" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen((o) => !o)}>
             <span className={`burger${open ? ' is-open' : ''}`} aria-hidden><i /><i /></span>
           </button>
@@ -80,7 +81,10 @@ export function Nav() {
               <span className="label">0{i + 1}</span>{r.label}
             </a>
           ))}
-          <Button to="/contact?intent=consult#brief" className="mmenu__cta" track="cta_consult_menu">Discuss a project<Arrow /></Button>
+          <div className="mmenu__row">
+            <Button to="/contact?intent=consult#brief" className="mmenu__cta" track="cta_consult_menu">Discuss a project<Arrow /></Button>
+            <span className="mmenu__theme"><ThemeToggle /></span>
+          </div>
         </nav>
       </div>
     </header>

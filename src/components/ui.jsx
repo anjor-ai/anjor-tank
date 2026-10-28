@@ -1,7 +1,8 @@
 import { useId, useState } from 'react'
 import { actors, status as statusMap, site } from '../content'
 import { Icon } from './icons'
-import { AppWin, Paint } from './paint'
+import { Paint } from './paint'
+import { BriefThread } from './v5'
 
 /** The site logo: the name in the display face, in the text colour of the theme. */
 export function Wordmark() {
@@ -162,7 +163,7 @@ export function Disclosure({ summary, children, open = false }) {
 
 /** Closing call to action used at the foot of every page. */
 /* ───────────── The closing panel used on every page ───────────── */
-export function Cta({ title, lead, primary, secondary, badges }) {
+export function Cta({ title, lead, primary, secondary, badges, topic }) {
   return (
     <section className="v-cta-sec">
       <div className="container">
@@ -177,14 +178,7 @@ export function Cta({ title, lead, primary, secondary, badges }) {
             {badges && <ul className="v-cta__badges">{badges.map((b) => <li key={b}>{b}</li>)}</ul>}
           </div>
           <Paint name="meadow" fit="bleed" className="v-cta__paint">
-            <AppWin title="New brief" tag="Takes two minutes" className="v-cta__win">
-              <div className="v-brief" aria-hidden="true">
-                <p className="v-brief__f"><small>What should move</small><span>Prepaid conversion<i className="v-caret" /></span></p>
-                <p className="v-brief__f"><small>Where it leaks</small><span className="is-chips"><em>Checkout</em><em>Payments</em><em>Fulfilment</em></span></p>
-                <p className="v-brief__f"><small>Tools involved</small><span className="is-chips"><em>Shopify</em><em>CleverTap</em><em>Mixpanel</em></span></p>
-                <span className="v-brief__send">Send brief <Icon name="arrow" size={13} /></span>
-              </div>
-            </AppWin>
+            <BriefThread topic={topic} />
           </Paint>
         </div>
       </div>

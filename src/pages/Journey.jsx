@@ -2,20 +2,15 @@ import { BELIEFS, EDU, journeyPage, roqiva } from '../content'
 import { Cta, LinkArrow } from '../components/ui'
 import { Icon } from '../components/icons'
 import { AsciiArt } from '../art/AsciiArt'
-import { Chip, Dot, Gantt, KHead, KSection, TINTS, Tile, Win } from '../components/kit'
-import { CAREER_ROWS, NOW } from '../components/sections'
-import { AppWin, Paint } from '../components/paint'
+import { Chip, Dot, KHead, KSection, TINTS, Tile, Win } from '../components/kit'
+import { Paint } from '../components/paint'
+import { CareerGraph } from '../components/v5'
 import { PageMotion } from '../lib/PageMotion'
 
 /* Journey: where I started, what each role added, and what the work taught me. One roadmap, three chapters, the principles, the foundations. */
 
-const ROWS = [
-  { group: 'Learning' },
-  { label: 'BTech', sub: 'Electronics and Telecom', a: 2018.5, b: 2022.5, tone: 'sky' },
-  { label: 'MBA', sub: 'Marketing, Operations, SCM', a: 2021.5, b: 2023.5, tone: 'lilac' },
-  { group: 'Work' },
-  ...CAREER_ROWS,
-]
+/* Now first: the founder chapter leads, each chapter lists its latest role first. Ids keep the original order so links stay stable. */
+const CHAPTERS = journeyPage.chapters.map((c, i) => ({ ...c, i, roles: [...c.roles].reverse() })).reverse()
 
 /** Right-hand windows of the three chapters. Each is an illustration, labelled as one. */
 function Wireframes() {
@@ -59,9 +54,9 @@ function Chapter({ c, i }) {
   const tint = TINTS[i % TINTS.length]
   const tags = c.roles.flatMap((r) => r.tags || []).slice(0, 4)
   return (
-    <Tile tint={tint} className="k-chap" id={`chapter-${i}`}>
+    <Tile tint={i === 2 ? 'ink' : tint} className={`k-chap${i === 2 ? ' k-chap--founder' : ''}`} id={`chapter-${i}`}>
       <div className="k-chap__card">
-        <p className="k-tile__k"><b>{c.k}</b>{c.span}</p>
+        <p className="k-tile__k"><b>{c.k}</b>{c.span}{i === 2 && <span className="k-chap__now"><Dot tone="accent" />Now · founder</span>}</p>
         <h2>{c.t}</h2>
         <p className="k-chap__d">{c.d}</p>
         <ul className="k-roles">
@@ -94,7 +89,8 @@ export default function Journey() {
             <p className="k-rule"><b>[00]</b><span>The story so far</span><i /><small>/ Path</small></p>
             <h1>Three chapters.<br /><em>One widening perspective.</em></h1>
             <p className="k-lead">From understanding how demand is made, to building the systems underneath it, to founding a product that connects the two.</p>
-            <nav className="k-jhero__nav" aria-label="Career chapters">{journeyPage.chapters.map((c, i) => <a key={c.k} href={`#chapter-${i}`}><b>{c.k}</b>{c.t}<Icon name="arrow" size={14} /></a>)}</nav>
+            <a className="k-jnow" href="/roqiva"><span className="k-jnow__k"><Dot tone="accent" />Right now</span><b>Founder, ROQIVA</b><em>In development · alongside Product Manager, GNC India</em><Icon name="arrow" size={15} /></a>
+            <nav className="k-jhero__nav" aria-label="Career chapters">{CHAPTERS.map((c) => <a key={c.k} href={`#chapter-${c.i}`}><b>{c.k}</b>{c.t}<Icon name="arrow" size={14} /></a>)}</nav>
           </div>
           <figure className="k-jhero__ph">
             <img src="/img/anjor.webp" width="447" height="721" alt="Anjor Tank" fetchpriority="high" />
@@ -104,19 +100,17 @@ export default function Journey() {
       </header>
 
       <KSection id="timeline" tone="soft">
-        <KHead n="01" label="A widening field of view" tag="2018 to now" title="Each role adds" sub="another dimension." lead="Demand. Product. Systems. Founding. Learning and work on one timeline." />
+        <KHead n="01" label="A widening field of view" tag="Now, back to 2018" title="Each role adds" sub="another dimension." lead="Demand. Product. Systems. Founding. Learning and work on one timeline." />
         <div data-reveal>
-          <Paint name="meadow" className="v-road v-road--wide">
-            <AppWin title="Learning and work · one timeline" tag="2018 to now">
-              <Gantt rows={ROWS} from={2018} to={2027} ticks={[2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027]} now={NOW} labelW={190} caption="Learning and work on one timeline, 2018 to now" />
-            </AppWin>
+          <Paint name="meadow" className="v-road v-road--wide" tilt={false}>
+            <CareerGraph withLearning />
           </Paint>
         </div>
       </KSection>
 
       <KSection id="chapters">
-        <KHead n="02" label="Three chapters" tag="What each role added" title="How demand is made," sub="then the systems, then the loop." />
-        <div className="k-chaps">{journeyPage.chapters.map((c, i) => <Chapter key={c.k} c={c} i={i} />)}</div>
+        <KHead n="02" label="Three chapters" tag="Latest first" title="The loop I am building now," sub="and what each role before it added." />
+        <div className="k-chaps">{CHAPTERS.map((c) => <Chapter key={c.k} c={c} i={c.i} />)}</div>
       </KSection>
 
       <KSection id="beliefs" tone="soft">

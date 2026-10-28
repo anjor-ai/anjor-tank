@@ -1,9 +1,11 @@
 import { gtm } from '../content'
 import { Button, Cta, LinkArrow } from '../components/ui'
 import { Icon } from '../components/icons'
-import { Chip, Dot, Flow, Gantt, KHead, KSection, ListTabs, StepTabs, TINTS, Tile, Win } from '../components/kit'
+import { Chip, Dot, Gantt, KHead, KSection, ListTabs, StepTabs, TINTS, Tile, Win } from '../components/kit'
 import { RoqivaFounder } from '../components/folio'
 import { AppWin, Paint } from '../components/paint'
+import { ScrollStory, Transform, Workflow } from '../components/v5'
+import { AsciiCanvas } from '../components/ascii'
 import { PageMotion } from '../lib/PageMotion'
 
 /* Hire: what I build, how a project runs, who it fits. Every widget below is an illustration and is labelled as one. */
@@ -52,20 +54,28 @@ export default function Hire() {
             <small className="k-hhero__n"><Dot tone="ok" /> Open to the right product role, too. <a href="/contact?intent=job#brief">Let’s talk ↗</a></small>
           </div>
           <Paint name="dusk" className="k-hhero__vis v-hhero">
-            <Flow label="Signals flow into a decision layer, which produces three outputs"
-              left={[{ label: 'Product', icon: 'grid' }, { label: 'CRM', icon: 'users' }, { label: 'Analytics', icon: 'chart' }]}
-              hub={{ label: 'Decision layer', sub: 'rules · guardrails · holdout' }}
-              right={[{ label: 'Find the leak', icon: 'search' }, { label: 'Fix the loop', icon: 'bolt' }, { label: 'Prove the lift', icon: 'check' }]} />
+            <Transform />
           </Paint>
         </div>
       </header>
 
-      <KSection id="system" tone="soft">
-        <KHead n="01" label="One commercial system" tag="Three connected layers" title="From the first signal" sub="to the next measured outcome." lead="Each layer solves a different part of the same problem." />
+      <KSection id="story">
+        <KHead n="01" label="The idea" tag="Scroll through one decision" title="One decision," sub="five stages." lead="One customer, one refill window, five stages. This is the loop I build for clients, and the loop ROQIVA is designed to run." />
+        <ScrollStory />
+      </KSection>
+
+      <KSection id="build" tone="soft">
+        <KHead n="02" label="What gets built" tag="Moving parts" title="Signals in, decisions out," sub="and a person at every gate that matters." lead="Events from the tools you already run resolve to one customer, detectors find the leak, a decision layer chooses the action, and a held-back group proves the lift." />
+        <div data-reveal><Paint name="dusk" className="v-hire-wf" tilt={false}><Workflow /></Paint></div>
+      </KSection>
+
+      <KSection id="system">
+        <KHead n="03" label="One commercial system" tag="Three connected layers" title="From the first signal" sub="to the next measured outcome." lead="Each layer solves a different part of the same problem." />
         <ListTabs items={LAYERS} label="Explore the architecture">
           {(l, i) => (
             <Tile tint={l.tint} reveal={false} className="k-layer">
               <p className="k-tile__k"><b>0{i + 1}</b>{l.status}</p>
+              <div className="k-layer__art"><AsciiCanvas scene={['find', 'decide', 'loop'][i]} label={`Animated drawing for ${l.title}`} /></div>
               <h3>{l.sub}.</h3>
               <p>{l.d}</p>
               <ol className="k-chev">{l.steps.map((x, k) => <li key={x}><b>{k + 1}</b>{x}</li>)}</ol>
@@ -74,13 +84,13 @@ export default function Hire() {
         </ListTabs>
       </KSection>
 
-      <KSection id="consulting">
-        <KHead n="02" label="Engagements" tag="Six ways to start" title="Start with" sub="the constraint." lead="A focused audit or a production-ready workflow: I scope the work around what has to change." />
+      <KSection id="consulting" tone="soft">
+        <KHead n="04" label="Engagements" tag="Six ways to start" title="Start with" sub="the constraint." lead="A focused audit or a production-ready workflow: I scope the work around what has to change." />
         <div className="k-bento">{gtm.services.slice(0, 6).map((s, i) => <Service key={s.id} s={s} i={i} />)}</div>
       </KSection>
 
-      <KSection id="process" tone="soft">
-        <KHead n="03" label="How a project runs" tag="Twelve weeks, typically" title="Less theatre." sub="More shipped decisions." lead="Find the problem, define the guardrails, build the fix, and measure its effect. Timelines depend on scope." />
+      <KSection id="process">
+        <KHead n="05" label="How a project runs" tag="Twelve weeks, typically" title="Less theatre." sub="More shipped decisions." lead="Find the problem, define the guardrails, build the fix, and measure its effect. Timelines depend on scope." />
         <div className="k-bento">
           <Tile className="k-c7 k-proc"><StepTabs steps={gtm.phases} label="Project phases">
             {(p) => (
@@ -101,15 +111,15 @@ export default function Hire() {
         </div>
       </KSection>
 
-      <KSection id="fit">
-        <KHead n="04" label="Fit check" tag="Before we talk" title="Who this is for," sub="and who it is not." />
+      <KSection id="fit" tone="soft">
+        <KHead n="06" label="Fit check" tag="Before we talk" title="Who this is for," sub="and who it is not." />
         <div className="k-bento">
           <Tile tint="mint" className="k-c6 k-fit"><h3>A good fit</h3><ul>{gtm.fitCheck.good.map((x) => <li key={x}><Icon name="check" size={15} />{x}</li>)}</ul></Tile>
           <Tile className="k-c6 k-fit k-fit--no"><h3>Not what I do</h3><ul>{gtm.fitCheck.not.map((x) => <li key={x}><span aria-hidden="true">–</span>{x}</li>)}</ul></Tile>
         </div>
       </KSection>
 
-      <KSection id="roqiva" tone="soft"><RoqivaFounder compact /></KSection>
+      <KSection id="roqiva"><RoqivaFounder compact /></KSection>
 
       <KSection id="role">
         <Tile tint="lilac" className="k-rolecta">
