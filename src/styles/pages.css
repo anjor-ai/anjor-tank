@@ -43,9 +43,6 @@
 @media (max-width: 1000px) { .engage { grid-template-columns: minmax(0, 1fr); } }
 
 /* ═══════════ Privacy ═══════════ */
-.legal { display: grid; gap: 28px; max-width: 72ch; }
-.legal__s { display: grid; gap: 10px; }
-.legal__s p { color: var(--text-2); }
 #finding .stage { --stage-pad: clamp(14px, 2.2vw, 30px); }
 
 /* ───────── Hero product screen ───────── */
@@ -124,7 +121,6 @@
 /* Company roadmap */
 
 /* ── ROQIVA on the home page: a dark product panel on the blue band ── */
-.rqh__live { width: 8px; height: 8px; border-radius: 50%; background: #2f95ff; box-shadow: 0 0 0 4px rgba(47, 149, 255, 0.22); }
 .h-4.sub { margin-bottom: 18px; }
 
 /* ═══════════ Brand identity ═══════════

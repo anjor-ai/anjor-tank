@@ -17,14 +17,9 @@ mark.kin-hl {
   padding: 0 0.04em; border-radius: 2px;
 }
 /* A highlight inside the quieter second voice keeps the accent. */
-.s-h em mark.kin-hl, .ct__h .em mark.kin-hl { color: var(--accent); }
+.ct__h .em mark.kin-hl { color: var(--accent); }
 
 /* The hero greeting. */
-.hey { display: flex; max-width: none; align-items: baseline; justify-content: flex-start; gap: 12px; margin: 0 0 14px; min-height: 1.3em; font: 500 clamp(26px, 3vw, 38px)/1.15 var(--font-display); letter-spacing: -0.03em; color: var(--accent); }
-.hey__m { display: inline-block; overflow: hidden; padding: 0.12em 0.06em 0.18em; margin: -0.12em -0.06em -0.18em; }
-.hey__i { display: inline-block; }
-.hey__l { font: 500 10.5px/1 var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); transform-origin: left bottom; }
-.hey__lm { align-self: center; }
 
 @media (prefers-reduced-motion: no-preference) {
   [data-kin-hero] .kw__i { animation: kwIn 0.95s var(--ease-out) both; animation-delay: calc(var(--w, 0) * 55ms + 120ms); }

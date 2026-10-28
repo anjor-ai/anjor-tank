@@ -10,7 +10,6 @@ export function Shader({ preset = 'violet', className = '' }) {
     if (!c) return undefined
     let s = null
     try { s = mountShader(c, preset, { still: window.matchMedia('(prefers-reduced-motion: reduce)').matches }) } catch { s = null }
-    if (s) c.parentElement.classList.add('is-live')
     return () => s && s.destroy()
   }, [preset])
   const p = PRESETS[preset] || PRESETS.violet

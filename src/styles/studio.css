@@ -24,11 +24,6 @@
 /* Four chapters as compact, staggered product cards, not a long text-only list. */
 
 /* Consulting: premium split, with a workflow screen rather than empty darkness. */
-.fdr{padding:clamp(21px,3vw,38px);gap:clamp(22px,3vw,46px)}
-.fdr__id{gap:11px}
-.fdr__lead{font-size:16px}
-.fdr__s{padding-top:10px}
-.fdr__btns{margin-top:8px}
 
 /* Refine smaller heroes and varied page composition. */
 

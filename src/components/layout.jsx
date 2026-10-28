@@ -38,47 +38,37 @@ export function SoundToggle({ className = '' }) {
 /** Elements made inert while the full-screen menu is open, so Tab and screen readers stay inside it. */
 const BEHIND_MENU = ['.skip-link', '#main', '.ft']
 
+/** The bar: the name, the pages, sound, theme and the one action. A plain solid bar: no blur, nothing floating.
+    It steps out of the way on the way down and returns on the way up. On a phone the pages open as a full panel. */
 export function Nav() {
   const { route } = useRoute()
   const [open, setOpen] = useState(false)
-  const [scrolled, setScrolled] = useState(false)
   const [hidden, setHidden] = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const btn = useRef(null)
   const menu = useRef(null)
-  const pill = useRef(null)
   const links = routes.filter((r) => !r.hidden)
   const main = links.filter((r) => r.path !== '/' && r.path !== '/contact')
 
   useEffect(() => { setOpen(false) }, [route.path])
-  // Hide on the way down, return on the way up; always shown near the top.
   useEffect(() => {
-    let lastY = window.scrollY
+    let lastY = window.scrollY, tick = false
     const on = () => {
-      const y = window.scrollY
-      setScrolled(y > 8)
-      setHidden(y > 240 && y > lastY + 2)
-      if (y < lastY - 2 || y < 240) setHidden(false)
-      lastY = y
+      if (tick) return
+      tick = true
+      requestAnimationFrame(() => {
+        tick = false
+        const y = window.scrollY
+        setScrolled(y > 4)
+        if (y < 120 || y < lastY - 4) setHidden(false)
+        else if (y > lastY + 4) setHidden(true)
+        lastY = y
+      })
     }
     on()
     window.addEventListener('scroll', on, { passive: true })
     return () => window.removeEventListener('scroll', on)
   }, [])
-  // The marker slides to the current page's link.
-  useEffect(() => {
-    const p = pill.current
-    if (!p) return undefined
-    const place = () => {
-      const a = p.querySelector('[aria-current="page"]') || p.querySelector(`a[href="/${route.path.split('/')[1]}"]`)
-      if (!a) { p.style.setProperty('--mw', '0px'); return }
-      p.style.setProperty('--mx', `${a.offsetLeft}px`); p.style.setProperty('--mw', `${a.offsetWidth}px`)
-    }
-    place()
-    document.fonts?.ready.then(place)
-    window.addEventListener('resize', place)
-    return () => window.removeEventListener('resize', place)
-  }, [route.path])
-  // Open: lock page scroll, make the page behind inert, move focus into the menu. Esc closes.
   useEffect(() => {
     if (!open) return undefined
     const behind = BEHIND_MENU.flatMap((s) => [...document.querySelectorAll(s)])
@@ -86,7 +76,7 @@ export function Nav() {
     document.body.style.overflow = 'hidden'
     menu.current?.querySelector('a')?.focus({ preventScroll: true })
     const key = (e) => { if (e.key === 'Escape') { setOpen(false); btn.current?.focus() } }
-    const mq = window.matchMedia('(min-width: 1021px)')
+    const mq = window.matchMedia('(min-width: 1081px)')
     const wide = () => { if (mq.matches) setOpen(false) }
     window.addEventListener('keydown', key)
     mq.addEventListener('change', wide)
@@ -100,90 +90,56 @@ export function Nav() {
 
   const here = (p) => route.path === p || (p !== '/' && route.path.startsWith(p + '/'))
   return (
-    <header className={`nv${scrolled ? ' is-scrolled' : ''}${hidden && !open ? ' is-hidden' : ''}${open ? ' is-open' : ''}`}>
-      <div className="nv__in">
-        <a href="/" className="nv__brand" aria-label={`${site.name} home`}><BrandMark className="nv__mark" decorative /><span>{site.name}</span></a>
-        <nav className="nv__pill" ref={pill} aria-label="Main">
-          <span className="nv__marker" aria-hidden="true" />
+    <header className={`b-nav${scrolled ? ' is-scrolled' : ''}${hidden && !open ? ' is-hidden' : ''}${open ? ' is-open' : ''}`}>
+      <div className="b-nav__in">
+        <a href="/" className="b-nav__brand" aria-label={`${site.name} home`}><BrandMark className="b-nav__mark" decorative /><span>{site.name}</span></a>
+        <nav className="b-nav__links" aria-label="Main">
           {main.map((r) => (
-            <a key={r.path} href={r.path} aria-current={here(r.path) ? 'page' : undefined}>{r.label}{r.badge && <span className="nv__dot" aria-label={r.badge} />}</a>
+            <a key={r.path} href={r.path} aria-current={here(r.path) ? 'page' : undefined}>{r.label}{r.badge && <i className="b-nav__dot" aria-label={r.badge} />}</a>
           ))}
         </nav>
-        <div className="nv__right">
-          <SoundToggle />
-          <span className="nv__theme"><ThemeToggle /></span>
-          <Button to="/contact?intent=consult#brief" size="sm" className="nv__cta" track="cta_consult_nav">Let's talk <Arrow /></Button>
-          <Button to="/contact#brief" size="sm" className="nv__cta-m" track="cta_contact_nav_mobile">Get in touch</Button>
-          <button type="button" ref={btn} className="nv-ic nv__burger" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen((o) => !o)}>
+        <div className="b-nav__right">
+          <SoundToggle className="b-nav__ic" />
+          <span className="b-nav__theme"><ThemeToggle /></span>
+          <Button to="/contact?intent=consult#brief" size="sm" className="b-nav__cta" track="cta_consult_nav">Let's talk <Arrow /></Button>
+          <button type="button" ref={btn} className="nv-ic b-nav__burger" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen((o) => !o)}>
             <span className={`burger${open ? ' is-open' : ''}`} aria-hidden><i /><i /></span>
           </button>
         </div>
       </div>
-      <div id="mobile-menu" ref={menu} className="mm" hidden={!open} onClick={(e) => { if (e.target.closest('a')) setOpen(false) }}>
-        <Shader preset="violet" className="mm__bg" />
-        <nav className="mm__in" aria-label="Mobile">
-          {links.map((r, i) => (
-            <a key={r.path} href={r.path} className="mm__link" style={{ '--i': i }} aria-current={here(r.path) && r.path !== '/' ? 'page' : route.path === '/' && r.path === '/' ? 'page' : undefined}>
-              <small>0{i + 1}</small>{r.label}
+      <div id="mobile-menu" ref={menu} className="b-menu" hidden={!open} onClick={(e) => { if (e.target.closest('a')) setOpen(false) }}>
+        <nav className="b-menu__in" aria-label="Mobile">
+          {links.map((r) => (
+            <a key={r.path} href={r.path} className="b-menu__a" aria-current={(r.path === '/' ? route.path === '/' : here(r.path)) ? 'page' : undefined}>
+              {r.label}<Icon name="arrow" size={18} />
             </a>
           ))}
-          <div className="mm__row">
-            <Button to="/contact?intent=consult#brief" className="mm__cta" track="cta_consult_menu">Discuss a project<Arrow /></Button>
-            <span className="mm__ic"><SoundToggle /><ThemeToggle /></span>
-          </div>
         </nav>
+        <div className="b-menu__row">
+          <Button to="/contact?intent=consult#brief" className="b-menu__cta" track="cta_consult_menu">Discuss a project<Arrow /></Button>
+          <span className="b-menu__ic"><SoundToggle /><ThemeToggle /></span>
+        </div>
       </div>
     </header>
   )
 }
 
-const STORY = routes.filter((r) => r.story)
-const storyIndex = (path) => STORY.findIndex((r) => r.path === path || path.startsWith(r.path + '/'))
-
-/** The trail below the nav on every page but the home page. The same trail ships as BreadcrumbList JSON-LD (site.mjs). */
-export function Breadcrumbs() {
-  const { route } = useRoute()
-  if (route.path === '/') return null
-  const r = routes.find((x) => x.path === route.path)
-  const parent = r && r.parent ? routes.find((x) => x.path === r.parent) : null
-  const cur = storyIndex(route.path)
-  return (
-    <div className="bc">
-      <nav aria-label="Breadcrumb">
-        <ol>
-          <li><a href="/">Home</a></li>
-          {parent && <li><a href={parent.path}>{parent.label}</a></li>}
-          <li><span aria-current="page">{r ? r.label : 'Page not found'}</span></li>
-        </ol>
-      </nav>
-      {cur >= 0 && (
-        <nav className="bc__steps" aria-label="The story, in order">
-          <ol>
-            {STORY.map((x, i) => (
-              <li key={x.path}><a href={x.path} title={x.label} aria-current={i === cur ? 'step' : undefined} className={i < cur ? 'is-past' : undefined}><b>0{i + 1}</b><span>{x.step}</span></a></li>
-            ))}
-          </ol>
-        </nav>
-      )}
-    </div>
-  )
-}
-
-/** The hand-over at the bottom of each story page: one large line that is a door to the next page. */
+/** The hand-over at the bottom of each story page: one tile that is a door to the next page. */
 export function StoryPager() {
   const { route } = useRoute()
   const p = pager[route.path]
   if (!p) return null
   const next = routes.find((r) => r.path === p.to)
   return (
-    <section className="np" aria-label="Next page">
-      <a className="np__a" href={p.to} data-track="pager_next" data-cursor="Next">
-        <span className="np__k">{p.kicker}</span>
-        <span className="np__t"><Rich text={p.title} /></span>
-        <span className="np__d">{p.d}</span>
-        <span className="np__go">{next ? next.label : 'Continue'}<i><Icon name="arrow" size={20} /></i></span>
-        <span className="np__fill" aria-hidden="true" />
-      </a>
+    <section className="b-next" aria-label="Next page">
+      <div className="b-wrap">
+        <a className="b-next__a" href={p.to} data-track="pager_next" data-cursor="Next" data-reveal>
+          <span className="b-next__k">{p.kicker}</span>
+          <span className="b-next__t"><Rich text={p.title} /></span>
+          <span className="b-next__d">{p.d}</span>
+          <span className="b-next__go">{next ? next.label : 'Continue'}<i><Icon name="arrow" size={18} /></i></span>
+        </a>
+      </div>
     </section>
   )
 }

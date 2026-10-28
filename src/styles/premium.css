@@ -10,22 +10,8 @@
   --st-sky: #0a6aa8; --st-ok: #1a7651; --st-amber: #9a6a00; --st-grey: #5e6068; --k-code: #1a7651; --k-agent: #6a4fd8; --k-person: #0072e5;
   color-scheme: light; color: var(--text);
 }
-.fdr {
-  --bg: #1f1d1a; --bg-2: #181715; --surface: #282623; --surface-2: #312e2a; --line: #38352f; --line-2: #4a463e;
-  --text: #f5f3ec; --text-2: #c4c0b5; --text-3: #a09c90;
-  --st-ok: #5fd3a0; --st-sky: #6cc0f5; --ok: #5fd3a0; --warn: #ff7a66;
-  color-scheme: dark; color: var(--text);
-}
 /* the accent inside a dark window follows the site: clay on the dark theme, a lifted blue on the light one */
-[data-theme='dark'] :is(.win, .st-console, .mth, .v3-founder, .fdr, .cs__rq, .czm__p, .czs__move, .rqh, .ed-consult, .scn--speed, .scn--live) { --accent: #e8825a; --accent-text: #f2966f; --accent-soft: rgba(232, 130, 90, 0.14); --ed-blue: #f2966f; --win-glow: rgba(232, 130, 90, 0.22); }
-[data-theme='light'] :is(.win, .st-console, .mth, .v3-founder, .fdr, .cs__rq, .czm__p, .czs__move, .rqh, .ed-consult, .scn--speed, .scn--live) { --accent: #3b9bff; --accent-text: #7ab8ff; --accent-soft: rgba(59, 155, 255, 0.16); --ed-blue: #7ab8ff; --win-glow: rgba(59, 155, 255, 0.24); }
 /* the navy panels of the earlier rounds become warm charcoal with one clay glow */
-.fdr {
-  background: radial-gradient(60% 90% at 100% 0%, var(--win-glow), transparent 62%), radial-gradient(50% 70% at 0% 100%, rgba(157, 143, 240, 0.10), transparent 64%), #1f1d1a;
-  border-color: #3d3a33; box-shadow: 0 28px 70px -40px rgba(24, 20, 14, 0.55);
-}
-.fdr a { color: var(--accent-text); }
-.fdr__name .rl__tile { background: #282623; border-color: #4a463e; }
 
 /* page-level atmosphere */
 [data-theme='dark'] body::before { background: radial-gradient(55% 45% at 100% 0%, rgba(232, 130, 90, 0.10), transparent 70%), radial-gradient(45% 40% at 0% 100%, rgba(157, 143, 240, 0.07), transparent 70%); }
@@ -46,18 +32,6 @@
 .stg__foot { margin: 0; padding: 11px 16px; border-top: 1px solid var(--line); font: 500 10px var(--font-mono); letter-spacing: 0.07em; color: var(--text-3); }
 
 /* work stage */
-.stg__feat { display: flex; align-items: center; gap: 16px; padding: 18px 18px 6px; }
-.stg__feat strong { font: 600 clamp(52px, 6vw, 76px)/0.9 var(--font-display); letter-spacing: -0.06em; color: var(--accent-text); }
-.stg__feat span { font-size: 14px; line-height: 1.4; color: var(--text-2); }
-.stg__tiles { list-style: none; margin: 0; padding: 12px 18px 18px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
-.stg__tile { position: relative; display: grid; gap: 6px; padding: 14px 12px 12px; border-radius: 16px; border: 1px solid var(--line); background: var(--tl); color: var(--text); transition: transform 0.3s var(--ease-out); }
-.stg__tile:hover { transform: translateY(-3px); }
-.stg__tile small { font: 500 10px var(--font-mono); letter-spacing: 0.04em; color: var(--text-2); text-transform: uppercase; }
-.stg__tile b { font: 600 clamp(17px, 1.8vw, 22px)/1.1 var(--font-display); letter-spacing: -0.035em; }
-.stg__tile svg { position: absolute; top: 12px; right: 10px; color: var(--tx); }
-.stg__tile--peach { --tl: var(--t-peach); --tx: var(--ts-peach); } .stg__tile--mint { --tl: var(--t-mint); --tx: var(--ts-mint); }
-.stg__tile--lilac { --tl: var(--t-lilac); --tx: var(--ts-lilac); } .stg__tile--sky { --tl: var(--t-sky); --tx: var(--ts-sky); } .stg__tile--butter { --tl: var(--t-butter); --tx: var(--ts-butter); }
-@media (max-width: 520px) { .stg__tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 /* journey stage */
 .rt { display: grid; grid-template-columns: minmax(0, 0.44fr) minmax(0, 0.56fr); gap: 10px 16px; padding: 18px; align-items: end; }
@@ -111,9 +85,6 @@
 .rqov__full, .rqov__full span, .rqov__full em { color: var(--accent-text); } .rqov__full b { color: var(--text); }
 
 /* pills inside always-dark windows keep their light-on-dark colours in either theme */
-:is(.win, .st-console, .mth, .v3-founder, .fdr, .cs__rq, .czm__p, .czs__move, .rqh, .ed-consult) :is(.ha__pill--sky, .status--sky) { color: var(--st-sky); }
-:is(.win, .st-console, .mth, .v3-founder, .fdr, .cs__rq, .czm__p, .czs__move, .rqh, .ed-consult) .ha__pill--ok { color: var(--st-ok); }
-:is(.win, .st-console, .mth, .v3-founder, .fdr, .cs__rq, .czm__p, .czs__move, .rqh, .ed-consult) .ha__pill--grey { color: var(--text-3); }
 
 /* ── Footer: smaller, name centred, no launch art ── */
 

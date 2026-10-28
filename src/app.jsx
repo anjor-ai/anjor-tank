@@ -2,15 +2,16 @@
 // and the build-time text snapshot (ssr.jsx), so both render exactly the same pages.
 import { Component, Suspense, useEffect, useState } from 'react'
 import { routes } from './content'
-import { Breadcrumbs, Footer, Nav, StoryPager } from './components/layout'
+import { Footer, Nav, StoryPager } from './components/layout'
 import { Button } from './components/ui'
 import { RouterProvider, setPreloader, useRoute } from './lib/router'
 import { ThemeProvider } from './lib/theme'
 import { ToastProvider } from './lib/toast'
 import { track } from './lib/track'
-import { Curtain, Cursor, Intro } from './system/shell'
-import { initScroll } from './system/scroll'
+import { Curtain, Cursor } from './system/shell'
 import { resumeOnGesture } from './system/sound'
+import { MQ, ScrollTrigger } from './lib/motion'
+import { SiteFilm } from './scenes/RoqivaIntro'
 
 // Each page is its own chunk, loaded when its route is opened (and preloaded on hover or touch). `loaded` caches the components.
 const loaders = {
@@ -44,13 +45,14 @@ function PageSlot({ path }) {
 
 function NotFound() {
   return (
-    <section className="sec"><div className="container">
-      <p className="label">404</p>
-      <h1 className="h-hero">That page does not exist.</h1>
-      <p className="lead" style={{ marginTop: 20 }}>It may have moved, or the link is mistyped. These pages do exist:</p>
-      <ul className="nf__links">
-        {routes.filter((r) => !r.hidden).map((r) => <li key={r.path}><a className="accent" href={r.path}>{r.label}</a></li>)}
-      </ul>
+    <section className="b-sec b-sec--first"><div className="b-wrap">
+      <div className="b-tile b-msg">
+        <h1 className="b-h">That page does not exist.</h1>
+        <p className="b-lead">It may have moved, or the link is mistyped. These pages do exist:</p>
+        <ul className="b-chips b-chips--links">
+          {routes.filter((r) => !r.hidden).map((r) => <li key={r.path}><a href={r.path}>{r.label}</a></li>)}
+        </ul>
+      </div>
     </div></section>
   )
 }
@@ -63,11 +65,12 @@ class Boundary extends Component {
   render() {
     if (!this.state.failed) return this.props.children
     return (
-      <section className="sec"><div className="container">
-        <p className="label">Something went wrong</p>
-        <h1 className="h-hero">This page did not load.</h1>
-        <p className="lead" style={{ marginTop: 20 }}>Reload to try again. If it keeps happening, write to us and we will fix it.</p>
-        <div style={{ marginTop: 24 }}><Button onClick={() => window.location.reload()}>Reload the page</Button></div>
+      <section className="b-sec b-sec--first"><div className="b-wrap">
+        <div className="b-tile b-msg">
+          <h1 className="b-h">This page did not load.</h1>
+          <p className="b-lead">Reload to try again. If it keeps happening, write to us and we will fix it.</p>
+          <div><Button onClick={() => window.location.reload()}>Reload the page</Button></div>
+        </div>
       </div></section>
     )
   }
@@ -100,19 +103,41 @@ function useDocumentHead(path) {
   }, [path])
 }
 
+/** The opening film, once per visit (not over ROQIVA or Beyond, which open with films of their own); the home page can replay it. */
+function Opener() {
+  const [on, setOn] = useState(false)
+  useEffect(() => {
+    const play = () => { if (window.matchMedia(MQ.motion).matches) setOn(true) }
+    try {
+      if (!window.__OI_TEST__ && !/^\/(roqiva|beyond)/.test(window.location.pathname) && sessionStorage.getItem('at-film-v2') !== '1') {
+        play()
+        sessionStorage.setItem('at-film-v2', '1')
+      }
+    } catch { /* Storage is optional. */ }
+    window.addEventListener('replay-site-film', play)
+    return () => window.removeEventListener('replay-site-film', play)
+  }, [])
+  // While the film plays, the page's opening entrance waits and runs once the film clears.
+  useEffect(() => {
+    const r = document.documentElement
+    if (on) r.setAttribute('data-film', '')
+    else r.removeAttribute('data-film')
+  }, [on])
+  return on ? <SiteFilm onDone={() => { setOn(false); requestAnimationFrame(() => ScrollTrigger.refresh()) }} /> : null
+}
+
 function Shell() {
   const { route } = useRoute()
   useDocumentHead(route.path)
-  useEffect(() => { initScroll(); resumeOnGesture() }, [])
+  useEffect(() => { resumeOnGesture() }, [])
   return (
     <>
-      <Intro />
+      <Opener />
       <Curtain routeKey={route.path + (route.n || '')} />
       <Cursor />
       <a className="skip-link" href="#main" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus() }}>Skip to content</a>
       <Nav />
       <main id="main" tabIndex={-1} key={route.path + (route.n || '')} className="page route-enter" style={{ outline: 'none' }}>
-        {!['/hire', '/journey', '/beyond'].includes(route.path) && <Breadcrumbs />}
         <Boundary key={route.path}>
           <Suspense fallback={<div className="page-wait" />}>
             <PageSlot path={route.path} />

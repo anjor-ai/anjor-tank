@@ -180,66 +180,103 @@ function plane(ws, hs) {
   return { v: new Float32Array(v), i: idx.length > 65535 ? new Uint32Array(idx) : new Uint16Array(idx) }
 }
 
-/** Mount a gradient on a canvas. Returns { destroy, setPreset }. */
-export function mountShader(canvas, name = 'violet', { still = false } = {}) {
-  const gl = canvas.getContext('webgl', { antialias: true, alpha: true, premultipliedAlpha: false, powerPreference: 'low-power' })
-  if (!gl) return null
+/* ─────────────────────────────────────────────────────────────────────────────
+   One renderer for the whole site. Earlier every gradient owned a WebGL context, and a page could hold six at once;
+   together with blurred glass above them that made scrolling stutter. Now a single hidden WebGL canvas draws each
+   gradient that is on screen in turn and copies the frame into that gradient's own 2D canvas.
+   · Frames are drawn at a fraction of the CSS size (a soft gradient loses nothing when scaled up) and at most 30 a second.
+   · Only gradients on screen are drawn; a background tab draws nothing.
+   · Under reduced motion each gradient is drawn once and left still.
+   ───────────────────────────────────────────────────────────────────────────── */
+const SCALE = 0.5, MAXW = 760, FPS = 30
+let R = null
+const targets = new Set()
+
+function renderer() {
+  if (R) return R
+  const cv = document.createElement('canvas')
+  const gl = cv.getContext('webgl', { antialias: false, alpha: true, premultipliedAlpha: false, preserveDrawingBuffer: true, powerPreference: 'low-power' })
+  if (!gl) { R = { gl: null }; return R }
   const big = gl.getExtension('OES_element_index_uint')
-  const sh = (t, s) => { const o = gl.createShader(t); gl.shaderSource(o, s); gl.compileShader(o); if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o)); return o }
+  const sh = (t, src) => { const o = gl.createShader(t); gl.shaderSource(o, src); gl.compileShader(o); if (!gl.getShaderParameter(o, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(o)); return o }
   const prog = gl.createProgram()
   gl.attachShader(prog, sh(gl.VERTEX_SHADER, VERT)); gl.attachShader(prog, sh(gl.FRAGMENT_SHADER, FRAG)); gl.linkProgram(prog)
   gl.useProgram(prog)
   const U = Object.fromEntries(['uMVP', 'uTime', 'uSpeed', 'uDensity', 'uStrength', 'uC1', 'uC2', 'uC3', 'uLight'].map((k) => [k, gl.getUniformLocation(prog, k)]))
-  const vbo = gl.createBuffer(), ibo = gl.createBuffer()
   const aPos = gl.getAttribLocation(prog, 'aPos')
-  let p, count = 0, itype = gl.UNSIGNED_SHORT, t = 0, raf = 0, last = 0, on = true, w = 0, h = 0
-  const setPreset = (n) => {
-    p = PRESETS[n] || PRESETS.violet
-    const seg = big ? 192 : 128
-    const g = p.type === 'plane' ? plane(1, seg) : plane(seg, seg)
+  gl.enableVertexAttribArray(aPos)
+  // Two meshes, built once: the water plane and the flat plane.
+  const seg = big ? 120 : 96
+  const mesh = {}
+  for (const [k, g] of [['waterPlane', plane(seg, seg)], ['plane', plane(1, seg)]]) {
+    const vbo = gl.createBuffer(), ibo = gl.createBuffer()
     gl.bindBuffer(gl.ARRAY_BUFFER, vbo); gl.bufferData(gl.ARRAY_BUFFER, g.v, gl.STATIC_DRAW)
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ibo); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, g.i, gl.STATIC_DRAW)
-    itype = g.i instanceof Uint32Array ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT; count = g.i.length
-    gl.enableVertexAttribArray(aPos); gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0)
-    gl.uniform3fv(U.uC1, hex(p.color1)); gl.uniform3fv(U.uC2, hex(p.color2)); gl.uniform3fv(U.uC3, hex(p.color3))
-    gl.uniform1f(U.uLight, p.brightness * 0.8); gl.uniform1f(U.uSpeed, p.uSpeed); gl.uniform1f(U.uDensity, p.uDensity); gl.uniform1f(U.uStrength, p.uStrength)
-    t = p.uTime
-    w = 0
+    mesh[k] = { vbo, ibo, count: g.i.length, type: g.i instanceof Uint32Array ? gl.UNSIGNED_INT : gl.UNSIGNED_SHORT }
   }
-  const draw = () => {
-    const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
-    const cw = Math.max(1, Math.round(canvas.clientWidth * dpr)), ch = Math.max(1, Math.round(canvas.clientHeight * dpr))
-    if (cw !== w || ch !== h) {
-      w = cw; h = ch; canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h)
-      const proj = perspective(rad(p.fov), w / h, 0.1, 100)
-      const view = lookAt(camera(p), [0, 0, 0], [0, 1, 0])
-      gl.uniformMatrix4fv(U.uMVP, false, mul(mul(proj, view), model(p)))
-    }
-    if (p.bg) { const c = hex(p.bg); gl.clearColor(c[0], c[1], c[2], 1) } else gl.clearColor(0, 0, 0, 0)
-    gl.clear(gl.COLOR_BUFFER_BIT)
-    gl.uniform1f(U.uTime, t)
-    gl.drawElements(gl.TRIANGLES, count, itype, 0)
+  R = { gl, cv, U, aPos, mesh }
+  return R
+}
+
+/** Draw one target's frame on the shared canvas and copy it into the target's own canvas. */
+function paint(t) {
+  const { gl, cv, U, aPos, mesh } = R
+  const p = t.p
+  const cssW = t.canvas.clientWidth, cssH = t.canvas.clientHeight
+  if (!cssW || !cssH) return
+  const k = Math.min(SCALE, MAXW / cssW)
+  const w = Math.max(2, Math.round(cssW * k)), h = Math.max(2, Math.round(cssH * k))
+  if (cv.width < w || cv.height < h) { cv.width = Math.max(cv.width, w); cv.height = Math.max(cv.height, h) }
+  if (t.canvas.width !== w || t.canvas.height !== h) { t.canvas.width = w; t.canvas.height = h; t.mvp = null }
+  if (!t.mvp) t.mvp = mul(mul(perspective(rad(p.fov), w / h, 0.1, 100), lookAt(camera(p), [0, 0, 0], [0, 1, 0])), model(p))
+  const m = mesh[p.type === 'plane' ? 'plane' : 'waterPlane']
+  gl.viewport(0, 0, w, h)
+  gl.enable(gl.SCISSOR_TEST); gl.scissor(0, 0, w, h)
+  if (p.bg) { const c = hex(p.bg); gl.clearColor(c[0], c[1], c[2], 1) } else gl.clearColor(0, 0, 0, 0)
+  gl.clear(gl.COLOR_BUFFER_BIT)
+  gl.bindBuffer(gl.ARRAY_BUFFER, m.vbo); gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0)
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, m.ibo)
+  gl.uniformMatrix4fv(U.uMVP, false, t.mvp)
+  gl.uniform3fv(U.uC1, t.c1); gl.uniform3fv(U.uC2, t.c2); gl.uniform3fv(U.uC3, t.c3)
+  gl.uniform1f(U.uLight, p.brightness * 0.8); gl.uniform1f(U.uSpeed, p.uSpeed); gl.uniform1f(U.uDensity, p.uDensity); gl.uniform1f(U.uStrength, p.uStrength)
+  gl.uniform1f(U.uTime, t.time)
+  gl.drawElements(gl.TRIANGLES, m.count, m.type, 0)
+  // The shared canvas is drawn bottom-up from its own lower-left corner: copy exactly that region.
+  t.ctx.clearRect(0, 0, w, h)
+  t.ctx.drawImage(cv, 0, cv.height - h, w, h, 0, 0, w, h)
+}
+
+let raf = 0, last = 0
+function loop(now) {
+  raf = 0
+  if (document.hidden) return
+  const due = !last || now - last >= 1000 / FPS - 2
+  let live = false
+  for (const t of targets) {
+    if (!t.seen || t.still) continue
+    live = true
+    if (due) { t.time += last ? Math.min(0.1, (now - last) / 1000) : 0; paint(t) }
   }
-  const loop = (now) => {
-    const dt = last ? Math.min(0.05, (now - last) / 1000) : 0
-    last = now
-    t += dt
-    draw()
-    raf = on ? requestAnimationFrame(loop) : 0
-  }
-  setPreset(name)
-  draw()
-  const start = () => { if (!raf && !still) { last = 0; on = true; raf = requestAnimationFrame(loop) } }
-  const stop = () => { on = false; cancelAnimationFrame(raf); raf = 0 }
-  let seen = false
-  const io = new IntersectionObserver(([e]) => { seen = e.isIntersecting; if (seen && !document.hidden) start(); else stop() }, { rootMargin: '120px' })
+  if (due) last = now
+  if (live) raf = requestAnimationFrame(loop)
+  else last = 0
+}
+const wake = () => { if (!raf) raf = requestAnimationFrame(loop) }
+if (typeof document !== 'undefined') document.addEventListener('visibilitychange', () => { if (!document.hidden) { last = 0; wake() } })
+
+/** Mount a gradient on a canvas. Returns { destroy } or null when WebGL is not available (the CSS field stays). */
+export function mountShader(canvas, name = 'violet', { still = false } = {}) {
+  const r = renderer()
+  if (!r.gl) return null
+  const p = PRESETS[name] || PRESETS.violet
+  const t = { canvas, ctx: canvas.getContext('2d'), p, c1: hex(p.color1), c2: hex(p.color2), c3: hex(p.color3), time: p.uTime, seen: false, still, mvp: null }
+  targets.add(t)
+  const io = new IntersectionObserver(([e]) => {
+    t.seen = e.isIntersecting
+    if (t.seen) { if (still || !t.drawn) { paint(t); t.drawn = true; canvas.parentElement?.classList.add('is-live') } wake() }
+  }, { rootMargin: '80px' })
   io.observe(canvas)
-  const vis = () => (document.hidden ? stop() : seen && start())
-  document.addEventListener('visibilitychange', vis)
-  const ro = new ResizeObserver(() => { if (!raf) draw() })
+  const ro = new ResizeObserver(() => { t.mvp = null; if (t.seen) paint(t) })
   ro.observe(canvas)
-  return {
-    setPreset: (n) => { setPreset(n); draw() },
-    destroy: () => { stop(); io.disconnect(); ro.disconnect(); document.removeEventListener('visibilitychange', vis); gl.getExtension('WEBGL_lose_context')?.loseContext() },
-  }
+  return { destroy: () => { targets.delete(t); io.disconnect(); ro.disconnect() } }
 }

@@ -2,10 +2,6 @@
    Uses existing Space Grotesk / IBM typography. */
 /* Every chapter takes a different posture. No artificial uniform centre grid. */
 /* The founder product is not an external company promotion. Match the system palette. */
-.fdr{background:radial-gradient(circle at 90% 0%,rgba(38,118,234,.25),transparent 50%),#08162c;border-color:#265582;color:#f0f8ff}
-.fdr__h,.fdr__name .rl--roq{color:#f2f8ff}
-.fdr__name .rl__tile{background:#142f54}
-.fdr__lead{color:#bbd2ee}.fdr__eyebrow{color:#93c1ea}
 /* Preserve legibility and only animate on capable devices. */
 
 /* Type and section alignments create a deliberate visual rhythm. */

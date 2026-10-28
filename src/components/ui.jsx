@@ -3,7 +3,7 @@ import { Icon } from './icons'
 import { BriefThread } from './v5'
 import { Kin } from './kin'
 import { Shader } from '../system/Shader'
-import { useTheme } from '../lib/theme'
+import { PageHead } from './board'
 export { Kin }
 
 /** The site logo: the name in the display face, in the text colour of the theme. */
@@ -71,26 +71,9 @@ export function Head({ eyebrow, title, lead, as: Tag = 'h2', id, scrub = false, 
   )
 }
 
-/** The page hero for every page below the home page: a rounded shader stage (dawn in light, violet in dark),
-    the title and its lead at the left, the page's own picture or window floating at the right. */
-export function PageHero({ eyebrow, label, title, lead, children, visual, visualLive = false, variant = '', shader }) {
-  const { theme } = useTheme()
-  const preset = shader || (theme === 'dark' ? 'violet' : 'dawn')
-  const dark = preset === 'violet'
-  return (
-    <header className={`ph2 ph2--${dark ? 'dark' : 'light'} ph2--${preset}${visual ? '' : ' ph2--solo'}${variant ? ' ph2--' + variant : ''}`}>
-      <div className="ph2__card">
-        <Shader preset={preset} className="ph2__bg" />
-        <div className="ph2__copy">
-          {(label || eyebrow) && <p className="s-label ph2__label">{label || <span>{eyebrow}</span>}</p>}
-          <h1 className="ph2__t" data-kin data-kin-hero><Kin text={title} /></h1>
-          {lead && <p className="ph2__lead">{lead}</p>}
-          {children}
-        </div>
-        {visual && <div className="ph2__vis" aria-hidden={visualLive ? undefined : 'true'}>{visual}</div>}
-      </div>
-    </header>
-  )
+/** Kept for pages that still call it: the new page head (components/board.jsx). */
+export function PageHero({ title, lead, children, visual }) {
+  return <PageHead title={title} lead={lead} visual={visual}>{children}</PageHead>
 }
 
 /** One status vocabulary for the whole site. */

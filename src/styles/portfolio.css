@@ -108,26 +108,6 @@
 /* hello card */
 
 /* ROQIVA founder band */
-.fdr { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(24px, 4vw, 56px); align-items: center; padding: clamp(24px, 3.4vw, 48px); border-radius: var(--r-xl); background: #141413; color: #faf9f5; border: 1px solid rgba(250, 249, 245, 0.12); box-shadow: 0 30px 80px rgba(0, 0, 0, 0.25); }
-.fdr--c { grid-template-columns: minmax(0, 1fr); }
-.fdr__id { display: grid; gap: 16px; align-content: start; justify-items: start; min-width: 0; }
-.fdr__eyebrow { display: inline-flex; align-items: center; gap: 9px; margin: 0; color: #b0aea5; }
-.fdr__name { width: 100%; }
-.fdr__name .rl--roq { justify-content: flex-start; font-size: clamp(54px, 7.6vw, 104px); color: #faf9f5; }
-.fdr__name .rl__tile { background: #262624; box-shadow: inset 0 0 0 2px rgba(250, 249, 245, 0.16); }
-.fdr__h { margin: 0; color: #faf9f5; }
-.fdr__h .em { color: #8fc2ff; }
-.fdr__lead { margin: 0; font-size: var(--fs-lead); line-height: 1.5; color: #d6d4cd; max-width: 44ch; }
-.fdr__s { display: flex; flex-wrap: wrap; gap: 8px 32px; margin: 4px 0 0; padding: 14px 0 0; border-top: 1px solid rgba(250, 249, 245, 0.14); list-style: none; width: 100%; }
-.fdr__s li { display: grid; gap: 2px; }
-.fdr__s b { font: 600 clamp(28px, 3vw, 36px) var(--font-display); letter-spacing: -0.03em; color: #faf9f5; }
-.fdr__s span { font-size: 12.5px; color: #b0aea5; }
-.fdr__btns { display: flex; flex-wrap: wrap; gap: 10px; }
-.fdr .btn--primary { background: #faf9f5; color: #141413; }
-.fdr .btn--ghost { color: #faf9f5; border-color: rgba(250, 249, 245, 0.3); }
-.fdr__app { min-width: 0; }
-.fdr--c .fdr__name .rl--roq { font-size: clamp(44px, 6vw, 80px); }
-@media (max-width: 960px) { .fdr { grid-template-columns: minmax(0, 1fr); } }
 
 /* case cards: actions */
 
