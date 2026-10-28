@@ -5,7 +5,7 @@ import { useTheme } from '../lib/theme'
 import { Icon } from './icons'
 import { BrandMark } from './BrandMark'
 import { Arrow, Button, Rich, Wordmark } from './ui'
-import { WordReel } from '../art/Reel'
+import { AsciiName } from './asciiName'
 
 function ThemeToggle() {
   const { theme, forced, toggle } = useTheme()
@@ -59,7 +59,7 @@ export function Nav() {
   return (
     <header className={`nav${scrolled ? ' is-scrolled' : ''}${open ? ' is-open' : ''}`}>
       <div className="container nav__in">
-        <a href="/" className="nav__brand"><BrandMark className="nav__mark" decorative /><Wordmark /></a>
+        <a href="/" className="nav__brand" aria-label={`${site.name} home`}><BrandMark className="nav__mark" decorative /><AsciiName text={site.name} /></a>
         <nav className="nav__links" aria-label="Main">
           {links.filter((r) => r.path !== '/' && r.path !== '/contact').map((r) => (
             <a key={r.path} href={r.path} className={`nav__link${r.badge ? ' nav__link--new' : ''}`} aria-current={route.path === r.path ? 'page' : undefined}>{r.label}{r.badge && <span className="nav__dot" aria-label={r.badge} />}</a>
@@ -145,7 +145,7 @@ export function StoryPager() {
   )
 }
 
-// The footer: a grainy horizon of hills (light or dark with the page), the ASCII launch, and the name as a reel.
+// The footer: the story, how to talk, where I am now. The name lives in the nav, as an ASCII decode.
 
 export function Footer() {
   const story = routes.filter((r) => r.story)
@@ -177,11 +177,6 @@ export function Footer() {
       <div className="container foot__base">
         <p className="label foot__copy"><span>© {new Date().getFullYear()} {site.name} · <a className="foot__legal" href="/privacy">Privacy</a></span></p>
         <p className="label">{footer.note}</p>
-      </div>
-      <div className="foot__horizon">
-        <div className="container foot__stage">
-          <div className="foot__reel"><WordReel word="anjor" size="foot" /></div>
-        </div>
       </div>
     </footer>
   )

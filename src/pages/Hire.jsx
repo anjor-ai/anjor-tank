@@ -4,7 +4,8 @@ import { Icon } from '../components/icons'
 import { Chip, Dot, Gantt, KHead, KSection, ListTabs, StepTabs, TINTS, Tile, Win } from '../components/kit'
 import { RoqivaFounder } from '../components/folio'
 import { AppWin, Paint } from '../components/paint'
-import { ScrollStory, Transform, Workflow } from '../components/v5'
+import { ScrollStory, Transform } from '../components/v5'
+import { ConsultMapScene } from '../scenes/ConsultMap'
 import { AsciiCanvas } from '../components/ascii'
 import { PageMotion } from '../lib/PageMotion'
 
@@ -66,7 +67,7 @@ export default function Hire() {
 
       <KSection id="build" tone="soft">
         <KHead n="02" label="What gets built" tag="Moving parts" title="Signals in, decisions out," sub="and a person at every gate that matters." lead="Events from the tools you already run resolve to one customer, detectors find the leak, a decision layer chooses the action, and a held-back group proves the lift." />
-        <div data-reveal><Paint name="dusk" className="v-hire-wf" tilt={false}><Workflow /></Paint></div>
+        <div className="v-cmap__solo" data-reveal><ConsultMapScene /></div>
       </KSection>
 
       <KSection id="system">
@@ -75,7 +76,7 @@ export default function Hire() {
           {(l, i) => (
             <Tile tint={l.tint} reveal={false} className="k-layer">
               <p className="k-tile__k"><b>0{i + 1}</b>{l.status}</p>
-              <div className="k-layer__art"><AsciiCanvas scene={['find', 'decide', 'loop'][i]} label={`Animated drawing for ${l.title}`} /></div>
+              <div className="k-layer__art"><AsciiCanvas scene={['signals', 'handoff', 'gate'][i]} label={`Animated drawing for ${l.title}`} /></div>
               <h3>{l.sub}.</h3>
               <p>{l.d}</p>
               <ol className="k-chev">{l.steps.map((x, k) => <li key={x}><b>{k + 1}</b>{x}</li>)}</ol>

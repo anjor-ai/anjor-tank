@@ -1,100 +1,251 @@
 import { useEffect, useRef } from 'react'
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   ASCII motion: small scenes drawn as characters on a canvas, the way a terminal would draw a 3D object.
-   Each scene is a function (t, cols, rows) → it writes brightness (0..1) and an accent flag into a grid.
-   The canvas runs only while it is on screen; under reduced motion it draws one still frame.
-   Colours come from CSS (--ascii-ink, --ascii-accent on the element), so both themes work.
+   ASCII motion. Each scene is a small diagram of one idea, drawn in characters on a canvas,
+   with real words in it: the funnel that leaks at payment, the call made on evidence, the loop that learns.
+   A scene is a function (g, t): g is a character grid it writes into, t is seconds since start.
+   Runs only while on screen; reduced motion draws one settled frame. Colours come from CSS
+   (--ascii-ink, --ascii-accent, --ascii-dim, --ascii-warn on the canvas) so both themes work.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-const RAMP = ' .,:-=+*#%@'
+const RAMP = ' .:-=+*#%@'
+const ease = (x) => 1 - Math.pow(1 - Math.min(1, Math.max(0, x)), 3)
+const cyc = (t, len) => (t % len)
+const type = (s, k) => s.slice(0, Math.max(0, Math.floor(k)))
 
-function rot(x, y, z, ax, ay) {
-  const cy = Math.cos(ay), sy = Math.sin(ay), cx = Math.cos(ax), sx = Math.sin(ax)
-  const x1 = x * cy + z * sy, z1 = -x * sy + z * cy
-  const y1 = y * cx - z1 * sx, z2 = y * sx + z1 * cx
-  return [x1, y1, z2]
-}
-
-/** 01 · Find: three stacked planes turn slowly; a scan line passes through them; the leak in the middle plane flares. */
-function find(t, C, R, put, M) {
-  const ay = t * 0.45, ax = 0.5
-  const scan = ((t * 0.32) % 1) * 2.2 - 1.1
-  for (let p = 0; p < 3; p++) {
-    const py = (p - 1) * 0.62
-    for (let i = -14; i <= 14; i += 0.5) for (let j = -14; j <= 14; j += 0.5) {
-      const x = i / 14, z = j / 14
-      const [X, Y, Z] = rot(x, py, z, ax, ay)
-      const d = 3.4 + Z
-      const [sx, sy] = M(X / d * 2.3, Y / d * 2.3)
-      const edge = Math.abs(i) >= 14 || Math.abs(j) >= 14
-      const leak = p === 1 && Math.hypot(i - 4, j + 3) < 4.2
-      const grid = i % 7 === 0 || j % 7 === 0
-      if (!edge && !grid && !(p === 1 && Math.hypot(i - 4, j + 3) < 4.2)) continue
-      let b = edge ? 0.95 : 0.42 + 0.12 * Math.sin(i * 0.9 + j * 0.7 + t * 2)
-      const near = Math.max(0, 1 - Math.abs(Y - scan) * 4)
-      b = Math.min(1, b + near * 0.6)
-      if (leak) b = 0.55 + 0.45 * Math.abs(Math.sin(t * 3 + i))
-      put(sx, sy, b, 1 / d, leak)
+/* ─────────── 01 Find: a funnel. Customers fall through five stages; at payment some spill out. The scan locks on it. ─────────── */
+function find(g, t) {
+  const { C, R } = g
+  const T = cyc(t, 7)
+  const stages = ['SEARCH', 'CART', 'CHECKOUT', 'PAYMENT', 'DELIVERED']
+  const top = 3, gap = Math.max(2, Math.floor((R - 7) / stages.length)), lx = 2, fx0 = 13, fw = C - fx0 - 4
+  const leakRow = 3
+  stages.forEach((s, k) => {
+    const y = top + k * gap
+    const w = Math.round(fw * (1 - k * 0.13))
+    const x0 = fx0 + Math.round((fw - w) / 2)
+    const scanned = T > 0.6 + k * 0.55
+    g.text(lx, y, s, scanned ? 0.9 : 0.45, k === leakRow && T > 3.3 ? 1 : 0)
+    for (let x = 0; x < w; x++) g.cell(x0 + x, y, x === 0 ? '[' : x === w - 1 ? ']' : '-', 0.35, 2)
+  })
+  // particles: each falls through the funnel; at the payment row a share leave sideways
+  for (let n = 0; n < 26; n++) {
+    const ph = (t * 0.32 + n / 26) % 1
+    const y = top + ph * (stages.length - 1) * gap
+    const k = Math.floor((y - top) / gap)
+    const spread = fw * (1 - Math.min(k, 4) * 0.13) * 0.42
+    let x = fx0 + fw / 2 + Math.sin(n * 12.9) * spread
+    const leaks = n % 4 === 0
+    if (leaks && y > top + leakRow * gap) {
+      const out = (y - (top + leakRow * gap)) * 2.4
+      g.cell(Math.round(x + out + spread * 0.3), Math.round(top + leakRow * gap + 0.5 + out * 0.15), '~', 0.95, 1)
+      continue
     }
+    g.cell(Math.round(x), Math.round(y), 'o', 0.9, 0)
   }
-  // the scan line itself
-  for (let x = 2; x < C - 2; x++) {
-    const sy = M(0, scan / 3.4 * 2.3)[1]
-    if ((x + Math.floor(t * 20)) % 3 === 0) put(x, sy, 0.35, 0.1, false)
-  }
+  // the scan bracket moves down, then locks on payment
+  const sk = Math.min(leakRow, Math.floor(Math.max(0, T - 0.6) / 0.55))
+  const sy = top + sk * gap
+  const lock = T > 3.3
+  g.cell(fx0 - 2, sy, '>', 1, lock ? 1 : 0)
+  g.cell(C - 2, sy, '<', 1, lock ? 1 : 0)
+  if (lock) {
+    const msg = 'LEAK FOUND: payment failures never retried'
+    g.text(2, R - 2, type(msg, (T - 3.3) * 28), 1, 1)
+  } else g.text(2, R - 2, type('scanning the journey...', T * 20), 0.6, 2)
 }
 
-/** 02 · Decide: evidence flows down from a root, splits at a node; one branch is chosen and brightens, the other fades. */
-function decide(t, C, R, put) {
-  const root = [C / 2, R * 0.16], a = [C * 0.22, R * 0.82], b = [C * 0.78, R * 0.82], mid = [C / 2, R * 0.48]
-  const cycle = Math.floor(t / 4) % 2, k = (t % 4) / 4
-  const chosen = cycle ? b : a, other = cycle ? a : b
-  const bez = (p0, p1, p2, s) => [(1 - s) ** 2 * p0[0] + 2 * (1 - s) * s * p1[0] + s * s * p2[0], (1 - s) ** 2 * p0[1] + 2 * (1 - s) * s * p1[1] + s * s * p2[1]]
-  const trunk = (s) => [root[0], root[1] + (mid[1] - root[1]) * s]
-  for (let s = 0; s <= 1; s += 0.02) { const [x, y] = trunk(s); put(Math.round(x), Math.round(y), 0.4, 1, false) }
-  for (const [end, on] of [[chosen, true], [other, false]]) {
-    for (let s = 0; s <= 1; s += 0.012) {
-      const [x, y] = bez(mid, [end[0], mid[1]], end, s)
-      put(Math.round(x), Math.round(y), on ? 0.55 + 0.3 * k : Math.max(0.08, 0.4 - k * 0.32), 1, on && k > 0.35)
+/* ─────────── 02 Decide: evidence on the left, one call in the middle, two outcomes; guardrails decide which one ships. ─────────── */
+function decide(g, t) {
+  const { C, R } = g
+  const T = cyc(t, 8)
+  const ev = ['gateway codes', 'cohort drop', 'support tickets']
+  const ex = 2, ey = 4, mid = Math.round(C * 0.5), my = Math.round(R / 2)
+  ev.forEach((e, k) => {
+    const on = T > 0.4 + k * 0.6
+    g.text(ex, ey + k * 3, (on ? '[x] ' : '[ ] ') + e, on ? 0.95 : 0.4, 0)
+    // a dotted lead from each piece of evidence to the decision
+    const y0 = ey + k * 3, x0 = ex + 4 + e.length + 2
+    for (let x = x0; x < mid - 4; x++) {
+      const y = Math.round(y0 + (my - y0) * ((x - x0) / Math.max(1, mid - 4 - x0)))
+      const flow = on && ((x + Math.floor(t * 14)) % 6 === 0)
+      g.cell(x, y, flow ? '*' : '.', flow ? 1 : 0.3, flow ? 1 : 2)
     }
-  }
-  // particles
-  for (let n = 0; n < 14; n++) {
-    const s = ((t * 0.55 + n / 14) % 1)
-    let p
-    if (s < 0.4) p = trunk(s / 0.4)
-    else { const u = (s - 0.4) / 0.6; p = bez(mid, [chosen[0], mid[1]], chosen, u) }
-    put(Math.round(p[0]), Math.round(p[1]), 1, 2, s > 0.4)
-  }
-  // nodes as boxes
-  const box = (c, w, h, br, acc) => { for (let x = -w; x <= w; x++) for (let y = -h; y <= h; y++) if (Math.abs(x) === w || Math.abs(y) === h) put(Math.round(c[0] + x), Math.round(c[1] + y), br, 3, acc) }
-  box(root, 3, 1, 0.9, false); box(mid, 2, 1, 1, true); box(chosen, 4, 2, 0.6 + 0.4 * k, k > 0.35); box(other, 4, 2, Math.max(0.15, 0.6 - k * 0.5), false)
+  })
+  // the decision node
+  const dn = ['  /\\  ', ' /  \\ ', '< ?? >', ' \\  / ', '  \\/  ']
+  const decided = T > 3
+  dn.forEach((row, k) => g.text(mid - 3, my - 2 + k, decided ? row.replace('??', 'OK') : row, 1, decided ? 1 : 0))
+  // two outcomes
+  const ox = mid + 6, ship = ['SHIP', 'retry rule + holdout'], hold = ['HOLD', 'wait for more data']
+  for (let x = mid + 3; x < ox; x++) { g.cell(x, my - 3, '-', 0.4, 2); g.cell(x, my + 3, '-', 0.4, 2) }
+  g.cell(mid + 3, my - 1, '/', 0.5, 2); g.cell(mid + 3, my + 1, '\\', 0.5, 2)
+  g.text(ox, my - 3, ship[0], decided ? 1 : 0.5, decided ? 1 : 0)
+  g.text(ox, my - 2, ship[1], decided ? 0.85 : 0.35, 0)
+  g.text(ox, my + 3, hold[0], decided ? 0.25 : 0.5, 2)
+  g.text(ox, my + 4, hold[1], decided ? 0.2 : 0.35, 2)
+  // guardrails, ticked one by one before the call is made
+  const gr = ['owner', 'guardrail', 'holdout']
+  let gx = 2
+  g.text(gx, R - 2, 'CHECKS ', 0.5, 2); gx += 7
+  gr.forEach((x, k) => { const on = T > 2 + k * 0.3; g.text(gx, R - 2, `${on ? '+' : '.'} ${x}  `, on ? 1 : 0.35, on ? 1 : 2); gx += x.length + 4 })
 }
 
-/** 03 · Close the loop: a torus turns; a bright band runs around it, the measured result feeding the next cycle. */
-function loop(t, C, R, put, M) {
-  const A = t * 0.7, B = t * 0.35
-  const cA = Math.cos(A), sA = Math.sin(A), cB = Math.cos(B), sB = Math.sin(B)
-  const band = (t * 1.6) % (Math.PI * 2)
-  for (let th = 0; th < Math.PI * 2; th += 0.09) {
-    const ct = Math.cos(th), st = Math.sin(th)
-    for (let ph = 0; ph < Math.PI * 2; ph += 0.025) {
-      const cp = Math.cos(ph), sp = Math.sin(ph)
-      const cx = 2 + ct, cy = st
-      const x = cx * (cB * cp + sA * sB * sp) - cy * cA * sB
-      const y = cx * (sB * cp - sA * cB * sp) + cy * cA * cB
-      const z = 6 + cA * cx * sp + cy * sA
-      const ooz = 1 / z
-      const [xp, yp] = M(ooz * x * 1.95, -ooz * y * 1.95)
-      const L = cp * ct * sB - cA * ct * sp - sA * st + cB * (cA * st - ct * sA * sp)
-      const hot = Math.abs(((ph - band + Math.PI * 3) % (Math.PI * 2)) - Math.PI) < 0.32
-      put(xp, yp, Math.max(0.05, (L + 1.2) / 2.6), ooz, hot)
+/* ─────────── 03 Close the loop: ship, measure, learn, decide around a ring; every lap the baseline moves. ─────────── */
+function loop(g, t) {
+  const { C, R } = g
+  const cx = C / 2, cy = R / 2 + 0.5, rx = Math.min(C * 0.27, R * 1.05), ry = Math.min(R * 0.36, rx / 2)
+  const head = (t * 0.9) % (Math.PI * 2)
+  for (let a = 0; a < Math.PI * 2; a += 0.04) {
+    const x = Math.round(cx + Math.cos(a) * rx), y = Math.round(cy + Math.sin(a) * ry)
+    const d = ((head - a) + Math.PI * 4) % (Math.PI * 2)
+    const trail = d < 1.4
+    g.cell(x, y, trail ? (d < 0.12 ? '@' : d < 0.5 ? '#' : '+') : '.', trail ? 1 - d * 0.5 : 0.3, trail ? 1 : 2)
+  }
+  const labels = [['SHIP', -Math.PI / 2], ['MEASURE', 0], ['LEARN', Math.PI / 2], ['DECIDE', Math.PI]]
+  labels.forEach(([s, a]) => {
+    const x = Math.round(cx + Math.cos(a) * (rx + (a === 0 ? 3 : a === Math.PI ? -3 - s.length : -s.length / 2)))
+    const y = Math.round(cy + Math.sin(a) * (ry + 1.6))
+    const near = Math.abs(((head - a) + Math.PI * 3) % (Math.PI * 2) - Math.PI) > Math.PI - 0.5
+    g.text(a === 0 ? Math.round(cx + rx + 2) : a === Math.PI ? Math.round(cx - rx - 2 - s.length) : x, y, s, near ? 1 : 0.55, near ? 1 : 0)
+  })
+  const lap = Math.floor((t * 0.9 + Math.PI / 2) / (Math.PI * 2)) % 9 + 1
+  g.text(Math.round(cx - 4), Math.round(cy) - 1, `cycle 0${lap}`, 0.9, 0)
+  const bars = Math.min(lap, 5)
+  for (let b = 0; b < bars; b++) for (let h = 0; h <= b; h++) g.cell(Math.round(cx - 3 + b * 2), Math.round(cy) + 2 - h, '#', 0.5 + b * 0.1, b === bars - 1 ? 1 : 0)
+}
+
+/* ─────────── GTM: scattered signals; the ones that carry intent line up and reach an order. ─────────── */
+function signals(g, t) {
+  const { C, R } = g
+  const words = ['search', 'scroll', 'cart', 'hover', 'pay', 'idle', 'refill', 'bounce']
+  const sieve = Math.round(C * 0.5)
+  g.text(2, 1, 'SIGNALS', 0.5, 2); g.text(sieve - 3, 1, 'INTENT', 0.5, 2); g.text(C - 9, 1, 'ORDERS', 0.5, 2)
+  for (let y = 3; y < R - 2; y++) g.cell(sieve, y, y % 2 ? '|' : ':', 0.4, 2)
+  words.forEach((w, k) => {
+    const ph = (t * 0.18 + k / words.length) % 1
+    const y0 = 3 + ((k * 5) % (R - 6))
+    const intent = k % 2 === 0
+    let x = 2 + ph * (C - 18)
+    let y = y0
+    if (x > sieve) {
+      if (!intent) { g.text(Math.round(sieve - w.length - 1), y0, w, 0.25, 2); return }
+      const k2 = (x - sieve) / (C - 18 - sieve)
+      y = Math.round(y0 + (Math.round(R / 2) - y0) * ease(k2 * 1.6))
     }
+    g.text(Math.round(x), y, w, intent && x > sieve ? 1 : 0.7, intent && x > sieve ? 1 : 0)
+  })
+  const o = Math.floor(t * 1.4) % 4
+  g.text(C - 9, Math.round(R / 2), ['[ ]', '[.]', '[o]', '[#]'][o] + ' +1', 1, 1)
+}
+
+/* ─────────── RevOps: one task handed from data to rule to action; every handoff has an owner and is stamped. ─────────── */
+function handoff(g, t) {
+  const { C, R } = g
+  const lanes = [['DATA', 'event lands'], ['RULE', 'owner checks'], ['ACTION', 'fires, logged']]
+  const T = cyc(t, 6)
+  const lh = Math.floor((R - 4) / 3)
+  lanes.forEach(([n, d], k) => {
+    const y = 2 + k * lh
+    g.text(2, y, n, 0.9, 0)
+    g.text(2, y + 1, d, 0.45, 2)
+    for (let x = 17; x < C - 3; x++) g.cell(x, y + 1, x % 2 ? '-' : ' ', 0.3, 2)
+    const done = T > 1.2 + k * 1.4
+    if (done) g.text(C - 10, y, '[ok]', 1, 1)
+    else g.text(C - 10, y, '[  ]', 0.4, 2)
+  })
+  // the token moves along a lane, then drops to the next
+  const k = Math.min(2, Math.floor(T / 1.4)), p = (T - k * 1.4) / 1.4
+  const y = 2 + k * lh + 1
+  const x = 17 + Math.min(1, p) * (C - 30)
+  g.text(Math.round(x), y, '[#]', 1, 1)
+  if (p > 0.9 && k < 2) for (let d = 1; d < lh; d++) g.cell(Math.round(x) + 1, y + d, '|', 0.6, 1)
+  g.text(2, R - 1, `handoffs ${Math.min(3, Math.floor(T / 1.4) + (T > 1.2 ? 0 : 0))}/3  dropped 0`, 0.7, 0)
+}
+
+/* ─────────── ROQIVA: detect, draft, then a gate that only a person opens. ─────────── */
+function gate(g, t) {
+  const { C, R } = g
+  const T = cyc(t, 8)
+  const y = Math.round(R / 2)
+  const gx = Math.round(C * 0.66)
+  g.text(2, 1, 'DETECT', 0.5, 2); g.text(Math.round(C * 0.3), 1, 'DRAFT', 0.5, 2); g.text(gx - 2, 1, 'GATE', 0.5, 2); g.text(C - 6, 1, 'SHIP', 0.5, 2)
+  // detector pulse
+  const p = Math.floor(t * 3) % 3
+  g.text(2, y, ['(.)', '(o)', '(O)'][p], 1, 1)
+  // the draft being written
+  const lines = ['spec: retry rule', 'test: holdout 10%', 'owner: payments']
+  lines.forEach((l, k) => g.text(Math.round(C * 0.22), y - 2 + k * 2, type(l, (T - 0.4 - k * 0.6) * 22), 0.85, 0))
+  // the gate: closed bars until approved
+  const open = T > 4.2
+  for (let d = -3; d <= 3; d++) {
+    g.cell(gx, y + d, open && Math.abs(d) < 2 ? ' ' : '#', open ? 0.6 : 1, open ? 1 : 3)
+  }
+  g.text(gx - 4, y + 5, open ? 'APPROVED' : 'WAITING ', 1, open ? 1 : 3)
+  g.text(gx - 4, y + 6, open ? 'by a person' : 'for a person', 0.5, 2)
+  if (open) {
+    const k = ease((T - 4.2) / 1.6)
+    const x = Math.round(gx + 2 + k * (C - gx - 9))
+    g.text(x, y, '[pack]', 1, 1)
   }
 }
 
-const SCENES = { find, decide, loop }
+/* ─────────── Below the UI: the screen is the top layer; the system breaks lower down. ─────────── */
+function layers(g, t) {
+  const { C, R } = g
+  const names = ['UI', 'LOGIC', 'DATA', 'OPS']
+  const T = cyc(t, 7)
+  const lh = Math.floor((R - 3) / names.length)
+  const crack = 3
+  names.forEach((n, k) => {
+    const y = 1 + k * lh
+    const peel = k === 0 ? ease((T - 1) / 1.2) : 0
+    const b = k === 0 ? 1 - peel * 0.75 : 0.75
+    g.text(2, y + 1, n, k === crack && T > 2.6 ? 1 : b, k === crack && T > 2.6 ? 1 : 0)
+    for (let x = 10; x < C - 2; x++) {
+      const ch = k === 0 ? '=' : k === 1 ? '-' : k === 2 ? ':' : '.'
+      const broken = k === crack && T > 2.6 && Math.abs(x - C * 0.62) < 3 + Math.sin(t * 6) * 1
+      g.cell(x, y + 1, broken ? (x % 2 ? '/' : '\\') : ch, broken ? 1 : b * 0.7, broken ? 1 : k === 0 ? 0 : 2)
+    }
+  })
+  g.text(2, R - 1, T > 2.6 ? type('root cause: in the workflow, not the screen', (T - 2.6) * 26) : 'the screen looks fine', T > 2.6 ? 1 : 0.5, T > 2.6 ? 1 : 2)
+}
+
+/* ─────────── Compounding: each lap of the loop adds to the last; the curve bends upward. ─────────── */
+function compound(g, t) {
+  const { C, R } = g
+  const T = cyc(t, 8)
+  const x0 = 4, y0 = R - 3, w = C - 8, h = R - 6
+  for (let x = x0; x < x0 + w; x++) g.cell(x, y0 + 1, '-', 0.35, 2)
+  for (let y = y0 - h; y <= y0; y++) g.cell(x0 - 1, y, '|', 0.35, 2)
+  const upto = Math.min(1, T / 5)
+  for (let i = 0; i <= w * upto; i++) {
+    const u = i / w
+    const y = Math.round(y0 - (Math.pow(1.9, u * 4) - 1) / (Math.pow(1.9, 4) - 1) * h)
+    g.cell(x0 + i, y, i >= w * upto - 1 ? '@' : '*', 0.9, i >= w * upto - 1 ? 1 : 0)
+  }
+  const laps = Math.floor(upto * 4)
+  for (let l = 1; l <= laps; l++) { const x = x0 + Math.round(w * l / 4) - 1; g.text(x - 2, y0 + 2 > R - 1 ? R - 1 : y0 + 2, `L${l}`, 0.7, 2) }
+  g.text(x0, 1, 'linear wins stop. loops compound.', 0.6, 2)
+}
+
+/* ─────────── Internal tools: an ops queue being worked, each row with an owner and an SLA. ─────────── */
+function tools(g, t) {
+  const { C, R } = g
+  const rows = [['#1042', 'refund', 'ops'], ['#1043', 'substitute', 'wh'], ['#1044', 'reroute', 'cx'], ['#1045', 'cashback', 'fin'], ['#1046', 'return', 'ops']]
+  g.text(2, 1, 'QUEUE        TASK         OWNER  SLA', 0.6, 2)
+  for (let x = 2; x < C - 2; x++) g.cell(x, 2, '-', 0.3, 2)
+  const sel = Math.floor(t * 0.8) % rows.length
+  rows.forEach(([id, task, own], k) => {
+    const y = 3 + k * 2
+    if (y >= R - 1) return
+    const done = k < sel
+    const on = k === sel
+    g.text(2, y, `${on ? '>' : ' '} ${id}  ${task.padEnd(12)} ${own.padEnd(6)} ${done ? 'met ' : on ? 'live' : '4h  '}`, on ? 1 : done ? 0.45 : 0.75, on ? 1 : done ? 2 : 0)
+  })
+}
+
+const SCENES = { find, decide, loop, signals, handoff, gate, layers, compound, tools }
 
 export function AsciiCanvas({ scene = 'find', className, label }) {
   const ref = useRef(null)
@@ -104,55 +255,54 @@ export function AsciiCanvas({ scene = 'find', className, label }) {
     const ctx = cv.getContext('2d')
     const fn = SCENES[scene]
     const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    let W = 0, H = 0, C = 0, R = 0, cw = 7, ch = 12, dpr = 1, raf = 0, visible = false, t0 = performance.now()
-    let ink = '#f2efe8', accent = '#9baeff'
-    let bright, zbuf, acc
+    let W = 0, H = 0, C = 0, R = 0, cw = 7, ch = 12, dpr = 1, raf = 0, visible = false
+    const t0 = performance.now()
+    let col = ['#f2efe8', '#9baeff', '#7d7a70', '#f0b45a']
+    let chars, bright, tone
     const size = () => {
       const r = cv.getBoundingClientRect()
       dpr = Math.min(2, window.devicePixelRatio || 1)
       W = r.width; H = r.height
-      cw = W < 360 ? 6 : 7; ch = cw * 1.75
-      C = Math.max(10, Math.floor(W / cw)); R = Math.max(6, Math.floor(H / ch))
+      cw = W < 330 ? 6 : W > 520 ? 8 : 7; ch = Math.round(cw * 1.7)
+      C = Math.max(20, Math.floor((W - 8) / cw)); R = Math.max(8, Math.floor((H - 6) / ch))
       cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr)
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0)
-      ctx.font = `500 ${Math.round(ch * 0.82)}px "IBM Plex Mono", ui-monospace, monospace`
+      ctx.font = `500 ${Math.round(ch * 0.78)}px "IBM Plex Mono", ui-monospace, monospace`
       ctx.textBaseline = 'top'
       const cs = getComputedStyle(cv)
-      ink = cs.getPropertyValue('--ascii-ink').trim() || ink
-      accent = cs.getPropertyValue('--ascii-accent').trim() || accent
-      bright = new Float32Array(C * R); zbuf = new Float32Array(C * R); acc = new Uint8Array(C * R)
+      col = ['--ascii-ink', '--ascii-accent', '--ascii-dim', '--ascii-warn'].map((v, i) => cs.getPropertyValue(v).trim() || col[i])
+      chars = new Array(C * R); bright = new Float32Array(C * R); tone = new Uint8Array(C * R)
     }
-    // Normalised coordinates (-1..1 across the shorter side, square in pixels) to a character cell.
-    const M = (nx, ny) => { const s = Math.min(W, H) * 0.46; return [Math.round((W / 2 + nx * s - (W - C * cw) / 2) / cw), Math.round((H / 2 + ny * s - (H - R * ch) / 2) / ch)] }
-    const put = (x, y, b, z, a) => {
-      if (x < 0 || y < 0 || x >= C || y >= R) return
-      const i = y * C + x
-      if (z >= zbuf[i]) { zbuf[i] = z; bright[i] = b; acc[i] = a ? 1 : 0 }
+    const g = {
+      get C() { return C }, get R() { return R },
+      cell(x, y, c, b = 1, tn = 0) { if (x < 0 || y < 0 || x >= C || y >= R) return; const i = y * C + x; chars[i] = c; bright[i] = b; tone[i] = tn },
+      text(x, y, s, b = 1, tn = 0) { for (let k = 0; k < s.length; k++) if (s[k] !== ' ') g.cell(x + k, y, s[k], b, tn) },
+      dot(x, y, b, tn = 0) { g.cell(x, y, RAMP[Math.max(1, Math.min(RAMP.length - 1, Math.round(b * (RAMP.length - 1))))], b, tn) },
     }
     const draw = (t) => {
-      bright.fill(0); zbuf.fill(-1e9); acc.fill(0)
-      fn(t, C, R, put, M)
+      chars.fill(undefined); bright.fill(0); tone.fill(0)
+      fn(g, t)
       ctx.clearRect(0, 0, W, H)
+      const ox = (W - C * cw) / 2, oy = (H - R * ch) / 2
       for (let y = 0; y < R; y++) for (let x = 0; x < C; x++) {
-        const i = y * C + x, b = bright[i]
-        if (b <= 0.02) continue
-        const chr = RAMP[Math.min(RAMP.length - 1, Math.max(1, Math.round(b * (RAMP.length - 1))))]
-        ctx.globalAlpha = Math.min(1, 0.25 + b * 0.85)
-        ctx.fillStyle = acc[i] ? accent : ink
-        ctx.fillText(chr, x * cw + (W - C * cw) / 2, y * ch + (H - R * ch) / 2)
+        const i = y * C + x
+        if (!chars[i]) continue
+        ctx.globalAlpha = Math.min(1, 0.2 + bright[i] * 0.85)
+        ctx.fillStyle = col[tone[i]]
+        ctx.fillText(chars[i], ox + x * cw, oy + y * ch)
       }
       ctx.globalAlpha = 1
     }
     const tick = (now) => { draw((now - t0) / 1000); if (visible) raf = requestAnimationFrame(tick) }
     size()
-    if (still) { draw(2.4); }
+    draw(5.5)
     const io = new IntersectionObserver(([e]) => {
       visible = e.isIntersecting
       cancelAnimationFrame(raf)
       if (visible && !still) raf = requestAnimationFrame(tick)
     }, { threshold: 0.05 })
     io.observe(cv)
-    const ro = new ResizeObserver(() => { size(); if (still || !visible) draw(2.4) })
+    const ro = new ResizeObserver(() => { size(); if (still || !visible) draw(5.5) })
     ro.observe(cv)
     return () => { cancelAnimationFrame(raf); io.disconnect(); ro.disconnect() }
   }, [scene])

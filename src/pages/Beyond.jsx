@@ -5,6 +5,7 @@ import { Icon } from '../components/icons'
 import { SCENES, photosOf } from '../components/Story'
 import BeyondFilm, { Book } from '../scenes/BeyondFilm'
 import { MQ, gsap, ScrollTrigger, useGSAP } from '../lib/motion'
+import { Finish, Play, RaceHud, StartLights, TrackBand } from '../components/race'
 import { PageMotion } from '../lib/PageMotion'
 
 /* Beyond work. Deliberately a different room from the rest of the site: dark, photographic, condensed display type,
@@ -17,7 +18,9 @@ const CHAPTERS = [
   { id: 'live', k: '03', name: 'Live' },
   { id: 'read', k: '04', name: 'Read' },
   { id: 'watch', k: '05', name: 'Watch' },
+  { id: 'play', k: '06', name: 'Play' },
 ]
+const SECTORS = CHAPTERS.map((c) => c.name)
 const COVERS = [['rainier', 'Wander', 'The long way'], ['kart-pov', 'Speed', 'The next apex'], ['laser', 'Live', 'One more set']]
 const scene = (g) => SCENES.find((s) => s.g === g)
 const img = (src) => `/img/adventure/${src}.webp`
@@ -296,9 +299,8 @@ export default function Beyond() {
       gsap.fromTo(q('.bx-panel'), { clipPath: 'polygon(0 0, 0 0, 0 100%, 0 100%)' }, { clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0 100%)', duration: 0.7, stagger: 0.14, ease: 'expo.inOut', scrollTrigger: { trigger: '.bx-manga', start: 'top 75%', once: true } })
       gsap.fromTo(q('.bx-dots circle'), { scale: 0, transformOrigin: '50% 50%' }, { scale: 1, duration: 0.5, ease: 'back.out(2)', stagger: { each: 0.0015, from: 'random' }, scrollTrigger: { trigger: '.bx-wl', start: 'top 85%', once: true } })
       // The chapter readout on the right edge.
-      const hud = q('.bx-chhud b')[0]
-      q('[data-chapter]').forEach((s) => ScrollTrigger.create({ trigger: s, start: 'top 55%', end: 'bottom 55%', onToggle: (st) => { if (st.isActive && hud) hud.textContent = s.dataset.chapter } }))
-      ScrollTrigger.create({ trigger: '.bx-wander', start: 'top 55%', endTrigger: '.bx-watch', end: 'bottom 55%', toggleClass: { targets: q('.bx-chhud')[0], className: 'is-on' } })
+      // The play shelf rises in; the featured title swaps with a short wipe (CSS).
+      gsap.fromTo(q('.ps__tile'), { y: 40, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.8, stagger: 0.04, ease: 'expo.out', scrollTrigger: { trigger: '.ps__shelf', start: 'top 92%', once: true } })
     })
     // Wander's roll scrolls sideways while the page is pinned, on screens big enough to pin.
     mm.add(`${MQ.motion} and (min-width: 900px)`, () => {
@@ -347,24 +349,33 @@ export default function Beyond() {
           </nav>
         </header>
 
-        <p className="bx-chhud" aria-hidden="true"><i /><b>01 Wander</b></p>
+        <RaceHud sectors={SECTORS} />
 
         <section className="bx-intro">
           <div className="container">
             <p className="bx-intro__k">The person behind the product</p>
-            <p className="bx-intro__s">A little less planned. <em>A lot more alive.</em> Water, mountains and back roads. Karts, a racing sim and the apex. Lights, lasers and a full room. A book on the shelf, and an anime queued for later.</p>
+            <p className="bx-intro__s">A little less planned. <em>A lot more alive.</em> Water, mountains and back roads. Karts, a racing sim and the apex. Lights, lasers and a full room. A book on the shelf, an anime queued for later, and a game to finish.</p>
+            <StartLights />
           </div>
         </section>
 
+        <TrackBand sector={1} name="Wander" />
         <Wander />
+        <TrackBand sector={2} name="Speed" />
         <Speed />
+        <TrackBand sector={3} name="Live" />
         <Live />
+        <TrackBand sector={4} name="Read" />
         <Read />
+        <TrackBand sector={5} name="Watch" />
         <Watch />
+        <TrackBand sector={6} name="Play" />
+        <Play />
+        <Finish />
 
         <section id="radar" className="bx-radar" aria-labelledby="bx-h-radar">
           <div className="container">
-            <p className="bx-ch__k"><b>06</b>Curiosity doesn’t switch off when the working day ends</p>
+            <p className="bx-ch__k"><b>07</b>Curiosity doesn’t switch off when the working day ends</p>
             <h2 id="bx-h-radar" className="bx-h"><span>Always something</span> <em>on the radar.</em></h2>
             <ol className="bx-radar__l">
               {LOVES.map(([a, b], k) => <li key={a} data-reveal><span>{String(k + 1).padStart(2, '0')}</span><b>{a}</b><p>{b}</p></li>)}

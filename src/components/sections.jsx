@@ -3,7 +3,8 @@ import { CaseMock } from './mocks'
 import { Dot, DotMap, KHead, KSection, ListTabs, Tile, useClock } from './kit'
 import { AppWin, Float, Paint } from './paint'
 import { AsciiCanvas } from './ascii'
-import { CareerGraph, Workflow } from './v5'
+import { CareerGraph } from './v5'
+import { ConsultMapScene } from '../scenes/ConsultMap'
 
 /* Home sections composed from the kit and the painted stages: how I think, the story so far, consulting. */
 
@@ -95,18 +96,17 @@ export function ConsultSection() {
   return (
     <KSection id="consulting" tone="soft">
       <KHead n="04" label="Consulting" tag="GTM engineering and RevOps" title="Growth often breaks" sub="between tools." lead="My consulting work combines GTM engineering and RevOps: find where the commercial journey leaks, engineer the missing operating loop, and prove the lift." />
-      <div className="v-consult">
-        <Paint name="dusk" className="v-consult__paint" tilt={false}>
-          <Workflow />
-        </Paint>
-        <div className="v-consult__side">
+      <div className="v-cmap">
+        <div className="v-cmap__side">
           <Tile className="v-consult__c"><p className="v-k"><b>01</b>GTM engineering</p><h3>Find the leak.</h3><p>Instrument the journey, recover intent and connect acquisition with conversion.</p></Tile>
           <Tile className="v-consult__c"><p className="v-k"><b>02</b>RevOps</p><h3>Connect the handoffs.</h3><p>Govern data, decision rules and the handoffs between the people and tools that deliver.</p></Tile>
+          <Tile tint="ink" className="v-cmap__bar">
+            <p className="k-tile__k"><Dot tone="accent" />ROQIVA · Intelligence layer · in development</p>
+            <h3>The product I am founding to make the method repeatable.</h3>
+            <div className="k-bar__btns"><Button to="/hire">Explore consulting <Arrow /></Button><Button to="/contact?intent=consult#brief" variant="ghost">Discuss a project</Button></div>
+          </Tile>
         </div>
-        <Tile tint="ink" className="k-bar v-consult__bar">
-          <div><p className="k-tile__k"><Dot tone="accent" />ROQIVA · Intelligence layer · in development</p><h3>The product I am founding to make the method repeatable.</h3></div>
-          <div className="k-bar__btns"><Button to="/hire">Explore consulting <Arrow /></Button><Button to="/contact?intent=consult#brief" variant="ghost">Discuss a project</Button></div>
-        </Tile>
+        <div className="v-cmap__stage" data-reveal><ConsultMapScene /></div>
       </div>
     </KSection>
   )

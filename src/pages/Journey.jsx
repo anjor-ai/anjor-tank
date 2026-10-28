@@ -1,7 +1,7 @@
 import { BELIEFS, EDU, journeyPage, roqiva } from '../content'
 import { Cta, LinkArrow } from '../components/ui'
 import { Icon } from '../components/icons'
-import { AsciiArt } from '../art/AsciiArt'
+import { AsciiCanvas } from '../components/ascii'
 import { Chip, Dot, KHead, KSection, TINTS, Tile, Win } from '../components/kit'
 import { Paint } from '../components/paint'
 import { CareerGraph } from '../components/v5'
@@ -118,7 +118,7 @@ export default function Journey() {
         <ul className="k-dm">
           {BELIEFS.map((b, i) => (
             <li key={b.t} className="k-dm__c" data-reveal>
-              <div className="k-dm__art" aria-hidden="true"><AsciiArt kind={['find', 'decide', 'prove'][i % 3]} /></div>
+              <div className="k-dm__art"><AsciiCanvas scene={['layers', 'compound', 'tools'][i % 3]} className="k-dm__cv" label={`Animated drawing: ${b.t}`} /></div>
               <div className="k-dm__b">
                 <span>{String(i + 1).padStart(2, '0')}</span>
                 <h3>{b.t}</h3><p>{b.d}</p>

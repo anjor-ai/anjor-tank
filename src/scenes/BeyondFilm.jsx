@@ -14,6 +14,7 @@ export const CUTS = [
   { w: 'LIVE', k: '03', cap: 'Listening to something loud.', img: '/img/adventure/laser.webp', alt: ALT.laser, tone: 'live' },
   { w: 'READ', k: '04', cap: 'On the shelf.', book: true, tone: 'read' },
   { w: 'WATCH', k: '05', cap: 'Gundam, Code Geass, one more episode.', img: '/img/manga/kart-night.png', alt: 'My own night-session photo, inked as a manga panel', tone: 'watch' },
+  { w: 'PLAY', k: '06', cap: 'Fifteen worlds, one more save.', img: '/img/games/elden-ring.webp', alt: '', tone: 'play' },
 ]
 
 const Letters = ({ w, className }) => (
@@ -64,7 +65,7 @@ export default function BeyondFilm({ onDone }) {
       const clock = { f: 0 }
       gsap.set(q('.bf__cut'), { autoAlpha: 0 })
       gsap.set(q('.bf__lid'), { height: '50.5%' })
-      t.to(clock, { f: 6.2 * 24, duration: 6.2, ease: 'none', onUpdate: () => {
+      t.to(clock, { f: 7.2 * 24, duration: 7.2, ease: 'none', onUpdate: () => {
         const f = Math.floor(clock.f); tc.textContent = `00:00:${String(Math.floor(f / 24)).padStart(2, '0')}:${String(f % 24).padStart(2, '0')}`
       } }, 0)
       // The eyelids open into a letterbox.
@@ -111,7 +112,7 @@ export default function BeyondFilm({ onDone }) {
       <div className="bf__hud" aria-hidden="true">
         <span className="bf__hud-tl">Anjor / off the clock</span>
         <span className="bf__hud-tr"><i /> REC <b className="bf__tc">00:00:00:00</b></span>
-        <span className="bf__hud-bl">Field notes · five chapters</span>
+        <span className="bf__hud-bl">Field notes · six chapters</span>
       </div>
       <button type="button" className="bf__skip" onClick={(e) => { e.stopPropagation(); finish() }}>Skip</button>
     </div>,
