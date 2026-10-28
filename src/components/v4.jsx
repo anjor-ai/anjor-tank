@@ -148,13 +148,14 @@ export function BeyondBand() {
       </div>
       <ul className="v-beyond__reel" data-v-seq>
         {REEL.map(([src, g, cap], k) => (
-          <li key={g} style={{ '--r': `${[-3, 2, -1.5, 3, -2][k]}deg` }}>
+          <li key={g}>
             <a href={`/beyond#scene-${g.toLowerCase()}`} aria-label={`${g}: ${cap}`}>
               <span className="v-beyond__img">
                 {src === 'book'
                   ? <span className="v-beyond__book" aria-hidden="true"><b>AI<br />ENGINEERING</b><small>Chip Huyen</small></span>
                   : <img src={src} alt="" loading="lazy" decoding="async" />}
               </span>
+              <span className="v-beyond__badge" aria-hidden="true"><Icon name="ne" size={15} /></span>
               <span className="v-beyond__cap"><b>0{k + 1}</b>{g}</span>
             </a>
           </li>
