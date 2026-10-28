@@ -1,9 +1,10 @@
 import { gtm } from '../content'
-import { Button, Cta, Kin, LinkArrow } from '../components/ui'
+import { Button, Cta, LinkArrow, PageHero } from '../components/ui'
+import { Shader } from '../system/Shader'
 import { Icon } from '../components/icons'
 import { Chip, Dot, Easel, Gantt, KHead, KSection, ListTabs, StepTabs, TINTS, Tile, Win } from '../components/kit'
 import { RoqivaFounder } from '../components/folio'
-import { AppWin, Paint } from '../components/paint'
+import { AppWin } from '../components/paint'
 import { ScrollStory, Transform } from '../components/v5'
 import { ConsultMapScene } from '../scenes/ConsultMap'
 import { AsciiCanvas } from '../components/ascii'
@@ -53,20 +54,11 @@ export default function Hire() {
   const rows = gtm.phases.map((p, i) => ({ label: p.label, sub: p.weeks, a: p.start, b: p.start + p.span, tone: TINTS[i] }))
   return (
     <PageMotion routeKey="/hire">
-      <header className="p-hero p-hero--hire">
-        <div className="p-hero__in">
-          <div className="p-hero__copy">
-            <p className="s-label"><b>00</b><span>Selective consulting</span><em>Hire</em></p>
-            <h1 className="p-hero__t" data-kin data-kin-hero><Kin text="Build the ==systems==" /><br /><em><Kin text="behind growth." /></em></h1>
-            <p className="p-hero__lead">I work where your product, CRM, analytics and operations meet. GTM engineering finds the leak. RevOps fixes the loop. ROQIVA is the product I’m founding to make the method repeatable.</p>
-            <p className="p-hero__acts"><Button to="/contact?intent=consult#brief">Discuss a project <Icon name="arrow" size={15} /></Button><LinkArrow to="#system">Explore the system</LinkArrow></p>
-            <small className="p-hero__note"><Dot tone="ok" /> Open to the right product role, too. <a href="/contact?intent=job#brief">Let’s talk ↗</a></small>
-          </div>
-          <div className="p-hero__stage">
-            <Paint name="dusk" className="p-hero__paint p-hero__paint--hire"><Transform /></Paint>
-          </div>
-        </div>
-      </header>
+      <PageHero variant="hire" shader="ember" label={<><b>00</b><span>Selective consulting</span><em>Hire</em></>} title="Build the ==systems== *behind growth.*" lead="I work where your product, CRM, analytics and operations meet. GTM engineering finds the leak. RevOps fixes the loop. ROQIVA is the product I’m founding to make the method repeatable." visualLive
+        visual={<div className="ph2__glass"><Transform /></div>}>
+        <p className="ph2__acts"><Button to="/contact?intent=consult#brief">Discuss a project <Icon name="arrow" size={15} /></Button><LinkArrow to="#system">Explore the system</LinkArrow></p>
+        <small className="ph2__note"><Dot tone="ok" /> Open to the right product role, too. <a href="/contact?intent=job#brief">Let’s talk ↗</a></small>
+      </PageHero>
 
       <KSection id="story">
         <KHead n="01" label="The idea" tag="Scroll through one decision" title="One decision," sub="==five stages==." lead="One customer, one refill window, five stages. This is the loop I build for clients, and the loop ROQIVA is designed to run." />
@@ -75,7 +67,7 @@ export default function Hire() {
 
       <KSection id="build" tone="soft">
         <KHead n="02" label="What gets built" tag="Moving parts" title="Signals in, ==decisions out==," sub="and a person at every gate that matters." lead="Events from the tools you already run resolve to one customer, detectors find the leak, a decision layer chooses the action, and a held-back group proves the lift." />
-        <Easel paint="noon" fit="center" className="hr-map"><ConsultMapScene /></Easel>
+        <div className="cx-dark" data-clip><Shader preset="violet" className="cx-dark__bg" /><div className="cx-dark__in"><ConsultMapScene /></div></div>
       </KSection>
 
       <KSection id="system">
@@ -89,11 +81,11 @@ export default function Hire() {
                 <p>{l.d}</p>
                 <ol className="hy__steps">{l.steps.map((x, k) => <li key={x}><b>{k + 1}</b>{x}</li>)}</ol>
               </div>
-              <div className="mt__art hy__art">
+              <div className="ob__art hy__art">
                 <img src={`/img/paint/${['dawn', 'dusk', 'meadow'][i]}.webp`} alt="" width="1600" height="1000" loading="lazy" decoding="async" />
-                <div className="mt__win">
-                  <span className="mt__bar" aria-hidden="true"><i /><i /><i /><b>{l.title}</b></span>
-                  <AsciiCanvas scene={['signals', 'handoff', 'gate'][i]} className="mt__cv" label={`Animated drawing for ${l.title}`} />
+                <div className="ob__win">
+                  <span className="ob__bar" aria-hidden="true"><i /><i /><i /><b>{l.title}</b></span>
+                  <AsciiCanvas scene={['signals', 'handoff', 'gate'][i]} className="ob__cv" label={`Animated drawing for ${l.title}`} />
                 </div>
               </div>
             </div>
@@ -134,7 +126,7 @@ export default function Hire() {
         </div>
       </KSection>
 
-      <KSection id="roqiva"><RoqivaFounder compact /></KSection>
+      <section id="roqiva" className="s-sec s-sec--ink rq-band"><div className="container"><RoqivaFounder compact /></div></section>
 
       <KSection id="role">
         <Easel paint="dusk" fit="center" className="hr-role">

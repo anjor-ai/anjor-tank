@@ -17,8 +17,7 @@ mark.kin-hl {
   padding: 0 0.04em; border-radius: 2px;
 }
 /* A highlight inside the quieter second voice keeps the accent. */
-.s-h em mark.kin-hl, .v-cta__h .em mark.kin-hl, .ct__h .em mark.kin-hl { color: var(--accent); }
-.v-cta__h mark.kin-hl { color: inherit; background-image: linear-gradient(color-mix(in srgb, var(--accent) 34%, transparent), color-mix(in srgb, var(--accent) 34%, transparent)); }
+.s-h em mark.kin-hl, .ct__h .em mark.kin-hl { color: var(--accent); }
 
 /* The hero greeting. */
 .hey { display: flex; max-width: none; align-items: baseline; justify-content: flex-start; gap: 12px; margin: 0 0 14px; min-height: 1.3em; font: 500 clamp(26px, 3vw, 38px)/1.15 var(--font-display); letter-spacing: -0.03em; color: var(--accent); }

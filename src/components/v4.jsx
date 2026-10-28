@@ -54,66 +54,58 @@ export function HeroTrace() {
   )
 }
 
-/* ───────────── Work showcase: a quiet ledger beside one sticky stage ─────────────
-   Pointing at a row (or focusing it, or tapping it) puts that system's window on the painting.
-   It pages through on its own until the visitor touches it, then it is theirs. */
-export function CaseShowcase({ onOpen, auto = 6500 }) {
-  const [i, setI] = useState(0)
-  const [mine, setMine] = useState(false)
-  const c = CASES[i]
-  useEffect(() => {
-    if (mine || typeof window === 'undefined' || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return undefined
-    const t = setTimeout(() => setI((n) => (n + 1) % CASES.length), auto)
-    return () => clearTimeout(t)
-  }, [i, mine, auto])
-  const pick = (k) => { setMine(true); setI(k) }
+/* ───────────── Home: the six systems on a rail that runs sideways while the section is pinned ─────────────
+   Each card is a painting with the system's window on it and its first result in a white panel. On a phone the
+   rail is a native swipe. The whole card opens the case; Quick view opens the summary in place. */
+export function CaseShowcase({ onOpen }) {
   return (
-    <div className="wl">
-      <div className="wl__list" role="tablist" aria-label="Six systems">
-        {CASES.map((x, k) => (
-          <button key={x.slug} type="button" role="tab" aria-selected={k === i} aria-controls="wl-stage" className={k === i ? 'is-on' : ''}
-            onClick={() => pick(k)} onMouseEnter={() => pick(k)} onFocus={() => pick(k)} style={{ '--auto': `${auto}ms` }} data-reveal>
-            <small>{x.n}</small>
-            <span><b>{x.title}</b><em>{x.cat}</em></span>
-            <strong>{x.metrics[0][0]}</strong>
-            {k === i && !mine && <i className="wl__bar" aria-hidden="true" />}
-          </button>
-        ))}
+    <section className="hs" data-hscroll aria-label="Six systems">
+      <div className="hs__view">
+        <ol className="hs__track">
+          {CASES.map((c, k) => (
+            <li key={c.slug} className="hs__card" data-cursor="Read">
+              <Paint name={PAINTS[k % PAINTS.length]} fit="bleed" className="hs__paint" tilt={false}>
+                <div className="hs__mock"><CaseMock slug={c.slug} /></div>
+              </Paint>
+              <span className="hs__chip">{c.cat}</span>
+              <a className="hs__a" href={`/work/${c.slug}`} aria-label={`${c.title}: read the case`} />
+              <div className="hs__body">
+                <p className="hs__n">{c.n} <span>/ 0{CASES.length}</span></p>
+                <h3>{c.title}</h3>
+                <p className="hs__l">{c.line}</p>
+                <p className="hs__m"><b><Stat v={c.metrics[0][0]} /></b><span>{c.metrics[0][1]}</span></p>
+                <div className="hs__acts">
+                  {onOpen && <button type="button" className="hs__q" onClick={() => onOpen(c.slug)}><Icon name="eye" size={14} />Quick view</button>}
+                  <span className="hs__go">Read the case<i><Icon name="ne" size={14} /></i></span>
+                </div>
+              </div>
+            </li>
+          ))}
+          <li className="hs__end"><a href="/work" data-cursor="Open"><span>Explore all six case studies</span><i><Icon name="arrow" size={22} /></i></a></li>
+        </ol>
       </div>
-      <div className="wl__stage" id="wl-stage" role="tabpanel" aria-live="polite">
-        <Paint name={PAINTS[i % PAINTS.length]} fit="bleed" key={c.slug} className="wl__paint">
-          <div className="wl__mock"><CaseMock slug={c.slug} /></div>
-          <Float className="wl__metric" depth={1.8}>
-            {c.metrics.slice(0, 2).map(([v, l]) => <span key={l}><b><Stat v={v} /></b><small>{l}</small></span>)}
-          </Float>
-        </Paint>
-        <div className="wl__foot">
-          <p><b>{c.title}.</b> {c.line}</p>
-          <p className="wl__acts">
-            {onOpen && <button type="button" className="v-btn-q" onClick={() => onOpen(c.slug)}><Icon name="eye" size={14} />Quick view</button>}
-            <LinkArrow to={`/work/${c.slug}`}>Read the case</LinkArrow>
-          </p>
-        </div>
-      </div>
-    </div>
+      <div className="hs__bar" aria-hidden="true"><i /></div>
+    </section>
   )
 }
 
-/** A case as a card: the system's window on a painting with its numbers floating over it, the words on paper beneath.
-    The whole card links to the case. */
+/** A case as a card (the Work page): the title on paper, the system's window on a painting inset below it,
+    then where it sits among the six and its numbers. The whole card links to the case. */
 export function CaseCard({ c, k = 0 }) {
   return (
-    <article className="cc" data-reveal>
-      <a className="cc__a" href={`/work/${c.slug}`} aria-label={`${c.title}: read the case`} />
-      <Paint name={PAINTS[k % PAINTS.length]} fit="bleed" className="cc__paint" tilt={false}>
-        <div className="cc__mock"><CaseMock slug={c.slug} /></div>
-        <ul className="cc__m">{c.metrics.slice(0, 2).map(([v, l]) => <li key={l}><b><Stat v={v} /></b><span>{l}</span></li>)}</ul>
-      </Paint>
-      <div className="cc__body">
-        <p className="cc__k"><b>{c.n}</b>{c.cat}</p>
+    <article className="wc" data-reveal data-cursor="Read">
+      <a className="wc__a" href={`/work/${c.slug}`} aria-label={`${c.title}: read the case`} />
+      <header className="wc__head">
+        <p className="wc__k"><b>{c.n}</b>{c.cat}</p>
         <h3>{c.title}</h3>
-        <span className="cc__go">Read the case<i><Icon name="ne" size={15} /></i></span>
-      </div>
+      </header>
+      <Paint name={PAINTS[k % PAINTS.length]} fit="bleed" className="wc__paint" tilt={false}>
+        <div className="wc__mock"><CaseMock slug={c.slug} /></div>
+      </Paint>
+      <footer className="wc__foot">
+        <ul className="wc__m">{c.metrics.slice(0, 2).map(([v, l]) => <li key={l}><b><Stat v={v} /></b><span>{l}</span></li>)}</ul>
+        <span className="wc__go">Read the case<i><Icon name="ne" size={14} /></i></span>
+      </footer>
     </article>
   )
 }
@@ -127,30 +119,30 @@ const REEL = [
   ['/img/manga/paddle.png', 'Watch', 'Mecha, strategy, one more episode.'],
 ]
 export function BeyondBand() {
+  const [on, setOn] = useState(0)
   return (
-    <section id="beyond" className="v-beyond" aria-labelledby="v-beyond-h">
-      <div className="container">
-        <p className="v-beyond__k"><span>05</span>Beyond work</p>
-        <h2 id="v-beyond-h" className="v-beyond__h"><span aria-hidden="true">OFF THE CLOCK</span><em>Away from the roadmap, still curious.</em></h2>
-        <p className="v-beyond__lead">Karting, music, travel, a book and an anime queue. I care about how things work, and about experiencing them for myself.</p>
+    <section id="beyond" className="bb" aria-labelledby="v-beyond-h">
+      <div className="container bb__head">
+        <p className="s-label bb__k"><b>05</b><span>Beyond work</span></p>
+        <h2 id="v-beyond-h" className="bb__h"><span aria-hidden="true">OFF THE CLOCK</span><em>Away from the roadmap, still curious.</em></h2>
+        <p className="bb__lead" data-split="lines">Karting, music, travel, a book and an anime queue. I care about how things work, and about experiencing them for myself.</p>
       </div>
-      <ul className="v-beyond__reel" data-v-seq>
+      <ul className="bb__acc">
         {REEL.map(([src, g, cap], k) => (
-          <li key={g}>
-            <a href={`/beyond#scene-${g.toLowerCase()}`} aria-label={`${g}: ${cap}`}>
-              <span className="v-beyond__img">
+          <li key={g} className={k === on ? 'is-on' : ''} onMouseEnter={() => setOn(k)} data-reveal>
+            <a href={`/beyond#scene-${g.toLowerCase()}`} aria-label={`${g}: ${cap}`} onFocus={() => setOn(k)} data-cursor="Enter">
+              <span className="bb__img">
                 {src === 'book'
                   ? <span className="v-beyond__book" aria-hidden="true"><b>AI<br />ENGINEERING</b><small>Chip Huyen</small></span>
                   : <img src={src} alt="" loading="lazy" decoding="async" />}
               </span>
-              <span className="v-beyond__badge" aria-hidden="true"><Icon name="ne" size={15} /></span>
-              <span className="v-beyond__cap"><b>0{k + 1}</b>{g}</span>
+              <span className="bb__cap"><small>0{k + 1}</small><b>{g}</b><em>{cap}</em></span>
+              <span className="bb__go" aria-hidden="true"><Icon name="ne" size={16} /></span>
             </a>
           </li>
         ))}
       </ul>
-      <div className="container v-beyond__go"><Button to="/beyond">Enter beyond work <Arrow /></Button><span>It opens with a short film.</span></div>
+      <div className="container bb__foot"><Button to="/beyond">Enter beyond work <Arrow /></Button><span>It opens with a short film.</span></div>
     </section>
   )
 }
-

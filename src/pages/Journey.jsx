@@ -1,5 +1,5 @@
 import { BELIEFS, EDU, journeyPage, roqiva } from '../content'
-import { Cta, Kin, LinkArrow } from '../components/ui'
+import { Cta, LinkArrow, PageHero } from '../components/ui'
 import { Icon } from '../components/icons'
 import { AsciiCanvas } from '../components/ascii'
 import { Chip, Dot, Easel, KHead, KSection, Tile, Win } from '../components/kit'
@@ -83,21 +83,11 @@ function Chapter({ c, i }) {
 export default function Journey() {
   return (
     <PageMotion routeKey="/journey">
-      <header className="p-hero p-hero--journey">
-        <div className="p-hero__in">
-          <div className="p-hero__copy">
-            <p className="s-label"><b>00</b><span>The story so far</span><em>Path</em></p>
-            <h1 className="p-hero__t" data-kin data-kin-hero><Kin text="Three chapters." /><br /><em><Kin text="One ==widening perspective==." /></em></h1>
-            <p className="p-hero__lead">From understanding how demand is made, to building the systems underneath it, to founding a product that connects the two.</p>
-            <a className="j-now" href="/roqiva"><span className="j-now__k"><Dot tone="accent" />Right now</span><b>Founder, ROQIVA</b><em>In development · alongside Product Manager, GNC India</em><Icon name="arrow" size={15} /></a>
-            <nav className="j-nav" aria-label="Career chapters">{CHAPTERS.map((c) => <a key={c.k} href={`#chapter-${c.i}`}><b>{c.k}</b>{c.t}<Icon name="arrow" size={14} /></a>)}</nav>
-          </div>
-          <figure className="p-hero__stage j-photo">
-            <img src="/img/anjor.webp" width="447" height="721" alt="Anjor Tank" fetchpriority="high" />
-            <figcaption><b>Always curious.</b><span>Always building.</span></figcaption>
-          </figure>
-        </div>
-      </header>
+      <PageHero variant="journey" shader="violet" label={<><b>00</b><span>The story so far</span><em>Path</em></>} title="Three chapters. *One ==widening perspective==.*" lead="From understanding how demand is made, to building the systems underneath it, to founding a product that connects the two." visualLive
+        visual={<figure className="ph2__photo"><img src="/img/anjor.webp" width="447" height="721" alt="Anjor Tank" fetchpriority="high" /><figcaption><span><b>Always curious.</b><small>Always building.</small></span><i className="ps__qr" aria-hidden="true" /></figcaption></figure>}>
+        <a className="j-now" href="/roqiva"><span className="j-now__k"><Dot tone="accent" />Right now</span><b>Founder, ROQIVA</b><em>In development · alongside Product Manager, GNC India</em><Icon name="arrow" size={15} /></a>
+        <nav className="j-nav" aria-label="Career chapters">{CHAPTERS.map((c) => <a key={c.k} href={`#chapter-${c.i}`}><b>{c.k}</b>{c.t}<Icon name="arrow" size={14} /></a>)}</nav>
+      </PageHero>
 
       <KSection id="timeline" tone="soft">
         <KHead n="01" label="A widening field of view" tag="Now, back to 2018" title="Each role adds" sub="another ==dimension==." lead="Demand. Product. Systems. Founding. Learning and work on one timeline." />
@@ -111,20 +101,19 @@ export default function Journey() {
 
       <KSection id="beliefs" tone="soft">
         <KHead n="03" label="Principles" tag="What stayed constant" title="What the work" sub="==taught me==." lead="The principles that stayed with me while the systems and responsibilities changed." />
-        <ul className="mt">
+        <ul className="ob">
           {BELIEFS.map((b, i) => (
-            <li key={b.t} className="mt__c" data-reveal>
-              <div className="mt__art">
+            <li key={b.t} className="ob__c" data-reveal>
+              <div className="ob__top"><h3>{b.t}</h3><span className="ob__x" aria-hidden="true"><Icon name="arrow" size={14} /></span></div>
+              <p>{b.d}</p>
+              <div className="ob__art">
                 <img src={`/img/paint/${['dusk', 'dawn', 'meadow'][i % 3]}.webp`} alt="" width="1600" height="1000" loading="lazy" decoding="async" />
-                <div className="mt__win">
-                  <span className="mt__bar" aria-hidden="true"><i /><i /><i /><b>{String(i + 1).padStart(2, '0')}</b></span>
-                  <AsciiCanvas scene={['layers', 'compound', 'tools'][i % 3]} className="mt__cv" label={`Animated drawing: ${b.t}`} />
+                <div className="ob__win">
+                  <span className="ob__bar" aria-hidden="true"><i /><i /><i /><b>{String(i + 1).padStart(2, '0')}</b></span>
+                  <AsciiCanvas scene={['layers', 'compound', 'tools'][i % 3]} className="ob__cv" label={`Animated drawing: ${b.t}`} />
                 </div>
               </div>
-              <div className="mt__b">
-                <h3>{b.t}</h3><p>{b.d}</p>
-                <ul className="mt__chips">{b.chips.map((x) => <li key={x}>{x}.</li>)}</ul>
-              </div>
+              <footer className="ob__f ob__f--chips">{b.chips.map((x) => <span key={x}>{x}.</span>)}</footer>
             </li>
           ))}
         </ul>
@@ -132,12 +121,12 @@ export default function Journey() {
 
       <KSection id="learning">
         <KHead n="04" label="Education" tag="NMIMS, Mumbai" title="The ==foundations==" sub="behind the work." lead="A continuous education in customers, commerce and how complex products scale." />
-        <div className="k-bento">
+        <div className="j-edus">
           {EDU.map(([a, b], i) => {
             const [deg, ...field] = a.split(' · ')
             const [school, yrs] = b.split(' · ')
             return (
-              <Tile key={a} tint={i ? undefined : 'ink'} className="k-c6 j-edu">
+              <Tile key={a} tint={i ? undefined : 'ink'} className="j-edu">
                 <p className="s-k"><b>0{i + 1}</b>{yrs}</p>
                 <h3>{deg}</h3>
                 <p>{field.join(' · ')}</p>

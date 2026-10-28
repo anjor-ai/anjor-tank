@@ -8,8 +8,9 @@ import { RouterProvider, setPreloader, useRoute } from './lib/router'
 import { ThemeProvider } from './lib/theme'
 import { ToastProvider } from './lib/toast'
 import { track } from './lib/track'
-import { MQ, ScrollTrigger } from './lib/motion'
-import { SiteFilm } from './scenes/RoqivaIntro'
+import { Curtain, Cursor, Intro } from './system/shell'
+import { initScroll } from './system/scroll'
+import { resumeOnGesture } from './system/sound'
 
 // Each page is its own chunk, loaded when its route is opened (and preloaded on hover or touch). `loaded` caches the components.
 const loaders = {
@@ -99,35 +100,15 @@ function useDocumentHead(path) {
   }, [path])
 }
 
-/** Restore the signature film, once per visit; the homepage also exposes replay. */
-function Opener() {
-  const [on, setOn] = useState(false)
-  useEffect(() => {
-    const play = () => { if (window.matchMedia(MQ.motion).matches) setOn(true) }
-    try {
-      if (!window.__OI_TEST__ && !/^\/(roqiva|beyond)/.test(window.location.pathname) && sessionStorage.getItem('at-film-v2') !== '1') {
-        play()
-        sessionStorage.setItem('at-film-v2', '1')
-      }
-    } catch { /* Storage is optional. */ }
-    window.addEventListener('replay-site-film', play)
-    return () => window.removeEventListener('replay-site-film', play)
-  }, [])
-  // While the film plays, page heroes hold their entrance and run it once the film clears.
-  useEffect(() => {
-    const r = document.documentElement
-    if (on) r.setAttribute('data-film', '')
-    else r.removeAttribute('data-film')
-  }, [on])
-  return on ? <SiteFilm onDone={() => { setOn(false); requestAnimationFrame(() => ScrollTrigger.refresh()) }} /> : null
-}
-
 function Shell() {
   const { route } = useRoute()
   useDocumentHead(route.path)
+  useEffect(() => { initScroll(); resumeOnGesture() }, [])
   return (
     <>
-      <Opener />
+      <Intro />
+      <Curtain routeKey={route.path + (route.n || '')} />
+      <Cursor />
       <a className="skip-link" href="#main" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus() }}>Skip to content</a>
       <Nav />
       <main id="main" tabIndex={-1} key={route.path + (route.n || '')} className="page route-enter" style={{ outline: 'none' }}>

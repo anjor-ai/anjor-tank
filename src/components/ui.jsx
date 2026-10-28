@@ -2,6 +2,8 @@ import { actors, status as statusMap, site } from '../content'
 import { Icon } from './icons'
 import { BriefThread } from './v5'
 import { Kin } from './kin'
+import { Shader } from '../system/Shader'
+import { useTheme } from '../lib/theme'
 export { Kin }
 
 /** The site logo: the name in the display face, in the text colour of the theme. */
@@ -69,19 +71,23 @@ export function Head({ eyebrow, title, lead, as: Tag = 'h2', id, scrub = false, 
   )
 }
 
-/** The page hero below the home page: the same split stage as the home page. Words on paper at the left,
-    the page's window on a painting at the right (when there is one). Title highlights use ==x== and *x*. */
-export function PageHero({ eyebrow, label, title, lead, children, visual, visualLive = false, variant = '' }) {
+/** The page hero for every page below the home page: a rounded shader stage (dawn in light, violet in dark),
+    the title and its lead at the left, the page's own picture or window floating at the right. */
+export function PageHero({ eyebrow, label, title, lead, children, visual, visualLive = false, variant = '', shader }) {
+  const { theme } = useTheme()
+  const preset = shader || (theme === 'dark' ? 'violet' : 'dawn')
+  const dark = preset === 'violet'
   return (
-    <header className={`p-hero${visual ? '' : ' p-hero--solo'}${variant ? ' p-hero--' + variant : ''}`}>
-      <div className="p-hero__in">
-        <div className="p-hero__copy">
-          {(label || eyebrow) && <p className="s-label">{label || <span>{eyebrow}</span>}</p>}
-          <h1 className="p-hero__t" data-kin data-kin-hero><Kin text={title} /></h1>
-          {lead && <p className="p-hero__lead">{lead}</p>}
+    <header className={`ph2 ph2--${dark ? 'dark' : 'light'} ph2--${preset}${visual ? '' : ' ph2--solo'}${variant ? ' ph2--' + variant : ''}`}>
+      <div className="ph2__card">
+        <Shader preset={preset} className="ph2__bg" />
+        <div className="ph2__copy">
+          {(label || eyebrow) && <p className="s-label ph2__label">{label || <span>{eyebrow}</span>}</p>}
+          <h1 className="ph2__t" data-kin data-kin-hero><Kin text={title} /></h1>
+          {lead && <p className="ph2__lead">{lead}</p>}
           {children}
         </div>
-        {visual && <div className="p-hero__stage" aria-hidden={visualLive ? undefined : 'true'}>{visual}</div>}
+        {visual && <div className="ph2__vis" aria-hidden={visualLive ? undefined : 'true'}>{visual}</div>}
       </div>
     </header>
   )
@@ -101,12 +107,12 @@ export function Actor({ kind, label }) {
   return <span className={`actor actor--${kind}`} title={a.d}><i aria-hidden="true" />{label || a.label}</span>
 }
 
-/* ───────────── The closing panel: a painting edge to edge, the words on paper, the brief thread on the painting ───────────── */
+/* ───────────── The closing panel: an ember shader edge to edge, the words on a white card, the brief thread beside it ───────────── */
 export function Cta({ title, lead, primary, secondary, badges, topic }) {
   return (
     <section className="cl">
-      <div className="cl__in">
-        <img className="cl__paint" src="/img/paint/meadow.webp" alt="" width="1600" height="1000" loading="lazy" decoding="async" data-v-paint />
+      <div className="cl__in" data-clip>
+        <Shader preset="ember" className="cl__bg" />
         <div className="cl__copy" data-reveal>
           <h2 className="cl__h" data-kin><Kin text={title} /></h2>
           {lead && <p>{lead}</p>}

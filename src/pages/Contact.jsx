@@ -5,6 +5,7 @@ import { Icon } from '../components/icons'
 import { Arrow, Button, Head, Kin, Section } from '../components/ui'
 import { ArtCard } from '../components/Art'
 import { PageMotion } from '../lib/PageMotion'
+import { Shader } from '../system/Shader'
 import { track } from '../lib/track'
 import { useTheme } from '../lib/theme'
 import { useRoute } from '../lib/router'
@@ -241,7 +242,7 @@ export default function Contact() {
             <div className="s-head__r"><p className="s-lead">{h.lead}</p></div>
           </div>
           <div className="ct__easel">
-          <img className="ct__paint" src="/img/paint/dawn.webp" alt="" width="1600" height="1000" decoding="async" />
+          <Shader preset="violet" className="ct__bg" />
           <div className="ct__grid">
             <QuickBrief />
             <div className="ct__book">

@@ -15,12 +15,10 @@
 
 /* ─────────────── Type: the serif half of every heading ─────────────── */
 .k-h, .h-2, .v-feat__h { text-wrap: balance; }
-.k-h em, .v-feat__h em, .v-cta__h .em {
+.k-h em, .v-feat__h em {
   font-family: var(--font-display); font-style: normal; font-weight: 400; letter-spacing: inherit; color: var(--text-3); font-size: 1em; line-height: inherit;
 }
 .k-h { font-size: clamp(30px, 3.4vw, 40px) !important; line-height: 1.06 !important; letter-spacing: -0.035em !important; }
-.k-rule { gap: 14px; opacity: 0.95; }
-.k-rule i { transform-origin: left; }
 .v-k { display: flex; align-items: center; gap: 10px; margin: 0; font: 500 11px/1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); }
 .v-k b { display: inline-grid; place-items: center; min-width: 26px; height: 20px; padding: 0 6px; border-radius: 6px; background: var(--btn-bg); color: var(--btn-ink); font-weight: 500; }
 
@@ -104,8 +102,6 @@
 }
 
 /* ─────────────── Work showcase ─────────────── */
-.v-btn-q { display: inline-flex; align-items: center; gap: 7px; padding: 9px 14px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--surface); color: var(--text); font: 500 13px/1 var(--font-display); cursor: pointer; transition: background 0.25s; }
-.v-btn-q:hover { background: var(--bg-2); }
 
 /* ─────────────── Case card (Work page) ─────────────── */
 
@@ -117,35 +113,11 @@
 .v-paint .v-win .k-gantt__track { background: var(--surface-2); }
 
 /* ─────────────── Home: the door into Beyond ─────────────── */
-.v-beyond { position: relative; overflow: hidden; padding: clamp(90px, 11vw, 150px) 0 clamp(70px, 9vw, 120px); background: #0b0b0a; color: #f2efe8; }
-.v-beyond::before { content: ''; position: absolute; inset: 0; background: radial-gradient(60% 50% at 80% 0%, rgba(255, 90, 31, 0.16), transparent 70%), radial-gradient(50% 50% at 0% 100%, rgba(94, 230, 255, 0.1), transparent 70%); pointer-events: none; }
-.v-beyond__k { display: flex; gap: 12px; align-items: center; margin: 0 0 20px; font: 500 11px/1 var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; color: rgba(242, 239, 232, 0.6); }
-.v-beyond__k span { padding: 4px 7px; border: 1px solid currentColor; border-radius: 3px; }
-.v-beyond__h { margin: 0; display: grid; gap: 6px; }
-.v-beyond__h span { font: 400 clamp(64px, 11vw, 168px)/0.84 'Anton', Impact, sans-serif; letter-spacing: 0; color: #f2efe8; }
-.v-beyond__h em { font: 400 clamp(24px, 2.8vw, 34px)/1.15 var(--font-display); font-style: normal; letter-spacing: -0.02em; color: #cbb894; }
-.v-beyond__lead { margin: 18px 0 0; max-width: 52ch; font: 400 16px/1.6 var(--font-body); color: rgba(242, 239, 232, 0.72); }
-.v-beyond__reel { list-style: none; margin: clamp(40px, 6vw, 70px) 0 0; padding: 0 clamp(20px, 4vw, 64px); display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: clamp(10px, 1.6vw, 22px); }
-.v-beyond__reel li { transform: rotate(var(--r)); transition: transform 0.7s cubic-bezier(0.34, 1.4, 0.64, 1); }
-.v-beyond__reel li:hover { transform: rotate(0) translateY(-10px) scale(1.03); }
-.v-beyond__reel a { display: grid; gap: 12px; color: inherit; }
-.v-beyond__img { display: block; aspect-ratio: 3 / 4; overflow: hidden; border-radius: 6px; background: #1a1a18; box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.7); }
-.v-beyond__img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 1s var(--v-ease); }
-.v-beyond__reel li:nth-child(5) .v-beyond__img { background: #fff; border: 4px solid #000; }
-.v-beyond__reel a:hover img { transform: scale(1.06); }
 .v-beyond__book { display: grid; align-content: space-between; height: 100%; padding: 18px 16px; background: linear-gradient(140deg, #22344a, #101a26 70%); color: #eef1f5; }
 .v-beyond__book b { font: 400 clamp(20px, 2.4vw, 34px)/0.92 'Anton', Impact, sans-serif; }
 .v-beyond__book small { font: 500 10px/1 var(--font-mono); letter-spacing: 0.14em; text-transform: uppercase; color: #9fb3c9; }
-.v-beyond__cap { display: flex; gap: 10px; align-items: baseline; font: 400 clamp(18px, 1.8vw, 24px)/1 'Anton', Impact, sans-serif; text-transform: uppercase; letter-spacing: 0.02em; }
-.v-beyond__cap b { font: 500 10.5px/1 var(--font-mono); color: rgba(242, 239, 232, 0.55); letter-spacing: 0.1em; }
-.v-beyond__go { display: flex; align-items: center; gap: 18px; margin-top: clamp(36px, 5vw, 60px); }
-.v-beyond__go .btn { background: #f2efe8; color: #0b0b0a; }
-.v-beyond__go span { font: 500 11px/1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: rgba(242, 239, 232, 0.55); }
-@media (max-width: 760px) { .v-beyond__reel { grid-template-columns: repeat(5, 62vw); overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 14px; } .v-beyond__reel li { scroll-snap-align: center; } }
 
 /* ─────────────── Closing panel ─────────────── */
-.v-cta__h { margin: 0; font: 500 clamp(30px, 3.4vw, 40px)/1.06 var(--font-display); letter-spacing: -0.035em; color: var(--text); }
-.v-cta__h .em { display: block; }
 @keyframes v-blink { 50% { opacity: 0; } }
 
 /* ─────────────── Home sections on paintings ─────────────── */
@@ -160,24 +132,6 @@
 /* Case hero and Work hero on paintings */
 
 /* ─────────────── Navigation on small screens: brand left, actions right, a direct way to get in touch ─────────────── */
-.nav__cta-m { display: none !important; }
-.nav__theme { display: contents; }
-.mmenu__row { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 18px; }
-.mmenu__row .mmenu__cta { margin: 0; }
-.mmenu__theme { display: none; }
-@media (max-width: 900px) {
-  .nav .nav__in { justify-content: space-between; }
-  .nav__right { margin-left: auto !important; gap: 8px; }
-  .nav__cta-m { display: inline-flex !important; padding: 0 14px; height: 38px; align-items: center; white-space: nowrap; }
-}
-@media (max-width: 480px) {
-  .nav__theme { display: none; }
-  .mmenu__theme { display: inline-flex; }
-  .nav .nav__in { padding-left: 12px; padding-right: 6px; gap: 8px; }
-}
-@media (max-width: 370px) {
-  .nav__brand .wordmark { display: none; }
-}
 
 /* Grids whose single column must never grow past the screen */
 .v-paint { grid-template-columns: minmax(0, 1fr); }
@@ -412,9 +366,8 @@
 .wsb__ph { aspect-ratio: 9 / 14; }
 @media (max-width: 900px) {
   .mmenu { inset: 0 !important; padding-top: calc(var(--nav-h, 64px) + 30px); }
-  .mmenu__link { font-size: 24px; }
 }
-@media (max-width: 900px) { .nav .nav__in { position: relative; z-index: 2; } .mmenu { z-index: 1; } }
+@media (max-width: 900px) { .mmenu { z-index: 1; } }
 
 /* ASCII palette: ink, accent, dim, warn */
 
@@ -422,11 +375,6 @@
 
 /* Nav name: ASCII decode */
 .an { display: inline-flex; white-space: pre; }
-.an__c { position: relative; display: inline-block; }
-.an__w { visibility: hidden; }
-.an__g { position: absolute; inset: 0; display: grid; place-items: center; }
-.an.is-run .an__g { font-family: var(--font-mono); font-weight: 500; color: var(--accent); }
-.an__sp { display: inline-block; width: 0.28em; }
 /* The footer no longer carries the name art */
 
 /* ─────────────── Home hero: one fold carries the claim, the proof and the system ─────────────── */
@@ -484,22 +432,3 @@
 .link-arrow:hover svg { transform: rotate(-45deg); background: color-mix(in srgb, var(--accent-text) 22%, transparent); }
 
 /* Home: the Beyond band as photo cards, a frosted label on each and a badge that says it opens. */
-.v-beyond__reel li { transform: none; transition: none; }
-.v-beyond__reel li:hover { transform: none; }
-.v-beyond__reel a { position: relative; display: block; overflow: hidden; border-radius: 26px; transition: transform 0.5s var(--ease-out); }
-.v-beyond__reel a:hover { transform: translateY(-8px); }
-.v-beyond__img { position: relative; border-radius: 26px; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08), 0 40px 70px -36px rgba(0, 0, 0, 0.9); }
-.v-beyond__img::after { content: ''; position: absolute; inset: 55% 0 0; background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.55)); pointer-events: none; border-radius: 0 0 26px 26px; }
-.v-beyond__reel li:nth-child(5) .v-beyond__img { border: 0; }
-.v-beyond__cap { position: absolute; left: 12px; bottom: 12px; z-index: 2; gap: 8px; align-items: center; padding: 9px 14px; border-radius: 999px; background: rgba(255, 255, 255, 0.16); -webkit-backdrop-filter: blur(14px) saturate(1.3); backdrop-filter: blur(14px) saturate(1.3); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.22); color: #fff; font: 500 15px/1 var(--font-display); text-transform: none; letter-spacing: -0.01em; }
-.v-beyond__cap b { color: rgba(255, 255, 255, 0.7); font-size: 11px; }
-.v-beyond__badge { position: absolute; z-index: 2; top: 12px; right: 12px; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: #fff; color: #111; transition: transform 0.45s var(--ease-spring); }
-.v-beyond__reel a:hover .v-beyond__badge { transform: rotate(45deg) scale(1.08); }
-.v-beyond__reel a:focus-visible { outline: 2px solid #fff; outline-offset: 4px; }
-@media (max-width: 760px) {
-  .v-beyond__reel { grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; scroll-snap-type: none; padding-bottom: 0; padding-inline: 20px; }
-  .v-beyond__reel li:last-child { grid-column: 1 / -1; }
-  .v-beyond__reel li:last-child .v-beyond__img { aspect-ratio: 16 / 10; }
-  .v-beyond__cap { font-size: 14px; padding: 8px 12px; }
-}
-.v-beyond__go .btn > svg:last-child { background: #0b0b0a; color: #f2efe8; }

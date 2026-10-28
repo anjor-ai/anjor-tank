@@ -3,6 +3,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { CustomEase } from 'gsap/CustomEase'
 import { DrawSVGPlugin } from 'gsap/DrawSVGPlugin'
 import { MotionPathPlugin } from 'gsap/MotionPathPlugin'
+import { SplitText } from 'gsap/SplitText'
 import { useGSAP } from '@gsap/react'
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -13,14 +14,16 @@ import { useGSAP } from '@gsap/react'
    · Only transforms and autoAlpha are animated.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-gsap.registerPlugin(ScrollTrigger, CustomEase, DrawSVGPlugin, MotionPathPlugin, useGSAP)
+gsap.registerPlugin(ScrollTrigger, CustomEase, DrawSVGPlugin, MotionPathPlugin, SplitText, useGSAP)
 CustomEase.create('eOut', '.22,.85,.3,1')
 CustomEase.create('eSpring', '.34,1.4,.64,1')
 CustomEase.create('eInOut', '.65,0,.35,1')
+CustomEase.create('eExpo', '.16,1,.3,1')
+CustomEase.create('eCurtain', '.76,0,.24,1')
 gsap.defaults({ duration: 0.7, ease: 'eOut' })
 ScrollTrigger.config({ ignoreMobileResize: true })
 
-export { gsap, ScrollTrigger, useGSAP }
+export { gsap, ScrollTrigger, SplitText, useGSAP }
 // Test hook: a test runner sets window.__OI_TEST__ before load to inspect trigger counts. Inert otherwise.
 if (typeof window !== 'undefined' && window.__OI_TEST__) window.__ST = ScrollTrigger
 

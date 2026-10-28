@@ -13,7 +13,6 @@
 }
 .sec {padding-block:var(--section-y)}
 .head {margin-bottom:clamp(20px,2.4vw,30px)}
-.pager{padding-block:20px 0}
 .more{margin-top:20px}
 
 /* First fold: left copy, a richly illustrated product workspace on the right. */

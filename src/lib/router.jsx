@@ -1,5 +1,6 @@
 import { createContext, startTransition, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { track } from './track'
+import { scrollToY } from '../system/scroll'
 
 // Real URLs through the History API. Every route also ships its own static HTML (`node scripts/site.mjs postbuild`),
 // so direct loads, sharing and crawlers work on Vercel. The page for the current route renders at route time.
@@ -24,7 +25,7 @@ export function scrollToHash(hash, { instant = false } = {}) {
   const go = () => {
     const el = document.getElementById(id)
     if (!el) { if (tries++ < 24) requestAnimationFrame(go); return }
-    el.scrollIntoView({ behavior: instant ? 'instant' : 'smooth', block: 'start' })
+    scrollToY(el, { immediate: instant, offset: -84 })
     if (!instant) return
     // A page opened on a hash: fonts and diagrams settle after first paint and move the target, so land again a few times.
     // Stops as soon as the visitor scrolls on their own.
@@ -32,7 +33,7 @@ export function scrollToHash(hash, { instant = false } = {}) {
     const stop = () => { mine = false }
     window.addEventListener('wheel', stop, { once: true, passive: true })
     window.addEventListener('touchstart', stop, { once: true, passive: true })
-    ;[250, 700, 1400].forEach((ms) => setTimeout(() => { if (mine) document.getElementById(id)?.scrollIntoView({ behavior: 'instant', block: 'start' }) }, ms))
+    ;[250, 700, 1400].forEach((ms) => setTimeout(() => { if (mine) scrollToY(document.getElementById(id), { immediate: true, offset: -84 }) }, ms))
   }
   requestAnimationFrame(go)
 }
@@ -47,10 +48,14 @@ export function RouterProvider({ children }) {
     window.history[replace ? 'replaceState' : 'pushState'](null, '', url.pathname + url.search + url.hash)
     if (samePage && url.hash) { scrollToHash(url.hash); return }
     window.__oiNav = (window.__oiNav || 0) + 1 // pages can tell an arrival from inside the site from a direct visit
-    // A transition keeps the current page on screen until the next page's code has arrived.
-    startTransition(() => setRoute({ ...parseLocation(), n: Date.now() }))
-    if (url.hash) scrollToHash(url.hash)
-    else window.scrollTo({ top: 0, behavior: 'instant' })
+    // The curtain closes over the page (when motion is on), then the next page renders under it and the curtain lifts.
+    const go = () => {
+      startTransition(() => setRoute({ ...parseLocation(), n: Date.now() }))
+      if (url.hash) scrollToHash(url.hash)
+      else scrollToY(0, { immediate: true })
+    }
+    if (window.__curtain) window.__curtain.close(url.pathname).then(go)
+    else go()
   }, [])
 
   useEffect(() => {

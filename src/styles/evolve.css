@@ -15,15 +15,7 @@ body::before { background: radial-gradient(60% 40% at 85% -5%, color-mix(in srgb
 /* ───────── Nav: a floating pill ───────── */
 .nav { padding-top: 12px; background: none !important; border: 0 !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
 .nav::before, .nav::after { display: none; }
-.nav .nav__in { width: calc(100% - 24px); max-width: 1080px; height: 56px; padding: 0 8px 0 16px; gap: 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--nav-bg); box-shadow: var(--shadow); backdrop-filter: blur(20px) saturate(1.5); -webkit-backdrop-filter: blur(20px) saturate(1.5); transition: box-shadow 0.3s, border-color 0.3s; }
-.nav.is-scrolled .nav__in { border-color: var(--line-2); }
 .nav.is-open { background: none !important; }
-.nav.is-open .nav__in { background: var(--bg); }
-.nav__links { margin: 0 auto; padding: 4px; border-radius: 999px; background: color-mix(in srgb, var(--text) 5%, transparent); }
-.nav__link { padding: 7px 15px; font-size: 14px; font-weight: 500; }
-.nav__link:hover { background: color-mix(in srgb, var(--text) 8%, transparent); color: var(--text); }
-.nav__link[aria-current='page'] { background: var(--text); color: var(--bg); }
-.nav__right { margin-left: 0; }
 .mmenu { inset: var(--nav-h) 0 0 0; }
 
 /* ───────── Headings and eyebrows ───────── */
@@ -108,7 +100,6 @@ body::before { background: radial-gradient(60% 40% at 85% -5%, color-mix(in srgb
 .foot { background: none; border-top: 0; }
 
 /* Narrow screens */
-@media (max-width: 900px) { .nav .nav__in { padding-left: 14px; } .nav__links { display: none; } }
 @media (max-width: 760px) {
   .sec--alt, .sec--band { margin-inline: 6px; border-radius: 28px; }
   .cta.sec--alt { margin-inline: 6px; }

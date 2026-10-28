@@ -4,18 +4,17 @@ import { Cta, LinkArrow, PageHero } from '../components/ui'
 import { KHead, KSection } from '../components/kit'
 import { CaseCard } from '../components/v4'
 import { WorkStage } from '../components/Story'
-import { Paint } from '../components/paint'
 import { PageMotion } from '../lib/PageMotion'
 
-/* Work: six cases, filterable. Each card is the system's window on a painting, the words on paper under it.
-   The first card of the list runs wide. The whole card links to the full case. */
+/* Work: six cases, filterable, as onboarding-style cards: the title on paper, the system's window on a painting
+   inset below it, its numbers at the foot. The first card of the list runs wide. The whole card links to the case. */
 export default function Work() {
   const [tag, setTag] = useState('All')
   const list = CASES.filter((c) => tag === 'All' || c.tag === tag)
   return (
     <PageMotion routeKey="/work">
-      <PageHero variant="work" eyebrow={P.hero.eyebrow} title={P.hero.title} lead={P.hero.lead} visual={<Paint name="dawn" className="p-hero__paint"><WorkStage /></Paint>} visualLive>
-        <ul className="p-hero__facts">{P.hero.facts.map((f) => <li key={f}>{f}</li>)}</ul>
+      <PageHero variant="work" eyebrow={P.hero.eyebrow} title={P.hero.title} lead={P.hero.lead} visual={<div className="ph2__win"><WorkStage /></div>} visualLive>
+        <ul className="ph2__facts">{P.hero.facts.map((f) => <li key={f}>{f}</li>)}</ul>
       </PageHero>
       <KSection id="cases">
         <KHead n="01" label="All six systems" tag="Product thinking to business outcome" title="Explore the ==decisions==" sub="behind the results." lead="Six real systems across conversion, growth, search, platform and operations. Each case maps the problem, trade-offs, requirements and measurable outcomes.">
@@ -24,7 +23,7 @@ export default function Work() {
         <div className="s-filter" role="group" aria-label="Filter cases" data-reveal>
           {TAGS.map((t) => <button key={t} type="button" aria-pressed={tag === t} onClick={() => setTag(t)}>{t}<small>{t === 'All' ? CASES.length : CASES.filter((c) => c.tag === t).length}</small></button>)}
         </div>
-        <div className="cc-grid" aria-live="polite">
+        <div className="wc-grid" aria-live="polite">
           {list.map((c) => <CaseCard key={c.slug} c={c} k={parseInt(c.n, 10) - 1} />)}
         </div>
       </KSection>
