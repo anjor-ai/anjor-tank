@@ -84,18 +84,41 @@ export function Nav() {
   }, [open])
 
   const here = (p) => route.path === p || (p !== '/' && route.path.startsWith(p + '/'))
+  // The raised segment slides to the current page's link (and hides when no main link is current).
+  const bar = useRef(null)
+  useEffect(() => {
+    const nav = bar.current
+    if (!nav) return undefined
+    const place = () => {
+      const a = nav.querySelector('a[aria-current="page"]')
+      const pill = nav.querySelector('.b-nav__pill')
+      if (!pill) return
+      if (!a) { pill.style.opacity = '0'; return }
+      pill.style.opacity = '1'
+      pill.style.width = `${a.offsetWidth}px`
+      pill.style.transform = `translateX(${a.offsetLeft}px)`
+    }
+    place()
+    document.fonts?.ready.then(place)
+    const ro = new ResizeObserver(place)
+    ro.observe(nav)
+    return () => ro.disconnect()
+  }, [route.path])
   return (
     <header className={`b-nav${scrolled ? ' is-scrolled' : ''}${open ? ' is-open' : ''}`}>
       <div className="b-nav__in">
         <a href="/" className="b-nav__brand" aria-label={`${site.name} home`}><BrandMark className="b-nav__mark" decorative /><span>{site.name}</span></a>
-        <nav className="b-nav__links" aria-label="Main">
+        <nav className="b-nav__links" aria-label="Main" ref={bar}>
+          <span className="b-nav__pill" aria-hidden="true" />
           {main.map((r) => (
             <a key={r.path} href={r.path} aria-current={here(r.path) ? 'page' : undefined}>{r.label}{r.badge && <i className="b-nav__dot" aria-label={r.badge} />}</a>
           ))}
         </nav>
         <div className="b-nav__right">
-          <SoundToggle className="b-nav__ic" />
-          <span className="b-nav__theme"><ThemeToggle /></span>
+          <div className="b-nav__tools">
+            <SoundToggle className="b-nav__ic" />
+            <span className="b-nav__theme"><ThemeToggle /></span>
+          </div>
           <Button to="/contact?intent=consult#brief" size="sm" className="b-nav__cta" track="cta_consult_nav">Let's talk <Arrow /></Button>
           <button type="button" ref={btn} className="nv-ic b-nav__burger" aria-label={open ? 'Close menu' : 'Open menu'} aria-expanded={open} aria-controls="mobile-menu" onClick={() => setOpen((o) => !o)}>
             <span className={`burger${open ? ' is-open' : ''}`} aria-hidden><i /><i /></span>
@@ -152,7 +175,7 @@ export function Footer() {
   return (
     <footer className="ft" ref={ref}>
       <div className="ft__card">
-        <Shader preset="violet" className="ft__bg" />
+        <Shader preset="tide" className="ft__bg" />
         <div className="ft__in">
           <div className="ft__brand">
             <a href="/" className="ft__logo"><BrandMark className="nv__mark" decorative /><span>{site.name}</span></a>

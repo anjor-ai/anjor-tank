@@ -1,3 +1,41 @@
+/* The frame: headings (kin) and the shared site frame (x): nav, buttons, footer. */
+
+/* ─────────────── from kin.css ─────────────── */
+/* ═══════════════════════════════════════════════════════════════════════════
+   Kinetic headings and highlighted words (from the Motion library: kinetic line-wipe, colour takeover, emphasis).
+   · Every heading word sits in its own mask (.kw) and rises out of it. Without JS or under reduced motion: plain, still text.
+   · ==key words== become <mark class="hl">: accent ink and a highlighter stroke that sweeps under them.
+   · Page heroes animate in CSS from first paint (no flash before hydration); section headings are driven by GSAP on scroll.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.kw { display: inline-block; vertical-align: top; overflow: hidden; padding: 0.1em 0.04em 0.16em; margin: -0.1em -0.04em -0.16em; }
+.kw__i { display: inline-block; will-change: auto; }
+
+/* The highlight. --hl (0..1) is the stroke's progress, so GSAP can sweep it. */
+mark.kin-hl {
+  --hl: 1;
+  color: var(--accent); background-color: transparent;
+  background-image: linear-gradient(color-mix(in srgb, var(--accent) 20%, transparent), color-mix(in srgb, var(--accent) 20%, transparent));
+  background-repeat: no-repeat; background-position: 0 86%; background-size: calc(var(--hl) * 100%) 0.34em;
+  -webkit-box-decoration-break: clone; box-decoration-break: clone;
+  padding: 0 0.04em; border-radius: 2px;
+}
+/* A highlight inside the quieter second voice keeps the accent. */
+.ct__h .em mark.kin-hl { color: var(--accent); }
+
+/* The hero greeting. */
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-kin-hero] .kw__i { animation: kwIn 0.95s var(--ease-out) both; animation-delay: calc(var(--w, 0) * 55ms + 120ms); }
+  [data-kin-hero] mark.kin-hl { animation: hlSweep 0.8s var(--ease-inout) 0.95s both; }
+  [data-kin-hero] .kw--hl .kw__i { animation: kwIn 0.95s var(--ease-out) both, kwPop 0.6s var(--ease-spring) 1.15s; animation-delay: calc(var(--w, 0) * 55ms + 120ms), 1.15s; }
+  html[data-film] [data-kin-hero] .kw__i, html[data-film] [data-kin-hero] mark.kin-hl { animation: none; }
+  html[data-film] [data-kin-hero] .kw__i { transform: translateY(110%); }
+}
+@keyframes kwIn { from { transform: translateY(110%) rotate(5deg); } to { transform: none; } }
+@keyframes kwPop { 0% { transform: none; } 40% { transform: translateY(-6%) scale(1.06); } 100% { transform: none; } }
+@keyframes hlSweep { from { background-size: 0% 0.34em; color: var(--text); } 40% { color: var(--text); } to { background-size: 100% 0.34em; color: var(--accent); } }
+
+/* ─────────────── from x.css ─────────────── */
 /* ═══════════════════════════════════════════════════════════════════════════
    X: the site's design system, rebuilt (Oct 2026). One file for the frame, the primitives and every page.
    References: soft white cards on shader and painted grounds, frosted chips over pictures, round arrow badges,

@@ -3,7 +3,7 @@ import { Icon } from './icons'
 import { Kin } from './kin'
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   The component kit. Every section below a page hero is composed from these, and styled in one file (styles/kit.css).
+   The component kit. Every section below a page hero is composed from these, and styled in styles/components.css (the kit block).
    The idea, from the references: each section's visual is a realistic product window, not a stock diagram.
    Primitives first (section, header, tile, window, chip, tabs), then the widgets the windows are filled with.
    Anything that shows numbers is labelled with where they come from; illustrations say so.
@@ -76,7 +76,7 @@ export const Chip = ({ tone, children, className }) => <span className={cx('k-ch
 export const Dot = ({ tone = 'ok' }) => <i className={`k-dot k-dot--${tone}`} aria-hidden="true" />
 
 /** A mono caption under an illustration, so nobody mistakes it for a screenshot. */
-export const Cap = ({ children = 'Illustration · sample data' }) => <p className="k-cap">{children}</p>
+export const Cap = ({ children }) => <p className="k-cap">{children}</p>
 
 /** Segmented meter. Only ever fed a number that exists in the case or the content. */
 export function Meter({ value, max = 100, segs = 28, tone = 'accent', label }) {

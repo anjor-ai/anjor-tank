@@ -1,5 +1,0 @@
-/* ═══════════ Motion: the CSS side. Nothing here hides content: GSAP sets every hidden start state. ═══════════ */
-.route-enter { animation: routeIn 0.5s var(--ease-out) backwards; } /* backwards: no transform is left on <main> afterwards, so fixed and pinned children stay fixed */
-@keyframes routeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
-
-/* Hero entrance: a CSS animation. `both` keeps the start state until it plays. */

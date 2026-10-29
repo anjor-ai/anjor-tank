@@ -4,7 +4,7 @@ import { Cta } from '../components/ui'
 import { Icon } from '../components/icons'
 import BeyondFilm from '../scenes/BeyondFilm'
 import { MQ, gsap, ScrollTrigger, useGSAP } from '../lib/motion'
-import { Intro, Live, Play, Radar, Read, Speed, Wander, Watch, img } from '../components/beyond'
+import { Intro, Music, Play, Radar, Read, Speed, Wander, Watch, img } from '../components/beyond'
 import { PageMotion } from '../lib/PageMotion'
 
 /* Beyond work. The hero is its own room: dark, photographic, condensed display type, opened by a short film
@@ -14,12 +14,12 @@ import { PageMotion } from '../lib/PageMotion'
 const CHAPTERS = [
   { id: 'wander', k: '01', name: 'Wander' },
   { id: 'speed', k: '02', name: 'Speed' },
-  { id: 'live', k: '03', name: 'Live' },
+  { id: 'music', k: '03', name: 'Music' },
   { id: 'read', k: '04', name: 'Read' },
   { id: 'watch', k: '05', name: 'Watch' },
   { id: 'play', k: '06', name: 'Play' },
 ]
-const COVERS = [['rainier', 'Wander', 'The long way'], ['kart-pov', 'Speed', 'The next apex'], ['laser', 'Live', 'One more set']]
+const COVERS = [['rainier', 'Wander', 'The long way'], ['kart-pov', 'Speed', 'The next apex'], ['laser', 'Music', 'One more set']]
 
 const Split = ({ text, className }) => <span className={className} aria-hidden="true">{text.split('').map((c, k) => <span key={k} className="bx-lm"><span className="bx-li">{c === ' ' ? ' ' : c}</span></span>)}</span>
 
@@ -98,7 +98,7 @@ export default function Beyond() {
 
         <Wander />
         <Speed />
-        <Live />
+        <Music />
         <Read />
         <Watch />
         <Play />

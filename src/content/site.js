@@ -66,6 +66,6 @@ export const routes = [
 
 export const footer = {
   line: 'Find the leak. Fix the loop. Prove the lift.',
-  note: 'Product screens on this site use sample data. ROQIVA is in development.',
+  note: 'Product screens on this site show how the system works, not client results. ROQIVA is in development.',
   how: 'Based in Mumbai. Working with teams in India and remotely.',
 }

@@ -1,6 +1,0 @@
-/* Portfolio site-wide refinement / Oct 2026.
-   Page-specific hierarchy, responsive high-fidelity diagrams and cohesive dark palette.
-   Replaces repetitive section labels with meaningful content. */
-:root{--section-y:clamp(40px,4.9vw,70px)}
-/* The default light illustrations must be legible as real UI in both theme modes. */
-/* Non-decorative motion follows the reference film without overwhelming reading. */

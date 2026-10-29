@@ -62,7 +62,7 @@ function Stages() {
             </li>
           ))}
         </ol>
-        <p className="b-ss__note">Illustration from the retention case. The repeat-order figure is from that case.</p>
+        <p className="b-ss__note">The repeat-order figure is from the retention case.</p>
       </Tile>
       <Stage kind="paint" name="noon" className="b-ss__r">
         <Win title={`Stage ${String(cur + 1).padStart(2, '0')} / ${s.k}`} className="b-ss__card">

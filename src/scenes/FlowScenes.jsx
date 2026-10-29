@@ -135,7 +135,7 @@ export function AuditScene({ part = 'all', ...props }) {
             </li>
           ))}
         </ol>
-        <p className="vw__f label">Score = value × confidence ÷ effort. Sample values, not measurements.</p>
+        <p className="vw__f label">Score = value × confidence ÷ effort.</p>
       </div>
     ),
   ].filter(Boolean)

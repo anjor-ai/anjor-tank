@@ -1,0 +1,768 @@
+/* Components layered over the foundation, in the order they were added. Later blocks win. */
+
+/* ─────────────── from art.css ─────────────── */
+/* The art engine's canvases, the ROQIVA wordmark with scenes inside, the footer and the card art. */
+.artcv { display: block; width: 100%; height: 100%; image-rendering: pixelated; image-rendering: crisp-edges; }
+
+/* ── The footer: page-coloured on top, a grainy horizon of hills underneath with the reel and the launch on it ── */
+/* the launch stands on the wordmark */
+
+/* ── The word reel (art/Reel.jsx): letters that turn into small screens and back ── */
+.rl { position: relative; display: block; width: 100%; }
+.rl--roq, .rl--anjor { display: flex; justify-content: center; gap: 0.06em; font-family: var(--font-display); font-weight: 600; line-height: 1; letter-spacing: -0.02em; }
+.rl__slot { position: absolute; top: 0; height: 100%; }
+.rl__slot--txt { position: relative; display: block; }
+.rl__ch { display: block; }
+.rl__tile { position: absolute; inset: 4% 3%; display: block; overflow: hidden; border-radius: 10px; background: #141413; opacity: 0; box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.45); }
+.rl--roq .rl__tile { inset: 6% 2%; border-radius: 0.12em; }
+.rl--nav .rl__tile { border-radius: 4px; box-shadow: none; inset: 2% 4%; }
+[data-theme='dark'] .rl--nav .rl__tile { box-shadow: inset 0 0 0 1px rgba(250, 249, 245, 0.14); }
+.rl__tile .artcv { position: absolute; inset: 0; }
+/* ── The site logo: the name beside the AT keycap ── */
+.rl__sp { display: block; width: 0.32em; flex: none; }
+
+/* ── Card art: a small dark screen with a line-art scene (art/cards.js) ── */
+.asc { position: relative; display: block; width: 100%; height: 100%; min-height: 120px; overflow: hidden; border-radius: 12px; background: #141413;
+  background-image: radial-gradient(120% 80% at 50% 0%, rgba(0, 131, 255, 0.08), transparent 60%); }
+.asc .artcv { position: absolute; inset: 0; }
+.acard__art--asc { padding: 10px; background: transparent; }
+
+/* ─────────────── from portfolio.css ─────────────── */
+/* Portfolio pages: story bar, pager, proof strip, Where I fit, case cards and case study, GTM blocks, journey, beyond, hire, contact extras.
+   Built on the shared tokens. Light and dark come from the tokens; no colour is set here except through them. Max type size 40px. */
+
+/* ───── shared small pieces ───── */
+.more { margin: clamp(22px, 3vw, 36px) 0 0; }
+.plain { display: grid; gap: 10px; margin: 12px 0 0; padding: 0; list-style: none; font-size: 15px; color: var(--text-2); }
+.plain b { display: block; color: var(--text); font-weight: 600; }
+.plain span { display: block; }
+.portrait { margin: 0; border-radius: var(--r-xl); overflow: hidden; border: 1px solid var(--line); background: var(--surface); max-width: 360px; }
+.portrait img { display: block; width: 100%; height: auto; }
+@media (max-width: 760px) { .portrait { max-width: 260px; } }
+
+/* ───── story bar under the breadcrumb ───── */
+.crumbs.story { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 24px; }
+
+/* ───── next-page pager ───── */
+
+/* ───── footer extras ───── */
+
+/* ───── proof strip ───── */
+
+/* ───── Where I fit ───── */
+@keyframes panelIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* ───── case cards, grid and deck ───── */
+
+.deck { display: flex; gap: 14px; margin: 0; padding: 4px var(--gutter) 14px; list-style: none; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: thin; margin-inline: calc(var(--gutter) * -1); overscroll-behavior-x: contain; }
+.deck:focus-visible { outline: 2px solid var(--accent-text); outline-offset: -2px; }
+
+/* ───── home: story thread visuals ───── */
+
+.leaks { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; }
+.leak a { display: grid; gap: 10px; align-content: start; height: 100%; padding: clamp(18px, 2vw, 26px); border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); transition: border-color 0.25s, transform 0.3s var(--ease-out); }
+.leak a:hover { border-color: var(--accent-text); transform: translateY(-3px); }
+.leak p { margin: 0; font-size: 14.5px; }
+@media (max-width: 1000px) { .leaks { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .leaks { grid-template-columns: minmax(0, 1fr); } }
+
+/* ───── case study ───── */
+.cs__m { display: flex; flex-wrap: wrap; gap: 10px 36px; margin: 6px 0 0; padding: 0; list-style: none; }
+.cs__m li { display: grid; gap: 2px; }
+.cs__m b { font: 600 clamp(26px, 3vw, 36px) var(--font-display); letter-spacing: -0.03em; font-variant-numeric: tabular-nums; }
+.cs__m span { font-size: 13px; color: var(--text-3); }
+.cs__quick { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.cs__q { display: grid; gap: 8px; align-content: start; padding: clamp(18px, 2vw, 26px); border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); }
+.cs__q p:last-child { margin: 0; font-size: 15.5px; line-height: 1.5; }
+@media (max-width: 860px) { .cs__quick { grid-template-columns: minmax(0, 1fr); } }
+.cs { display: grid; grid-template-columns: minmax(0, 280px) minmax(0, 1fr); gap: clamp(28px, 5vw, 72px); align-items: start; }
+@media (max-width: 960px) {
+  .cs { grid-template-columns: minmax(0, 1fr); }
+}
+
+/* ───── vertical tabs (leaks, compare) ───── */
+.vt { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.7fr); gap: 14px; }
+@media (max-width: 860px) { .vt { grid-template-columns: minmax(0, 1fr); } }
+
+/* ───── GTM: hero visual, journey map, offers, phases, shapes, guardrails, stack ───── */
+.why { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; }
+@media (max-width: 860px) { .why { grid-template-columns: minmax(0, 1fr); } }
+
+.offers { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; }
+.offer { display: grid; gap: 12px; align-content: start; min-width: 0; padding: clamp(20px, 2.4vw, 30px); border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); }
+@media (max-width: 960px) { .offers { grid-template-columns: minmax(0, 1fr); } }
+
+.ph { display: grid; gap: 14px; }
+
+/* ───── journey ───── */
+
+/* ───── beyond ───── */
+
+/* ───── hire ───── */
+.open { display: grid; gap: 10px; padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); max-width: 560px; }
+.open .label { display: inline-flex; align-items: center; gap: 8px; margin: 0; }
+.open .label i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 4px color-mix(in srgb, var(--ok) 22%, transparent); }
+.open ul { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.open li { padding: 4px 10px; border: 1px solid var(--line-2); border-radius: 999px; font-size: 13px; }
+.moves { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; }
+.move { display: grid; gap: 8px; align-content: start; padding: clamp(18px, 2.2vw, 28px); border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); }
+.move p { margin: 0; font-size: 15px; }
+.role { display: grid; grid-template-columns: minmax(0, 190px) minmax(0, 1fr); gap: 8px 32px; padding-block: 22px; border-top: 1px solid var(--line); }
+.role:last-child { border-bottom: 1px solid var(--line); }
+@media (max-width: 760px) { .moves { grid-template-columns: minmax(0, 1fr); } .role { grid-template-columns: minmax(0, 1fr); } }
+
+/* ───── contact extras ───── */
+.asks { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; }
+.ask { display: grid; gap: 10px; align-content: start; justify-items: start; padding: clamp(18px, 2.2vw, 28px); border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); }
+.ask p { margin: 0; font-size: 15px; }
+@media (max-width: 700px) { .asks { grid-template-columns: minmax(0, 1fr); } }
+
+/* ───── ROQIVA origin ───── */
+.rqor { display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
+.rqor__cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; margin: 0; padding: 0; list-style: none; }
+.rqor__card { display: grid; gap: 8px; align-content: start; padding: clamp(18px, 2.2vw, 28px); border: 1px solid var(--line); border-radius: var(--r-lg); background: var(--surface); }
+.rqor__card p { margin: 0; font-size: 15px; }
+.rqor__n { font: 600 12px var(--font-mono); color: var(--accent-text); }
+.rqor__a { display: inline-flex; align-items: center; gap: 6px; margin-top: 4px; font: 600 13px var(--font-display); color: var(--accent-text); }
+.rqor__who { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 18px; align-items: start; padding: clamp(18px, 2.4vw, 30px); border-radius: var(--r-xl); border: 1px solid var(--line-2); background: var(--surface); }
+.rqor__who > div { display: grid; gap: 10px; justify-items: start; min-width: 0; }
+.rqor__who p { margin: 0; }
+.rqor__av { display: grid; place-items: center; width: 52px; height: 52px; border-radius: 14px; background: var(--void); color: #faf9f5; font: 700 16px var(--font-mono); box-shadow: inset 0 0 0 2px rgba(250, 249, 245, 0.16); }
+@media (max-width: 700px) { .rqor__cards { grid-template-columns: minmax(0, 1fr); } }
+
+/* ───── mobile containment ───── */
+@media (max-width: 600px) { .cta__btns .btn { white-space: normal; text-align: left; } .cta__btns { max-width: 100%; } }
+
+/* ═════════ Round 2: hello, founder band, quick view, product illustrations, journey cards, hire ═════════ */
+
+/* hello card */
+
+/* ROQIVA founder band */
+
+/* case cards: actions */
+
+/* quick view */
+.cqv { position: fixed; inset: 0; z-index: 200; display: grid; place-items: center; padding: clamp(10px, 3vw, 32px); background: rgba(8, 8, 8, 0.7); backdrop-filter: blur(6px); animation: cqvIn 0.25s var(--ease-out); }
+@keyframes cqvIn { from { opacity: 0; } to { opacity: 1; } }
+.cqv__p { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; width: min(100%, 880px); max-height: 100%; border: 1px solid var(--line-2); border-radius: var(--r-xl); background: var(--bg); box-shadow: 0 40px 100px rgba(0, 0, 0, 0.45); overflow: hidden; }
+.cqv__h { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; padding: clamp(16px, 2.4vw, 26px) clamp(16px, 2.8vw, 30px) 14px; border-bottom: 1px solid var(--line); }
+.cqv__h h2 { margin: 6px 0 0; }
+.cqv__b { display: grid; gap: 18px; padding: clamp(16px, 2.6vw, 28px) clamp(16px, 2.8vw, 30px); overflow-y: auto; overscroll-behavior: contain; animation: panelIn 0.35s var(--ease-out); }
+.cqv__b .lead { margin: 0; }
+.cqv__f { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; padding: 14px clamp(16px, 2.8vw, 30px); border-top: 1px solid var(--line); background: var(--surface); }
+@media (max-width: 560px) { .cqv__f { justify-content: center; } .cqv .cs__quick { grid-template-columns: minmax(0, 1fr); } }
+
+/* product illustrations */
+
+/* journey cards */
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--ok) 50%, transparent); } 100% { box-shadow: 0 0 0 8px transparent; } }
+
+/* hire */
+.ways { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 8px 0 0; padding: 0; list-style: none; width: 100%; max-width: 880px; counter-reset: w; }
+.ways a { display: grid; gap: 4px; height: 100%; padding: 14px 16px; border: 1px solid var(--line); border-radius: var(--r-md); background: var(--surface); transition: border-color 0.25s, transform 0.3s var(--ease-out); }
+.ways a:hover { border-color: var(--accent-text); transform: translateY(-2px); }
+.ways b { font: 600 16px var(--font-display); }
+.ways a > span:last-child { font-size: 13.5px; color: var(--text-2); }
+@media (max-width: 760px) { .ways { grid-template-columns: minmax(0, 1fr); } }
+.cqv__b { display: flex; flex-direction: column; }
+.cqv__b > * { flex: none; }
+
+/* ═══════════ Round 3: proof in the hero, motion pieces, illustrated cards, case parts, the opening ═══════════ */
+
+/* the hero: proof numbers and tags, a slow drift behind */
+@keyframes drift { to { transform: translate3d(60px, 40px, 0) scale(1.12); } }
+
+/* kinetic type: outlined bands that slide against the scroll. Decorative, hidden from readers. */
+
+/* illustrated cards */
+
+/* the ring */
+
+/* the layers */
+
+/* the system, short (home) */
+
+/* the system, long (hire): the pinned visuals */
+
+/* case parts */
+
+/* the site's opening film (scenes/RoqivaIntro.jsx SiteFilm) reuses the ROQIVA film's frame */
+
+/* hello card: larger, with badges that float around it */
+
+/* case pages: tighter rhythm, the illustration close to the title */
+
+/* ─────────────── from motion.css ─────────────── */
+/* ═══════════ Motion: the CSS side. Nothing here hides content: GSAP sets every hidden start state. ═══════════ */
+.route-enter { animation: routeIn 0.5s var(--ease-out) backwards; } /* backwards: no transform is left on <main> afterwards, so fixed and pinned children stay fixed */
+@keyframes routeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+/* Hero entrance: a CSS animation. `both` keeps the start state until it plays. */
+
+/* ─────────────── from editorial.css ─────────────── */
+/* The editorial layer: asymmetric story composition, product-led interactivity, accessible motion.
+   Uses existing Space Grotesk / IBM typography. */
+/* Every chapter takes a different posture. No artificial uniform centre grid. */
+/* The founder product is not an external company promotion. Match the system palette. */
+/* Preserve legibility and only animate on capable devices. */
+
+/* Type and section alignments create a deliberate visual rhythm. */
+
+/* ─────────────── from studio.css ─────────────── */
+/* Portfolio visual system v3
+   Matches the site's Space Grotesk/IBM Plex Sans/IBM Plex Mono, black/white
+   surfaces and electric-blue accent. Colorful stages are contained illustrations.
+   Every module is static-first, responsive and reduced-motion aware. */
+
+/* Match the actual orchestration-intelligence theme tokens instead of blanket navy. */
+:root {
+  --section-y:clamp(38px,4.9vw,70px);
+  --maxw:1240px;
+  --fs-hero:clamp(30px,3.35vw,40px);
+  --fs-h2:clamp(25px,2.8vw,34px);
+  --fs-lead:clamp(15px,1.3vw,18px);
+}
+.sec {padding-block:var(--section-y)}
+.head {margin-bottom:clamp(20px,2.4vw,30px)}
+.more{margin-top:20px}
+
+/* First fold: left copy, a richly illustrated product workspace on the right. */
+
+/* Selected work: middle-justified title belongs with a centered carousel. */
+
+/* Visual, actionable decision diagram: animated system windows. */
+
+/* Four chapters as compact, staggered product cards, not a long text-only list. */
+
+/* Consulting: premium split, with a workflow screen rather than empty darkness. */
+
+/* Refine smaller heroes and varied page composition. */
+
+/* Polish and accessibility. */
+@media(max-width:640px){
+ :root{--section-y:clamp(31px,8.5vw,48px)}
+}
+
+/* ─────────────── from portfolio-v3.css ─────────────── */
+/* Portfolio site-wide refinement / Oct 2026.
+   Page-specific hierarchy, responsive high-fidelity diagrams and cohesive dark palette.
+   Replaces repetitive section labels with meaningful content. */
+:root{--section-y:clamp(40px,4.9vw,70px)}
+/* The default light illustrations must be legible as real UI in both theme modes. */
+/* Non-decorative motion follows the reference film without overwhelming reading. */
+
+/* ─────────────── from evolve.css ─────────────── */
+/* ───────────────────────── Evolve · the design layer ─────────────────────────
+   Loaded last. It restyles the shared pieces (nav, headings, sections, cards, panels) and the page blocks, without touching the content.
+   Patterns taken from the reference set: a floating pill nav; chip eyebrows over two-tone headings; a product frame on a colour mesh;
+   bento tiles with one warm gradient tile; pastel panels that hold white cards; a split light/dark card for the number that matters.
+   Colour only comes from tokens (see tokens.css: --t-* tints, --ts-* strong tints, --tg warm gradient, --mesh-*), so both themes stay in step.
+   Largest type here is 40px; the opener and brand art are the only places above that. */
+
+:root { --nav-h: 68px; --r-sm: 12px; --r-md: 18px; --r-lg: 26px; --r-xl: 36px; --panel-r: clamp(26px, 3.4vw, 44px); }
+@media (max-width: 760px) { :root { --nav-h: 64px; } }
+
+/* Page finish: warm paper in light, ink in dark, one very soft colour wash at the top */
+body::before { background: radial-gradient(60% 40% at 85% -5%, color-mix(in srgb, var(--mesh-b) 55%, transparent), transparent 70%), radial-gradient(50% 35% at 5% 0%, color-mix(in srgb, var(--mesh-a) 50%, transparent), transparent 70%) !important; }
+[data-theme='dark'] body::before { opacity: 0.8; }
+
+/* ───────── Nav: a floating pill ───────── */
+.nav { padding-top: 12px; background: none !important; border: 0 !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+.nav::before, .nav::after { display: none; }
+.nav.is-open { background: none !important; }
+.mmenu { inset: var(--nav-h) 0 0 0; }
+
+/* ───────── Headings and eyebrows ───────── */
+.eyebrow { display: inline-flex; align-items: center; gap: 9px; width: fit-content; padding: 6px 13px 6px 11px; border: 1px solid var(--line-2); border-radius: 999px; background: color-mix(in srgb, var(--surface) 86%, transparent); color: var(--text-2); }
+.eyebrow::before { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
+.h-hero, .h-2 { letter-spacing: -0.032em; }
+.h-2 .em, .h-3 .em { color: var(--text-3); }
+.h-hero .em { background: linear-gradient(100deg, var(--accent-text), var(--ts-lilac)); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.lead { color: var(--text-2); }
+.head { gap: 14px; }
+
+/* ───────── Sections: no hairlines, soft rounded bands ───────── */
+.sec { border-top: 0; }
+.sec--alt { background: var(--bg-2); margin-inline: clamp(8px, 1.2vw, 16px); border-radius: var(--panel-r); }
+.sec--band { margin-inline: clamp(8px, 1.2vw, 16px); border-radius: var(--panel-r); overflow: clip; }
+.crumbs ol { color: var(--text-3); }
+
+/* Buttons and chips */
+.btn { padding: 14px 24px; }
+.btn--ghost { background: color-mix(in srgb, var(--surface) 80%, transparent); border-color: var(--line-2); }
+.chip { background: var(--surface); }
+.chip[aria-pressed='true'] { background: var(--text); border-color: var(--text); color: var(--bg); }
+
+/* ───────── Closing call to action: one warm tile ───────── */
+.cta.sec--alt { position: relative; isolation: isolate; overflow: clip; background: var(--tg); color: #fff; margin-block: clamp(24px, 4vw, 56px); padding-block: clamp(48px, 7vw, 96px); }
+.cta.sec--alt::before { content: ''; position: absolute; inset: 0; z-index: -1; background: radial-gradient(50% 70% at 85% 10%, rgba(255, 255, 255, 0.28), transparent 70%), radial-gradient(40% 60% at 10% 100%, rgba(80, 0, 40, 0.28), transparent 70%); }
+.cta__in { max-width: 760px; margin-inline: auto; justify-items: center; text-align: center; }
+.cta .h-2, .cta .h-2 .em { color: #fff; }
+.cta .h-2 .em { opacity: 0.72; }
+.cta .lead { color: rgba(255, 255, 255, 0.88); }
+.cta__btns { justify-content: center; }
+.cta .btn--primary { background: #fff; color: #14110f; }
+.cta .btn--primary:hover { background: #fff; transform: translateY(-2px); }
+.cta .btn--ghost { color: #fff; border-color: rgba(255, 255, 255, 0.55); background: rgba(255, 255, 255, 0.08); }
+.cta .btn--ghost:hover { background: rgba(255, 255, 255, 0.18); border-color: #fff; }
+.cta__badges { justify-content: center; color: rgba(255, 255, 255, 0.85); }
+.cta__badges li::before { color: #fff; }
+
+/* ───────── Home hero: copy, a product frame on a colour mesh, a bento row of numbers ───────── */
+
+/* Kinetic type: lose the rules, keep the movement */
+
+/* ───────── Case cards: one tint each, the product picture on top, a pill to open the case ───────── */
+
+/* Work page: a bento of six, wide and narrow cards in turn */
+
+/* ───────── System rail, layers, where I fit, founder ───────── */
+
+/* ───────── Sticky stories (Hire, Journey): the picture sits on a mesh stage ───────── */
+
+/* ───────── Shared cards ───────── */
+.acard { border-radius: var(--r-lg); }
+.acard { border-color: transparent; background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); }
+.acards > li:nth-child(5n+1) .acard__art { background: radial-gradient(80% 100% at 50% 0%, var(--t-peach), transparent 78%), var(--bg-2); }
+.acards > li:nth-child(5n+2) .acard__art { background: radial-gradient(80% 100% at 50% 0%, var(--t-lilac), transparent 78%), var(--bg-2); }
+.acards > li:nth-child(5n+3) .acard__art { background: radial-gradient(80% 100% at 50% 0%, var(--t-mint), transparent 78%), var(--bg-2); }
+.acards > li:nth-child(5n+4) .acard__art { background: radial-gradient(80% 100% at 50% 0%, var(--t-sky), transparent 78%), var(--bg-2); }
+.acards > li:nth-child(5n) .acard__art { background: radial-gradient(80% 100% at 50% 0%, var(--t-butter), transparent 78%), var(--bg-2); }
+.acard__art { border-bottom: 0; height: 180px; }
+.cs__q { border-radius: 26px; }
+
+/* ───────── Page heroes below the home page ───────── */
+.portrait { border: 0; border-radius: var(--panel-r); box-shadow: var(--shadow); }
+.portrait img { border-radius: var(--panel-r); }
+
+/* ───────── Case study page ───────── */
+
+/* Each of the eleven parts is a rounded panel; the white cards sit on it */
+
+/* The case's section bar floats like the nav */
+.snav { top: calc(var(--nav-h) - 2px); width: calc(100% - 24px); max-width: 1080px; margin: 0 auto; border: 1px solid var(--line); border-radius: 999px; background: var(--nav-bg); box-shadow: var(--shadow); }
+.snav a[aria-current='true'] { background: var(--text); color: var(--bg); }
+
+/* ───────── Contact: readable calendar, softer cards ───────── */
+.bcal__day:not([disabled]) { background: var(--accent-soft); font-weight: 500; }
+.bcal__day[disabled] { opacity: 0.6; color: var(--text-3); background: none; }
+.bwin, .bcal { border-radius: 28px; }
+.ask { border-radius: 26px; }
+
+/* ───────── Footer ───────── */
+.foot { background: none; border-top: 0; }
+
+/* Narrow screens */
+@media (max-width: 760px) {
+  .sec--alt, .sec--band { margin-inline: 6px; border-radius: 28px; }
+  .cta.sec--alt { margin-inline: 6px; }
+  .snav { width: calc(100% - 12px); }
+}
+
+/* Page heroes without a product picture sit in one soft panel */
+.ways { max-width: none; gap: 12px; margin-top: 10px; }
+.ways a { padding: 18px 20px 20px; border: 0; border-radius: 24px; background: var(--t-peach); gap: 6px; }
+.ways li:nth-child(2) a { background: var(--t-lilac); } .ways li:nth-child(3) a { background: var(--t-mint); }
+.ways a:hover { transform: translateY(-4px); }
+.ways b { font-size: 18px; }
+.ways a > span:last-child { color: var(--text-2); }
+@media (max-width: 760px) { .ways { grid-template-columns: minmax(0, 1fr); } }
+
+/* Hire: the leak, offer and phase panels */
+.offer { border-radius: 26px; }
+
+/* Contrast fixes found by the scan */
+[data-theme='dark'] .ha__av, [data-theme='dark'] .art__av { color: #06121f; }
+@media (max-width: 760px) { p > .btn { white-space: normal; } }
+.sec--alt + .sec--alt, .sec--alt + .sec--band, .sec--band + .sec--alt { margin-top: 12px; }
+
+/* Journey ribbon: the four cards take the shared tints, so they follow the theme */
+
+[data-theme='light'] .ha__pill--sky, [data-theme='light'] .status--sky { color: #075a8c; }
+[data-theme='light'] .ha__pill--ok { color: #11633f; }
+[data-theme='light'] .ha__pill--grey { color: #4b4e56; }
+
+/* ─────────────── from premium.css ─────────────── */
+/* premium.css: the last layer. One warm system for both themes, drawn windows, the page-hero shell and every component in Story.jsx.
+   Colours here come from tokens only; the few scoped blocks below re-declare the tokens for a surface that is always dark or always light. */
+
+/* ───────── 1. Scopes: always-light paper, always-dark windows ───────── */
+/* the accent inside a dark window follows the site: clay on the dark theme, a lifted blue on the light one */
+/* the navy panels of the earlier rounds become warm charcoal with one clay glow */
+
+/* page-level atmosphere */
+[data-theme='dark'] body::before { background: radial-gradient(55% 45% at 100% 0%, rgba(232, 130, 90, 0.10), transparent 70%), radial-gradient(45% 40% at 0% 100%, rgba(157, 143, 240, 0.07), transparent 70%); }
+.sec--band, .sec--sky { background-image: none !important; background: radial-gradient(60% 80% at 85% 0%, var(--mesh-a), transparent 62%), radial-gradient(50% 70% at 5% 100%, var(--mesh-b), transparent 64%), var(--bg-2) !important; }
+
+/* ───────── 2. Page-hero shell (every page except home) ───────── */
+.ph .h-hero { max-width: 15ch; font-size: clamp(34px, 5vw, 62px); line-height: 1.02; letter-spacing: -0.045em; color: var(--text); }
+.ph .h-hero .em { color: var(--text-3); }
+.ph .lead { max-width: 46ch; color: var(--text-2); }
+/* case + contact heroes keep their own content, on the same shell */
+@media (max-width: 760px) { .ph .h-hero { font-size: clamp(32px, 10vw, 44px); } }
+
+/* the drawn stage inside a hero */
+.stg { border: 1px solid var(--line-2); border-radius: 22px; background: var(--bg); box-shadow: var(--shadow); overflow: hidden; color: var(--text); }
+.stg__bar { height: 38px; display: flex; align-items: center; gap: 12px; padding: 0 14px; border-bottom: 1px solid var(--line); background: var(--bg-2); font: 500 10px var(--font-mono); letter-spacing: 0.06em; color: var(--text-2); }
+.stg__dots { display: inline-flex; gap: 5px; } .stg__dots i { width: 7px; height: 7px; border-radius: 50%; background: var(--line-2); }
+.stg__dots i:nth-child(1) { background: #f4a58e; } .stg__dots i:nth-child(2) { background: #f3cd7d; } .stg__dots i:nth-child(3) { background: #86d3ac; }
+.stg__foot { margin: 0; padding: 11px 16px; border-top: 1px solid var(--line); font: 500 10px var(--font-mono); letter-spacing: 0.07em; color: var(--text-3); }
+
+/* work stage */
+
+/* journey stage */
+.rt { display: grid; grid-template-columns: minmax(0, 0.44fr) minmax(0, 0.56fr); gap: 10px 16px; padding: 18px; align-items: end; }
+
+/* beyond stage */
+
+/* hire stage */
+
+/* ───────── 3. Home: HELLO ───────── */
+.hi { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 18px; margin: 0 0 10px; }
+
+/* the home hero panel and console: a dark product window on a colour mesh */
+
+/* ───────── 4. Method circuit ───────── */
+
+/* ───────── 5. Journey ───────── */
+@media (max-width: 900px) { .pass { grid-template-columns: minmax(0, 1fr); } }
+
+/* ───────── 6. Beyond ───────── */
+.stops { list-style: none; margin: 26px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.stop { position: relative; display: grid; align-content: end; gap: 3px; aspect-ratio: 4 / 4.6; padding: 20px; border-radius: 26px; overflow: hidden; color: #fff; isolation: isolate; border: 1px solid var(--line); }
+.stop img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; transition: transform 0.8s var(--ease-out); }
+.stop::after { content: ''; position: absolute; inset: 35% 0 0; z-index: -1; background: linear-gradient(transparent, rgba(12, 9, 5, 0.82)); }
+.stop:hover img { transform: scale(1.07); }
+.stop b { font: 600 clamp(26px, 3vw, 38px)/1 var(--font-display); letter-spacing: -0.045em; } .stop small { font-size: 14px; opacity: 0.92; } .stop em { margin-top: 6px; font: 500 10px var(--font-mono); font-style: normal; letter-spacing: 0.08em; text-transform: uppercase; opacity: 0.8; }
+@property --w { syntax: '<percentage>'; inherits: false; initial-value: 60%; }
+@media (max-width: 900px) {
+  .stops { grid-template-columns: minmax(0, 1fr); } .stop { aspect-ratio: 16 / 10; }
+}
+
+/* ───────── 7. Hire ───────── */
+@media (max-width: 900px) { .lk { grid-template-columns: minmax(0, 1fr); } }
+
+/* ───────── 8. Motion off ───────── */
+
+/* ───────── 9. ROQIVA hero, contact, last fixes ───────── */
+.rqbd__hills { filter: saturate(0.45) brightness(0.85); }
+.rqov__hero { max-width: none; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); column-gap: clamp(24px, 4vw, 56px); }
+.rqov__hero > * { grid-column: 1; } .rqov__hero > .rqs { grid-column: 2; grid-row: 1 / span 7; align-self: center; }
+.rqs { background: var(--rq-fill-2, rgba(255, 255, 255, 0.05)); }
+.rqs__l { list-style: none; margin: 0; padding: 16px 18px 12px; display: grid; gap: 0; }
+.rqs__n { position: relative; display: grid; grid-template-columns: 30px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 9px 0; font-size: 13.5px; }
+.rqs__n + .rqs__n::before { content: ''; position: absolute; left: 14px; top: -10px; height: 20px; border-left: 2px dashed var(--line-2); }
+.rqs__n i { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; background: var(--surface-2); border: 1px solid var(--line-2); font: 600 12px var(--font-mono); font-style: normal; color: var(--text); }
+.rqs__n b { font: 600 14px var(--font-display); color: var(--text); letter-spacing: -0.02em; } .rqs__n span { font: 500 10px var(--font-mono); color: var(--text-3); text-align: right; }
+.rqs__n--gate i { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); box-shadow: 0 0 0 5px var(--accent-soft); }
+.rqs__n--gate b { color: var(--accent-text); }
+.rqs__n--o i { color: #f2966f; } .rqs__n--p i { color: #b4a6ff; } .rqs__n--g i { color: #5fd3a0; } .rqs__n--b i { color: #6cc0f5; } .rqs__n--v i { color: #e9b94f; }
+@media (max-width: 1000px) { .rqov__hero { grid-template-columns: minmax(0, 1fr); } .rqov__hero > .rqs { grid-column: 1; grid-row: auto; } }
+.rqbd__hills { filter: saturate(0.25) brightness(0.8); }
+.rqov__full, .rqov__full span, .rqov__full em { color: var(--accent-text); } .rqov__full b { color: var(--text); }
+
+/* pills inside always-dark windows keep their light-on-dark colours in either theme */
+
+/* ── Footer: smaller, name centred, no launch art ── */
+
+/* ── Journey hero: career altitude ── */
+
+/* ── Education timeline ── */
+
+/* ── Beyond: plain photos + motion graphics ── */
+
+.tel { grid-column: 1 / -1; position: relative; display: grid; grid-template-columns: minmax(0, 1.4fr) auto minmax(0, 1fr) auto; align-items: center; gap: 22px; padding: 18px 22px; border-radius: 22px; background: var(--surface); border: 1px solid var(--line-2); color: var(--text); }
+@media (max-width: 900px) { .tel { grid-template-columns: 1fr 1fr; } }
+
+/* ── System blueprints ── */
+
+/* ── Work: compact cards, the whole card opens the case ── */
+
+/* ── Hire: symptom router, who it's for, fit check ── */
+
+.wf { display: grid; gap: 18px; margin-top: 28px; }
+
+/* ── Round 3: crisper components ── */
+/* Leaks: a rail of five stages, one panel */
+
+/* Education: two cards */
+
+/* Telemetry and sound: just the essentials */
+.tel { grid-template-columns: minmax(0, 1.5fr) auto auto; }
+@media (max-width: 900px) { .tel { grid-template-columns: 1fr 1fr; } }
+
+/* Blueprints */
+
+/* ─────────────── from atelier.css ─────────────── */
+/* Reference-led portfolio system. New components own their styling; approved sections keep their structure. */
+[data-theme='light'] { --bg:#fcfcfd;--bg-2:#f3f5f8;--surface:#fff;--surface-2:#f8f9fb;--line:#e4e7ec;--line-2:#cdd3dc;--text:#171a21;--text-2:#535c6b;--text-3:#697284;--accent:#5575d9;--accent-fill:#3459bf;--accent-text:#3459bf;--accent-head:#3459bf;--accent-soft:#5575d90c;--accent-glow:#5575d925;--btn-bg:#20232b;--btn-ink:#fff;--nav-bg:#fcfcfdef;--node-bg:#fff;--stage-bg:#f3f5f8;--stage-line:#e4e7ec;--stage-glow:#5575d915;--ed-blue:#3459bf;--mesh-a:#e9edf8;--mesh-b:#e9eef5;--mesh-c:#e4edf6;--at-stage:#eef2f9;--at-glass:#ffffffeb;--at-shadow:0 2px 5px #182a4d05,0 16px 45px -20px #182a4d40; }
+[data-theme='dark'] { --bg:#101114;--bg-2:#15171c;--surface:#1a1c22;--surface-2:#20232b;--line:#2b2e37;--line-2:#3e4350;--text:#f0f1f5;--text-2:#b0b5c1;--text-3:#929aaa;--accent:#9baeff;--accent-fill:#3459bf;--accent-text:#a9baff;--accent-head:#a9baff;--accent-soft:#9baeff0d;--accent-glow:#9baeff20;--btn-bg:#f0f1f5;--btn-ink:#15171c;--nav-bg:#101114ec;--node-bg:#1a1c22;--stage-bg:#15171c;--stage-line:#2b2e37;--stage-glow:#9baeff12;--ed-blue:#a9baff;--mesh-a:#1a2030;--mesh-b:#1b2031;--mesh-c:#182329;--at-stage:#161b27;--at-glass:#1b1f29ed;--at-shadow:0 2px 4px #0002,0 22px 60px -24px #000b; }
+body::before,[data-theme='dark'] body::before{background:none;display:none}
+/* Deliberately quiet emphasis and consistent type, capped at 40px. */
+/* Keep quiet surfaces on the remaining journey blocks. */
+[class*='atelier-'] button:focus-visible,[class*='atelier-'] a:focus-visible,[class*='atelier-'] summary:focus-visible{outline:2px solid var(--accent-text);outline-offset:5px}
+/* Flatten page-level wrappers; use the illustration, not an oversized rounded section, as the focal point. */
+.pagemotion[data-route='/hire']>.sec--alt,.pagemotion[data-route='/journey']>.sec--alt{margin-inline:0;border-radius:0;background:var(--surface-2);border-top:1px solid var(--line)}
+.pagemotion[data-route^='/work/'] .sec--alt{margin-inline:0;border-radius:0;background:var(--surface-2)}
+.pagemotion[data-route^='/work/'] .cs__m{border-radius:0;background:transparent;border:0;border-top:1px solid var(--line);padding-top:18px}
+.pagemotion[data-route^='/work/'] .cs__m li{background:transparent;box-shadow:none;border-radius:0}
+
+/* Code-native illustrations: hairline geometry and a quiet ASCII signal. */
+
+/* ─────────────── from impact.css ─────────────── */
+/* Expressive, illustration-led portfolio. Preserve the established case carousel and ROQIVA experience. */.chapter-art .asc{display:block;position:relative;width:100%;height:100%;min-height:0;background:transparent;border:0;border-radius:0;box-shadow:none}.chapter-art{height:200px;margin-top:24px;background:#172631;border-radius:14px;overflow:hidden}.scene-note{font:400 9px var(--font-mono);color:var(--text-3);text-align:right;margin-top:12px}
+@media(max-width:760px){.chapter-art{height:170px}.scene-note{text-align:left;font-size:8px}}
+/* Keep the hero illustration compact; the full case carries the detailed flow. */
+
+/* ─────────────── from composition.css ─────────────── */
+/* Editorial composition: warm paper, substantial product scenes, precise geometry. */
+[data-theme='light']{--bg:#f8f7f4;--bg-2:#efeee9;--surface:#fff;--surface-2:#f0efeb;--line:#e1dfd9;--line-2:#d0cec7;--text:#242522;--text-2:#60635d;--text-3:#74766f;--nav-bg:#f8f7f4ef;--mesh-a:#eaece5;--mesh-b:#e8e6e0;--accent-text:#436555;--accent-head:#436555;--btn-bg:#252722}
+[data-theme='dark']{--bg:#141613;--bg-2:#1a1d19;--surface:#20231f;--surface-2:#252923;--line:#343a31;--line-2:#464d42;--text:#efefe9;--text-2:#bbc1b6;--text-3:#9fa797;--nav-bg:#141613ef;--mesh-a:#252e27;--mesh-b:#30352a;--accent-text:#b3c7ac;--accent-head:#b3c7ac}.chapter-art{background:#1b211b}
+/* Service offerings are illustrated with tangible workflow compositions. */.chapter-art{height:250px}
+@media(max-width:760px){.chapter-art{height:230px}}
+/* Keep workflow provenance visible inside the illustration frame. */
+
+/* ─────────────── from kit.css ─────────────── */
+/* ═══════════════════════════════════════════════════════════════════════════
+   kit.css: the component kit, loaded last. Everything below a page hero is built from these classes (components/kit.jsx).
+   Colour comes from tokens only. A tint is one soft hue per surface; a window is the product mock that sits on it.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* ───────── Section shell and header ───────── */
+.k-h { margin: 0; font: 500 clamp(26px, 3.1vw, 38px)/1.1 var(--font-display); letter-spacing: -0.035em; color: var(--text); text-wrap: balance; }
+.k-h em { font-style: normal; color: var(--text-3); }
+
+/* ───────── Bento ───────── */
+
+/* ───────── Window ───────── */
+
+/* ───────── Chips, dots, meter ───────── */
+
+/* ───────── Step tabs: a segmented control over one panel ───────── */
+
+/* ───────── List tabs: questions on the left, the window on the right ───────── */
+
+/* ───────── Roadmap (gantt) ───────── */
+
+/* ───────── Flow: signals in, a decision layer, outputs ───────── */
+
+/* ───────── Timeline (vertical) ───────── */
+
+/* ───────── Dot map ───────── */
+
+/* ═══════════════ Case tiles ═══════════════ */
+
+/* ═══════════════ How I think ═══════════════ */
+
+/* ═══════════════ Story so far ═══════════════ */
+
+/* ═══════════════ Consulting ═══════════════ */
+
+/* ═══════════════ Beyond doors ═══════════════ */
+
+/* ═══════════════ Filter ═══════════════ */
+
+/* ═══════════════ Case page ═══════════════ */
+
+/* ═══════════════ Journey ═══════════════ */
+
+/* ═══════════════ Hire ═══════════════ */
+
+/* Narrow screens: the label rule must never set the page width. */
+
+/* ─────────────── from v4.css ─────────────── */
+/* ═══════════════════════════════════════════════════════════════════════════
+   v4: the showcase layer and the kit's finish. Loaded after kit.css, before beyond.css.
+   Painted panels hold crisp product windows; headings pair the grotesk with an editorial serif;
+   surfaces are raised (hairline + soft shadow) rather than flat. One place for all of it.
+   ═══════════════════════════════════════════════════════════════════════════ */
+:root {
+  /* The second half of a heading: the same display face, lighter and quieter, not a second family. */
+  --font-serif: var(--font-display);
+  --v-r: 28px;
+  --v-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset, 0 1px 2px rgba(24, 22, 16, 0.06), 0 18px 40px -18px rgba(24, 22, 16, 0.18);
+  --v-win-shadow: 0 0 0 1px rgba(24, 22, 16, 0.06), 0 2px 4px rgba(24, 22, 16, 0.04), 0 40px 80px -24px rgba(30, 28, 60, 0.35);
+  --v-ease: cubic-bezier(0.22, 0.85, 0.3, 1);
+}
+[data-theme='dark'] { --v-shadow: 0 1px 0 rgba(255, 255, 255, 0.04) inset, 0 18px 40px -18px rgba(0, 0, 0, 0.6); --v-win-shadow: 0 0 0 1px rgba(255, 255, 255, 0.08), 0 40px 80px -24px rgba(0, 0, 0, 0.7); }
+
+/* ─────────────── Type: the serif half of every heading ─────────────── */
+.k-h, .h-2 { text-wrap: balance; }
+.k-h em {
+  font-family: var(--font-display); font-style: normal; font-weight: 400; letter-spacing: inherit; color: var(--text-3); font-size: 1em; line-height: inherit;
+}
+.k-h { font-size: clamp(30px, 3.4vw, 40px) !important; line-height: 1.06 !important; letter-spacing: -0.035em !important; }
+
+/* ─────────────── Surfaces: raised, not flat ─────────────── */
+
+/* ─────────────── Painted panel ─────────────── */
+
+/* ─────────────── Product window ─────────────── */
+.v-win__dots { display: inline-flex; gap: 6px; } .v-win__dots i { width: 9px; height: 9px; border-radius: 50%; background: #e4e1d9; }
+[data-theme='dark'] .v-win__dots i { background: #3a3e37; }
+
+/* ─────────────── Home hero ─────────────── */
+
+/* ─────────────── Work showcase ─────────────── */
+
+/* ─────────────── Case card (Work page) ─────────────── */
+
+/* ─────────────── Feature row ─────────────── */
+
+/* Kit pieces placed on paintings */
+
+/* ─────────────── Home: the door into Beyond ─────────────── */
+
+/* ─────────────── Closing panel ─────────────── */
+
+/* ─────────────── Home sections on paintings ─────────────── */
+
+/* Consulting on Home */
+
+/* Case hero and Work hero on paintings */
+
+/* ─────────────── Navigation on small screens: brand left, actions right, a direct way to get in touch ─────────────── */
+
+/* Grids whose single column must never grow past the screen */
+.rqor__who .label { white-space: normal; }
+.rqor__who > div { grid-template-columns: minmax(0, 1fr); }
+@media (max-width: 480px) { .rqor__who { grid-template-columns: minmax(0, 1fr) !important; } }
+
+/* ─────────────── How I work: ASCII instrument cards ─────────────── */
+
+/* ═══════════════ v5: career graph, workflow, brief thread, scroll story, wireframes, dock ═══════════════ */
+
+/* Career graph */
+.is-head h3 b { font-size: clamp(22px, 2.4vw, 28px); letter-spacing: -0.03em; }
+.is-learn h3 b { font-size: 15px; color: var(--text-2); }
+
+/* Home career layout */
+
+/* Brief thread */
+.bt { width: 100%; max-width: 540px; border-radius: 16px 16px 0 0; background: var(--surface); box-shadow: var(--v-win-shadow); overflow: hidden; color: var(--text); --surface: #fff; --surface-2: #f6f5f1; --line: #e8e6df; --text: #1d1e1b; --text-2: #5d6059; --text-3: #8a8c85; }
+[data-theme='dark'] .bt { --surface: #1c1e1b; --surface-2: #232622; --line: #30342e; --text: #eeeee8; --text-2: #b6bbb1; --text-3: #8d9387; }
+.bt__bar { display: flex; align-items: center; gap: 12px; height: 36px; padding: 0 14px; border-bottom: 1px solid var(--line); background: var(--surface-2); }
+.bt__bar b { flex: 1; text-align: center; font: 500 11.5px/1 var(--font-display); color: var(--text-2); }
+.bt__bar small { font: 500 9.5px/1 var(--font-mono); color: var(--text-3); }
+.bt__list { list-style: none; margin: 0; padding: 16px; display: grid; gap: 12px; }
+.bt__m { display: grid; grid-template-columns: 30px minmax(0, 1fr); gap: 10px; align-items: start; opacity: 0; transform: translateY(10px); transition: opacity 0.5s, transform 0.6s var(--v-ease); transition-delay: calc(var(--k) * 0.55s + 0.2s); }
+.bt.is-on .bt__m { opacity: 1; transform: none; }
+.bt__av { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--surface-2); border: 1px solid var(--line); font: 600 9.5px/1 var(--font-display); color: var(--text-2); }
+.bt__m--me .bt__av { background: var(--text); color: var(--surface); border-color: transparent; }
+.bt__m--card .bt__av { background: var(--accent); color: #fff; border-color: transparent; }
+.bt__b { min-width: 0; padding: 10px 12px; border-radius: 4px 12px 12px 12px; background: var(--surface-2); border: 1px solid var(--line); }
+.bt__m--card .bt__b { background: var(--surface); border-color: color-mix(in srgb, var(--accent) 40%, var(--line)); box-shadow: 0 10px 24px -14px color-mix(in srgb, var(--accent) 60%, transparent); }
+.bt__b b { display: block; font: 500 13px/1.3 var(--font-display); color: var(--text); }
+.bt__b p { margin: 3px 0 0; font: 400 12.5px/1.45 var(--font-body); color: var(--text-2); }
+.bt__chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+.bt__chips em { font-style: normal; padding: 4px 8px; border-radius: 6px; background: var(--surface); border: 1px solid var(--line); font: 500 11px/1 var(--font-display); color: var(--text); }
+.bt__b dl { display: grid; gap: 4px; margin: 8px 0 0; }
+.bt__b dl div { display: grid; grid-template-columns: 70px minmax(0, 1fr); gap: 8px; font-size: 11.5px; }
+.bt__b dt { font: 500 10px/1.5 var(--font-mono); letter-spacing: 0.05em; text-transform: uppercase; color: var(--text-3); }
+.bt__b dd { margin: 0; font: 400 12px/1.45 var(--font-body); color: var(--text); }
+.bt__typing { display: flex; gap: 4px; padding-left: 40px; opacity: 0; transition: opacity 0.3s 2.6s; }
+.bt.is-on .bt__typing { opacity: 1; }
+.bt__typing i { width: 6px; height: 6px; border-radius: 50%; background: var(--text-3); animation: bt-dot 1.2s ease-in-out infinite; }
+.bt__typing i:nth-child(2) { animation-delay: 0.15s; } .bt__typing i:nth-child(3) { animation-delay: 0.3s; }
+@keyframes bt-dot { 50% { transform: translateY(-4px); opacity: 0.4; } }
+
+/* Scroll story */
+.ss { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: clamp(20px, 5vw, 72px); }
+@media (max-width: 900px) { .ss { grid-template-columns: minmax(0, 1fr); } }
+
+/* Storyboard */
+
+/* Architecture wire */
+
+/* Dashboard wireframe */
+
+/* Case dock */
+.snav { display: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .bt__m { transition: none !important; }
+  .bt__m { opacity: 1 !important; transform: none !important; }
+  .bt__typing i { animation: none !important; }
+}
+
+/* Journey: now first, founder emphasis */
+
+/* Transformation card */
+.tf { width: 100%; padding: 18px; border-radius: 18px; background: #0d0e10; color: #ebe7e2; box-shadow: var(--v-win-shadow); border: 1px solid #26272d; }
+.tf dl { margin: 12px 0 0; display: grid; }
+.tf dl div { display: flex; justify-content: space-between; gap: 10px; padding: 7px 0; border-bottom: 1px dashed #2a2b31; font: 400 12px/1.3 var(--font-body); }
+.tf dl div:last-child { border-bottom: 0; }
+.tf dt { font: 500 9px/1.6 var(--font-mono); letter-spacing: 0.07em; text-transform: uppercase; color: #5e6068; }
+.tf dd { margin: 0; text-align: right; }
+.tf dd.is-hot, .tf dd.is-none { padding: 3px 8px; border-radius: 999px; font: 500 9px/1.3 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; }
+.tf dd.is-hot { background: rgba(117, 96, 255, 0.14); color: #8f7dff; border: 1px solid rgba(117, 96, 255, 0.3); }
+.tf dd.is-none { border: 1px solid #3a3c44; color: #8a8d99; }
+@media (prefers-reduced-motion: reduce) { .tf * { animation: none !important; } }
+
+/* Hire: layer art */
+@media (max-width: 900px) {
+  .mmenu { inset: 0 !important; padding-top: calc(var(--nav-h, 64px) + 30px); }
+}
+@media (max-width: 900px) { .mmenu { z-index: 1; } }
+
+/* ASCII palette: ink, accent, dim, warn */
+
+/* ─────────────── Consulting system map (same scene engine as the ROQIVA site) ─────────────── */
+
+/* Nav name: ASCII decode */
+.an { display: inline-flex; white-space: pre; }
+/* The footer no longer carries the name art */
+
+/* ─────────────── Home hero: one fold carries the claim, the proof and the system ─────────────── */
+/* Tighter rhythm: more of each section fits in one screen */
+
+/* ─────────────── Talk: two ways in, both in the first screen ─────────────── */
+.ct__h .em { color: var(--text-3); }
+.ct__grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr); gap: 16px; align-items: start; }
+.qb, .ct__book { display: grid; gap: 14px; padding: clamp(18px, 2.4vw, 28px); border-radius: var(--v-r); background: var(--surface); border: 1px solid color-mix(in srgb, var(--text) 8%, transparent); box-shadow: var(--v-shadow); min-width: 0; }
+.qb { border-color: color-mix(in srgb, var(--accent) 35%, var(--line)); box-shadow: var(--v-shadow), 0 30px 60px -36px color-mix(in srgb, var(--accent) 70%, transparent); }
+.qb__k { display: flex; justify-content: space-between; align-items: baseline; margin: 0; font: 500 11px/1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); }
+.qb__k span { color: var(--text); font: 500 17px/1.2 var(--font-display); letter-spacing: -0.01em; text-transform: none; }
+.qb__intent { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; border: 0; }
+.qb__chip { padding: 8px 12px; border-radius: 999px; border: 1px solid var(--line-2); background: var(--bg); color: var(--text-2); font: 500 13px/1.1 var(--font-display); cursor: pointer; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+.qb__chip:hover { border-color: var(--text-3); color: var(--text); }
+.qb__chip[aria-pressed='true'] { background: var(--btn-bg); color: var(--btn-ink); border-color: transparent; }
+.qb__row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+.qb__f { display: grid; gap: 6px; min-width: 0; }
+.qb__f > span { font: 500 12.5px/1 var(--font-display); color: var(--text-2); }
+.qb__f small { color: var(--text-3); font-weight: 400; }
+.qb__f input, .qb__f textarea { width: 100%; min-width: 0; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line-2); background: var(--bg); color: var(--text); font: 400 15px/1.4 var(--font-body); resize: vertical; transition: border-color 0.2s, box-shadow 0.2s; }
+.qb__f input:focus, .qb__f textarea:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent); }
+.qb__f [aria-invalid='true'] { border-color: #d0453a; }
+.qb__err, .qb__error { font: 400 12.5px/1.3 var(--font-body); font-style: normal; color: #c2392e; margin: 0; }
+.qb__send { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+.qb__btn { min-height: 48px; padding-inline: 24px !important; }
+.qb__fine { display: inline-flex; align-items: center; gap: 6px; margin: 0; font: 400 12.5px/1.3 var(--font-body); color: var(--text-3); }
+.qb__alt { margin: 0; font: 400 12.5px/1.4 var(--font-body); color: var(--text-3); }
+.qb__alt a, .qb__alt button { background: none; border: 0; padding: 0; font: inherit; color: var(--text-2); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
+.qb--done { justify-items: start; }
+.qb__ok { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: rgba(26, 118, 81, 0.12); color: #1a7651; }
+.qb__h { margin: 0; font: 500 22px/1.2 var(--font-display); color: var(--text); } .qb__p { margin: 0; color: var(--text-2); }
+.qb__acts { display: flex; flex-wrap: wrap; gap: 8px; }
+.ct__book .bwin { margin: 0; max-width: none; width: 100%; }
+.ct__direct { list-style: none; margin: 0; padding: 12px 0 0; border-top: 1px solid var(--line); display: grid; gap: 8px; }
+.ct__direct li { display: flex; justify-content: space-between; gap: 12px; font: 400 14px/1.3 var(--font-body); }
+.ct__direct span { font: 500 10.5px/1.6 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); }
+.ct__direct a { color: var(--text); overflow: hidden; text-overflow: ellipsis; }
+.ct .ctrust { margin-top: 16px; }
+@media (max-width: 960px) { .ct__grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 520px) { .qb__row { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 380px) { .roq .btn { white-space: normal; text-align: left; } }
+
+/* ─────────────── Component pass (references: round arrow badges, frosted chips over photographs, lifted cards) ─────────────── */
+/* Buttons: the arrow sits in its own round badge at the right end of the pill. */
+.btn:has(> svg:last-child) { gap: 12px; padding-right: 7px; }
+.btn > svg:last-child { box-sizing: content-box; flex: none; width: 15px; height: 15px; padding: 7px; border-radius: 50%; background: var(--btn-ink); color: var(--btn-bg); transition: transform 0.4s var(--ease-spring); }
+.btn--ghost > svg:last-child { background: var(--text); color: var(--bg); }
+.btn--sm:has(> svg:last-child) { padding-right: 5px; }
+.btn--sm > svg:last-child { padding: 5px; }
+.btn:hover > svg:last-child { transform: translateX(3px) rotate(-45deg); }
+.btn:active { transform: scale(0.97); }
+/* Text links: a small round arrow that turns on hover. */
+
+/* Home: the Beyond band as photo cards, a frosted label on each and a badge that says it opens. */

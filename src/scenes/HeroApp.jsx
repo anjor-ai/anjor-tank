@@ -4,8 +4,10 @@ import { Icon } from '../components/icons'
 import { MQ } from '../lib/motion'
 
 /* The hero product screen: the ROQIVA workspace as one clean app window. The sidebar works: every item opens its view.
-   While nobody is using it, a cursor walks the sidebar and opens each view in turn; any real pointer or keyboard use takes over.
-   Every value comes from the same illustrative work item the rest of the site uses. */
+   While nobody is using it, a cursor walks the sidebar and opens each view in turn. A real pointer or key press pauses the
+   walk; it picks up again from the open view after a few quiet seconds. Every value comes from the work item the rest
+   of the site uses. */
+const IDLE = 6000
 
 const ranked = [...rankedFindings].map((f) => ({ ...f, s: score(f) })).sort((a, b) => b.s - a.s)
 const gaps = signalLog.lines.filter((l) => l.state === 'gap').length
@@ -74,25 +76,29 @@ const VIEW = { item: ItemView, signals: SignalsView, findings: FindingsView, bra
 export function HeroApp({ brand = 'ROQIVA' }) {
   const [view, setView] = useState('item')
   const [cur, setCur] = useState(null)       // the demo cursor: { x, y, click }
-  const human = useRef(false)
+  const human = useRef(0)
   const root = useRef(null)
   const btns = useRef({})
 
-  const take = useCallback(() => { human.current = true; setCur(null) }, [])
+  const viewRef = useRef(view)
+  viewRef.current = view
+  // A person used the window: hide the demo cursor and hold the walk until they have been idle for IDLE ms.
+  const take = useCallback(() => { human.current = Date.now(); setCur(null) }, [])
 
-  // The walk: move to the next item, click, open it. Stops for good once a person uses the window. Off under reduced motion.
+  // The walk: move to the next item, click, open it. Pauses while a person is using the window. Off under reduced motion.
   useEffect(() => {
     if (typeof window === 'undefined' || !window.matchMedia(MQ.motion).matches) return
-    let i = 0, t1, t2, t3
+    let t1, t2, t3
+    const busy = () => human.current && Date.now() - human.current < IDLE
     const step = () => {
-      if (human.current) return
-      i = (i + 1) % ORDER.length
+      if (busy()) { t1 = setTimeout(step, 1000); return }
+      const i = (ORDER.indexOf(viewRef.current) + 1) % ORDER.length
       const b = btns.current[ORDER[i]], r = root.current
-      if (!b || !r) return
+      if (!b || !r) { t1 = setTimeout(step, 1000); return }
       const rb = b.getBoundingClientRect(), rr = r.getBoundingClientRect()
       const k = (r.offsetWidth && rr.width / r.offsetWidth) || 1 // the window may be scaled by a parent
       setCur({ x: (rb.left - rr.left + rb.width * 0.55) / k, y: (rb.top - rr.top + rb.height * 0.6) / k, click: false })
-      t2 = setTimeout(() => { if (human.current) return; setCur((c) => c && { ...c, click: true }); setView(ORDER[i]) }, 850)
+      t2 = setTimeout(() => { if (busy()) return; setCur((c) => c && { ...c, click: true }); setView(ORDER[i]) }, 850)
       t3 = setTimeout(() => { setCur((c) => c && { ...c, click: false }) }, 1300)
       t1 = setTimeout(step, 4200)
     }
@@ -102,10 +108,10 @@ export function HeroApp({ brand = 'ROQIVA' }) {
 
   const V = VIEW[view]
   return (
-    <div className="ha" ref={root} onPointerDown={take} onKeyDown={take} aria-label={`The ${brand} workspace, with sample data`}>
+    <div className="ha" ref={root} onPointerDown={take} onKeyDown={take} aria-label={`The ${brand} workspace`}>
       <aside className="ha__side">
         <div className="ha__tb" aria-hidden="true"><span className="ha__dots"><i /><i /><i /></span><Icon name="grid" size={14} /><Icon name="back" size={14} /></div>
-        <button type="button" className="ha__new" onClick={() => setView('item')}><Icon name="arrow" size={13} />Open sample work item</button>
+        <button type="button" className="ha__new" onClick={() => setView('item')}><Icon name="arrow" size={13} />New work item</button>
         <nav className="ha__nav" aria-label="Workspace">
           {NAV.map((n) => (
             <button key={n.id} type="button" ref={(el) => { btns.current[n.id] = el }} className="ha__nb" aria-pressed={view === n.id} onClick={() => setView(n.id)}>

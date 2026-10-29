@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { ALT, GAMES, LOVES, PHOTOS, SHELF, WATCHLIST } from '../content'
 import { Icon } from './icons'
 import { AsciiCanvas } from './ascii'
 import { SCENES, photosOf } from './Story'
 import { Book } from '../scenes/BeyondFilm'
+import { BPM, PATTERN, createTechno } from '../lib/techno'
+import { MQ } from '../lib/motion'
 
 /* ═══════════════════════════════════════════════════════════════════════════
    Beyond work, the chapters. One card system for all of them, so the page reads as one piece of work:
@@ -63,7 +65,7 @@ export function Intro() {
   )
 }
 
-/* ─────────── 01 Wander: a trail card you page through, with the route it draws ─────────── */
+/* ─────────── 01 Wander: one frame at a time, full bleed, the route drawn over it and a stepper under it ─────────── */
 const PROFILE = (() => {
   const pts = []
   for (let i = 0; i <= 120; i++) {
@@ -79,54 +81,77 @@ export function Wander() {
   const s = scene('Wander')
   const [i, setI] = useState(0)
   const p = L[i]
+  const go = (d) => setI((n) => (n + d + L.length) % L.length)
   const [dx, dy] = PROFILE.at(0.05 + i * (0.9 / (L.length - 1)))
   return (
     <section id="scene-wander" className="by-ch by-wander" aria-labelledby="bx-h-wander">
       <div className="container">
         <Head id="bx-h-wander" k="01" label={`Chapter · ${L.length} frames`} g={s.g} lede={s.lede} sub={s.sub} />
-        <div className="by-wander__grid">
-          <article className="by-trail" data-by-card>
-            <div className="by-trail__media">
-              {L.map((x, k) => <img key={x.src} className={k === i ? 'is-on' : ''} src={img(x.src)} width={x.w} height="998" alt={k === i ? ALT[x.src] : ''} aria-hidden={k !== i} loading="lazy" decoding="async" />)}
-              <span className="by-chip by-chip--float">Frame {pad(i + 1)} of {pad(L.length)}</span>
-              <div className="by-trail__bar">
-                <p aria-live="polite"><b>{p.cap}</b><span>{s.sub}</span></p>
-                <button type="button" className="by-glass" onClick={() => setI((n) => (n + 1) % L.length)}>Next frame <i><Icon name="arrow" size={15} /></i></button>
-              </div>
+        <figure className="by-wd" data-by-card>
+          {L.map((x, k) => <img key={x.src} className={k === i ? 'is-on' : ''} src={img(x.src)} width={x.w} height="998" alt={k === i ? ALT[x.src] : ''} aria-hidden={k !== i} loading="lazy" decoding="async" />)}
+          <span className="by-wd__shade" aria-hidden="true" />
+          <svg className="by-wd__route" viewBox="0 0 300 110" aria-hidden="true">
+            <path className="by-route__line" d={PROFILE.d} />
+            {L.map((_, k) => { const [x, y] = PROFILE.at(0.05 + k * (0.9 / (L.length - 1))); return <circle key={k} className={`by-route__pin${k <= i ? ' is-past' : ''}`} cx={x} cy={y} r="3" /> })}
+            <g className="by-route__me" style={{ transform: `translate(${dx}px, ${dy}px)` }}><circle r="8" /><circle r="4" /></g>
+          </svg>
+          <figcaption className="by-wd__cap" aria-live="polite">
+            <span className="by-chip by-chip--glass">Frame {pad(i + 1)} of {pad(L.length)}</span>
+            <b>{p.cap}</b>
+          </figcaption>
+          <div className="by-wd__bar">
+            <ol className="by-wd__steps" aria-label="Frames">
+              {L.map((x, k) => <li key={x.src}><button type="button" className={k === i ? 'is-on' : ''} aria-pressed={k === i} aria-label={x.cap} onClick={() => setI(k)}>{pad(k + 1)}</button></li>)}
+            </ol>
+            <div className="by-wd__nav">
+              <button type="button" className="by-round" onClick={() => go(-1)} aria-label="Previous frame"><Icon name="prev" size={16} /></button>
+              <button type="button" className="by-round by-round--light" onClick={() => go(1)} aria-label="Next frame"><Icon name="arrow" size={16} /></button>
             </div>
-            <div className="by-trail__info">
-              <div>
-                <h3>{s.g}</h3>
-                <p>{s.lede}</p>
-                <Dots items={[`${L.length} frames`, 'My own photographs']} />
-              </div>
-              <figure className="by-route" aria-label="The route, drawn as a line with a marker at the current frame">
-                <svg viewBox="0 0 300 96" aria-hidden="true">
-                  <path className="by-route__line" d={PROFILE.d} />
-                  {L.map((_, k) => { const [x, y] = PROFILE.at(0.05 + k * (0.9 / (L.length - 1))); return <circle key={k} className={`by-route__pin${k <= i ? ' is-past' : ''}`} cx={x} cy={y} r="3.2" /> })}
-                  <g className="by-route__me" style={{ transform: `translate(${dx}px, ${dy}px)` }}><circle r="9" /><circle r="4.5" /></g>
-                </svg>
-              </figure>
-            </div>
-          </article>
-          <ul className="by-thumbs" aria-label="Wander frames">
-            {L.map((x, k) => (
-              <li key={x.src} data-by-card>
-                <button type="button" className={k === i ? 'is-on' : ''} aria-pressed={k === i} onClick={() => setI(k)}>
-                  <img src={img(x.src)} width={x.w} height="998" alt="" loading="lazy" decoding="async" />
-                  <span>{x.cap}</span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
+          </div>
+        </figure>
       </div>
     </section>
   )
 }
 
-/* ─────────── 02 Speed: a big point-of-view card, a circuit tile, and a pair of travel cards ─────────── */
+/* ─────────── 02 Speed: a start gantry you can race, the point of view, the circuit and the sim ─────────── */
 export const TRACK = 'M 70 150 C 40 90, 90 40, 160 50 S 240 110, 300 80 S 380 20, 430 60 S 450 150, 380 170 S 250 150, 200 185 S 90 210, 70 150 Z'
+
+/** Lights out: five lights come on a second apart, then go out after a random hold. React as fast as you can. */
+function LightsOut() {
+  const [on, setOn] = useState(0)          // lights lit, 0–5
+  const [state, setState] = useState('idle') // idle | count | hold | go | done | jump
+  const [ms, setMs] = useState(0)
+  const [best, setBest] = useState(0)
+  const t = useRef([])
+  const t0 = useRef(0)
+  const clear = () => { t.current.forEach(clearTimeout); t.current = [] }
+  useEffect(() => clear, [])
+  const start = () => {
+    clear(); setOn(0); setMs(0); setState('count')
+    for (let k = 1; k <= 5; k++) t.current.push(setTimeout(() => setOn(k), k * 1000))
+    const hold = 5000 + 200 + Math.random() * 2600
+    t.current.push(setTimeout(() => setState('hold'), 5000))
+    t.current.push(setTimeout(() => { setOn(0); setState('go'); t0.current = performance.now() }, hold))
+  }
+  const press = () => {
+    if (state === 'idle' || state === 'done' || state === 'jump') return start()
+    if (state === 'count' || state === 'hold') { clear(); setOn(0); setState('jump'); return undefined }
+    const r = Math.round(performance.now() - t0.current)
+    setMs(r); setBest((b) => (b ? Math.min(b, r) : r)); setState('done')
+    return undefined
+  }
+  const say = { idle: 'Press to start. React when the lights go out.', count: 'Wait for it.', hold: 'Wait for it.', go: 'Go.', done: `${(ms / 1000).toFixed(3)} s`, jump: 'Jump start. Press to try again.' }[state]
+  return (
+    <div className={`by-lo by-lo--${state}`} data-by-card>
+      <div className="by-lo__top"><span className="by-chip">Lights out</span>{best > 0 && <span className="by-lo__best">Best this visit <b>{(best / 1000).toFixed(3)} s</b></span>}</div>
+      <button type="button" className="by-lo__gantry" onClick={press} aria-label={state === 'go' ? 'React now' : 'Start the lights'}>
+        {Array.from({ length: 5 }, (_, k) => <span key={k} className={k < on ? 'is-on' : ''}><i /><i /></span>)}
+      </button>
+      <p className="by-lo__say" aria-live="polite">{say}</p>
+    </div>
+  )
+}
 
 export function Speed() {
   const L = photosOf('Speed')
@@ -135,50 +160,109 @@ export function Speed() {
   return (
     <section id="scene-speed" className="by-ch by-speed" aria-labelledby="bx-h-speed">
       <div className="container">
-        <Head id="bx-h-speed" k="02" label={`Chapter · ${L.length} frames`} g={s.g} lede={s.lede} sub={s.sub} />
+        <Head id="bx-h-speed" k="02" label="Chapter · Karts, a sim and Formula 1" g={s.g} lede={s.lede} sub="Karts, a racing sim, the apex and Formula 1." />
         <div className="by-speed__grid">
           <Shot p={by['kart-pov']} over className="by-speed__pov" chip="Speed" />
+          <LightsOut />
+          <Shot p={by['f1-sim']} over className="by-speed__sim" />
           <div className="by-circuit" data-by-card>
-            <div className="by-circuit__top"><span className="by-chip">Circuit</span><span className="by-ill"><i />Illustration</span></div>
+            <div className="by-circuit__top"><span className="by-chip">Circuit</span><span className="by-sec"><i />S1<i />S2<i />S3</span></div>
             <svg viewBox="0 0 500 230" aria-hidden="true">
               <path d={TRACK} className="by-circuit__road" />
               <path id="by-trk" d={TRACK} className="by-circuit__line" />
               <circle className="by-circuit__car" r="8" cx="70" cy="150" />
             </svg>
-            <p>{s.sub}</p>
           </div>
           <Shot p={by['kart-night']} over className="by-speed__night" />
-          <article className="by-pair by-pair--text" data-by-card>
-            <div className="by-pair__copy"><h3>{by['kart-grid'].cap}</h3><Dots items={['Speed', `Frame ${pad(L.indexOf(by['kart-grid']) + 1)} of ${pad(L.length)}`]} /></div>
-            <span className="by-pair__img"><img src={img('kart-grid')} width={by['kart-grid'].w} height="998" alt={ALT['kart-grid']} loading="lazy" decoding="async" data-by-par /></span>
-          </article>
-          <article className="by-pair by-pair--img" data-by-card>
-            <span className="by-pair__img"><img src={img('f1-sim')} width={by['f1-sim'].w} height="998" alt={ALT['f1-sim']} loading="lazy" decoding="async" data-by-par /></span>
-            <div className="by-pair__copy"><h3>{by['f1-sim'].cap}</h3><Dots items={['Speed', `Frame ${pad(L.indexOf(by['f1-sim']) + 1)} of ${pad(L.length)}`]} /></div>
-          </article>
         </div>
       </div>
     </section>
   )
 }
 
-/* ─────────── 03 Live: a night field, one wide picture that breathes, three under it ─────────── */
-export function Live() {
+/* ─────────── 03 Music: a player (a techno loop made in the browser, and Arctic Monkeys), and the live rooms ─────────── */
+const AM = 'https://open.spotify.com/artist/7Ln80lUS6He07XvHI8qqHH'
+function Player() {
+  const [st, setSt] = useState('techno')
+  const [playing, setPlaying] = useState(false)
+  const [beat, setBeat] = useState(-1)
+  const synth = useRef(null)
+  const cv = useRef(null)
+  useEffect(() => () => { synth.current?.close(); synth.current = null }, [])
+  // The visual: the loop's spectrum while it plays; a slow idle wave otherwise. Drawn only while on screen.
+  useEffect(() => {
+    const c = cv.current
+    if (!c) return undefined
+    const x = c.getContext('2d')
+    let raf = 0, seen = false
+    const data = new Uint8Array(64)
+    const still = !window.matchMedia(MQ.motion).matches
+    const draw = (now) => {
+      const w = (c.width = c.clientWidth * 2), h = (c.height = c.clientHeight * 2)
+      x.clearRect(0, 0, w, h)
+      const n = 48, gap = w / n
+      const a = synth.current?.playing && synth.current.analyser
+      if (a) a.getByteFrequencyData(data)
+      for (let k = 0; k < n; k++) {
+        const v = a ? data[Math.min(63, Math.floor(k * 1.2))] / 255 : 0.18 + 0.12 * Math.sin(now / 700 + k * 0.35) + 0.06 * Math.sin(now / 300 + k)
+        const bh = Math.max(4, v * h * 0.9)
+        x.fillStyle = st === 'techno' ? `hsla(${190 + k * 1.6}, 95%, ${55 + v * 20}%, ${0.55 + v * 0.45})` : `hsla(${28 + k * 0.4}, 90%, ${58 + v * 15}%, ${0.5 + v * 0.5})`
+        x.fillRect(k * gap + gap * 0.2, (h - bh) / 2, gap * 0.6, bh)
+      }
+      if (seen && !still) raf = requestAnimationFrame(draw)
+    }
+    const io = new IntersectionObserver(([e]) => { seen = e.isIntersecting; cancelAnimationFrame(raf); if (seen) raf = requestAnimationFrame(draw) })
+    io.observe(c)
+    draw(0)
+    return () => { cancelAnimationFrame(raf); io.disconnect() }
+  }, [st])
+  const toggle = async () => {
+    if (!synth.current) synth.current = createTechno({ onStep: setBeat })
+    if (!synth.current) return
+    if (synth.current.playing) { synth.current.stop(); setPlaying(false); setBeat(-1) } else { await synth.current.start(); setPlaying(true) }
+  }
+  const pick = (k) => { if (k !== 'techno' && synth.current?.playing) { synth.current.stop(); setPlaying(false); setBeat(-1) } setSt(k) }
+  return (
+    <div className={`by-pl by-pl--${st}`} data-by-card>
+      <div className="by-pl__top">
+        <span className="by-chip by-chip--glass"><i className={`by-pl__live${playing ? ' is-on' : ''}`} />{playing ? 'Playing' : 'On repeat'}</span>
+        <div className="by-pl__seg" role="group" aria-label="Station">
+          <button type="button" aria-pressed={st === 'techno'} onClick={() => pick('techno')}>Techno</button>
+          <button type="button" aria-pressed={st === 'am'} onClick={() => pick('am')}>Arctic Monkeys</button>
+        </div>
+      </div>
+      <canvas ref={cv} className="by-pl__cv" aria-hidden="true" />
+      {st === 'techno' ? (
+        <div className="by-pl__body">
+          <div className="by-pl__t"><b>Techno</b><span>{BPM} BPM · four to the floor</span></div>
+          <div className="by-pl__seq" aria-hidden="true">
+            {Object.entries(PATTERN).map(([name, row]) => (
+              <p key={name}><small>{name}</small>{row.map((v, k) => <i key={k} className={`${v ? 'is-hit' : ''}${k === beat ? ' is-now' : ''}`} />)}</p>
+            ))}
+          </div>
+          <button type="button" className="by-glass by-glass--light by-pl__go" onClick={toggle}>{playing ? 'Stop the beat' : 'Play a beat'}<i><Icon name={playing ? 'pause' : 'play'} size={14} /></i></button>
+        </div>
+      ) : (
+        <div className="by-pl__body">
+          <div className="by-pl__t"><b>Arctic Monkeys</b><span>Indie rock · Sheffield</span></div>
+          <a className="by-glass by-glass--light by-pl__go" href={AM} target="_blank" rel="noopener noreferrer">Open on Spotify<i><Icon name="ne" size={14} /></i></a>
+        </div>
+      )}
+    </div>
+  )
+}
+
+export function Music() {
   const L = photosOf('Live')
   const s = scene('Live')
-  const wide = L.find((p) => p.src === 'laser') || L[0]
-  const rest = L.filter((p) => p !== wide)
   return (
-    <section id="scene-live" className="by-ch by-live" aria-labelledby="bx-h-live">
+    <section id="scene-music" className="by-ch by-live" aria-labelledby="bx-h-music">
       <div className="container">
-        <Head id="bx-h-live" k="03" label={`Chapter · ${L.length} frames`} g={s.g} lede={s.lede} sub={s.sub} />
+        <Head id="bx-h-music" k="03" label={`Chapter · ${L.length} frames`} g="Music" lede={s.lede} sub={`Arctic Monkeys, techno, and ${s.sub.charAt(0).toLowerCase()}${s.sub.slice(1)}`} />
         <div className="by-live__board">
-          <figure className="by-live__wide" data-by-card>
-            <span className="by-live__frame"><img src={img(wide.src)} width={wide.w} height="998" alt={ALT[wide.src]} loading="lazy" decoding="async" data-by-zoom /></span>
-            <figcaption><span className="by-chip by-chip--glass">Live</span><b>{wide.cap}</b></figcaption>
-          </figure>
+          <Player />
           <div className="by-live__row">
-            {rest.map((p) => <Shot key={p.src} p={p} over className="by-live__shot" />)}
+            {L.slice(0, 4).map((p) => <Shot key={p.src} p={p} over className="by-live__shot" />)}
           </div>
         </div>
       </div>

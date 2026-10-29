@@ -1,13 +1,11 @@
 // The illustrative work item that every output window on the site draws from, so the whole site tells one story.
-// Nothing here is a client result, a measurement or a metric. Every window that uses it carries the "Illustrative walkthrough" label.
+// Nothing here is a client result, a measurement or a metric.
 // The item follows finding F-001 in `rankedFindings` (system.js): failed payments get one retry.
 
 export const run = {
   id: 'WI-014',
   title: 'Failed payments get one retry',
   finding: 'F-001',
-  badge: 'Illustrative walkthrough',
-  note: 'Illustrative. Sample data shaped like real output. Not a client result, and no figure on this page is a measurement.',
 }
 
 // Detect: what the Detectors log. `state` is computed by code; gap = no decision reads the signal.
@@ -174,7 +172,7 @@ export const monitor = {
     { id: 'tune', t: 'Tune', d: 'It helps, but a threshold or a rule needs adjusting.' },
     { id: 'rollback', t: 'Roll back', d: 'It hurt a guardrail or changed something unplanned.' },
   ],
-  axis: 'Shape only. No values: an illustration of baseline against result, not a measurement.',
+  axis: 'Shape only, not a measurement.',
   foot: 'The verdict and its reason go back to the Brain. An inconclusive result is reported as inconclusive.',
 }
 

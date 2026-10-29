@@ -251,12 +251,12 @@ export const findingCard = {
     { id: 'observed', k: 'Observed', q: 'What actually happens', ex: 'Gateway failure codes are captured on every attempt, but the CRM retry rule treats hard, transient and bank-side failures the same.' },
     { id: 'sources', k: 'Sources', q: 'Where the evidence comes from', ex: 'Payments export. CRM retry-rule configuration.' },
     { id: 'label', k: 'Evidence label', q: 'How proven it is', ex: 'Supported' },
-    { id: 'value', k: 'Value range', q: 'What fixing it could be worth', ex: 'Not sized in this illustration. A real card gives a range from the brand’s own numbers, labelled by proof level. Never a single promise.' },
+    { id: 'value', k: 'Value range', q: 'What fixing it could be worth', ex: 'Not sized here. A real card gives a range from the brand’s own numbers, labelled by proof level. Never a single promise.' },
     { id: 'effort', k: 'Effort and owner', q: 'What it costs and who must act', ex: 'An engineering estimate, and the team that owns the retry rule.' },
     { id: 'unseen', k: 'Not seen', q: 'What the Analyst could not inspect', ex: 'Card-network decline reasons were not in the export. Unseen is never reported as healthy.' },
   ],
   lanes: 'Two lanes: incidents (a live break) and opportunities (upside). Priority = value × confidence ÷ effort.',
-  note: 'This example is illustrative. It is not a finding for any brand.',
+  note: 'This example is not a finding for any brand.',
 }
 
 // Illustrative ranked findings. Value, confidence and effort are on a 1–3 scale. Score = value × confidence ÷ effort, computed in code.

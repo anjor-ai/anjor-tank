@@ -72,7 +72,7 @@ export const roqiva = {
     crumb: 'Workspace',
     eyebrow: 'The workspace',
     title: 'Explore one workspace concept for *signals, decisions and approvals.*',
-    lead: 'This clickable product concept uses sample data. See how a detected gap could become a documented finding, an approved action and a decision history. It is not a live client deployment.',
+    lead: 'This clickable product concept shows how a detected gap could become a documented finding, an approved action and a decision history. It is not a live client deployment.',
   },
   parts: {
     crumb: 'Parts',

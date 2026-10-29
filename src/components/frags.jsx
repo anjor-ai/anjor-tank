@@ -65,7 +65,7 @@ export function ArchMap({ parts }) {
   const half = Math.ceil(parts.length / 2)
   const rows = [parts.slice(0, half), parts.slice(half)]
   return (
-    <Win title="System map" tag="Illustration" dark className="u-arch" >
+    <Win title="System map" dark className="u-arch">
       <div role="img" aria-label={`System diagram: ${parts.map((p) => p.t).join(' → ')}`}>
         {rows.map((row, r) => (
           <div key={r} className="u-arch__row" data-seq>

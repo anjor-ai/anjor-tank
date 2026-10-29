@@ -1,6 +1,0 @@
-/* Editorial composition: warm paper, substantial product scenes, precise geometry. */
-[data-theme='light']{--bg:#f8f7f4;--bg-2:#efeee9;--surface:#fff;--surface-2:#f0efeb;--line:#e1dfd9;--line-2:#d0cec7;--text:#242522;--text-2:#60635d;--text-3:#74766f;--nav-bg:#f8f7f4ef;--mesh-a:#eaece5;--mesh-b:#e8e6e0;--accent-text:#436555;--accent-head:#436555;--btn-bg:#252722}
-[data-theme='dark']{--bg:#141613;--bg-2:#1a1d19;--surface:#20231f;--surface-2:#252923;--line:#343a31;--line-2:#464d42;--text:#efefe9;--text-2:#bbc1b6;--text-3:#9fa797;--nav-bg:#141613ef;--mesh-a:#252e27;--mesh-b:#30352a;--accent-text:#b3c7ac;--accent-head:#b3c7ac}.chapter-art{background:#1b211b}
-/* Service offerings are illustrated with tangible workflow compositions. */.chapter-art{height:250px}
-@media(max-width:760px){.chapter-art{height:230px}}
-/* Keep workflow provenance visible inside the illustration frame. */

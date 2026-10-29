@@ -1,25 +1,26 @@
-import { Fragment, useLayoutEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { gsap } from '../lib/motion'
 
 /* ═══════════════════════════════════════════════════════════════════════════
-   The Beyond-work opener: a short film, about ten seconds, shot like an expedition reel.
-   Letterbox bars and film grain, a field-log HUD (timecode, chapter counter, coordinates), and six chapters cut
-   with whip-pans and light leaks. Each chapter is a full-bleed photograph pushing in, its word driving across the
-   frame and a material of its own: a route line over the mountain, speed streaks, strobes over the crowd, a book
-   turning, a screentone panel, save slots flickering. It ends on a montage that assembles OFF THE CLOCK, then the
-   bars close and hand over to the page. Click, Escape or "Skip" ends it at once. Never mounts under reduced motion.
+   The Beyond-work opener: a short film, about ten seconds, with no captions.
+   It starts on a Formula 1 grid: five red lights come on one by one, then lights out. Six chapters follow, cut with
+   whip-pans and light leaks under letterbox bars and film grain. Each is a full-bleed photograph pushing in, its word
+   driving across the frame and a material of its own: a route line over the mountain, speed streaks, strobes on the
+   beat, a book turning, a screentone panel, save slots flickering. It ends on a montage that assembles OFF THE CLOCK,
+   then the bars close and hand over to the page. Click, Escape or "Skip" ends it at once. Never mounts under reduced
+   motion.
    All photographs are Anjor's own; the game tiles are original abstract art.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 const A = (s) => `/img/adventure/${s}.webp`
 export const CUTS = [
-  { w: 'WANDER', cap: 'Finding the longer route.', img: A('rainier'), fx: 'route' },
-  { w: 'SPEED', cap: 'Chasing a better lap.', img: A('kart-pov'), fx: 'speed' },
-  { w: 'LIVE', cap: 'Listening to something loud.', img: A('laser'), fx: 'live' },
-  { w: 'READ', cap: 'On the shelf.', fx: 'read' },
-  { w: 'WATCH', cap: 'Mecha, strategy and one more episode.', img: '/img/manga/kart-night.png', fx: 'watch' },
-  { w: 'PLAY', cap: 'One more save before bed.', fx: 'play' },
+  { w: 'WANDER', img: A('rainier'), fx: 'route' },
+  { w: 'SPEED', img: A('kart-pov'), fx: 'speed' },
+  { w: 'MUSIC', img: A('laser'), fx: 'live' },
+  { w: 'READ', fx: 'read' },
+  { w: 'WATCH', img: '/img/manga/kart-night.png', fx: 'watch' },
+  { w: 'PLAY', fx: 'play' },
 ]
 const MONTAGE = ['lake-overlook', 'kart-grid', 'festival', 'waterfall', 'f1-sim', 'stage-unreal', 'jeep', 'paddle'].map(A)
 const GAMES = ['wuthering-waves', 'halo', 'god-of-war', 'assassins-creed', 'warframe', 'elden-ring', 'doom', 'ghost-of-tsushima', 'silent-hill'].map((g) => `/img/games/${g}.webp`)
@@ -74,40 +75,37 @@ export default function BeyondFilm({ onDone }) {
     const ctx = gsap.context(() => {
       const t = gsap.timeline({ defaults: { ease: 'expo.out' } })
       tl.current = t
-      const tc = q('.fx-tc')[0], ch = q('.fx-ch')[0]
-      const clock = { f: 0 }
-      gsap.set(q('.fx-shot, .fx-open, .fx-end'), { autoAlpha: 0 })
+      gsap.set(q('.fx-shot, .fx-lights, .fx-end'), { autoAlpha: 0 })
       gsap.set(q('.fx-bar'), { height: '50.5%' })
-      const END = 10.6
-      t.to(clock, { f: END * 24, duration: END, ease: 'none', onUpdate: () => {
-        const f = Math.floor(clock.f); tc.textContent = `00:00:${String(Math.floor(f / 24)).padStart(2, '0')}:${String(f % 24).padStart(2, '0')}`
-      } }, 0)
-      // The bars part into a 2.39 letterbox; the log comes up.
-      t.to(q('.fx-bar'), { height: '11.5vh', duration: 0.9, ease: 'expo.inOut' }, 0.05)
-        .fromTo(q('.fx-hud > *'), { autoAlpha: 0, y: 6 }, { autoAlpha: 1, y: 0, duration: 0.5, stagger: 0.06 }, 0.55)
-      // The line that opens the page, said first.
-      t.set(q('.fx-open'), { autoAlpha: 1 }, 0.5)
-        .fromTo(q('.fx-open span'), { autoAlpha: 0, y: 18, filter: 'blur(8px)' }, { autoAlpha: 1, y: 0, filter: 'blur(0px)', duration: 0.7, stagger: 0.07 }, 0.6)
-        .to(q('.fx-open'), { autoAlpha: 0, scale: 1.06, duration: 0.35, ease: 'power2.in' }, 1.75)
+      const END = 10.4
+      // The bars part into a 2.39 letterbox on a dark grid: five red lights, one by one, then lights out.
+      t.to(q('.fx-bar'), { height: '11.5vh', duration: 0.8, ease: 'expo.inOut' }, 0.05)
+        .set(q('.fx-lights'), { autoAlpha: 1 }, 0.2)
+        .fromTo(q('.fx-lights__col'), { y: -24, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.5, stagger: 0.04 }, 0.2)
+      q('.fx-lights__col').forEach((c, k) => t.to(c, { className: 'fx-lights__col is-on', duration: 0.01 }, 0.55 + k * 0.22))
+      t.to(q('.fx-lights__col'), { className: 'fx-lights__col', duration: 0.01 }, 1.75)
+        .to(q('.fx-lights'), { autoAlpha: 0, duration: 0.08 }, 1.78)
 
       // Six chapters. Each: a whip-pan in, the photograph pushing in, the word driving across, its material.
-      const S = 2.05, D = 1.18
+      const S = 1.86, D = 1.18
       CUTS.forEach((c, k) => {
         const at = S + k * D, shot = q(`.fx-shot--${k}`), dir = k % 2 ? -1 : 1
         t.set(shot, { autoAlpha: 1 }, at)
-          .call(() => { ch.textContent = `CH ${String(k + 1).padStart(2, '0')} / 06` }, null, at)
           .fromTo(shot, { xPercent: 18 * dir, skewX: -8 * dir }, { xPercent: 0, skewX: 0, duration: 0.42, ease: 'expo.out' }, at)
           .fromTo(q(`.fx-shot--${k} .fx-bg`), { scale: 1.32 }, { scale: 1.06, duration: D + 0.4, ease: 'power2.out' }, at)
-          .fromTo(q('.fx-leak'), { autoAlpha: 0.85, xPercent: -40 * dir }, { autoAlpha: 0, xPercent: 40 * dir, duration: 0.5, ease: 'power2.out' }, at)
+          .fromTo(q('.fx-leak'), { autoAlpha: 0.85, xPercent: -40 * dir }, { autoAlpha: 0, xPercent: 40 * dir, duration: 0.5, ease: 'power2.out', immediateRender: false }, at)
           .fromTo(q(`.fx-shot--${k} .fx-word__c`), { yPercent: 110 * dir, skewY: 8 * dir }, { yPercent: 0, skewY: 0, duration: 0.6, stagger: 0.03 }, at + 0.06)
           .fromTo(q(`.fx-shot--${k} .fx-word`), { xPercent: 6 * dir }, { xPercent: -6 * dir, duration: D + 0.2, ease: 'none' }, at)
-          .fromTo(q(`.fx-shot--${k} .fx-cap`), { autoAlpha: 0, y: 12 }, { autoAlpha: 1, y: 0, duration: 0.45 }, at + 0.25)
         if (c.fx === 'route') t.fromTo(q('.fx-route path'), { drawSVG: '0%' }, { drawSVG: '100%', duration: D, ease: 'power2.inOut' }, at + 0.1)
           .fromTo(q('.fx-route circle'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.2 }, at + D - 0.1)
         if (c.fx === 'speed') t.fromTo(q('.fx-streak'), { scaleX: 0, xPercent: -60 }, { scaleX: 1, xPercent: 80, duration: 0.7, ease: 'power3.out', stagger: { each: 0.025, from: 'random' } }, at)
           .fromTo(q('.fx-shot--1 .fx-bg'), { x: -6 }, { x: 6, duration: 0.05, repeat: 9, yoyo: true, ease: 'none' }, at + 0.1)
-        if (c.fx === 'live') t.fromTo(q('.fx-beam'), { rotate: (i) => -60 + i * 22, autoAlpha: 0 }, { rotate: (i) => -30 + i * 12, autoAlpha: 1, duration: 0.8, ease: 'power2.out' }, at)
-          .fromTo(q('.fx-strobe'), { autoAlpha: 0 }, { autoAlpha: 0.9, duration: 0.04, repeat: 5, yoyo: true, ease: 'none' }, at + 0.35)
+        // Music: beams sweep in and the strobe hits on the beat, 128 BPM.
+        if (c.fx === 'live') {
+          t.fromTo(q('.fx-beam'), { rotate: (i) => -60 + i * 22, autoAlpha: 0 }, { rotate: (i) => -30 + i * 12, autoAlpha: 1, duration: 0.8, ease: 'power2.out' }, at)
+          for (let b = 0; b < 3; b++) t.fromTo(q('.fx-strobe'), { autoAlpha: 0.85 }, { autoAlpha: 0, duration: 0.18, ease: 'power2.out' }, at + 0.12 + b * (60 / 128))
+          t.fromTo(q('.fx-shot--2 .fx-word'), { scale: 1.06 }, { scale: 1, duration: 0.2, repeat: 2, repeatDelay: 60 / 128 - 0.2, ease: 'power2.out' }, at + 0.12)
+        }
         if (c.fx === 'read') t.fromTo(q('.fx-shot--3 .book'), { rotateY: -70, rotateX: 12, y: 40 }, { rotateY: -16, rotateX: 4, y: 0, duration: 1.1 }, at)
         if (c.fx === 'watch') t.fromTo(q('.fx-burst'), { scale: 0.5, autoAlpha: 0, rotate: -8 }, { scale: 1, autoAlpha: 1, rotate: 0, duration: 0.4, ease: 'back.out(2)' }, at)
         if (c.fx === 'play') t.fromTo(q('.fx-slot'), { autoAlpha: 0, scale: 0.86 }, { autoAlpha: 1, scale: 1, duration: 0.3, stagger: { each: 0.04, grid: [3, 3], from: 'center' } }, at)
@@ -122,7 +120,6 @@ export default function BeyondFilm({ onDone }) {
       q('.fx-flash img').forEach((im, k) => t.fromTo(im, { autoAlpha: 1 }, { autoAlpha: 0, duration: 0.01 }, M + 0.09 * (k + 1)))
       t.fromTo(q('.fx-mosaic'), { scale: 1.6, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 1.1, ease: 'expo.out' }, M + 0.75)
         .fromTo(q('.fx-title .fx-word__c'), { yPercent: (i) => (i % 2 ? -120 : 120), autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 0.8, stagger: 0.04 }, M + 0.85)
-        .fromTo(q('.fx-sub'), { autoAlpha: 0, y: 10 }, { autoAlpha: 1, y: 0, duration: 0.5 }, M + 1.3)
       t.call(finish, null, END)
     }, ref)
     return () => { ctx.revert(); html.classList.remove('rq-lock'); window.removeEventListener('keydown', key) }
@@ -130,7 +127,7 @@ export default function BeyondFilm({ onDone }) {
 
   return createPortal(
     <div className="fx" ref={ref} onClick={finish} role="presentation">
-      <div className="fx-open" aria-hidden="true"><p>{'Some of the best stories happen'.split(' ').map((w, k) => <Fragment key={k}><span>{w}</span>{' '}</Fragment>)}<em>{'outside the roadmap.'.split(' ').map((w, k) => <Fragment key={k}>{k > 0 && ' '}<span>{w}</span></Fragment>)}</em></p></div>
+      <div className="fx-lights" aria-hidden="true">{Array.from({ length: 5 }, (_, k) => <span key={k} className="fx-lights__col"><i /><i /></span>)}</div>
 
       {CUTS.map((c, k) => (
         <section key={c.w} className={`fx-shot fx-shot--${k} fx-shot--${c.fx}`} aria-hidden="true">
@@ -143,7 +140,6 @@ export default function BeyondFilm({ onDone }) {
           {c.fx === 'watch' && <div className="fx-burst" />}
           <div className="fx-shade" />
           <Word w={c.w} />
-          <p className="fx-cap"><b>{String(k + 1).padStart(2, '0')}</b>{c.cap}</p>
         </section>
       ))}
 
@@ -152,19 +148,12 @@ export default function BeyondFilm({ onDone }) {
         <div className="fx-mosaic">{MONTAGE.slice(0, 6).map((s) => <img key={s} src={s} alt="" />)}</div>
         <div className="fx-shade fx-shade--end" />
         <div className="fx-title"><Word w="OFF THE" /><Word w="CLOCK" /></div>
-        <p className="fx-sub">Field notes · six chapters</p>
       </section>
 
       <div className="fx-leak" aria-hidden="true" />
       <div className="fx-grain" aria-hidden="true" />
       <div className="fx-vignette" aria-hidden="true" />
       <div className="fx-bar fx-bar--t" /><div className="fx-bar fx-bar--b" />
-      <div className="fx-hud" aria-hidden="true">
-        <span className="fx-hud__tl">Field log · Anjor</span>
-        <span className="fx-hud__tr"><i /> REC <b className="fx-tc">00:00:00:00</b></span>
-        <span className="fx-hud__bl fx-ch">CH 00 / 06</span>
-        <span className="fx-hud__br">19.07° N · 72.87° E</span>
-      </div>
       <button type="button" className="fx-skip" onClick={(e) => { e.stopPropagation(); finish() }}>Skip</button>
     </div>,
     document.body,

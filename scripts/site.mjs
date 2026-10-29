@@ -136,7 +136,7 @@ function llmsTxt(c, SITE) {
 /** Everything in one file, for assistants that read a single document. */
 function llmsFull(c, SITE, pages) {
   const { site, routes, gtm } = c
-  const L = [`# ${site.name}: full site content`, '', `> ${site.category}. ${site.tagline}`, '', `Source: ${SITE}. Generated from the live pages; product screens use sample data. ROQIVA is in development.`, '']
+  const L = [`# ${site.name}: full site content`, '', `> ${site.category}. ${site.tagline}`, '', `Source: ${SITE}. Generated from the live pages; product screens show how the system works, not client results. ROQIVA is in development.`, '']
   for (const r of routes) L.push('---', '', `Page: ${SITE}${r.path === '/' ? '/' : r.path}`, `Title: ${r.title}`, `Last updated: ${r.updated}`, '', pages[r.path] || r.description, '')
   return L.join('\n')
 }

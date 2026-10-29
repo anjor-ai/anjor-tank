@@ -58,8 +58,8 @@ export function Tile({ as: Tag = 'div', tone, className, children, ...rest }) {
   return <Tag className={cx('b-tile', tone && `b-tile--${tone}`, className)} {...rest}>{children}</Tag>
 }
 
-/** A product window: traffic lights, a title, and the tag that says it is an illustration. */
-export function Win({ title, tag = 'Illustration', className, children, dark = false }) {
+/** A product window: traffic lights, a title, and an optional tag. */
+export function Win({ title, tag, className, children, dark = false }) {
   return (
     <div className={cx('b-win', dark && 'b-win--dark', className)}>
       <div className="b-win__bar">

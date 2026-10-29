@@ -20,6 +20,10 @@ export const PRESETS = {
   dawn: { type: 'plane', bg: null, brightness: 1.2, cAzimuthAngle: 180, cDistance: 3.6, cPolarAngle: 90, fov: 45,
     color1: '#ff5005', color2: '#dbba95', color3: '#d0bce1', positionX: -1.4, positionY: 0, positionZ: 0, rotationX: 0, rotationY: 10, rotationZ: 50,
     uDensity: 1.3, uSpeed: 0.4, uStrength: 4, uTime: 0, grain: true },
+  /* The footer: a deep-water plane in midnight blues, dark everywhere so white type stays readable on every part of it. */
+  tide: { type: 'plane', bg: null, brightness: 1.05, cAzimuthAngle: 180, cDistance: 3.4, cPolarAngle: 90, fov: 45,
+    color1: '#0a1530', color2: '#1747c9', color3: '#04070f', positionX: -0.6, positionY: 0.2, positionZ: 0, rotationX: 0, rotationY: 0, rotationZ: 130,
+    uDensity: 1.1, uSpeed: 0.18, uStrength: 2.6, uTime: 0.3, grain: true },
 }
 
 const NOISE = `vec3 mod289(vec3 x)

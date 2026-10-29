@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { CASES, home as content } from '../content'
 import { Arrow, Button, Cta } from '../components/ui'
 import { CaseModal } from '../components/folio'
-import { Board, Go, H, Kicker, Screen, Sec, Stage, Tile } from '../components/board'
+import { Board, Go, H, Kicker, Sec, Stage, Tile } from '../components/board'
 import { LedBoard } from '../components/led'
 import { CareerLog, MapDots } from '../components/frags'
 import { CaseTile } from '../components/cards'
@@ -10,6 +10,7 @@ import { RoqivaStage } from '../components/Story'
 import { Stat } from '../components/kinetic'
 import { Icon } from '../components/icons'
 import { HeroApp } from '../scenes/HeroApp'
+import { MethodRun } from '../components/method'
 import { ConsultMapScene } from '../scenes/ConsultMap'
 import { WordReel } from '../art/Reel'
 import { useClock } from '../components/kit'
@@ -42,7 +43,7 @@ function Hero() {
             {content.hello.proof.map(([v, l]) => <li key={l} className="b-tile"><b><Stat v={v} /></b><span>{l}</span></li>)}
           </ul>
           <Stage kind="shader" name={theme === 'dark' ? 'violet' : 'dawn'} className="b-hero__stage">
-            <div className="b-hero__app mh" aria-label="Product workspace, sample data"><HeroApp /></div><span className="w-ill w-ill--hero">Illustration · sample data</span>
+            <div className="b-hero__app mh"><HeroApp /></div>
           </Stage>
           <button className="b-hero__replay" type="button" onClick={() => window.dispatchEvent(new Event('replay-site-film'))}><Icon name="play" size={13} />Replay the opening film</button>
         </Board>
@@ -66,17 +67,10 @@ function Marquee() {
   )
 }
 
-const THINK = [
-  { slug: 'price-lock-checkout', title: 'What happens when an order changes after payment?', sub: 'Keep the promise made at checkout.', result: '+12.5pp', metric: 'prepaid conversion', rule: 'Committed price preserved' },
-  { slug: 'search-discovery', title: 'Should a typo ever become a lost order?', sub: 'Understand the query before ranking the results.', result: '+9%', metric: 'search-to-order conversion', rule: 'Intent matched and results ranked' },
-  { slug: 'retention-reminders', title: 'When does a reminder become genuinely useful?', sub: 'Match the reminder to the reorder window.', result: '~1,100', metric: 'additional repeat orders a day', rule: 'Reorder cadence identified' },
-]
-const METHOD = [['find', 'Find the real problem.', 'Follow the friction across the journey, not just the screen.', 'Scan'], ['decide', 'Make the difficult call.', 'Turn the evidence into a decision with clear guardrails.', 'Branch'], ['prove', 'Close the loop.', 'Ship, measure the outcome, and use it to shape the next move.', 'Loop']]
-
 const REEL = [
   ['/img/adventure/rainier.webp', 'Wander', 'Water, mountains and back roads.'],
   ['/img/adventure/kart-pov.webp', 'Speed', 'Karts, a racing sim and the apex.'],
-  ['/img/adventure/laser.webp', 'Live', 'Lights, lasers and a full room.'],
+  ['/img/adventure/laser.webp', 'Music', 'Lights, lasers and a full room.'],
   ['book', 'Read', 'On the shelf.'],
   ['/img/manga/paddle.png', 'Watch', 'Mecha, strategy, one more episode.'],
 ]
@@ -97,25 +91,8 @@ export default function Home() {
       </Sec>
       {open && <CaseModal slug={open} setSlug={setOpen} onClose={() => setOpen('')} />}
 
-      <Sec id="method" tone="soft" label="How I think" tag="Product decisions" title="A great interface is just" sub="the ==visible part==." lead="The product is the decision beneath it. I connect customer experience with the systems that deliver it, and the metrics that prove it worked.">
-        <Board className="b-think">
-          {THINK.map((s) => (
-            <Tile key={s.slug} className="b-q">
-              <Kicker icon="check">{s.rule}</Kicker>
-              <h3>{s.title}</h3>
-              <p>{s.sub}</p>
-              <a className="b-q__res" href={`/work/${s.slug}`} data-cursor="Read"><b>{s.result}</b><span>{s.metric}</span><em>Read the case<Arrow /></em></a>
-            </Tile>
-          ))}
-          {METHOD.map(([k, title, d, m], i) => (
-            <Tile key={k} className="b-m" tone="ink">
-              <Screen scene={k} className="b-m__screen" label={m} />
-              <h3>{title}</h3>
-              <p>{d}</p>
-              <p className="b-m__n">{i + 1} of {METHOD.length}</p>
-            </Tile>
-          ))}
-        </Board>
+      <Sec id="method" tone="soft" label="How I think" tag="Six steps, four gates" title="Connect signals" sub="to ==better decisions and outcomes==." lead="Code finds and ranks the gaps. People decide at every gate. Every release is measured against a frozen baseline.">
+        <MethodRun />
       </Sec>
 
       <Sec id="journey" label="The story so far" tag="Three chapters" title="From understanding demand" sub="to ==building what delivers it==." lead="Different roles. One growing curiosity about how products and businesses really work.">

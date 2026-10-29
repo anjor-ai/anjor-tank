@@ -5,7 +5,7 @@ import { cx } from './board'
    Wireframes and workflows: the picture of each case, drawn the way product people sketch software.
    Three views per case: the screen the system was built around, the workflow behind it, and the outcome.
    Soft grey bars stand in for content; only the words that carry the idea are written, all taken from the case.
-   A number appears only when it is the case's own figure. Every view is an illustration and says so.
+   A number appears only when it is the case's own figure.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 const Bar = ({ w = 60, tone, h }) => <i className={cx('w-bar', tone && `w-bar--${tone}`)} style={{ width: `${w}%`, height: h }} />
@@ -134,14 +134,13 @@ function Result({ c }) {
 export const WIRE_KINDS = [['screen', 'The screen'], ['flow', 'The workflow'], ['result', 'The outcome']]
 
 /** One view of a case: kind is 'screen', 'flow' or 'result'. */
-export function Wire({ c, kind = 'screen', label = true }) {
+export function Wire({ c, kind = 'screen' }) {
   const S = SCREENS[c.slug]
   return (
-    <div className={cx('w', `w--${kind}`, `w--${c.slug}`)} role="img" aria-label={`Illustration, ${kind === 'flow' ? 'workflow' : kind} of ${c.title}`}>
+    <div className={cx('w', `w--${kind}`, `w--${c.slug}`)} role="img" aria-label={`${kind === 'flow' ? 'Workflow' : kind === 'result' ? 'Outcome' : 'Screen'} of ${c.title}`}>
       {kind === 'screen' && S && <S />}
       {kind === 'flow' && <Flow slug={c.slug} />}
       {kind === 'result' && <Result c={c} />}
-      {label && <span className="w-ill" aria-hidden="true">Illustration</span>}
     </div>
   )
 }

@@ -97,7 +97,7 @@ export function BriefThread({ topic = 'consult' }) {
   ]
   return (
     <div ref={ref} className={cx('bt', on && 'is-on')}>
-      <div className="bt__bar"><span className="v-win__dots" aria-hidden="true"><i /><i /><i /></span><b>From brief to first finding</b><small>Illustration</small></div>
+      <div className="bt__bar"><span className="v-win__dots" aria-hidden="true"><i /><i /><i /></span><b>From brief to first finding</b></div>
       <ol className="bt__list">
         {steps.map((s, k) => (
           <li key={s.t} className={`bt__m bt__m--${s.who}`} style={{ '--k': k }}>
@@ -153,7 +153,7 @@ export function ScrollStory() {
             <div className="ss__ui">{x.rows.map(([a, b]) => <p key={a}><small>{a}</small><strong>{b}</strong></p>)}</div>
           </article>
         ))}
-        <p className="ss__note">Illustration from the retention case. The repeat-order figure is from that case.</p>
+        <p className="ss__note">The repeat-order figure is from the retention case.</p>
       </div>
     </div>
   )
@@ -195,7 +195,7 @@ export function ArchWire({ parts }) {
   const rows = [parts.slice(0, half), parts.slice(half)]
   return (
     <div ref={ref} className={cx('aw', on && 'is-on')} role="img" aria-label={`System diagram: ${parts.map((p) => p.t).join(' → ')}`}>
-      <p className="aw__tag">System map · illustration</p>
+      <p className="aw__tag">System map</p>
       {rows.map((row, r) => (
         <div key={r} className="aw__row">
           {row.map((p, k) => (

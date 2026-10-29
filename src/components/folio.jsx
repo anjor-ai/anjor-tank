@@ -143,7 +143,7 @@ export function RoqivaFounder({ compact = false }) {
           <Button to={R.secondary.to} variant="ghost">{R.secondary.label}</Button>
         </div>
       </div>
-      {!compact && <div className="fdr__app" aria-label="ROQIVA workspace, sample data"><HeroApp brand="ROQIVA" /></div>}
+      {!compact && <div className="fdr__app" aria-label="ROQIVA workspace"><HeroApp brand="ROQIVA" /></div>}
     </div>
   )
 }
