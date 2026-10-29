@@ -1,15 +1,12 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import { ALT } from '../content'
 import { Cta } from '../components/ui'
-import { Icon } from '../components/icons'
-import BeyondFilm from '../scenes/BeyondFilm'
 import { MQ, gsap, ScrollTrigger, useGSAP } from '../lib/motion'
 import { Intro, Music, Play, Radar, Read, Speed, Wander, Watch, img } from '../components/beyond'
 import { PageMotion } from '../lib/PageMotion'
 
-/* Beyond work. The hero is its own room: dark, photographic, condensed display type, opened by a short film
-   (scenes/BeyondFilm) once per visit. The chapters after it share one card system (components/beyond.jsx)
-   and follow the site's theme. Decorative display words are aria-hidden; the real headings carry the meaning. */
+/* Beyond work. The hero is its own room: dark, photographic, condensed display type.
+   The chapters after it share one card system (components/beyond.jsx) and follow the site's theme. Decorative display words are aria-hidden; the real headings carry the meaning. */
 
 const CHAPTERS = [
   { id: 'wander', k: '01', name: 'Wander' },
@@ -26,13 +23,12 @@ const Split = ({ text, className }) => <span className={className} aria-hidden="
 export default function Beyond() {
   const root = useRef(null)
   const intro = useRef(null)
-  const [film, setFilm] = useState(false)
 
   useGSAP(() => {
     const mm = gsap.matchMedia()
     mm.add(MQ.motion, () => {
       const q = gsap.utils.selector(root.current)
-      // Hero entry: panels rise, the title assembles from a scatter, the index slides in. Plays after the film, or at once.
+      // Hero entry: panels rise, the title assembles from a scatter, the index slides in. Plays on arrival.
       const t = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } })
       t.fromTo(q('.bx-tri__p'), { yPercent: 104 }, { yPercent: 0, duration: 1.1, stagger: 0.09, ease: 'expo.inOut' }, 0)
         .fromTo(q('.bx-tri__p img'), { scale: 1.35 }, { scale: 1, duration: 1.8 }, 0.2)
@@ -41,8 +37,6 @@ export default function Beyond() {
       intro.current = t
       const once = (trigger, start = 'top 85%') => ({ trigger, start, toggleActions: 'play none none none' })
       // Chapters do not reveal themselves: only the drawn things move (the route, the lap, the book).
-      // Wander: the route draws itself once the card is in view.
-      q('.by-route__line').forEach((l) => gsap.fromTo(l, { drawSVG: '0%' }, { drawSVG: '100%', duration: 1.8, ease: 'eInOut', scrollTrigger: once(l, 'top 90%') }))
       // Speed: the car laps the circuit while the tile is on screen; the line draws first.
       const car = q('.by-circuit__car')[0], trk = q('#by-trk')[0]
       if (car && trk) {
@@ -57,21 +51,12 @@ export default function Beyond() {
     return () => mm.revert()
   }, { scope: root })
 
-  // Once per visit, unless motion is reduced or a test runner is driving the page. Decided before first paint.
-  useLayoutEffect(() => {
-    let seen = true
-    try { seen = sessionStorage.getItem('at-beyond-film') === '1' } catch { /* storage blocked: treat as seen */ }
-    const ok = window.matchMedia(MQ.motion).matches && !window.__OI_TEST__
-    if (!seen && ok) { try { sessionStorage.setItem('at-beyond-film', '1') } catch { /* ignore */ } setFilm(true) }
-    else intro.current?.play()
-  }, [])
-
-  const replay = () => { intro.current?.pause(0); setFilm(true) }
+  // The intro plays on arrival (there is no opening film on this page).
+  useLayoutEffect(() => { intro.current?.play() }, [])
 
   return (
     <PageMotion routeKey="/beyond">
       <div ref={root} className="bx">
-        {film && <BeyondFilm onDone={() => { setFilm(false); intro.current?.play(0); ScrollTrigger.refresh() }} />}
         <header className="bx-hero" aria-labelledby="bx-h1">
           <div className="bx-tri">
             {COVERS.map(([src, g, line], k) => (
@@ -86,7 +71,6 @@ export default function Beyond() {
           <div className="bx-title" aria-hidden="true"><Split text="OFF THE" className="bx-title__a" /><Split text="CLOCK" className="bx-title__b" /></div>
           <div className="bx-hero__top">
             <span>Anjor / beyond work</span>
-            <button type="button" className="bx-replay" onClick={replay}><Icon name="arrow" size={13} />Replay the film</button>
           </div>
           <p className="bx-hero__lede">Some of the best stories happen <em>outside the roadmap.</em></p>
           <nav className="bx-index" aria-label="Chapters">

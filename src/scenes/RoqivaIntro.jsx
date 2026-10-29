@@ -261,7 +261,7 @@ export function SiteFilm({ onDone }) {
         <div className="rqf__scene rqf__s4">
           <p className="rqf__hero">{plain(home.hello.title).split(' ').map((w, k) => <span key={k} className="rqf__hw">{w} </span>)}</p>
           <p className="rqf__name">{site.name}</p>
-          <p className="rqf__status"><i />Product Manager · Founder of ROQIVA</p>
+          <p className="rqf__status"><i />Product Manager · Building ROQIVA</p>
         </div>
       </div>
       <div className="rqf__ck" aria-hidden="true">{Array.from({ length: 144 }, (_, k) => <i key={k} />)}</div>

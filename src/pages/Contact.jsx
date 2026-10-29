@@ -80,7 +80,7 @@ function QuickBrief() {
       <input type="hidden" name="access_key" value={site.web3formsKey} />
       <input type="hidden" name="subject" value={`Portfolio enquiry${intent ? `: ${intent}` : ''}`} />
       <textarea name="message" value={brief} readOnly className="sr-only" tabIndex={-1} aria-hidden="true" />
-      <p className="qb__k"><span>Write to me</span><em>Takes a minute</em></p>
+      <p className="qb__k"><span>Write to me</span></p>
       <fieldset className="qb__intent">
         <legend className="sr-only">What is this about?</legend>
         {B.intents.map((c) => <button key={c} type="button" className="qb__chip" aria-pressed={intent === c} onClick={() => setIntent((p) => (p === c ? '' : c))}>{c.replace(': follow along or help shape it', '')}</button>)}
@@ -141,11 +141,11 @@ function BookCalendar() {
   const cells = [...Array(lead).fill(null), ...Array.from({ length: days }, (_, i) => new Date(view.y, view.m, i + 1))]
   return (
     <div className="bwin" id="book">
-      <div className="bwin__bar"><span className="app__dots" aria-hidden="true"><i /><i /><i /></span><span className="bwin__t">A first call · {site.name}</span><span className="bwin__live"><i />Check times in Calendly</span></div>
+      <div className="bwin__bar"><span className="app__dots" aria-hidden="true"><i /><i /><i /></span><span className="bwin__t">A first call · {site.name}</span></div>
       <div className="bwin__body">
         <div className="bwin__who">
           <span className="bwin__avs" aria-hidden="true"><i>AT</i></span>
-          <span><b>With Anjor</b><small>Free · video call · scheduled by Calendly</small></span>
+          <span><b>With Anjor</b><small>Free · video call</small></span>
         </div>
         <div className="bcal" role="group" aria-label="Choose a day to book">
           <div className="bcal__head">
@@ -166,9 +166,9 @@ function BookCalendar() {
               )
             })}
           </div>
-          <p className="bcal__sum" aria-live="polite">{sel ? sel.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' }) : 'Choose a day to check availability, or open Calendly.'}</p>
+          <p className="bcal__sum" aria-live="polite">{sel ? sel.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long' }) : 'Choose a day.'}</p>
           <button type="button" className="btn btn--primary bcal__go" onClick={() => { setDlg(true); track('book_times_opened') }}>{sel ? 'See times' : 'See all times'}<Arrow /></button>
-          <p className="bcal__note">Scheduling by Calendly · <a href={calendlyUrl(sel, theme, false)} target="_blank" rel="noopener noreferrer">Open it in a new tab ↗</a></p>
+          <p className="bcal__note"><a href={calendlyUrl(sel, theme, false)} target="_blank" rel="noopener noreferrer">Open in a new tab ↗</a></p>
         </div>
       </div>
       {dlg && <BookDialog url={calendlyUrl(sel, theme, true)} tabUrl={calendlyUrl(sel, theme, false)} onClose={closeDlg} />}
@@ -246,7 +246,7 @@ export default function Contact() {
           <div className="ct__grid">
             <QuickBrief />
             <div className="ct__book">
-              <p className="qb__k"><span>Or pick a time</span><em>Opens Calendly</em></p>
+              <p className="qb__k"><span>Or pick a time</span></p>
               <BookCalendar />
               <ul className="ct__direct">
                 <li><span>Email</span><a href={`mailto:${site.email}`}>{site.email}</a></li>

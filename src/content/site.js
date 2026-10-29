@@ -10,9 +10,9 @@ import { CASES } from './folio.js'
 export const site = {
   name: 'Anjor Tank',
   url: 'https://anjor-portfolio.vercel.app', // canonical website origin in production and preview metadata
-  tagline: 'Product manager, consultant and founder of ROQIVA.',
-  ogAlt: 'Anjor Tank — product manager and founder of ROQIVA. AT keycap mark on a dark background.',
-  category: 'Product architect · GTM engineering · Revenue operations',
+  tagline: 'Product manager and consultant, building ROQIVA.',
+  ogAlt: 'Anjor Tank — product manager, building ROQIVA. AT keycap mark on a dark background.',
+  category: 'Product manager · Revenue systems strategy · Systems architecture',
   // Public contact address. Keep mailto links and the privacy notice aligned with this address.
   email: 'anjort2000@gmail.com',
   supportEmail: 'anjort2000@gmail.com',
@@ -37,7 +37,7 @@ export const status = {
 // `hidden` keeps a route out of the main navigation. `step` is the page's place in the story, shown on every page.
 export const routes = [
   { path: '/', label: 'Home', type: 'WebPage', updated: '2026-10-26',
-    title: `${site.name} — Product manager and founder of ROQIVA`,
+    title: `${site.name} — Product manager, building ROQIVA`,
     description: 'Anjor Tank is a product manager at GNC India building ecommerce, growth, operational platforms and ROQIVA. Explore the case studies, journey and consulting work.' },
   { path: '/work', label: 'Work', type: 'CollectionPage', updated: '2026-10-26', story: true, step: 'Proof',
     title: `Work — ${site.name}`,
@@ -52,13 +52,13 @@ export const routes = [
     description: 'Karts, techno, long drives and good food. The person behind the product work.' },
   { path: '/hire', label: 'Hire me', type: 'WebPage', updated: '2026-10-26', story: true, step: 'Hire',
     title: `Hire me — ${site.name}`,
-    description: 'Explore product-led consulting with Anjor Tank for conversion, GTM engineering and RevOps, alongside product management roles and founding ROQIVA.' },
+    description: 'Consulting with Anjor Tank in GTM and revenue systems strategy, and in systems and solution architecture, alongside product roles and building ROQIVA.' },
   { path: '/roqiva', label: 'ROQIVA', parent: '/hire', type: 'WebPage', updated: '2026-10-26', badge: 'In development',
     title: `ROQIVA — the revenue system Anjor Tank is building`,
     description: 'ROQIVA is a governed revenue-operations system in development: it finds unread signals, drafts the fix, and waits for a person to approve it.' },
   { path: '/contact', label: 'Contact', type: 'ContactPage', updated: '2026-10-26',
     title: `Contact — ${site.name}`,
-    description: 'Start a conversation about a role, a GTM or RevOps engagement, or ROQIVA. Send a brief or book a time.' },
+    description: 'Start a conversation about a role, a strategy or architecture engagement, or ROQIVA. Send a brief or book a time.' },
   { path: '/privacy', label: 'Privacy', hidden: true, type: 'WebPage', updated: '2026-10-26',
     title: `Privacy notice — ${site.name}`,
     description: 'What this website collects when you send a brief or book a time, and what it does not do.' },

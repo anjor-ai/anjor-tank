@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { CASES, home as content } from '../content'
+import { CASES, consult, home as content } from '../content'
 import { Arrow, Button, Cta } from '../components/ui'
 import { CaseModal } from '../components/folio'
 import { Board, Go, H, Kicker, Sec, Stage, Tile } from '../components/board'
@@ -7,12 +7,11 @@ import { LedBoard } from '../components/led'
 import { CareerLog } from '../components/frags'
 import { BasedIn } from '../components/globe'
 import { CaseTile } from '../components/cards'
-import { Parts } from '../components/RoqivaParts'
-import { Stat } from '../components/kinetic'
+import { PartsRail } from '../components/RoqivaParts'
 import { Icon } from '../components/icons'
 import { HeroApp } from '../scenes/HeroApp'
 import { MethodRun } from '../components/method'
-import { ConsultMapScene } from '../scenes/ConsultMap'
+import { Branches } from '../components/consult'
 import { WordReel } from '../art/Reel'
 import { useTheme } from '../lib/theme'
 import { PageMotion } from '../lib/PageMotion'
@@ -33,16 +32,14 @@ function Hero() {
           </Tile>
           <Tile className="b-hero__copy">
             <H as="h1" text={content.hello.title} hero hlEm className="b-hero__t" />
-            <p className="b-lead">I design consumer experiences, build the systems behind them, and measure what moves. Currently at GNC India, founding ROQIVA, and open to selective consulting.</p>
+            <p className="b-lead">I design consumer experiences, build the systems behind them, and measure what moves. Currently at GNC India, building ROQIVA, and open to selective consulting.</p>
             <div className="b-acts">
               <Button to="/contact?intent=consult#brief" track="cta_consult_home">Discuss a project <Arrow /></Button>
               <Go to="#work">Explore the work</Go>
             </div>
           </Tile>
-          <ul className="b-hero__proof" aria-label="Selected results">
-            {content.hello.proof.map(([v, l]) => <li key={l} className="b-tile"><b><Stat v={v} /></b><span>{l}</span></li>)}
-          </ul>
-          <Stage kind="shader" name={theme === 'dark' ? 'violet' : 'dawn'} className="b-hero__stage">
+          <Stage kind="shader" name={theme === 'dark' ? 'violet' : 'blaze'} className="b-hero__stage">
+            <p className="b-hero__tag"><span><i className="b-live" />ROQIVA</span><em>The workspace I am building</em></p>
             <div className="b-hero__app mh"><HeroApp /></div>
           </Stage>
           <button className="b-hero__replay" type="button" onClick={() => window.dispatchEvent(new Event('replay-site-film'))}><Icon name="play" size={13} />Replay the opening film</button>
@@ -82,7 +79,7 @@ export default function Home() {
       <Hero />
       <Marquee />
 
-      <Sec id="work" label="Selected work" tag="Six systems" title="Not just features." sub="Products that ==changed the outcome==." lead="Six detailed stories behind measurable results. Open a quick view, or dive into the system design."
+      <Sec id="work" label="Selected work" tag="Six systems" title="Not just features." sub="Products that ==changed the outcome==."
         aside={<Go to="/work">Explore all six case studies</Go>}>
         <Board className="b-cases">
           {CASES.map((c, k) => <CaseTile key={c.slug} c={c} onOpen={setOpen} wide={k === 0 || k === 5} />)}
@@ -94,15 +91,15 @@ export default function Home() {
         <MethodRun />
       </Sec>
 
-      <Sec id="journey" label="The story so far" tag="Three chapters" title="From understanding demand" sub="to ==building what delivers it==." lead="Different roles. One growing curiosity about how products and businesses really work.">
+      <Sec id="journey" label="The story so far" tag="Three chapters" title="From understanding demand" sub="to ==building what delivers it==.">
         <Board className="b-story">
           <figure className="b-tile b-story__photo">
             <img src="/img/anjor.webp" width="447" height="721" alt="Anjor Tank" loading="lazy" decoding="async" />
-            <figcaption><b>Anjor Tank</b><small>Curiosity is the through line.</small></figcaption>
+            <figcaption><b>Anjor Tank</b></figcaption>
           </figure>
           <Tile className="b-story__now">
             <Kicker icon={<i className="b-live" />}>Right now</Kicker>
-            <h3>Founder of ROQIVA. Product Manager, GNC India.</h3>
+            <h3>Building ROQIVA. Product Manager, GNC India.</h3>
             <Go to="/journey">The story so far</Go>
           </Tile>
           <Tile className="b-story__map"><BasedIn /></Tile>
@@ -110,17 +107,8 @@ export default function Home() {
         </Board>
       </Sec>
 
-      <Sec id="consulting" tone="soft" label="Consulting" tag="GTM engineering and RevOps" title="Growth often breaks" sub="==between tools==." lead="My consulting work combines GTM engineering and RevOps: find where the commercial journey leaks, engineer the missing operating loop, and prove the lift.">
-        <Board className="b-consult">
-          <Stage kind="shader" name="violet" className="b-consult__map"><ConsultMapScene /></Stage>
-          <Tile className="b-consult__c b-consult__c1"><Kicker icon="radar">GTM engineering</Kicker><h3>Find the leak.</h3><p>Instrument the journey, recover intent and connect acquisition with conversion.</p></Tile>
-          <Tile className="b-consult__c b-consult__c2"><Kicker icon="link">RevOps</Kicker><h3>Connect the handoffs.</h3><p>Govern data, decision rules and the handoffs between the people and tools that deliver.</p></Tile>
-          <Tile className="b-consult__c b-consult__c3 b-consult__c--ink" tone="ink">
-            <Kicker icon={<i className="b-live" />}>ROQIVA · Intelligence layer · in development</Kicker>
-            <h3>The product I am founding to make the method repeatable.</h3>
-            <div className="b-acts"><Button to="/hire">Explore consulting <Arrow /></Button><Button to="/contact?intent=consult#brief" variant="ghost">Discuss a project</Button></div>
-          </Tile>
-        </Board>
+      <Sec id="consulting" tone="soft" label="Consulting" tag="Two disciplines and a product" title="From complex problems" sub="to ==systems that work==." lead={consult.hero.lead} center>
+        <Branches />
       </Sec>
 
       <section id="roqiva" className="b-sec b-sec--ink" aria-labelledby="roqiva-h">
@@ -137,13 +125,13 @@ export default function Home() {
                 <Button to={content.roqiva.secondary.to} variant="ghost">{content.roqiva.secondary.label}</Button>
               </div>
             </Tile>
-            <div className="b-rq__sys"><Parts /></div>
+            <div className="b-rq__sys"><PartsRail /></div>
           </Board>
         </div>
       </section>
 
-      <Sec id="beyond" label="Beyond work" title="Away from the roadmap, still curious." lead="Karting, music, travel, a book and an anime queue. I care about how things work, and about experiencing them for myself."
-        aside={<p className="b-beyond__go"><Button to="/beyond">Enter beyond work <Arrow /></Button><small>It opens with a short film.</small></p>}>
+      <Sec id="beyond" label="Beyond work" title="Away from the roadmap, still curious."
+        aside={<p className="b-beyond__go"><Button to="/beyond">Enter beyond work <Arrow /></Button></p>}>
         <Board as="ul" className="b-beyond">
           {REEL.map(([src, g, cap]) => (
             <li key={g} className="b-pic" data-cursor="Enter">

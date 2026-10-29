@@ -113,11 +113,11 @@ export function WorkStage() {
 
 const STEPS = [
   ['EF', "Eggfirst", "Dealer networks", "2022"], ['NP', "Neil Patel Digital", "Client accounts", "2023"],
-  ['TM', "Truemeds", "Two pods, 12 engineers", "2023–26"], ['GN', "GNC India", "Consumer brand", "2026"], ['RQ', "ROQIVA", "Founding", "now"],
+  ['TM', "Truemeds", "Two pods, 12 engineers", "2023–26"], ['GN', "GNC India", "Consumer brand", "2026"], ['RQ', "ROQIVA", "Building", "now"],
 ]
 export function JourneyStage() {
   return (
-    <div className="stg stg--climb" role="img" aria-label="Career altitude: from dealer networks to founding ROQIVA">
+    <div className="stg stg--climb" role="img" aria-label="Career altitude: from dealer networks to building ROQIVA">
       <div className="stg__bar"><Dots /><span>CAREER / ALTITUDE</span></div>
       <div className="clb">
         <svg className="clb__line" viewBox="0 0 500 220" preserveAspectRatio="none" aria-hidden="true">

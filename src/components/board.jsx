@@ -26,10 +26,10 @@ export function H({ as: Tag = 'h2', text, sub, className, hero = false, hlEm = f
 }
 
 /** A section: its heading and lead on one line across the top, then its board. */
-export function Sec({ id, title, sub, lead, aside, tone, className, children, labelledBy, label, tag }) {
+export function Sec({ id, title, sub, lead, aside, tone, className, children, labelledBy, label, tag, center = false }) {
   const hid = id ? `${id}-h` : undefined
   return (
-    <section id={id} className={cx('b-sec', tone && `b-sec--${tone}`, className)} aria-labelledby={title ? hid : labelledBy}>
+    <section id={id} className={cx('b-sec', tone && `b-sec--${tone}`, center && 'b-sec--center', className)} aria-labelledby={title ? hid : labelledBy}>
       <div className="b-wrap">
         {title && (
           <header className="b-head">

@@ -3,7 +3,6 @@ import { ALT, GAMES, LOVES, PHOTOS, SHELF, WATCHLIST } from '../content'
 import { Icon } from './icons'
 import { AsciiCanvas } from './ascii'
 import { SCENES, photosOf } from './Story'
-import { Book } from '../scenes/BeyondFilm'
 import { BPM, PATTERN, createTechno } from '../lib/techno'
 import { MQ } from '../lib/motion'
 
@@ -14,6 +13,22 @@ import { MQ } from '../lib/motion'
    thing to do (pick a frame, pick a title, filter the shelf). Text is all real; pictures are Anjor's own,
    and every drawn picture says so. Motion lives in pages/Beyond.jsx (one useGSAP scope for the page).
    ═══════════════════════════════════════════════════════════════════════════ */
+
+/** A small original book object, drawn in CSS. Used in the film and on the page. */
+export function Book({ className = '' }) {
+  return (
+    <div className={`book ${className}`} aria-hidden="true">
+      <div className="book__front">
+        <span className="book__lat">{Array.from({ length: 30 }, (_, k) => <i key={k} style={{ '--k': k }} />)}</span>
+        <b>AI<br />ENGINEERING</b>
+        <em>Building Applications with Foundation Models</em>
+        <small>Chip Huyen</small>
+      </div>
+      <div className="book__spine"><span>AI ENGINEERING · CHIP HUYEN</span></div>
+      <div className="book__pages" />
+    </div>
+  )
+}
 
 const scene = (g) => SCENES.find((s) => s.g === g)
 export const img = (src) => `/img/adventure/${src}.webp`
@@ -65,93 +80,38 @@ export function Intro() {
   )
 }
 
-/* ─────────── 01 Wander: one frame at a time, full bleed, the route drawn over it and a stepper under it ─────────── */
-const PROFILE = (() => {
-  const pts = []
-  for (let i = 0; i <= 120; i++) {
-    const x = i / 120
-    const y = 0.55 - 0.18 * Math.sin(x * 5.2 + 0.4) - 0.1 * Math.sin(x * 13.1 + 1.2) - 0.05 * Math.sin(x * 29 + 2) - 0.12 * x
-    pts.push([x * 300, 8 + y * 92])
-  }
-  return { d: pts.map(([x, y], i) => `${i ? 'L' : 'M'}${x.toFixed(1)} ${y.toFixed(1)}`).join(' '), at: (t) => pts[Math.round(t * 120)] }
-})()
-
+/* ─────────── 01 Wander: a shelf of tall photo cards you scroll through, like a trail app ─────────── */
 export function Wander() {
   const L = photosOf('Wander')
   const s = scene('Wander')
-  const [i, setI] = useState(0)
-  const p = L[i]
-  const go = (d) => setI((n) => (n + d + L.length) % L.length)
-  const [dx, dy] = PROFILE.at(0.05 + i * (0.9 / (L.length - 1)))
+  const row = useRef(null)
+  const go = (d) => { const el = row.current; if (!el) return; const card = el.querySelector('li'); el.scrollBy({ left: d * ((card?.offsetWidth || 280) + 12), behavior: window.matchMedia(MQ.motion).matches ? 'smooth' : 'auto' }) }
   return (
     <section id="scene-wander" className="by-ch by-wander" aria-labelledby="bx-h-wander">
       <div className="container">
         <Head id="bx-h-wander" k="01" label={`Chapter · ${L.length} frames`} g={s.g} lede={s.lede} sub={s.sub} />
-        <figure className="by-wd" data-by-card>
-          {L.map((x, k) => <img key={x.src} className={k === i ? 'is-on' : ''} src={img(x.src)} width={x.w} height="998" alt={k === i ? ALT[x.src] : ''} aria-hidden={k !== i} loading="lazy" decoding="async" />)}
-          <span className="by-wd__shade" aria-hidden="true" />
-          <svg className="by-wd__route" viewBox="0 0 300 110" aria-hidden="true">
-            <path className="by-route__line" d={PROFILE.d} />
-            {L.map((_, k) => { const [x, y] = PROFILE.at(0.05 + k * (0.9 / (L.length - 1))); return <circle key={k} className={`by-route__pin${k <= i ? ' is-past' : ''}`} cx={x} cy={y} r="3" /> })}
-            <g className="by-route__me" style={{ transform: `translate(${dx}px, ${dy}px)` }}><circle r="8" /><circle r="4" /></g>
-          </svg>
-          <figcaption className="by-wd__cap" aria-live="polite">
-            <span className="by-chip by-chip--glass">Frame {pad(i + 1)} of {pad(L.length)}</span>
-            <b>{p.cap}</b>
-          </figcaption>
-          <div className="by-wd__bar">
-            <ol className="by-wd__steps" aria-label="Frames">
-              {L.map((x, k) => <li key={x.src}><button type="button" className={k === i ? 'is-on' : ''} aria-pressed={k === i} aria-label={x.cap} onClick={() => setI(k)}>{pad(k + 1)}</button></li>)}
-            </ol>
-            <div className="by-wd__nav">
-              <button type="button" className="by-round" onClick={() => go(-1)} aria-label="Previous frame"><Icon name="prev" size={16} /></button>
-              <button type="button" className="by-round by-round--light" onClick={() => go(1)} aria-label="Next frame"><Icon name="arrow" size={16} /></button>
-            </div>
+        <div className="by-wd2">
+          <ul className="by-wd2__row" ref={row} aria-label="Wander frames">
+            {L.map((p, k) => (
+              <li key={p.src} className={k === 0 ? 'is-lead' : ''} data-by-card>
+                <img src={img(p.src)} width={p.w} height="998" alt={ALT[p.src]} loading="lazy" decoding="async" />
+                <span className="by-wd2__n">{pad(k + 1)}</span>
+                <span className="by-wd2__cap"><b>{p.cap}</b></span>
+              </li>
+            ))}
+          </ul>
+          <div className="by-wd2__nav">
+            <button type="button" className="by-round by-round--soft" onClick={() => go(-1)} aria-label="Previous frames"><Icon name="prev" size={16} /></button>
+            <button type="button" className="by-round by-round--ink" onClick={() => go(1)} aria-label="Next frames"><Icon name="arrow" size={16} /></button>
           </div>
-        </figure>
+        </div>
       </div>
     </section>
   )
 }
 
-/* ─────────── 02 Speed: a start gantry you can race, the point of view, the circuit and the sim ─────────── */
+/* ─────────── 02 Speed: the circuit as the lead card, the point of view, the sim and the night session ─────────── */
 export const TRACK = 'M 70 150 C 40 90, 90 40, 160 50 S 240 110, 300 80 S 380 20, 430 60 S 450 150, 380 170 S 250 150, 200 185 S 90 210, 70 150 Z'
-
-/** Lights out: five lights come on a second apart, then go out after a random hold. React as fast as you can. */
-function LightsOut() {
-  const [on, setOn] = useState(0)          // lights lit, 0–5
-  const [state, setState] = useState('idle') // idle | count | hold | go | done | jump
-  const [ms, setMs] = useState(0)
-  const [best, setBest] = useState(0)
-  const t = useRef([])
-  const t0 = useRef(0)
-  const clear = () => { t.current.forEach(clearTimeout); t.current = [] }
-  useEffect(() => clear, [])
-  const start = () => {
-    clear(); setOn(0); setMs(0); setState('count')
-    for (let k = 1; k <= 5; k++) t.current.push(setTimeout(() => setOn(k), k * 1000))
-    const hold = 5000 + 200 + Math.random() * 2600
-    t.current.push(setTimeout(() => setState('hold'), 5000))
-    t.current.push(setTimeout(() => { setOn(0); setState('go'); t0.current = performance.now() }, hold))
-  }
-  const press = () => {
-    if (state === 'idle' || state === 'done' || state === 'jump') return start()
-    if (state === 'count' || state === 'hold') { clear(); setOn(0); setState('jump'); return undefined }
-    const r = Math.round(performance.now() - t0.current)
-    setMs(r); setBest((b) => (b ? Math.min(b, r) : r)); setState('done')
-    return undefined
-  }
-  const say = { idle: 'Press to start. React when the lights go out.', count: 'Wait for it.', hold: 'Wait for it.', go: 'Go.', done: `${(ms / 1000).toFixed(3)} s`, jump: 'Jump start. Press to try again.' }[state]
-  return (
-    <div className={`by-lo by-lo--${state}`} data-by-card>
-      <div className="by-lo__top"><span className="by-chip">Lights out</span>{best > 0 && <span className="by-lo__best">Best this visit <b>{(best / 1000).toFixed(3)} s</b></span>}</div>
-      <button type="button" className="by-lo__gantry" onClick={press} aria-label={state === 'go' ? 'React now' : 'Start the lights'}>
-        {Array.from({ length: 5 }, (_, k) => <span key={k} className={k < on ? 'is-on' : ''}><i /><i /></span>)}
-      </button>
-      <p className="by-lo__say" aria-live="polite">{say}</p>
-    </div>
-  )
-}
 
 export function Speed() {
   const L = photosOf('Speed')
@@ -161,19 +121,19 @@ export function Speed() {
     <section id="scene-speed" className="by-ch by-speed" aria-labelledby="bx-h-speed">
       <div className="container">
         <Head id="bx-h-speed" k="02" label="Chapter · Karts, a sim and Formula 1" g={s.g} lede={s.lede} sub="Karts, a racing sim, the apex and Formula 1." />
-        <div className="by-speed__grid">
-          <Shot p={by['kart-pov']} over className="by-speed__pov" chip="Speed" />
-          <LightsOut />
-          <Shot p={by['f1-sim']} over className="by-speed__sim" />
-          <div className="by-circuit" data-by-card>
+        <div className="by-sp2">
+          <div className="by-circuit by-sp2__track" data-by-card>
             <div className="by-circuit__top"><span className="by-chip">Circuit</span><span className="by-sec"><i />S1<i />S2<i />S3</span></div>
             <svg viewBox="0 0 500 230" aria-hidden="true">
               <path d={TRACK} className="by-circuit__road" />
               <path id="by-trk" d={TRACK} className="by-circuit__line" />
               <circle className="by-circuit__car" r="8" cx="70" cy="150" />
             </svg>
+            <p className="by-sp2__cap"><b>Speed</b><span>{s.sub}</span></p>
           </div>
-          <Shot p={by['kart-night']} over className="by-speed__night" />
+          <Shot p={by['kart-pov']} over className="by-sp2__pov" />
+          <Shot p={by['f1-sim']} over className="by-sp2__sim" />
+          <Shot p={by['kart-night']} over className="by-sp2__night" />
         </div>
       </div>
     </section>
@@ -224,30 +184,34 @@ function Player() {
   const pick = (k) => { if (k !== 'techno' && synth.current?.playing) { synth.current.stop(); setPlaying(false); setBeat(-1) } setSt(k) }
   return (
     <div className={`by-pl by-pl--${st}`} data-by-card>
-      <div className="by-pl__top">
-        <span className="by-chip by-chip--glass"><i className={`by-pl__live${playing ? ' is-on' : ''}`} />{playing ? 'Playing' : 'On repeat'}</span>
-        <div className="by-pl__seg" role="group" aria-label="Station">
-          <button type="button" aria-pressed={st === 'techno'} onClick={() => pick('techno')}>Techno</button>
-          <button type="button" aria-pressed={st === 'am'} onClick={() => pick('am')}>Arctic Monkeys</button>
-        </div>
-      </div>
       <canvas ref={cv} className="by-pl__cv" aria-hidden="true" />
-      {st === 'techno' ? (
-        <div className="by-pl__body">
-          <div className="by-pl__t"><b>Techno</b><span>{BPM} BPM · four to the floor</span></div>
-          <div className="by-pl__seq" aria-hidden="true">
-            {Object.entries(PATTERN).map(([name, row]) => (
-              <p key={name}><small>{name}</small>{row.map((v, k) => <i key={k} className={`${v ? 'is-hit' : ''}${k === beat ? ' is-now' : ''}`} />)}</p>
-            ))}
+      <div className="by-pl__main">
+        <div className="by-pl__top">
+          <span className="by-chip by-chip--glass"><i className={`by-pl__live${playing ? ' is-on' : ''}`} />{playing ? 'Playing' : 'On repeat'}</span>
+          <div className="by-pl__seg" role="group" aria-label="Station">
+            <button type="button" aria-pressed={st === 'techno'} onClick={() => pick('techno')}>Techno</button>
+            <button type="button" aria-pressed={st === 'am'} onClick={() => pick('am')}>Arctic Monkeys</button>
           </div>
-          <button type="button" className="by-glass by-glass--light by-pl__go" onClick={toggle}>{playing ? 'Stop the beat' : 'Play a beat'}<i><Icon name={playing ? 'pause' : 'play'} size={14} /></i></button>
         </div>
-      ) : (
-        <div className="by-pl__body">
+        {st === 'techno' ? (
+          <>
+            <div className="by-pl__t"><b>Techno</b><span>{BPM} BPM · four to the floor</span></div>
+            <div className="by-pl__seq" aria-hidden="true">
+              {Object.entries(PATTERN).map(([name, row]) => (
+                <p key={name}><small>{name}</small>{row.map((v, k) => <i key={k} className={`${v ? 'is-hit' : ''}${k === beat ? ' is-now' : ''}`} />)}</p>
+              ))}
+            </div>
+          </>
+        ) : (
           <div className="by-pl__t"><b>Arctic Monkeys</b><span>Indie rock · Sheffield</span></div>
-          <a className="by-glass by-glass--light by-pl__go" href={AM} target="_blank" rel="noopener noreferrer">Open on Spotify<i><Icon name="ne" size={14} /></i></a>
-        </div>
-      )}
+        )}
+      </div>
+      <div className="by-pl__ctl">
+        {st === 'techno'
+          ? <button type="button" className="by-pl__play" onClick={toggle} aria-label={playing ? 'Stop the beat' : 'Play a beat'}><Icon name={playing ? 'pause' : 'play'} size={22} /></button>
+          : <a className="by-pl__play" href={AM} target="_blank" rel="noopener noreferrer" aria-label="Open Arctic Monkeys on Spotify"><Icon name="ne" size={22} /></a>}
+        <small>{st === 'techno' ? (playing ? 'Stop' : 'Play a beat') : 'Spotify'}</small>
+      </div>
     </div>
   )
 }
@@ -259,11 +223,11 @@ export function Music() {
     <section id="scene-music" className="by-ch by-live" aria-labelledby="bx-h-music">
       <div className="container">
         <Head id="bx-h-music" k="03" label={`Chapter · ${L.length} frames`} g="Music" lede={s.lede} sub={`Arctic Monkeys, techno, and ${s.sub.charAt(0).toLowerCase()}${s.sub.slice(1)}`} />
-        <div className="by-live__board">
+        <div className="by-mu">
           <Player />
-          <div className="by-live__row">
-            {L.slice(0, 4).map((p) => <Shot key={p.src} p={p} over className="by-live__shot" />)}
-          </div>
+          <ul className="by-mu__row">
+            {L.slice(0, 4).map((p) => <li key={p.src}><Shot p={p} over className="by-live__shot" /></li>)}
+          </ul>
         </div>
       </div>
     </section>

@@ -7,7 +7,7 @@ import { site } from './site.js'
 export const pager = {
   '/work': { to: '/journey', kicker: 'Next · Path', title: 'See how I *got here.*', d: 'Dealer networks and campaigns, then payments and growth, now ROQIVA.' },
   '/journey': { to: '/beyond', kicker: 'Next · Person', title: 'Meet the person *behind the work.*', d: 'Karts, techno, long drives and good food.' },
-  '/beyond': { to: '/hire', kicker: 'Next · Hire', title: 'Work *with me.*', d: 'A role, a GTM and RevOps engagement, or ROQIVA.' },
+  '/beyond': { to: '/hire', kicker: 'Next · Hire', title: 'Work *with me.*', d: 'A role, a strategy or architecture engagement, or ROQIVA.' },
   '/hire': { to: '/contact', kicker: 'Next · Talk', title: 'Start *a conversation.*', d: 'Send a short brief or book a time.' },
   '/roqiva': { to: '/contact', kicker: 'Next · Talk', title: 'Help shape *what ROQIVA does first.*', d: 'Follow along, or tell me the problem you would point it at.' },
 }
@@ -49,7 +49,7 @@ export const home = {
   },
   fit: { eyebrow: 'Where I fit', title: 'Pick *the seat you need.*', link: ['Hire me', '/hire'] },
   roqiva: {
-    eyebrow: 'Founder · In development',
+    eyebrow: 'Building · In development',
     title: 'The system I am building. *A company comes next.*',
     lead: 'It finds the signals your tools capture and no decision reads, drafts the fix, and waits for a person to approve it. It writes nothing to your live tools.',
     stats: [['6', 'steps per work item'], ['4', 'human gates'], ['0', 'writes to live tools']],
@@ -58,7 +58,7 @@ export const home = {
   },
   cta: {
     title: 'Bring me a number *that will not move.*',
-    lead: 'A role, a GTM or RevOps engagement, or ROQIVA. A short brief is enough.',
+    lead: 'A role, a strategy or architecture engagement, or ROQIVA. A short brief is enough.',
     primary: { label: 'Send a brief', to: '/contact#brief' },
     secondary: { label: 'Book a time', to: '/contact#book' },
   },
@@ -126,7 +126,7 @@ export const journeyPage = {
     { k: 'III', t: 'The system that runs them', span: '2026 – now', d: 'The loop I ran by hand, made repeatable.',
       lesson: 'A system can run the loop, as long as a person decides what changes the business.',
       roles: [
-        { when: '2026 – now', role: 'Founder', org: 'ROQIVA · in development', mono: 'RQ', now: true, text: 'Designing and building a governed revenue system for commerce and D2C. A company will form around it.', stats: [['6', 'agents'], ['6', 'steps'], ['4', 'gates']], tags: ['Product architecture', 'Agents', 'RevOps'], to: '/roqiva' },
+        { when: '2026 – now', role: 'Building ROQIVA', org: 'In development', mono: 'RQ', now: true, text: 'Designing and building a governed revenue system for commerce and D2C. A company will form around it.', stats: [['6', 'agents'], ['6', 'steps'], ['4', 'gates']], tags: ['Product architecture', 'Agents', 'RevOps'], to: '/roqiva' },
       ] },
   ],
   beliefs: { eyebrow: 'How I think', title: 'Three *beliefs about product.*' },
@@ -147,7 +147,7 @@ export const hire = {
   hero: {
     eyebrow: 'Hire me',
     title: 'Find the leak. *Build what fixes it.*',
-    lead: 'Product-led consulting for growth, conversion and operational bottlenecks. I also work in product teams, and I am founding ROQIVA.',
+    lead: 'Product-led consulting for growth, conversion and operational bottlenecks. I also work in product teams, and I am building ROQIVA.',
     primary: { label: 'Discuss consulting', to: '/contact?intent=consult#brief' },
     secondary: { label: 'LinkedIn', href: site.linkedin },
     ways: [
@@ -178,18 +178,18 @@ export const contactPage = {
   book: {
     label: 'A first call',
     h: 'Leave with *a clearer next step.*',
-    p: 'Bring one problem and the tools involved. We will clarify what to look at first and agree a practical next step. Choose a day here, then select an available time in Calendly to confirm.',
+    p: 'Bring one problem and the tools involved. We will clarify what to look at first and agree a practical next step.',
     plan: [
       ['Walk me through it', 'From first visit to repeat order, or the role and the team, in your words.'],
       ['I map where it likely breaks', 'Which tools hold the data, and which decisions never read it.'],
-      ['Agree a next step', 'A role conversation, a scoped GTM or RevOps piece, or a ROQIVA conversation.'],
+      ['Agree a next step', 'A role conversation, a scoped strategy or architecture piece, or a ROQIVA conversation.'],
     ],
     bring: 'One problem and the tools involved. No deck, and no production access.',
   },
   brief: {
     h: 'Send a short brief *instead.*',
     eyebrow: 'Prefer to write first?',
-    intents: ['A role on your team', 'A GTM or RevOps engagement', 'ROQIVA: follow along or help shape it', 'Just saying hello'],
+    intents: ['A role on your team', 'A strategy or architecture engagement', 'ROQIVA: follow along or help shape it', 'Just saying hello'],
     topics: ['A number that will not move', 'Checkout and payments', 'Search and discovery', 'Delivery and returns', 'Retention and CRM', 'Tracking I do not trust', 'Something else'],
     tools: ['CRM', 'Analytics', 'Payments', 'Order management', 'Support desk', 'Catalogue', 'Data warehouse'],
   },

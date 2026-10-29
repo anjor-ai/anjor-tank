@@ -9,31 +9,41 @@ import { CAREER, LEARNING } from './v5'
    Every fragment is fluid: it reads at 280px and at 640px (container queries in site.css trim the extras).
    ═══════════════════════════════════════════════════════════════════════════ */
 
+const KIND = (r) => (r.head ? ['build', 'Building'] : r.now ? ['now', 'Now'] : r.learn ? ['learn', 'Education'] : ['role', 'Career'])
+const MONO = { 'GNC India': 'GN', Truemeds: 'TM', 'Neil Patel Digital India': 'NP', Eggfirst: 'EF', 'NMIMS, Mumbai': 'NM' }
+const mono = (org) => MONO[org] || org.slice(0, 2).toUpperCase()
+
+/** The career as a git log, made to scan: a coloured kind chip, the organisation's monogram, the dates in a pill,
+   the numbers as chips. Colours: violet = building ROQIVA, green = now, blue = career, amber = education. */
 export function CareerLog({ withLearning = false, compact = false }) {
   const rows = withLearning ? [...CAREER, ...LEARNING] : CAREER
   return (
     <div className={cx('u-log', compact && 'u-log--c')}>
-      <p className="u-log__top"><span><b>$</b> git log --graph --career</span><span className="u-log__legend"><i className="l1" />ROQIVA <i className="l0" />Career{withLearning && <><i className="lx" />Learning</>}</span></p>
+      <p className="u-log__top"><span><b>$</b> git log --graph --career</span><span className="u-log__legend"><i className="k-build" />Building <i className="k-now" />Now <i className="k-role" />Career{withLearning && <><i className="k-learn" />Education</>}</span></p>
       <ol className="u-log__rows" data-seq>
-        {rows.map((r) => (
-          <li key={r.id} className={cx('u-log__r', r.head && 'is-head', r.now && 'is-now', r.learn && 'is-learn', r.lane === 1 && 'is-branch')}>
-            <span className="u-log__g" aria-hidden="true"><i /></span>
-            <div className="u-log__c">
-              <p className="u-log__m">
-                {r.ref && <span className={cx('u-log__ref', r.head && 'is-head')}>{r.head ? 'HEAD → ' : ''}{r.ref}</span>}
-                {r.now && !r.head && <span className="u-log__now"><i />Now</span>}
-                <span>{r.when}</span>
-              </p>
-              <h3><b>{r.role}</b><span>{r.org}{r.sub && <em> · {r.sub}</em>}</span></h3>
-              {(r.stats || r.to) && (
-                <div className="u-log__f">
-                  {r.stats && <dl>{r.stats.map(([v, l]) => <div key={l}><dt>{v}</dt><dd>{l}</dd></div>)}</dl>}
-                  {r.to && <a href={r.to}>{r.cta}<Icon name="arrow" size={13} /></a>}
+        {rows.map((r) => {
+          const [k, label] = KIND(r)
+          const org = r.head ? 'ROQIVA' : r.org
+          return (
+            <li key={r.id} className={cx('u-log__r', `k-${k}`)}>
+              <span className="u-log__g" aria-hidden="true"><i /></span>
+              <div className="u-log__c">
+                <span className="u-log__mono" aria-hidden="true">{r.head ? 'RQ' : mono(org)}</span>
+                <div className="u-log__main">
+                  <p className="u-log__m"><span className="u-log__kind">{k === 'now' && <i />}{label}</span>{r.ref && <code className="u-log__ref">{r.ref}</code>}</p>
+                  <h3><b>{r.role}</b><span>{r.head ? r.org : r.org}{r.sub && <em> · {r.sub}</em>}</span></h3>
+                  {(r.stats || r.to) && (
+                    <div className="u-log__f">
+                      {r.stats && <ul>{r.stats.map(([v, l]) => <li key={l}><b>{v}</b>{l}</li>)}</ul>}
+                      {r.to && <a href={r.to}>{r.cta}<Icon name="arrow" size={13} /></a>}
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-          </li>
-        ))}
+                <span className="u-log__when">{r.when}</span>
+              </div>
+            </li>
+          )
+        })}
       </ol>
     </div>
   )
