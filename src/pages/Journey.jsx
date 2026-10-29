@@ -1,8 +1,9 @@
-import { BELIEFS, EDU, journeyPage, roqiva } from '../content'
+import { BELIEFS, EDU, journeyPage } from '../content'
 import { Cta } from '../components/ui'
 import { Icon } from '../components/icons'
-import { Board, Chips, Go, Kicker, PageHead, Screen, Sec, Stage, Tile, Win } from '../components/board'
+import { Board, Go, Kicker, PageHead, Screen, Sec, Stage, Tile } from '../components/board'
 import { CareerLog } from '../components/frags'
+import { CHAPTER_ART } from '../components/journeyArt'
 import { PageMotion } from '../lib/PageMotion'
 
 /* Journey: where I started, what each role added, and what the work taught me.
@@ -11,42 +12,7 @@ import { PageMotion } from '../lib/PageMotion'
 /* Now first: the founder chapter leads, each chapter lists its latest role first. Ids keep the original order so links stay stable. */
 const CHAPTERS = journeyPage.chapters.map((c, i) => ({ ...c, i, roles: [...c.roles].reverse() })).reverse()
 
-function Wireframes() {
-  return (
-    <Win title="Dealer landing pages">
-      <div className="u-wf">
-        {['Dealer page', 'Campaign page', 'Lead form'].map((t, k) => (
-          <div key={t} className="u-wf__p"><i /><i className="is-hero" /><i /><i className="is-s" /><span>{k === 2 ? 'Submit' : 'Call'}</span><small>{t}</small></div>
-        ))}
-      </div>
-    </Win>
-  )
-}
-function Pods({ tags }) {
-  return (
-    <Win title="Two product pods">
-      <div className="u-pods">
-        <p className="u-pods__row"><span>Payments</span><span>Portals</span></p>
-        <p className="u-pods__eng" aria-label="12 engineers">{Array.from({ length: 12 }, (_, i) => <i key={i} />)}</p>
-        <small>12 engineers across two pods</small>
-        <Chips items={tags} />
-      </div>
-    </Win>
-  )
-}
-function RoqivaSteps() {
-  const steps = roqiva.flow.titles.map((t) => t.replace(/\*/g, ''))
-  return (
-    <Win title="ROQIVA · one work item" tag="In development" dark>
-      <ol className="u-steps">{steps.map((t, k) => <li key={t}><b>{k + 1}</b><span>{t}</span></li>)}</ol>
-      <Chips items={['4 human gates', '6 steps']} className="u-steps__chips" />
-    </Win>
-  )
-}
-const CH_PAINT = ['dawn', 'noon', 'night']
-
 function Chapter({ c, i }) {
-  const tags = c.roles.flatMap((r) => r.tags || []).slice(0, 4)
   const founder = i === 2
   return (
     <Board className="b-chap" id={`chapter-${i}`}>
@@ -70,7 +36,7 @@ function Chapter({ c, i }) {
         </ul>
         <blockquote>{c.lesson}</blockquote>
       </Tile>
-      <Stage kind="paint" name={CH_PAINT[i]} className="b-chap__vis">{i === 0 ? <Wireframes /> : i === 1 ? <Pods tags={tags} /> : <RoqivaSteps />}</Stage>
+      <div className={`b-chap__vis ja-field ja-field--${i}`}>{(() => { const A = CHAPTER_ART[i]; return <A /> })()}</div>
     </Board>
   )
 }

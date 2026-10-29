@@ -1,13 +1,13 @@
 import { RoqivaStage } from '../components/Story'
+import { Parts } from '../components/RoqivaParts'
 import { useEffect, useRef, useState } from 'react'
 import { SplitText } from 'gsap/SplitText'
 import { CASES, parts, roqiva as R, tracks, workflow } from '../content'
 import { Icon } from '../components/icons'
 import { Arrow, Button, Rich, Status } from '../components/ui'
-import { Art, ArtCard } from '../components/Art'
+import { ArtCard } from '../components/Art'
 import { FitPin } from '../components/Sticky'
 import { MQ, ScrollTrigger, gsap, useGSAP } from '../lib/motion'
-import { useCycle } from '../lib/useCycle'
 import { useForcedTheme } from '../lib/theme'
 import { PageMotion } from '../lib/PageMotion'
 import { Stage, useWide } from '../showcase/primitives'
@@ -239,31 +239,6 @@ function Overview({ ready }) {
         </div>
       </div>
     </section>
-  )
-}
-
-/* ───────── Parts: an expanding horizontal carousel ───────── */
-const PART_ART = { brain: 'brain', detectors: 'scan', orchestrator: 'gate', drafting: 'agent', monitor: 'prove', people: 'person', tools: 'lock' }
-const PART_ICON = { brain: 'brain', detectors: 'radar', orchestrator: 'branch', drafting: 'agent', monitor: 'chart', people: 'person', tools: 'layers' }
-function Parts() {
-  const ref = useRef(null)
-  const list = parts.items
-  const [i, pick] = useCycle(list.length, 3800, ref)
-  const ssr = typeof window === 'undefined'
-  return (
-    <div className="rqp" ref={ref} data-reveal>
-      {list.map((p, k) => (
-        <button key={p.id} type="button" className="rqp__panel" aria-expanded={ssr || i === k} onClick={() => pick(k)} onMouseEnter={() => pick(k)}>
-          <span className="rqp__rail"><Icon name={PART_ICON[p.id]} size={16} /><span>{p.name}</span><em>0{k + 1}</em></span>
-          <span className="rqp__open">
-            <span className="rqp__art acard__art" aria-hidden="true"><Art art={PART_ART[p.id]} /></span>
-            <span className="label">{p.kind}</span>
-            <b className="h-3">{p.name}</b>
-            <span className="rqp__d">{p.d}</span>
-          </span>
-        </button>
-      ))}
-    </div>
   )
 }
 

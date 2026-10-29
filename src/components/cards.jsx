@@ -8,7 +8,7 @@ import { WIRE_KINDS, Wire } from './wires'
    Case cards. Two shapes, one language: white panels on the app canvas, a soft field holding the wireframe,
    the title and one line in readable type, the number that moved, and one action.
    · CaseCard: the Work page. The words on a white panel, the pictures in a framed field you page through
-     (the screen, the workflow, the outcome), chips and the second number laid over it. Alternate cards flip.
+     (the screen, the workflow, the outcome) and the second number laid over it. Alternate cards flip.
    · CaseTile: the home board. The picture on top (or beside it, on the wide tiles), then the words.
    ═══════════════════════════════════════════════════════════════════════════ */
 
@@ -31,7 +31,6 @@ export function CaseCard({ c, flip = false }) {
         </footer>
       </div>
       <div className={`cc__media cc__media--${c.slug}`}>
-        <Tags c={c} n={2} />
         <div className="cc__track" style={{ transform: `translateX(-${i * 100}%)` }}>
           {WIRE_KINDS.map(([k], j) => <div key={k} className="cc__slide" aria-hidden={j !== i}><Wire c={c} kind={k} /></div>)}
         </div>
@@ -44,19 +43,13 @@ export function CaseCard({ c, flip = false }) {
   )
 }
 
-/** The case's category and tags, as chips over the top-left of its picture. */
-function Tags({ c, n }) {
-  const tags = [c.tag, ...c.chips.filter((t) => t !== c.tag)].slice(0, n + 1)
-  return <ul className="c-tags" aria-label="Tags">{tags.map((t, k) => <li key={t} className={k === 0 ? 'is-k' : undefined}>{t}</li>)}</ul>
-}
-
 /** The home board's tile: the picture, then what it is and what moved. The whole tile opens the case. */
 export function CaseTile({ c, onOpen, wide = false }) {
   const [v, l] = c.metrics[0]
   return (
     <article className={cx('ct2', wide && 'ct2--wide')} data-cursor="Read">
       <a className="ct2__a" href={`/work/${c.slug}`} aria-label={`${c.title}: read the case`} />
-      <div className={`ct2__art cc__media--${c.slug}`}><Wire c={c} kind={wide ? 'flow' : 'screen'} /><Tags c={c} n={1} /></div>
+      <div className={`ct2__art cc__media--${c.slug}`}><Wire c={c} kind={wide ? 'flow' : 'screen'} /></div>
       {onOpen && <button type="button" className="ct2__q" onClick={() => onOpen(c.slug)} aria-label={`Quick view: ${c.title}`}><Icon name="eye" size={14} /><span>Quick view</span></button>}
       <div className="ct2__b">
         <h3>{c.title}</h3>

@@ -187,7 +187,6 @@ body { background: var(--bg); color: var(--text); }
 .ft__col a span { font: 500 11.5px/1 var(--font-mono); opacity: 0.6; }
 .ft__col p { margin: 0; font: 400 15px/1.55 var(--font-body); color: rgba(255, 255, 255, 0.8); }
 .ft__name { display: flex; justify-content: center; overflow: hidden; margin-top: clamp(50px, 6vw, 90px); padding: 0 12px; font: 600 clamp(64px, 17.4vw, 300px)/0.8 var(--font-display); letter-spacing: -0.07em; white-space: nowrap; }
-.ft__name span { display: inline-block; }
 .ft__base { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 24px; padding: 22px clamp(24px, 4vw, 64px) 26px; font: 400 13px/1.4 var(--font-body); color: rgba(255, 255, 255, 0.72); }
 .ft__base p { margin: 0; }
 .ft__base a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }

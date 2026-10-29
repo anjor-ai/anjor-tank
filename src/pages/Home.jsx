@@ -4,16 +4,16 @@ import { Arrow, Button, Cta } from '../components/ui'
 import { CaseModal } from '../components/folio'
 import { Board, Go, H, Kicker, Sec, Stage, Tile } from '../components/board'
 import { LedBoard } from '../components/led'
-import { CareerLog, MapDots } from '../components/frags'
+import { CareerLog } from '../components/frags'
+import { BasedIn } from '../components/globe'
 import { CaseTile } from '../components/cards'
-import { RoqivaStage } from '../components/Story'
+import { Parts } from '../components/RoqivaParts'
 import { Stat } from '../components/kinetic'
 import { Icon } from '../components/icons'
 import { HeroApp } from '../scenes/HeroApp'
 import { MethodRun } from '../components/method'
 import { ConsultMapScene } from '../scenes/ConsultMap'
 import { WordReel } from '../art/Reel'
-import { useClock } from '../components/kit'
 import { useTheme } from '../lib/theme'
 import { PageMotion } from '../lib/PageMotion'
 
@@ -77,7 +77,6 @@ const REEL = [
 
 export default function Home() {
   const [open, setOpen] = useState('')
-  const t = useClock()
   return (
     <PageMotion routeKey="/">
       <Hero />
@@ -106,11 +105,7 @@ export default function Home() {
             <h3>Founder of ROQIVA. Product Manager, GNC India.</h3>
             <Go to="/journey">The story so far</Go>
           </Tile>
-          <Tile className="b-story__map" tone="soft">
-            <Kicker icon="pin">Based in</Kicker>
-            <MapDots />
-            <p className="b-story__city"><b>Mumbai</b><span>{t || 'India'}</span></p>
-          </Tile>
+          <Tile className="b-story__map"><BasedIn /></Tile>
           <Stage kind="paint" name="noon" className="b-story__log" align="start"><CareerLog compact /></Stage>
         </Board>
       </Sec>
@@ -142,7 +137,7 @@ export default function Home() {
                 <Button to={content.roqiva.secondary.to} variant="ghost">{content.roqiva.secondary.label}</Button>
               </div>
             </Tile>
-            <Stage kind="shader" name="violet" className="b-rq__app"><RoqivaStage /></Stage>
+            <div className="b-rq__sys"><Parts /></div>
           </Board>
         </div>
       </section>

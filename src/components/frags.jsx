@@ -25,8 +25,6 @@ export function CareerLog({ withLearning = false, compact = false }) {
                 <span>{r.when}</span>
               </p>
               <h3><b>{r.role}</b><span>{r.org}{r.sub && <em> · {r.sub}</em>}</span></h3>
-              {r.d && <p className="u-log__d">{r.d}</p>}
-              {r.note && <p className="u-log__note"><Icon name="branch" size={13} />{r.note}</p>}
               {(r.stats || r.to) && (
                 <div className="u-log__f">
                   {r.stats && <dl>{r.stats.map(([v, l]) => <div key={l}><dt>{v}</dt><dd>{l}</dd></div>)}</dl>}
@@ -38,23 +36,6 @@ export function CareerLog({ withLearning = false, compact = false }) {
         ))}
       </ol>
     </div>
-  )
-}
-
-/* ───────────── A dotted coastline with a pin on Mumbai. Abstract on purpose. ───────────── */
-export function MapDots({ caption = 'Dotted map with a pin on Mumbai' }) {
-  const coast = (y) => [[0, 10.5], [2, 9.6], [4, 10.6], [6, 9.4], [8, 10.2], [9, 10.9], [10, 11.4], [12, 12.4]].reduce((acc, p, i, a) => (y >= p[0] && a[i + 1] && y <= a[i + 1][0] ? p[1] + ((y - p[0]) / (a[i + 1][0] - p[0])) * (a[i + 1][1] - p[1]) : acc), 12.4)
-  const dots = []
-  for (let y = 0; y <= 12; y++) for (let x = 0; x < 26; x++) {
-    const c = coast(y)
-    const width = y > 7 ? Math.max(2.2, 15 - (y - 7) * 3.1) : 99
-    if (x > c && x < c + width) dots.push([x, y])
-  }
-  return (
-    <svg className="u-map" viewBox="0 0 260 130" role="img" aria-label={caption}>
-      {dots.map(([x, y]) => <circle key={`${x}-${y}`} cx={x * 10 + 5} cy={y * 10 + 5} r="2" />)}
-      <g className="u-map__pin" transform="translate(152 98)"><circle className="u-map__pulse" r="6" /><circle r="6" /></g>
-    </svg>
   )
 }
 

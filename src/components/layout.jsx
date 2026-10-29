@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from 'react'
 import { footer, pager, routes, site } from '../content'
 import { useRoute } from '../lib/router'
-import { MQ, gsap, useGSAP } from '../lib/motion'
 import { useTheme } from '../lib/theme'
 import { isSoundOn, subscribe, toggleSound } from '../system/sound'
 import { Shader } from '../system/Shader'
 import { Icon } from './icons'
 import { BrandMark } from './BrandMark'
+import { WordReel } from '../art/Reel'
 import { Arrow, Button, Rich } from './ui'
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -107,7 +107,7 @@ export function Nav() {
   return (
     <header className={`b-nav${scrolled ? ' is-scrolled' : ''}${open ? ' is-open' : ''}`}>
       <div className="b-nav__in">
-        <a href="/" className="b-nav__brand" aria-label={`${site.name} home`}><BrandMark className="b-nav__mark" decorative /><span>{site.name}</span></a>
+        <a href="/" className="b-nav__brand"><BrandMark className="b-nav__mark" decorative /><WordReel word="anjor" size="nav" label={`${site.name} home`} /></a>
         <nav className="b-nav__links" aria-label="Main" ref={bar}>
           <span className="b-nav__pill" aria-hidden="true" />
           {main.map((r) => (
@@ -165,13 +165,6 @@ export function StoryPager() {
 export function Footer() {
   const story = routes.filter((r) => r.story)
   const ref = useRef(null)
-  useGSAP(() => {
-    const mm = gsap.matchMedia()
-    mm.add(MQ.motion, () => {
-      gsap.fromTo('.ft__name span', { yPercent: 70 }, { yPercent: 0, ease: 'none', stagger: 0.03, scrollTrigger: { trigger: ref.current, start: 'top bottom', end: 'bottom bottom', scrub: 0.6 } })
-    })
-    return () => mm.revert()
-  }, { scope: ref })
   return (
     <footer className="ft" ref={ref}>
       <div className="ft__card">
@@ -199,7 +192,7 @@ export function Footer() {
             <p>Product Manager at GNC India. Building ROQIVA, in development. {footer.how}</p>
           </div>
         </div>
-        <div className="ft__name" aria-hidden="true">{site.name.split('').map((c, i) => <span key={i}>{c === ' ' ? ' ' : c}</span>)}</div>
+        <div className="ft__name"><WordReel word="anjor" size="foot" label={site.name} /></div>
         <div className="ft__base">
           <p><span>© {new Date().getFullYear()} {site.name} · <a href="/privacy">Privacy</a></span></p>
           <p>{footer.note}</p>
