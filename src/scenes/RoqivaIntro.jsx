@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef } from 'react'
+import { useLayoutEffect, useRef } from 'react'
 import { createPortal } from 'react-dom'
 import { home, roqiva as R, site, workflow } from '../content'
 import { gsap } from '../lib/motion'

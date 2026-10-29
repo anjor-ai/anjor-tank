@@ -4,7 +4,9 @@ import { Arrow, Button, Cta } from '../components/ui'
 import { CaseModal } from '../components/folio'
 import { Board, Go, H, Kicker, Screen, Sec, Stage, Tile } from '../components/board'
 import { LedBoard } from '../components/led'
-import { CareerLog, CaseTile, DecisionTrace, MapDots } from '../components/frags'
+import { CareerLog, MapDots } from '../components/frags'
+import { CaseTile } from '../components/cards'
+import { RoqivaStage } from '../components/Story'
 import { Stat } from '../components/kinetic'
 import { Icon } from '../components/icons'
 import { HeroApp } from '../scenes/HeroApp'
@@ -40,7 +42,7 @@ function Hero() {
             {content.hello.proof.map(([v, l]) => <li key={l} className="b-tile"><b><Stat v={v} /></b><span>{l}</span></li>)}
           </ul>
           <Stage kind="shader" name={theme === 'dark' ? 'violet' : 'dawn'} className="b-hero__stage">
-            <DecisionTrace />
+            <div className="b-hero__app mh" aria-label="Product workspace, sample data"><HeroApp /></div><span className="w-ill w-ill--hero">Illustration · sample data</span>
           </Stage>
           <button className="b-hero__replay" type="button" onClick={() => window.dispatchEvent(new Event('replay-site-film'))}><Icon name="play" size={13} />Replay the opening film</button>
         </Board>
@@ -49,13 +51,18 @@ function Hero() {
   )
 }
 
-/** The one loud move: who I have worked with, travelling across the screen. */
+/** Where the work was done: a dark band with its label fixed at the left and the names travelling behind a soft edge. */
 function Marquee() {
-  const set = <><em>Experience across</em><b>Truemeds</b><i /><b>GNC India</b><i /><b>Neil Patel Digital</b><i /><em>Commerce · Growth · Operations</em><i /></>
+  const set = <><b>Truemeds</b><i /><b>GNC India</b><i /><b>Neil Patel Digital</b><i /><em>Commerce · Growth · Operations</em><i /></>
   return (
-    <div className="b-mq" aria-label="Experience across Truemeds, GNC India and Neil Patel Digital, in commerce, growth and operations">
-      <div className="b-mq__row" aria-hidden="true"><span>{set}</span><span>{set}</span></div>
-    </div>
+    <section className="b-sec b-sec--band" aria-label="Experience across Truemeds, GNC India and Neil Patel Digital, in commerce, growth and operations">
+      <div className="b-wrap">
+        <div className="b-mq">
+          <p className="b-mq__k" aria-hidden="true"><i className="b-live" />Experience across</p>
+          <div className="b-mq__view" aria-hidden="true"><div className="b-mq__row"><span>{set}</span><span>{set}</span></div></div>
+        </div>
+      </div>
+    </section>
   )
 }
 
@@ -158,7 +165,7 @@ export default function Home() {
                 <Button to={content.roqiva.secondary.to} variant="ghost">{content.roqiva.secondary.label}</Button>
               </div>
             </Tile>
-            <div className="b-rq__app" aria-label="ROQIVA workspace, sample data"><HeroApp brand="ROQIVA" /></div>
+            <Stage kind="shader" name="violet" className="b-rq__app"><RoqivaStage /></Stage>
           </Board>
         </div>
       </section>

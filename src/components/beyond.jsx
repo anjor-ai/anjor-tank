@@ -172,12 +172,14 @@ export function Live() {
     <section id="scene-live" className="by-ch by-live" aria-labelledby="bx-h-live">
       <div className="container">
         <Head id="bx-h-live" k="03" label={`Chapter · ${L.length} frames`} g={s.g} lede={s.lede} sub={s.sub} />
-        <figure className="by-live__wide" data-by-card>
-          <span className="by-live__frame"><img src={img(wide.src)} width={wide.w} height="998" alt={ALT[wide.src]} loading="lazy" decoding="async" data-by-zoom /></span>
-          <figcaption><span className="by-chip by-chip--glass">Live</span><b>{wide.cap}</b></figcaption>
-        </figure>
-        <div className="by-live__row">
-          {rest.map((p) => <Shot key={p.src} p={p} over className="by-live__shot" />)}
+        <div className="by-live__board">
+          <figure className="by-live__wide" data-by-card>
+            <span className="by-live__frame"><img src={img(wide.src)} width={wide.w} height="998" alt={ALT[wide.src]} loading="lazy" decoding="async" data-by-zoom /></span>
+            <figcaption><span className="by-chip by-chip--glass">Live</span><b>{wide.cap}</b></figcaption>
+          </figure>
+          <div className="by-live__row">
+            {rest.map((p) => <Shot key={p.src} p={p} over className="by-live__shot" />)}
+          </div>
         </div>
       </div>
     </section>
@@ -261,36 +263,40 @@ export function Play() {
     <section id="scene-play" className="by-ch by-play" aria-labelledby="bx-h-play">
       <div className="container">
         <Head id="bx-h-play" k="06" label={`Chapter · ${GAMES.length} on the shelf`} g="Play" lede="One more save before bed." />
-        <div className="by-feat" data-by-card aria-live="polite">
-          {GAMES.map((x) => <img key={x.slug} className={x.slug === g.slug ? 'is-on' : ''} src={`/img/games/${x.slug}.webp`} alt="" loading="lazy" decoding="async" />)}
-          <div className="by-feat__copy">
-            <span className="by-chip by-chip--glass">{cat === 'All' ? 'In my library' : cat}</span>
-            <h3 key={g.slug}>{g.t}</h3>
-            <dl className="by-feat__facts">
-              <div><dt>Genre</dt><dd>{g.g}</dd></div>
-              <div><dt>Studio</dt><dd>{g.st}</dd></div>
-              <div><dt>First released</dt><dd>{g.y}</dd></div>
-            </dl>
+        <div className="by-play__board">
+          <div className="by-feat" data-by-card aria-live="polite">
+            {GAMES.map((x) => <img key={x.slug} className={x.slug === g.slug ? 'is-on' : ''} src={`/img/games/${x.slug}.webp`} alt="" loading="lazy" decoding="async" />)}
+            <div className="by-feat__copy">
+              <span className="by-chip by-chip--glass">{cat === 'All' ? 'In my library' : cat}</span>
+              <h3 key={g.slug}>{g.t}</h3>
+              <dl className="by-feat__facts">
+                <div><dt>Genre</dt><dd>{g.g}</dd></div>
+                <div><dt>Studio</dt><dd>{g.st}</dd></div>
+                <div><dt>First released</dt><dd>{g.y}</dd></div>
+              </dl>
+            </div>
+            <div className="by-feat__nav">
+              <span>Shelf position <b>{pad(GAMES.indexOf(g) + 1)} / {GAMES.length}</b></span>
+              <button type="button" className="by-round" onClick={() => move(-1)} aria-label="Previous game"><Icon name="prev" size={16} /></button>
+              <button type="button" className="by-glass by-glass--light" onClick={() => move(1)}>Next title <i><Icon name="arrow" size={15} /></i></button>
+            </div>
           </div>
-          <div className="by-feat__nav">
-            <span>Shelf position <b>{pad(GAMES.indexOf(g) + 1)} / {GAMES.length}</b></span>
-            <button type="button" className="by-round" onClick={() => move(-1)} aria-label="Previous game"><Icon name="prev" size={16} /></button>
-            <button type="button" className="by-glass by-glass--light" onClick={() => move(1)}>Next title <i><Icon name="arrow" size={15} /></i></button>
-          </div>
+          <aside className="by-shelf" aria-label="The library">
+            <nav className="by-tabs" aria-label="Filter games by category">
+              {CATS.map((c) => <button key={c} type="button" aria-pressed={cat === c} onClick={() => setCat(c)}>{c}<small>{c === 'All' ? GAMES.length : GAMES.filter((x) => x.c === c).length}</small></button>)}
+            </nav>
+            <ul className="by-lib" aria-label="Games I play">
+              {list.map((x) => (
+                <li key={x.slug} data-by-tile>
+                  <button type="button" className={x.slug === g.slug ? 'is-on' : ''} aria-pressed={x.slug === g.slug} onClick={() => setSlug(x.slug)}>
+                    <span className="by-lib__art"><img src={`/img/games/${x.slug}.webp`} alt="" loading="lazy" decoding="async" /></span>
+                    <span className="by-lib__t"><b>{x.t}</b><small>{x.c}</small></span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </aside>
         </div>
-        <nav className="by-tabs" aria-label="Filter games by category">
-          {CATS.map((c) => <button key={c} type="button" aria-pressed={cat === c} onClick={() => setCat(c)}>{c}<small>{c === 'All' ? GAMES.length : GAMES.filter((x) => x.c === c).length}</small></button>)}
-        </nav>
-        <ul className="by-lib" aria-label="Games I play">
-          {list.map((x) => (
-            <li key={x.slug} data-by-tile>
-              <button type="button" className={x.slug === g.slug ? 'is-on' : ''} aria-pressed={x.slug === g.slug} onClick={() => setSlug(x.slug)}>
-                <span className="by-lib__art"><img src={`/img/games/${x.slug}.webp`} alt="" loading="lazy" decoding="async" /></span>
-                <span className="by-lib__t"><b>{x.t}</b><small>{x.c}</small></span>
-              </button>
-            </li>
-          ))}
-        </ul>
         <p className="by-note">Cover art is original and abstract, made for this page. No official artwork is used.</p>
       </div>
     </section>

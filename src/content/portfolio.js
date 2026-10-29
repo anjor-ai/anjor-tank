@@ -213,3 +213,13 @@ export const legal = {
     { h: 'Your choices', p: [`Ask me at ${site.email} what I hold from your brief, or to delete it. I will reply in plain terms.`] },
   ],
 }
+
+// The closing panel of each case page: one line for that case, so no two pages close the same way. (New lines, Oct 2026: review.)
+export const closers = {
+  'price-lock-checkout': { title: 'Trace the doubt *in ==your checkout==.*', lead: 'Bring the payment and cancellation numbers you trust least.' },
+  'sku-substitution-engine': { title: 'Turn ==stock-outs== *into kept orders.*', lead: 'Bring the order states your warehouse argues with.' },
+  'retention-reminders': { title: 'Find ==the reorder window== *in your data.*', lead: 'Bring your repeat-order numbers and the tools that send reminders.' },
+  'search-discovery': { title: 'Make ==search== *end in an order.*', lead: 'Bring the queries that return nothing.' },
+  'ai-automation': { title: 'Automate ==the simple calls== *first.*', lead: 'Bring your contact reasons and your cost per order.' },
+  'headless-cms-experimentation': { title: 'Ship ==campaign pages== *without a ticket.*', lead: 'Bring the last page that waited on engineering.' },
+}

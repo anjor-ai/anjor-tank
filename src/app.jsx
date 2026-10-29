@@ -8,7 +8,7 @@ import { RouterProvider, setPreloader, useRoute } from './lib/router'
 import { ThemeProvider } from './lib/theme'
 import { ToastProvider } from './lib/toast'
 import { track } from './lib/track'
-import { Curtain, Cursor } from './system/shell'
+import { Cursor } from './system/shell'
 import { resumeOnGesture } from './system/sound'
 import { MQ, ScrollTrigger } from './lib/motion'
 import { SiteFilm } from './scenes/RoqivaIntro'
@@ -133,7 +133,6 @@ function Shell() {
   return (
     <>
       <Opener />
-      <Curtain routeKey={route.path + (route.n || '')} />
       <Cursor />
       <a className="skip-link" href="#main" onClick={(e) => { e.preventDefault(); document.getElementById('main')?.focus() }}>Skip to content</a>
       <Nav />

@@ -2,8 +2,7 @@ import { useState } from 'react'
 import { CASES, TAGS, work as P } from '../content'
 import { Cta } from '../components/ui'
 import { Board, Go, PageHead, Sec, Stage, Win } from '../components/board'
-import { CaseTile } from '../components/frags'
-import { CaseModal } from '../components/folio'
+import { CaseCard } from '../components/cards'
 import { PageMotion } from '../lib/PageMotion'
 
 /* Work: the six systems. The head shows them as an index in a window; below, a filter and the six as tiles,
@@ -23,7 +22,6 @@ function Index() {
 
 export default function Work() {
   const [tag, setTag] = useState('All')
-  const [open, setOpen] = useState('')
   const list = CASES.filter((c) => tag === 'All' || c.tag === tag)
   return (
     <PageMotion routeKey="/work">
@@ -37,10 +35,9 @@ export default function Work() {
           {TAGS.map((t) => <button key={t} type="button" aria-pressed={tag === t} onClick={() => setTag(t)}>{t}<small>{t === 'All' ? CASES.length : CASES.filter((c) => c.tag === t).length}</small></button>)}
         </div>
         <Board className="b-workgrid" aria-live="polite" key={tag}>
-          {list.map((c) => <CaseTile key={c.slug} c={c} onOpen={setOpen} metrics={2} />)}
+          {list.map((c, k) => <CaseCard key={c.slug} c={c} flip={k % 2 === 1} />)}
         </Board>
       </Sec>
-      {open && <CaseModal slug={open} setSlug={setOpen} onClose={() => setOpen('')} />}
 
       <Cta topic="work" title="Want this *done on ==your system==?*" lead="Tell me the number that will not move." primary={{ label: 'Send a brief', to: '/contact?intent=consult#brief' }} secondary={{ label: 'Hire me', to: '/hire' }} />
     </PageMotion>

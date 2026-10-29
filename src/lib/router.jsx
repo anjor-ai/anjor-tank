@@ -48,14 +48,12 @@ export function RouterProvider({ children }) {
     window.history[replace ? 'replaceState' : 'pushState'](null, '', url.pathname + url.search + url.hash)
     if (samePage && url.hash) { scrollToHash(url.hash); return }
     window.__oiNav = (window.__oiNav || 0) + 1 // pages can tell an arrival from inside the site from a direct visit
-    // The curtain closes over the page (when motion is on), then the next page renders under it and the curtain lifts.
     const go = () => {
       startTransition(() => setRoute({ ...parseLocation(), n: Date.now() }))
       if (url.hash) scrollToHash(url.hash)
       else scrollToY(0, { immediate: true })
     }
-    if (window.__curtain) window.__curtain.close(url.pathname).then(go)
-    else go()
+    go()
   }, [])
 
   useEffect(() => {

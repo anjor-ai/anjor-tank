@@ -40,19 +40,7 @@ export default function Beyond() {
         .fromTo(q('.bx-hero__top > *, .bx-hero__lede, .bx-index > *'), { autoAlpha: 0, y: 16 }, { autoAlpha: 1, y: 0, duration: 0.8, stagger: 0.05 }, 1.0)
       intro.current = t
       const once = (trigger, start = 'top 85%') => ({ trigger, start, toggleActions: 'play none none none' })
-      // Chapter headings: the display word rises out of its mask, the serif line follows.
-      q('.by-h').forEach((h) => gsap.fromTo(h.children, { yPercent: 70, autoAlpha: 0 }, { yPercent: 0, autoAlpha: 1, duration: 1, stagger: 0.12, ease: 'eOut', scrollTrigger: once(h) }))
-      q('.by-head .by-k, .by-head .by-sub').forEach((el) => gsap.fromTo(el, { y: 14, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.8, ease: 'eOut', scrollTrigger: once(el, 'top 90%') }))
-      // Cards arrive in reading order, section by section: rise and settle, staggered.
-      q('.by-ch, .by-intro').forEach((sec) => {
-        const cards = sec.querySelectorAll('[data-by-card]')
-        if (cards.length) gsap.fromTo(cards, { y: 36, autoAlpha: 0 }, { y: 0, autoAlpha: 1, duration: 0.9, stagger: 0.08, ease: 'eOut', scrollTrigger: once(cards[0], 'top 88%') })
-        const tiles = sec.querySelectorAll('[data-by-tile]')
-        if (tiles.length) gsap.fromTo(tiles, { y: 24, autoAlpha: 0, scale: 0.97 }, { y: 0, autoAlpha: 1, scale: 1, duration: 0.7, stagger: 0.035, ease: 'eOut', scrollTrigger: once(tiles[0], 'top 92%') })
-      })
-      // Photographs drift inside their frames; the wide Live picture settles from close in.
-      q('[data-by-par]').forEach((im) => gsap.fromTo(im, { yPercent: -5 }, { yPercent: 5, ease: 'none', scrollTrigger: { trigger: im.parentElement, start: 'top bottom', end: 'bottom top', scrub: true } }))
-      q('[data-by-zoom]').forEach((im) => gsap.fromTo(im, { scale: 1.18 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: im.parentElement, start: 'top bottom', end: 'center center', scrub: 0.6 } }))
+      // Chapters do not reveal themselves: only the drawn things move (the route, the lap, the book).
       // Wander: the route draws itself once the card is in view.
       q('.by-route__line').forEach((l) => gsap.fromTo(l, { drawSVG: '0%' }, { drawSVG: '100%', duration: 1.8, ease: 'eInOut', scrollTrigger: once(l, 'top 90%') }))
       // Speed: the car laps the circuit while the tile is on screen; the line draws first.
@@ -65,9 +53,6 @@ export default function Beyond() {
       // Read: the book turns as you pass it.
       const book = q('.book--page')[0]
       if (book) gsap.fromTo(book, { rotateY: -42, rotateX: 8 }, { rotateY: 18, rotateX: -4, ease: 'none', scrollTrigger: { trigger: '.by-read', start: 'top bottom', end: 'bottom top', scrub: 0.8 } })
-      // Watch: the panels wipe in, one after another.
-      const panels = q('.by-panel img')
-      if (panels.length) gsap.fromTo(panels, { clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0% 0 0)', duration: 0.9, stagger: 0.12, ease: 'eInOut', scrollTrigger: once(panels[0], 'top 85%') })
     })
     return () => mm.revert()
   }, { scope: root })

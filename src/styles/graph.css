@@ -33,9 +33,7 @@
 .gx__n--brain, .gx__n--hub { background: color-mix(in srgb, var(--accent-fill) 7%, var(--surface)); border-color: color-mix(in srgb, var(--accent-text) 35%, var(--line-2)); }
 .gx__n--ext { border-style: dashed; }
 .gx__n--src { --nc: var(--st-ok); }
-.gx__n--src.is-gap { --nc: var(--st-amber); }
 .gx__n--dec { --nc: var(--k-person); }
-.gx__n.is-blind { border-style: dashed; border-color: color-mix(in srgb, var(--st-amber) 70%, var(--line-2)); --nc: var(--st-amber); }
 .gx__n--break { border-style: dashed; border-color: var(--st-amber); background: color-mix(in srgb, var(--st-amber) 9%, var(--surface)); justify-items: center; --nc: transparent; }
 .gx__n--break .gx__k { color: var(--st-amber); font-weight: 600; }
 .gx__n--gate { border-radius: 999px; padding: 0 0.6em; justify-items: center; text-align: center; background: color-mix(in srgb, var(--k-person) 8%, var(--surface)); --nc: transparent; }

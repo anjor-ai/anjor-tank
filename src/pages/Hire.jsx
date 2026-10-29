@@ -237,7 +237,7 @@ export default function Hire() {
         </Tile>
       </Sec>
 
-      <Cta title="Bring a ==real constraint==. *Let's design the next move.*" lead="Start with the problem and the tools involved. A short brief is enough." primary={{ label: 'Discuss consulting', to: '/contact?intent=consult#brief' }} secondary={{ label: 'Talk about a product role', to: '/contact?intent=job#brief' }} />
+      <Cta title="Pick ==one constraint==. *We'll design the next move.*" lead="Start with the problem and the tools involved. A short brief is enough." primary={{ label: 'Discuss consulting', to: '/contact?intent=consult#brief' }} secondary={{ label: 'Talk about a product role', to: '/contact?intent=job#brief' }} />
     </PageMotion>
   )
 }

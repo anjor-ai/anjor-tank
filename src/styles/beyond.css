@@ -3,7 +3,7 @@
    editorial serif (Instrument Serif), and a material per chapter: night (wander), carbon (speed), stage light (live),
    paper (read), ink (watch). Display words are decorative and aria-hidden; headings below them carry the meaning.
    ═══════════════════════════════════════════════════════════════════════════ */
-.bx, .bf {
+.bx, .fx {
   --bx-ink: #0b0b0a; --bx-ink-2: #141412; --bx-paper: #efe8da; --bx-bone: #f2efe8; --bx-mute: rgba(242, 239, 232, 0.62);
   --bx-red: #ff3b2f; --bx-lime: #c8ff3d; --bx-violet: #8b6cff; --bx-cyan: #5ee6ff;
   --bx-d: 'Anton', 'Impact', 'Arial Narrow', sans-serif; --bx-s: 'Instrument Serif', Georgia, 'Times New Roman', serif;
@@ -11,51 +11,7 @@
 .bx { background: var(--bg); color: var(--text); }
 .bx .container { position: relative; z-index: 1; }
 
-/* ─────────────── The film ─────────────── */
-.bf { position: fixed; inset: 0; z-index: 10000; overflow: hidden; cursor: pointer; background: var(--bx-ink); color: var(--bx-bone); }
-.bf__room { position: absolute; inset: 0; transition: background-color 0.18s linear; background: #0e1511; }
-.bf__room[data-tone='speed'] { background: #101010; }
-.bf__room[data-tone='live'] { background: #0b0918; }
-.bf__room[data-tone='read'] { background: var(--bx-paper); }
-.bf__room[data-tone='watch'] { background: #fff radial-gradient(circle, #000 0.9px, transparent 1.3px) 0 0 / 7px 7px; }
-.bf__tone { position: absolute; inset: 0; background: radial-gradient(70% 60% at 50% 50%, transparent, rgba(0, 0, 0, 0.45)); pointer-events: none; }
-.bf__cut { position: absolute; inset: 0; display: grid; place-items: center; }
-.bf__word { position: absolute; left: 0; right: 0; top: 50%; margin: 0; transform: translateY(-50%); display: flex; justify-content: center; font: 400 min(30vw, 46vh) / 0.82 var(--bx-d); letter-spacing: -0.01em; color: var(--bx-bone); white-space: nowrap; }
-.bf__word--line { color: transparent; -webkit-text-stroke: 2px var(--bx-bone); z-index: 2; }
-.bf__lm { display: inline-block; overflow: hidden; padding: 0.04em 0; }
-.bf__li { display: inline-block; will-change: transform; }
-.bf__card { position: relative; z-index: 1; margin: 0; width: min(30vw, 34vh); aspect-ratio: 3 / 4; overflow: hidden; border-radius: 6px; box-shadow: 0 40px 120px rgba(0, 0, 0, 0.55); background: #222; }
-.bf__card img { width: 100%; height: 100%; object-fit: cover; display: block; will-change: transform; }
-.bf__cap { position: absolute; left: 50%; bottom: calc(9vh + 26px); transform: translateX(-50%); z-index: 3; margin: 0; display: flex; gap: 12px; align-items: center; font: 500 12px/1 var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; }
-.bf__cap b { padding: 4px 7px; border: 1px solid currentColor; border-radius: 3px; }
-.bf__cut--read, .bf__cut--watch { color: #111; }
-.bf__cut--read .bf__word, .bf__cut--watch .bf__word { color: #111; }
-.bf__cut--read .bf__word--line, .bf__cut--watch .bf__word--line { color: transparent; -webkit-text-stroke-color: #111; }
-.bf__cut--read .bf__card { background: transparent; box-shadow: none; overflow: visible; display: grid; place-items: center; perspective: 1400px; }
-.bf__cut--watch .bf__card { border: 5px solid #000; border-radius: 0; box-shadow: 14px 14px 0 #000; background: #fff; }
-.bf__cut--speed .bf__word { color: var(--bx-bone); font-style: italic; transform: translateY(-50%) skewX(-10deg); }
-.bf__cut--speed .bf__word--line { -webkit-text-stroke-color: var(--bx-red); }
-.bf__streaks { position: absolute; inset: 0; pointer-events: none; }
-.bf__streak { position: absolute; left: -10%; right: -10%; height: 2px; background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.85), transparent); transform-origin: left; }
-.bf__streak:nth-child(3n) { background: linear-gradient(90deg, transparent, var(--bx-red), transparent); height: 3px; }
-.bf__beams { position: absolute; inset: 0; pointer-events: none; }
-.bf__beam { position: absolute; left: 50%; bottom: -10%; width: 3px; height: 130%; transform-origin: 50% 100%; background: linear-gradient(0deg, var(--bx-cyan), transparent 85%); filter: drop-shadow(0 0 8px var(--bx-cyan)); opacity: 0; }
-.bf__beam:nth-child(even) { background: linear-gradient(0deg, var(--bx-violet), transparent 85%); filter: drop-shadow(0 0 8px var(--bx-violet)); }
-.bf__flash { position: absolute; inset: 0; background: #fff; opacity: 0; }
-.bf__burst { position: absolute; inset: -20%; background: repeating-conic-gradient(from 0deg at 50% 50%, #000 0deg 1.2deg, transparent 1.2deg 7deg); -webkit-mask: radial-gradient(circle at 50% 50%, transparent 26%, #000 46%); mask: radial-gradient(circle at 50% 50%, transparent 26%, #000 46%); opacity: 0; }
-.bf__lid { position: absolute; left: 0; right: 0; height: 9vh; background: #000; z-index: 5; }
-.bf__lid--t { top: 0; } .bf__lid--b { bottom: 0; }
-.bf__hud { position: absolute; inset: 0; z-index: 6; pointer-events: none; font: 500 11px/1 var(--font-mono); letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255, 255, 255, 0.78); }
-.bf__hud > span { position: absolute; }
-.bf__hud-tl { left: 28px; top: calc(4.5vh - 5px); } .bf__hud-tr { right: 28px; top: calc(4.5vh - 5px); display: flex; gap: 8px; align-items: center; }
-.bf__hud-bl { left: 28px; bottom: calc(4.5vh - 5px); }
-.bf__hud-tr i { width: 8px; height: 8px; border-radius: 50%; background: var(--bx-red); animation: bx-rec 1s steps(2) infinite; }
-.bf__tc { font-weight: 500; color: #fff; min-width: 11ch; }
-@keyframes bx-rec { 50% { opacity: 0.15; } }
-.bf__skip { position: absolute; z-index: 7; right: 24px; bottom: calc(4.5vh - 15px); padding: 8px 14px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, 0.35); background: transparent; color: #fff; font: 500 12px/1 var(--font-display); cursor: pointer; }
-@media (max-width: 700px) { .bf__card { width: 46vw; } .bf__word { font-size: 31vw; } .bf__hud-bl { display: none; } }
-
-/* The book object (film and the Read chapter) */
+/* The book object (the film and the Read chapter) */
 .book { --bw: 230px; position: relative; width: var(--bw); aspect-ratio: 0.72; transform-style: preserve-3d; transform: rotateY(-22deg) rotateX(6deg); }
 .book > div { position: absolute; }
 .book__front { inset: 0; display: grid; align-content: space-between; padding: 22px 20px; border-radius: 2px 6px 6px 2px; background: linear-gradient(140deg, #22344a, #101a26 70%); color: #eef1f5; transform: translateZ(calc(var(--bw) * 0.09)); box-shadow: inset 4px 0 0 rgba(255, 255, 255, 0.08), inset -1px 0 0 rgba(255, 255, 255, 0.06); overflow: hidden; }
@@ -67,7 +23,6 @@
 .book__spine { top: 0; bottom: 0; left: 0; width: calc(var(--bw) * 0.18); transform-origin: left; transform: rotateY(-90deg) translateX(calc(var(--bw) * -0.09)); background: linear-gradient(90deg, #0d1620, #1a2a3c); display: grid; place-items: center; }
 .book__spine span { writing-mode: vertical-rl; font: 500 calc(var(--bw) * 0.042) / 1 var(--font-mono); letter-spacing: 0.14em; color: #9fb3c9; white-space: nowrap; }
 .book__pages { top: 3px; bottom: 3px; right: 0; width: calc(var(--bw) * 0.17); transform-origin: right; transform: rotateY(90deg) translateX(calc(var(--bw) * 0.085)); background: repeating-linear-gradient(90deg, #f3eee2 0 2px, #ddd5c4 2px 3px); }
-.bf .book { --bw: min(26vw, 30vh); }
 
 /* ─────────────── Hero: a triptych, a title that assembles over it ─────────────── */
 .bx-hero { position: relative; height: max(640px, 100svh); overflow: hidden; background: #000; isolation: isolate; }
@@ -347,4 +302,98 @@
 
 @media (prefers-reduced-motion: reduce) {
   .by-trail__media img, .by-feat > img, .by-route__me, .by-thumbs button, .by-lib button, .by-title, .by-radar__grid li { transition: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   Fit: every chapter is one screen on a laptop. A chapter is its heading plus one board, and the board takes the
+   height that is left (--by-stage), so a chapter never asks you to scroll inside it to see what it is.
+   Below 961px wide (or on short screens) the boards fall back to the stacked layouts above.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.bx { --by-stage: clamp(440px, calc(100svh - var(--nav-h) - 196px), 620px); }
+.by-ch { padding: var(--sec-y) 0; }
+.by-head { margin-bottom: 20px; gap: 12px 40px; }
+.by-h { margin-top: 10px; }
+.by-sub { font-size: 16px; }
+.by-note { margin-top: 12px; font-size: 12.5px; }
+.by-intro { padding: var(--sec-y) 0; }
+.by-k--plain { margin-bottom: 16px; }
+.by-intro__s { font-size: clamp(24px, 2.2vw, 32px); }
+.by-intro__facts { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.by-intro__facts li { gap: 6px; padding: 16px 18px; }
+
+@media (min-width: 961px) and (min-height: 620px) {
+  /* 01 Wander: the trail card and the frames share one height */
+  .by-wander__grid { height: var(--by-stage); }
+  .by-trail { display: grid; grid-template-rows: minmax(0, 1fr) auto; min-height: 0; }
+  .by-trail__media { aspect-ratio: auto; min-height: 0; }
+  .by-trail__info { padding: 14px 14px 6px; gap: 16px; }
+  .by-trail__info h3 { font-size: 20px; }
+  .by-trail__info > div > p:not(.by-dots) { margin: 4px 0 8px; font-size: 18px; }
+  .by-route { padding: 10px 12px; }
+  .by-route svg { max-height: 64px; }
+  .by-thumbs { min-height: 0; }
+
+  /* 02 Speed: the point of view on the left, the circuit, the night and two frames around it */
+  .by-speed__grid { height: var(--by-stage); grid-template-rows: repeat(2, minmax(0, 1fr)); }
+  .by-speed__pov { grid-column: span 6; grid-row: 1 / span 2; min-height: 0; }
+  .by-speed__pov .by-shot__in { min-height: 0; }
+  .by-circuit { grid-column: span 3; min-height: 0; grid-template-rows: auto minmax(0, 1fr) auto; gap: 8px; padding: 16px; }
+  .by-circuit svg { height: 100%; min-height: 0; }
+  .by-circuit p { font-size: 14px; }
+  .by-speed__night { grid-column: span 3; min-height: 0; grid-template-rows: minmax(0, 1fr); }
+  .by-speed__night .by-shot__in { aspect-ratio: auto; height: 100%; }
+  .by-pair { grid-column: span 3; min-height: 0; grid-template-rows: auto minmax(0, 1fr); }
+  .by-pair--img { grid-template-rows: minmax(0, 1fr) auto; }
+  .by-pair__copy { gap: 6px; padding: 14px 16px; }
+  .by-pair__copy h3 { font-size: 19px; line-height: 1.15; letter-spacing: -0.015em; }
+  .by-pair .by-dots { font-size: 13px; }
+  .by-pair__img { min-height: 0; }
+
+  /* 03 Live: the wide frame and the three beside it */
+  .by-live__board { display: grid; grid-template-columns: minmax(0, 2.4fr) minmax(0, 1fr); grid-template-rows: minmax(0, 1fr); gap: clamp(12px, 1.4vw, 18px); height: var(--by-stage); }
+  .by-live__wide { min-height: 0; }
+  .by-live__frame { aspect-ratio: auto; height: 100%; }
+  .by-live__frame img { position: absolute; inset: 0; }
+  .by-live__row { grid-template-columns: none; grid-template-rows: repeat(3, minmax(0, 1fr)); margin: 0; gap: clamp(12px, 1.4vw, 18px); min-height: 0; }
+  .by-live__shot { min-height: 0; grid-template-rows: minmax(0, 1fr); }
+  .by-live__shot .by-shot__in { aspect-ratio: auto; height: 100%; }
+  .by-live__shot figcaption { padding: 40px 16px 14px; font-size: 15px; }
+
+  /* 04 Read */
+  .by-read__stage { min-height: 0; height: var(--by-stage); }
+  .by-book { margin-top: 20px; padding-top: 18px; }
+
+  /* 05 Watch: two title cards side by side, the inked panels in a strip under them */
+  .by-title { grid-template-rows: none; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: stretch; height: calc(var(--by-stage) * 0.56); }
+  .by-title__art { height: auto; }
+  .by-title__copy { gap: 10px; padding: 14px 10px 10px 18px; }
+  .by-title__copy > b { font-size: 24px; }
+  .by-title__copy > em { font-size: 18px; }
+  .by-title__facts { gap: 20px; font-size: 15px; }
+  .by-title .by-badge { top: 18px; right: 18px; width: 32px; height: 32px; }
+  .by-panels { grid-auto-rows: calc(var(--by-stage) * 0.44 - 52px); margin-top: 12px; }
+
+  /* 06 Play: a launcher. The featured title on the left, the library list on the right */
+  .by-play__board { display: grid; grid-template-columns: minmax(0, 2.1fr) minmax(300px, 1fr); gap: clamp(12px, 1.4vw, 18px); height: var(--by-stage); }
+  .by-feat { min-height: 0; grid-template-columns: minmax(0, 1fr); align-content: end; }
+  .by-feat__nav { justify-content: flex-start; }
+  .by-feat__nav > span { text-align: left; }
+  .by-shelf { display: grid; grid-template-rows: auto minmax(0, 1fr); gap: 10px; min-height: 0; padding: 12px; border-radius: calc(var(--by-r) + 6px); background: var(--by-card); box-shadow: var(--by-ring), var(--by-shadow); }
+  .by-shelf .by-tabs { margin: 0; gap: 6px; }
+  .by-shelf .by-tabs button { padding: 7px 11px; font-size: 13px; }
+  .by-shelf .by-lib { grid-template-columns: minmax(0, 1fr); align-content: start; gap: 4px; overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; padding: 4px; margin: -4px; }
+  .by-shelf .by-lib button { grid-template-rows: none; grid-template-columns: 64px minmax(0, 1fr); align-items: center; gap: 12px; height: auto; padding: 6px; border-radius: 14px; background: transparent; color: var(--by-ink); box-shadow: none; }
+  .by-shelf .by-lib button:hover { transform: none; background: color-mix(in srgb, var(--text) 6%, transparent); }
+  .by-shelf .by-lib button.is-on { background: var(--by-tile); color: #fff; box-shadow: none; }
+  .by-shelf .by-lib__art { border-radius: 10px; }
+  .by-shelf .by-lib button:hover img { transform: none; }
+  .by-shelf .by-lib__t { padding: 0; }
+  .by-shelf .by-lib__t b { font-size: 15px; }
+  .by-shelf .by-lib__t small { color: var(--by-mute); }
+  .by-shelf .by-lib button.is-on small { color: rgba(255, 255, 255, 0.62); }
+
+  /* 07 Radar */
+  .by-radar__grid li { min-height: 150px; padding: 20px 22px; gap: 6px; }
+  .by-radar__grid b { font-size: 21px; }
+  .by-radar__grid p { font-size: 15px; }
 }

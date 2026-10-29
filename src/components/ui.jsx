@@ -90,22 +90,26 @@ export function Actor({ kind, label }) {
   return <span className={`actor actor--${kind}`} title={a.d}><i aria-hidden="true" />{label || a.label}</span>
 }
 
-/* ───────────── The closing panel: an ember shader edge to edge, the words on a white card, the brief thread beside it ───────────── */
-export function Cta({ title, lead, primary, secondary, badges, topic }) {
+/* ───────────── The closing panel: the ask on a white panel, the brief thread on an ember field beside it. One board, no dead space.
+   Every page sets its own words (see each page, and `closers` in content/portfolio.js for the cases). ───────────── */
+export function Cta({ title, lead, primary, secondary, topic }) {
   return (
-    <section className="cl">
-      <div className="cl__in" data-clip>
-        <Shader preset="ember" className="cl__bg" />
-        <div className="cl__copy" data-reveal>
-          <h2 className="cl__h" data-kin><Kin text={title} /></h2>
-          {lead && <p>{lead}</p>}
-          <div className="cl__btns">
-            <Button to={primary.to} track={`cta_${primary.to.replace(/\W+/g, '_')}`}>{primary.label}<Arrow /></Button>
-            {secondary && <Button to={secondary.to} variant="ghost">{secondary.label}</Button>}
+    <section className="b-sec b-cta" aria-labelledby="cta-h">
+      <div className="b-wrap">
+        <div className="b-cta__board">
+          <div className="b-cta__copy">
+            <h2 className="b-h" id="cta-h"><Kin text={title} /></h2>
+            {lead && <p className="b-lead">{lead}</p>}
+            <div className="b-acts">
+              <Button to={primary.to} track={`cta_${primary.to.replace(/\W+/g, '_')}`}>{primary.label}<Arrow /></Button>
+              {secondary && <Button to={secondary.to} variant="ghost">{secondary.label}</Button>}
+            </div>
           </div>
-          {badges && <ul className="cl__badges">{badges.map((b) => <li key={b}>{b}</li>)}</ul>}
+          <div className="b-cta__stage">
+            <Shader preset="ember" className="b-cta__bg" />
+            <div className="b-cta__win"><BriefThread topic={topic} /></div>
+          </div>
         </div>
-        <div className="cl__win" data-reveal><BriefThread topic={topic} /></div>
       </div>
     </section>
   )

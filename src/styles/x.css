@@ -81,10 +81,6 @@ body { background: var(--bg); color: var(--text); }
 .ptr b { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%) scale(0.6); opacity: 0; font: 500 12.5px/1 var(--font-display); color: var(--bg); white-space: nowrap; transition: opacity 0.3s, transform 0.5s var(--e-expo); }
 .ptr.is-label b { opacity: 1; transform: translate(-50%, -50%) scale(1); }
 .cu { position: fixed; inset: 0; z-index: 9000; visibility: hidden; pointer-events: none; }
-.cu__p { position: absolute; inset: 0; transform: translateY(100%); }
-.cu__p--a { background: #5606ff; }
-.cu__p--b { display: grid; place-items: center; background: #0b0b0b; overflow: hidden; }
-.cu__p--b b { color: #fff; font: 500 clamp(48px, 9vw, 150px)/1 var(--font-display); letter-spacing: -0.06em; }
 .in { position: fixed; inset: 0; z-index: 10000; display: grid; place-items: center; overflow: hidden; color: #fff; background: #000; clip-path: inset(0% 0% 0% 0%); }
 
 /* ─────────────── Trail ─────────────── */
@@ -135,17 +131,6 @@ body { background: var(--bg); color: var(--text); }
 
 /* ─────────────── The closing panel ─────────────── */
 .cl { padding: 10px; }
-.cl__in { position: relative; display: grid; grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr); align-items: center; gap: clamp(20px, 3vw, 56px); min-height: clamp(620px, 66vw, 820px); overflow: hidden; padding: clamp(20px, 4vw, 64px) 0 0 clamp(20px, 4vw, 64px); border-radius: var(--r-xl); isolation: isolate; }
-.cl__bg { z-index: -1; }
-.cl__copy { align-self: center; margin-bottom: clamp(20px, 4vw, 64px); padding: clamp(28px, 3.4vw, 52px); border-radius: var(--r-xl); background: var(--surface); box-shadow: 0 50px 100px -40px rgba(0, 0, 0, 0.55); }
-.cl__h { margin: 0; font: 500 clamp(38px, 4.4vw, 70px)/0.98 var(--font-display); letter-spacing: -0.055em; }
-.cl__h .em { display: block; color: var(--text-3); }
-.cl__copy > p { margin: 20px 0 0; max-width: 46ch; font: 400 18px/1.55 var(--font-body); color: var(--text-2); }
-.cl__btns { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 30px; }
-.cl__badges { list-style: none; display: flex; flex-wrap: wrap; gap: 8px; margin: 18px 0 0; padding: 0; }
-.cl__win { align-self: end; min-width: 0; }
-.cl__win > * { border-radius: 18px 0 0 0 !important; }
-@media (max-width: 960px) { .cl__in { grid-template-columns: minmax(0, 1fr); padding: 14px 14px 0; min-height: 0; } .cl__copy { margin-bottom: 0; } .cl__win { margin-left: 14px; } }
 
 /* ─────────────── Next page ─────────────── */
 

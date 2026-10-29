@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
-import { CASES, GLANCE, bridge } from '../content'
+import { CASES, GLANCE, bridge, closers } from '../content'
 import { Arrow, Cta } from '../components/ui'
 import { Board, Chips, Go, H, Kicker, PageHead, Stage, Tile, Win, cx } from '../components/board'
-import { ArchMap, CASE_PAINT, CaseUI, DashWire, Storyboard } from '../components/frags'
+import { ArchMap, DashWire, Storyboard } from '../components/frags'
+import { Wire } from '../components/wires'
 import { Stat } from '../components/kinetic'
 import { Icon } from '../components/icons'
 import { PageMotion } from '../lib/PageMotion'
@@ -125,7 +126,7 @@ export default function Case() {
   return (
     <PageMotion routeKey={route.path}>
       <PageHead className="b-cs-head" title={c.title} lead={c.hook}
-        visual={<Stage kind="paint" name={CASE_PAINT[c.slug]}><CaseUI slug={c.slug} /></Stage>}>
+        visual={<div className={`b-cs-art cc__media--${c.slug}`}><Wire c={c} kind="screen" /></div>}>
         <p className="b-k"><span className="b-k__ic"><Icon name="layers" size={14} /></span>{c.n} · {c.cat} · Case study</p>
         <ul className="b-ph__nums">{c.metrics.map(([v, l]) => <li key={l}><b><Stat v={v} /></b><span>{l}</span></li>)}</ul>
         <Chips items={c.chips} />
@@ -259,7 +260,7 @@ export default function Case() {
         </div>
       </section>
 
-      <Cta topic="work" title="Want this *done on ==your system==?*" lead="Tell me the number that will not move." primary={{ label: 'Send a brief', to: '/contact?intent=consult#brief' }} secondary={{ label: 'See all cases', to: '/work' }} />
+      <Cta topic="work" title={closers[c.slug].title} lead={closers[c.slug].lead} primary={{ label: 'Send a brief', to: '/contact?intent=consult#brief' }} secondary={{ label: 'See all cases', to: '/work' }} />
     </PageMotion>
   )
 }

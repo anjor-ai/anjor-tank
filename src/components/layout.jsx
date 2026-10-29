@@ -38,12 +38,11 @@ export function SoundToggle({ className = '' }) {
 /** Elements made inert while the full-screen menu is open, so Tab and screen readers stay inside it. */
 const BEHIND_MENU = ['.skip-link', '#main', '.ft']
 
-/** The bar: the name, the pages, sound, theme and the one action. A plain solid bar: no blur, nothing floating.
-    It steps out of the way on the way down and returns on the way up. On a phone the pages open as a full panel. */
+/** The bar: the name, the pages, sound, theme and the one action. A plain solid bar that stays at the top while you scroll.
+    On a phone the pages open as a full panel. */
 export function Nav() {
   const { route } = useRoute()
   const [open, setOpen] = useState(false)
-  const [hidden, setHidden] = useState(false)
   const [scrolled, setScrolled] = useState(false)
   const btn = useRef(null)
   const menu = useRef(null)
@@ -52,17 +51,13 @@ export function Nav() {
 
   useEffect(() => { setOpen(false) }, [route.path])
   useEffect(() => {
-    let lastY = window.scrollY, tick = false
+    let tick = false
     const on = () => {
       if (tick) return
       tick = true
       requestAnimationFrame(() => {
         tick = false
-        const y = window.scrollY
-        setScrolled(y > 4)
-        if (y < 120 || y < lastY - 4) setHidden(false)
-        else if (y > lastY + 4) setHidden(true)
-        lastY = y
+        setScrolled(window.scrollY > 4)
       })
     }
     on()
@@ -90,7 +85,7 @@ export function Nav() {
 
   const here = (p) => route.path === p || (p !== '/' && route.path.startsWith(p + '/'))
   return (
-    <header className={`b-nav${scrolled ? ' is-scrolled' : ''}${hidden && !open ? ' is-hidden' : ''}${open ? ' is-open' : ''}`}>
+    <header className={`b-nav${scrolled ? ' is-scrolled' : ''}${open ? ' is-open' : ''}`}>
       <div className="b-nav__in">
         <a href="/" className="b-nav__brand" aria-label={`${site.name} home`}><BrandMark className="b-nav__mark" decorative /><span>{site.name}</span></a>
         <nav className="b-nav__links" aria-label="Main">

@@ -1,10 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { CASES, bridge, fit as FIT, home, roqiva } from '../content'
+import { CASES, fit as FIT, home, roqiva } from '../content'
 import { Arrow, Button, LinkArrow, Rich } from './ui'
 import { Icon } from './icons'
-import { CaseMock } from './mocks'
-import { Stat } from './kinetic'
+import { Wire } from './wires'
 import { WordReel } from '../art/Reel'
 import { HeroApp } from '../scenes/HeroApp'
 
@@ -77,27 +76,6 @@ export function WhereIFit({ initial = 0 }) {
   )
 }
 
-/** One case, as a card: the illustration, the number, the tags. With `onOpen` the card opens the quick view; the full case is always one link away. */
-export function CaseCard({ c, onOpen, as: Tag = 'li' }) {
-  const b = bridge[c.slug]
-  return (
-    <Tag className={`ccd ccd--t${(parseInt(c.n, 10) - 1) % 5}`} data-reveal>
-      <div className="ccd__a" onClick={onOpen ? () => onOpen(c.slug) : undefined}>
-        <div className="ccd__art" aria-hidden="true"><div className="ccd__mock"><CaseMock slug={c.slug} /></div></div>
-        <span className="ccd__top"><span className="ccd__n">{c.n}</span><span className="label">{c.cat}</span><span className="ccd__yr label">{c.year}</span></span>
-        <h3 className="h-3">{c.title}</h3>
-        <ul className="ccd__m">{c.metrics.slice(0, 2).map(([v, l]) => <li key={l}><Stat v={v} /><span>{l}</span></li>)}</ul>
-        <ul className="ccd__tags">{c.chips.map((t) => <li key={t}>{t}</li>)}</ul>
-        {b && !onOpen && <p className="ccd__b"><span className="label">In ROQIVA</span>{b.became}</p>}
-        <span className="ccd__acts">
-          {onOpen && <button type="button" className="ccd__go" onClick={(e) => { e.stopPropagation(); onOpen(c.slug) }}>Quick view<Icon name="eye" size={14} /></button>}
-          <a className="ccd__full" href={`/work/${c.slug}`} onClick={(e) => e.stopPropagation()}>Full case<Arrow /></a>
-        </span>
-      </div>
-    </Tag>
-  )
-}
-
 /** The quick view: the illustration, the three numbers and the problem, the call and the result, without leaving the page. */
 export function CaseModal({ slug, setSlug, onClose }) {
   const i = CASES.findIndex((c) => c.slug === slug)
@@ -133,7 +111,7 @@ export function CaseModal({ slug, setSlug, onClose }) {
         <div className="cqv__b" key={c.slug}>
           <p className="lead">{c.hook}</p>
           <ul className="cs__m">{c.metrics.map(([v, l]) => <li key={l}><b>{v}</b><span>{l}</span></li>)}</ul>
-          <CaseMock slug={c.slug} />
+          <div className={`cqv__art cc__media--${c.slug}`}><Wire c={c} kind="screen" /></div>
           <div className="cs__quick">
             {[['Problem', c.quick.problem], ['The call', c.quick.call], ['Result', c.quick.result]].map(([k, v]) => <div key={k} className="cs__q"><p className="label">{k}</p><p>{v}</p></div>)}
           </div>

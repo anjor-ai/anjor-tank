@@ -2,14 +2,6 @@
    Colours here come from tokens only; the few scoped blocks below re-declare the tokens for a surface that is always dark or always light. */
 
 /* ───────── 1. Scopes: always-light paper, always-dark windows ───────── */
-.mk {
-  --bg: #ffffff; --bg-2: #f4f3ee; --surface: #ffffff; --surface-2: #f8f7f3; --line: #e4e2da; --line-2: #d3d1c6;
-  --text: #0b0c0f; --text-2: #4a4f57; --text-3: #626872; --accent: #0083ff; --accent-text: #005fc7; --accent-soft: rgba(0, 131, 255, 0.08);
-  --ed-blue: #005fc7; --ok: #1a7651; --warn: #ce1500; --amber: #9a6a00; --stage-bg: #ffffff; --stage-line: #e4e2da; --node-bg: #ffffff;
-  --t-peach: #fde4d4; --t-lilac: #e7e4fc; --t-mint: #d9f1e5; --t-sky: #dbecfc; --t-butter: #fbf0c8;
-  --st-sky: #0a6aa8; --st-ok: #1a7651; --st-amber: #9a6a00; --st-grey: #5e6068; --k-code: #1a7651; --k-agent: #6a4fd8; --k-person: #0072e5;
-  color-scheme: light; color: var(--text);
-}
 /* the accent inside a dark window follows the site: clay on the dark theme, a lifted blue on the light one */
 /* the navy panels of the earlier rounds become warm charcoal with one clay glow */
 
