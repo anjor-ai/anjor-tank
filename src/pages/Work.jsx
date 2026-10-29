@@ -1,22 +1,49 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { CASES, TAGS, work as P } from '../content'
 import { Cta } from '../components/ui'
-import { Board, Go, PageHead, Sec, Stage, Win } from '../components/board'
+import { Board, Go, PageHead, Sec } from '../components/board'
+import { Icon } from '../components/icons'
+import { useStep } from '../components/consult'
+import { Wire } from '../components/wires'
 import { CaseCard } from '../components/cards'
 import { PageMotion } from '../lib/PageMotion'
 
-/* Work: the six systems. The head shows them as an index in a window; below, a filter and the six as tiles,
-   each opening its case (or a quick view in place). */
+/* Work: the six systems. The head plays them as a reel: one case at a time on its own field (the screen as a
+   wireframe, the number it moved, a way in), with all six on a rail underneath. It steps on its own while on screen
+   until someone picks a case. Below, a filter and the six as cards. */
 
-function Index() {
+const REEL_MS = 4200
+
+function Reel() {
+  const ref = useRef(null)
+  const [i, pick] = useStep(CASES.length, REEL_MS, ref)
+  const [held, setHeld] = useState(false)
+  const c = CASES[i]
+  const [v, l] = c.metrics[0]
+  const choose = (k) => { setHeld(true); pick(k) }
   return (
-    <Win title="Six systems · index" tag="Index" className="b-index">
-      <ol>
-        {CASES.map((c) => (
-          <li key={c.slug}><a href={`/work/${c.slug}`} data-cursor="Read"><small>{c.n}</small><b>{c.title}</b><em>{c.metrics[0][0]}</em></a></li>
+    <div className={`wr${held ? ' is-held' : ''}`} ref={ref} style={{ '--ms': `${REEL_MS}ms` }}>
+      <div className={`wr__stage cc__media--${c.slug}`}>
+        <p className="wr__top"><span>Case {c.n}</span><span>{c.tag}</span><span>{c.year}</span></p>
+        <div className="wr__wire" key={c.slug} aria-hidden="true"><Wire c={c} kind="screen" /></div>
+        <a className="wr__card" href={`/work/${c.slug}`} key={`n${c.slug}`} data-cursor="Read">
+          <b>{v}</b><span>{l}</span>
+          <strong>{c.title}</strong>
+          <em>Read the case<Icon name="ne" size={13} /></em>
+        </a>
+      </div>
+      <ol className="wr__rail" aria-label="The six systems">
+        {CASES.map((x, k) => (
+          <li key={x.slug}>
+            <button type="button" className={k === i ? 'is-on' : ''} aria-pressed={k === i} onClick={() => choose(k)}>
+              <small>{x.tag}</small>
+              <b>{x.metrics[0][0]}</b>
+              <i aria-hidden="true" />
+            </button>
+          </li>
         ))}
       </ol>
-    </Win>
+    </div>
   )
 }
 
@@ -25,7 +52,7 @@ export default function Work() {
   const list = CASES.filter((c) => tag === 'All' || c.tag === tag)
   return (
     <PageMotion routeKey="/work">
-      <PageHead label={P.hero.eyebrow} title={P.hero.title} lead={P.hero.lead} visual={<Stage kind="shader" name="ember"><Index /></Stage>}>
+      <PageHead label={P.hero.eyebrow} title={P.hero.title} lead={P.hero.lead} visual={<Reel />} visualClass="b-ph__vis--reel">
         <ul className="b-ph__facts">{P.hero.facts.map((f) => <li key={f}>{f}</li>)}</ul>
       </PageHead>
 

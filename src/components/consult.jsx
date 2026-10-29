@@ -10,13 +10,13 @@ import { MQ } from '../lib/motion'
    · FlowHero      business challenge → strategic direction → system blueprint, one stage lit at a time
    · Discipline    an editorial panel with its own workflow strip
    · Compare       the two disciplines side by side (core question, focus, output)
-   · Connect       two entry points, one path to a build-ready direction
+   · Connect       one row of cards (question, Strategy, Architecture, result) and the three ways through it
    · Branches      the home page's three panels: Strategy, Architecture, ROQIVA
    Motion steps forward only while on screen and stops for good under reduced motion.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 /** A value that steps 0..n-1 every `ms` while `ref` is on screen; a click takes over for good. */
-function useStep(n, ms, ref) {
+export function useStep(n, ms, ref) {
   const [i, setI] = useState(0)
   const human = useRef(false)
   useEffect(() => {
@@ -131,24 +131,39 @@ export function Compare() {
   )
 }
 
-/* ─────────── How they connect: two doors, one path ─────────── */
+/* ─────────── How they connect: one row of cards, three ways through it ─────────── */
 export function Connect() {
-  const [q, , , out] = C.connect.steps
+  const ref = useRef(null)
+  const P = C.connect.paths
+  const [p, pick] = useStep(P.length, 3200, ref)
+  const [a, b] = C.disciplines
+  const via = P[p].via
+  const cards = [
+    { id: 'q', key: <Icon name="radar" size={14} />, kind: 'Start', name: C.connect.steps[0] },
+    { id: 'a', key: 'A', kind: a.kind, name: 'Strategy', d: a.question },
+    { id: 'b', key: 'B', kind: b.kind, name: 'Architecture', d: b.question },
+    { id: 'out', key: <Icon name="check" size={14} />, kind: 'Result', name: C.connect.steps[3] },
+  ]
+  const on = (id) => id === 'q' || id === 'out' || via.includes(id)
   return (
-    <div className="cs-con" role="img" aria-label="A business question can enter at Strategy or at Architecture; either leads to a build-ready direction">
-      <span className="cs-con__n cs-con__n--q">{q}</span>
-      <span className="cs-con__n cs-con__n--a"><small>A · What / why</small>Strategy</span>
-      <span className="cs-con__n cs-con__n--b"><small>B · How</small>Architecture</span>
-      <span className="cs-con__n cs-con__n--out">{out}</span>
-      <span className="cs-con__door cs-con__door--a">Enter here</span>
-      <span className="cs-con__door cs-con__door--b">Or here</span>
-      <svg className="cs-con__w" viewBox="0 0 1000 220" preserveAspectRatio="none" aria-hidden="true">
-        <path className="cs-con__p" d="M170 110 L 330 110" />
-        <path className="cs-con__p" d="M500 110 L 590 110" />
-        <path className="cs-con__p" d="M760 110 L 830 110" />
-        <path className="cs-con__p cs-con__p--alt" d="M170 110 C 300 110, 300 190, 420 190 L 600 190 C 660 190, 660 140, 675 135" />
-        <circle className="cs-con__dot" r="6"><animateMotion dur="5s" repeatCount="indefinite" path="M170 110 L 330 110 L 590 110 L 830 110" /></circle>
-      </svg>
+    <div className="cs-con" ref={ref}>
+      <div className="cs-con__tabs" role="tablist" aria-label="Ways through">
+        {P.map((x, k) => (
+          <button key={x.k} type="button" role="tab" aria-selected={k === p} className={cx(k === p && 'is-on')} onClick={() => pick(k)}>
+            <span className="cs-con__route" aria-hidden="true">{['a', 'b'].map((id) => <i key={id} className={cx(`is-${id}`, x.via.includes(id) && 'is-lit')} />)}</span>
+            {x.k}
+          </button>
+        ))}
+      </div>
+      <ol className="cs-con__row" aria-label={`${P[p].k}: ${cards.filter((c) => on(c.id)).map((c) => c.name).join(', then ')}`}>
+        {cards.map((c) => (
+          <li key={c.id} className={cx(`cs-con__c cs-con__c--${c.id}`, on(c.id) ? 'is-on' : 'is-off')}>
+            <span className="cs-con__top"><span className="cs-disc__key">{c.key}</span><span className="cs-disc__kind">{c.kind}</span></span>
+            <b>{c.name}</b>
+            {c.d && <small>{c.d}</small>}
+          </li>
+        ))}
+      </ol>
     </div>
   )
 }

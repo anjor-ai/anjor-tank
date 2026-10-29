@@ -1,13 +1,13 @@
 import { BELIEFS, EDU, journeyPage } from '../content'
 import { Cta } from '../components/ui'
 import { Icon } from '../components/icons'
-import { Board, Go, Kicker, PageHead, Screen, Sec, Tile } from '../components/board'
+import { Board, Go, PageHead, Screen, Sec, Tile } from '../components/board'
 import { CareerLog } from '../components/frags'
 import { CHAPTER_ART } from '../components/journeyArt'
 import { PageMotion } from '../lib/PageMotion'
 
 /* Journey: where I started, what each role added, and what the work taught me.
-   The head (the line, where I am now, the three chapters), the whole log, the chapters (latest first), the beliefs, the schooling. */
+   The head (the line, where I am now, schooling as chips, the three chapters), the whole log, the chapters (latest first), the beliefs. */
 
 /* Now first: the founder chapter leads, each chapter lists its latest role first. Ids keep the original order so links stay stable. */
 const CHAPTERS = journeyPage.chapters.map((c, i) => ({ ...c, i, roles: [...c.roles].reverse() })).reverse()
@@ -15,7 +15,7 @@ const CHAPTERS = journeyPage.chapters.map((c, i) => ({ ...c, i, roles: [...c.rol
 const CH_TONE = ['#ff7a2e', '#157a4f', '#7c5cff']
 
 /** One chapter: a header strip (numeral, years, place in the story), the roles as cards with their numbers,
-   what the chapter added, the lesson as a pull quote, and the chapter's software beside it. */
+   and what the chapter added, with the chapter's software beside it. */
 function Chapter({ c, i }) {
   const now = i === 2
   const added = [...new Set(c.roles.flatMap((r) => r.tags || []))].slice(0, 6)
@@ -45,7 +45,6 @@ function Chapter({ c, i }) {
           ))}
         </ul>
         {added.length > 0 && <div className="b-chap__add"><small>What it added</small><ul>{added.map((t) => <li key={t}>{t}</li>)}</ul></div>}
-        <blockquote><span aria-hidden="true">“</span>{c.lesson}</blockquote>
       </Tile>
       <div className={`b-chap__vis ja-field ja-field--${i}`}>{(() => { const A = CHAPTER_ART[i]; return <A /> })()}</div>
     </Board>
@@ -58,6 +57,7 @@ export default function Journey() {
       <PageHead label="The story so far" tag="Path" title="Three chapters. *One ==widening perspective==.*" lead="From understanding how demand is made, to building the systems underneath it, to building a product that connects the two."
         visual={<figure className="b-photo"><img src="/img/anjor.webp" width="447" height="721" alt="Anjor Tank" fetchpriority="high" /><figcaption><b>Always curious.</b><small>Always building.</small></figcaption></figure>}>
         <a className="b-jnow" href="/roqiva"><i className="b-live" /><b>Right now · Building ROQIVA</b><em>In development · alongside Product Manager, GNC India</em><Icon name="arrow" size={16} /></a>
+        <div className="b-jedu"><small>Education</small><ul>{EDU.map(([a, b]) => { const [deg, ...field] = a.split(' · '); const [school, yrs] = b.split(' · '); return <li key={a}><b>{deg}</b><span>{field.join(' · ')}</span><em>{school.split(',')[0]} · {yrs.replace(/ – /, '–')}</em></li> })}</ul></div>
         <nav className="b-jnav" aria-label="Career chapters">{CHAPTERS.map((c) => <a key={c.k} href={`#chapter-${c.i}`}><b>{c.k}</b>{c.t}<Icon name="arrow" size={14} /></a>)}</nav>
       </PageHead>
 
@@ -81,23 +81,6 @@ export default function Journey() {
               <p className="b-m__n">{b.chips.map((x) => `${x}.`).join(' ')}</p>
             </Tile>
           ))}
-        </Board>
-      </Sec>
-
-      <Sec id="learning" label="Education" tag="NMIMS, Mumbai" title="The ==foundations==" sub="behind the work.">
-        <Board className="b-edu">
-          {EDU.map(([a, b], i) => {
-            const [deg, ...field] = a.split(' · ')
-            const [school, yrs] = b.split(' · ')
-            return (
-              <Tile key={a} tone={i ? undefined : 'ink'}>
-                <Kicker icon="doc">{yrs}</Kicker>
-                <h3>{deg}</h3>
-                <p>{field.join(' · ')}</p>
-                <p className="b-edu__s"><Icon name="pin" size={14} />{school}</p>
-              </Tile>
-            )
-          })}
         </Board>
       </Sec>
 

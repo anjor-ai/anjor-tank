@@ -20,7 +20,7 @@ export default function Hire() {
     <PageMotion routeKey="/hire">
       <PageHead label={H0.eyebrow} tag={H0.tag} title={H0.title} lead={H0.lead} visual={<div className="hr-head"><FlowHero /></div>}>
         <div className="b-acts"><Button to={H0.primary.to} track="cta_consult_hire">{H0.primary.label} <Arrow /></Button><Go to={H0.secondary.to}>{H0.secondary.label}</Go></div>
-        <p className="b-k"><i className="b-live" />Open to the right product role, too. <a href="/contact?intent=job#brief" style={{ color: 'var(--text)' }}>Let’s talk ↗</a></p>
+        <p className="hr-role"><i className="b-live" /><span>Open to the right product role, too.</span><a href="/contact?intent=job#brief">Let’s talk ↗</a></p>
       </PageHead>
 
       <Sec id="disciplines" label="Two disciplines" tag="Strategy and architecture" title="Start with ==what to fix==," sub="or with how to build it." center>

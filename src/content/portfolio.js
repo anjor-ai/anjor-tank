@@ -112,19 +112,16 @@ export const journeyPage = {
   },
   chapters: [
     { k: 'I', t: 'How demand is made', span: '2022 – 2023', d: 'Dealer networks, landing pages and campaigns.',
-      lesson: 'Demand is made in the gap between an ad and an order.',
       roles: [
         { when: 'Apr – Sep 2022', role: 'Client Services Associate', org: 'Eggfirst Advertising and Design', mono: 'EF', text: 'Primary contact for Tata Motors dealers across Maharashtra. Wireframed landing pages and a lead system.', stats: [['15', 'dealers'], ['48', 'landing pages'], ['~100', 'campaigns']] },
         { when: 'Sep – Dec 2023', role: 'Management Trainee', org: 'Neil Patel Digital India', mono: 'NP', text: 'Ran client accounts and sharpened campaign targeting from consumer-behaviour data.', stats: [['6', 'clients']] },
       ] },
     { k: 'II', t: 'The systems underneath', span: 'Dec 2023 – now', d: 'Product roles where scale broke the workflows, not the interface.',
-      lesson: 'When scale breaks a product, it breaks in the systems underneath.',
       roles: [
         { when: 'Dec 2023 – Jul 2026', role: 'Associate Product Manager', org: 'Truemeds · Mumbai', mono: 'TM', text: 'Co-managed two pods across payments and portals. Owned sprint planning, prioritisation, on-call and delivery.', stats: [['2', 'pods'], ['12', 'engineers'], ['5', 'systems 0-to-1']], tags: ['Payments', 'Growth', 'Search', 'Internal tools'], to: '/work' },
         { when: 'Oct 2026 – now', role: 'Product Manager', org: 'GNC India · Mumbai', mono: 'GN', now: true, text: 'Product manager at the consumer wellness brand, across ecommerce, growth and the platforms behind them.', stats: [['Oct', 'joined 2026']], tags: ['Ecommerce', 'D2C', 'Growth'] },
       ] },
     { k: 'III', t: 'The system that runs them', span: '2026 – now', d: 'The loop I ran by hand, made repeatable.',
-      lesson: 'A system can run the loop, as long as a person decides what changes the business.',
       roles: [
         { when: '2026 – now', role: 'Building ROQIVA', org: 'In development', mono: 'RQ', now: true, text: 'Designing and building a governed revenue system for commerce and D2C. A company will form around it.', stats: [['6', 'agents'], ['6', 'steps'], ['4', 'gates']], tags: ['Product architecture', 'Agents', 'RevOps'], to: '/roqiva' },
       ] },

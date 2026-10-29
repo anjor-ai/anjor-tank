@@ -55,10 +55,15 @@ export const consult = {
     title: 'Different entry points. *==One connected way== of thinking.*',
     lead: 'Some teams need clarity on what to fix; others already know and need a buildable blueprint. I can work from either starting point—or connect both.',
     steps: ['Business question', 'Strategy: what / why', 'Architecture: how', 'Build-ready direction'],
+    paths: [
+      { k: 'Clarity on what to fix', via: ['a'] },
+      { k: 'A buildable blueprint', via: ['b'] },
+      { k: 'Connect both', via: ['a', 'b'] },
+    ],
   },
   roqiva: {
     eyebrow: 'In development · Product venture',
-    title: 'ROQIVA — *Intelligence built for growth.*',
+    title: 'Intelligence *built for growth.*',
     copy: 'ROQIVA is an AI-powered revenue intelligence and orchestration product in development—connecting fragmented commercial signals to evidence-backed opportunities, better decisions and clearer system changes.',
     flow: ['Detect', 'Audit', 'Decide', 'Design', 'Monitor', 'Measure'],
     micro: 'Product vision in development; not a live client deployment.',

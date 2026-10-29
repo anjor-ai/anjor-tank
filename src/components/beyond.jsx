@@ -5,26 +5,28 @@ import { AsciiCanvas } from './ascii'
 import { SCENES, photosOf } from './Story'
 import { BPM, PATTERN, createTechno } from '../lib/techno'
 import { MQ } from '../lib/motion'
+import { asciiFor } from '../art/gameAscii'
 
 /* ═══════════════════════════════════════════════════════════════════════════
    Beyond work, the chapters. One card system for all of them, so the page reads as one piece of work:
    rounded white cards and dark tiles, photographs with frosted chips over them, round arrow badges,
    fact rows separated by dots. Each chapter changes the composition, not the language, and carries one
-   thing to do (pick a frame, pick a title, filter the shelf). Text is all real; pictures are Anjor's own,
-   and every drawn picture says so. Motion lives in pages/Beyond.jsx (one useGSAP scope for the page).
+   thing to do (pick a frame, pick a book, pick a game). Text is all real; photographs are Anjor's own,
+   and covers and game scenes are drawn for the page. Motion lives in pages/Beyond.jsx (one useGSAP scope for the page).
    ═══════════════════════════════════════════════════════════════════════════ */
 
-/** A small original book object, drawn in CSS. Used in the film and on the page. */
-export function Book({ className = '' }) {
+/** A small book object drawn in CSS, its cover set from the title (one drawn style for the whole shelf). */
+export function Book({ className = '', b }) {
+  const size = b.t.length > 40 ? 's' : b.t.length > 22 ? 'm' : 'l'
   return (
-    <div className={`book ${className}`} aria-hidden="true">
+    <div className={`book book--${size} ${className}`} style={{ '--bk': b.c }} aria-hidden="true">
       <div className="book__front">
         <span className="book__lat">{Array.from({ length: 30 }, (_, k) => <i key={k} style={{ '--k': k }} />)}</span>
-        <b>AI<br />ENGINEERING</b>
-        <em>Building Applications with Foundation Models</em>
-        <small>Chip Huyen</small>
+        <b>{b.t}</b>
+        <em>{b.s}</em>
+        <small>{b.a}</small>
       </div>
-      <div className="book__spine"><span>AI ENGINEERING · CHIP HUYEN</span></div>
+      <div className="book__spine"><span>{b.t.toUpperCase()} · {b.a.split(',')[0].toUpperCase()}</span></div>
       <div className="book__pages" />
     </div>
   )
@@ -71,7 +73,7 @@ export function Intro() {
     <section className="by-intro" aria-label="About this page">
       <div className="container by-intro__in">
         <p className="by-k by-k--plain">The person behind the product</p>
-        <p className="by-intro__s" data-by-card>A little less planned. <em>A lot more alive.</em> Water, mountains and back roads. Karts, a racing sim and the apex. Lights, lasers and a full room. A book on the shelf, an anime queued for later, and a game to finish.</p>
+        <p className="by-intro__s" data-by-card>A little less planned. <em>A lot more alive.</em> Water, mountains and back roads. Karts, a racing sim and the apex. Lights, lasers and a full room. Books on the shelf, an anime queued for later, and a game to finish.</p>
         <ul className="by-intro__facts">
           {facts.map(([n, l]) => <li key={l} data-by-card><b>{n}</b><span>{l}</span></li>)}
         </ul>
@@ -234,24 +236,40 @@ export function Music() {
   )
 }
 
-/* ─────────── 04 Read: one card, the book on a stage beside its details ─────────── */
+/* ─────────── 04 Read: the library. The picked book on a stage, the shelf of spines beside it ─────────── */
+const AREAS = ['All', ...new Set(SHELF.map((b) => b.k))]
+
 export function Read() {
+  const [area, setArea] = useState('All')
+  const [pick, setPick] = useState(0)
+  const list = SHELF.map((b, i) => [b, i]).filter(([b]) => area === 'All' || b.k === area)
+  const b = SHELF[list.some(([, i]) => i === pick) ? pick : list[0][1]]
   return (
     <section id="scene-read" className="by-ch by-read" aria-labelledby="bx-h-read">
       <div className="container">
         <article className="by-read__card" data-by-card>
-          <div className="by-read__stage"><Book className="book--page" /><span className="by-read__shadow" aria-hidden="true" /></div>
+          <div className="by-read__stage"><Book className="book--page" b={b} /><span className="by-read__shadow" aria-hidden="true" /></div>
           <div className="by-read__copy">
-            <p className="by-k"><b>04</b>Chapter · On the shelf</p>
-            <h2 id="bx-h-read" className="bx-h by-h"><span>Read.</span> <em>What’s on the shelf.</em></h2>
-            {SHELF.map((b) => (
-              <div key={b.t} className="by-book">
-                <h3>{b.t}</h3>
-                <p>{b.s}</p>
-                <Dots items={[b.a, b.p]} />
-              </div>
-            ))}
-            <p className="by-note">Cover drawn for this page, not the publisher’s design</p>
+            <p className="by-k"><b>04</b>Chapter · {SHELF.length} on the shelf</p>
+            <h2 id="bx-h-read" className="bx-h by-h"><span>Read.</span> <em>AI engineering, data and the systems under them.</em></h2>
+            <nav className="by-tabs by-tabs--read" aria-label="Filter books by area">
+              {AREAS.map((a) => <button key={a} type="button" aria-pressed={area === a} onClick={() => setArea(a)}>{a}<small>{a === 'All' ? SHELF.length : SHELF.filter((x) => x.k === a).length}</small></button>)}
+            </nav>
+            <ul className="by-spines" aria-label="The shelf">
+              {list.map(([x, i]) => (
+                <li key={x.t}>
+                  <button type="button" className={x === b ? 'is-on' : ''} aria-pressed={x === b} onClick={() => setPick(i)} style={{ '--bk': x.c, '--h': `${78 + ((x.t.length * 7) % 22)}%` }}>
+                    <span>{x.t}</span>
+                  </button>
+                </li>
+              ))}
+            </ul>
+            <div className="by-book" aria-live="polite">
+              <span className="by-chip">{b.k}</span>
+              <h3>{b.t}</h3>
+              <p>{b.s}</p>
+              <Dots items={[b.a, b.p]} />
+            </div>
           </div>
         </article>
       </div>
@@ -282,7 +300,6 @@ export function Watch() {
             </button>
           ))}
         </div>
-        <p className="by-note">Scenes are abstract and drawn for this page. No artwork from either series is used.</p>
         <div className="by-panels">
           {PANELS.map(([src, cap]) => (
             <figure key={src} className="by-panel" data-by-card>
@@ -291,13 +308,40 @@ export function Watch() {
             </figure>
           ))}
         </div>
-        <p className="by-note">Panels: my own photographs, inked and screentoned</p>
       </div>
     </section>
   )
 }
 
-/* ─────────── 06 Play: a featured title, category pills, and the library as dark tiles ─────────── */
+/** A game's scene as ASCII (art/gameAscii.js). `live` drifts it while on screen; motion off keeps the first frame. */
+function GameArt({ slug, cols, rows, live = false, className = '' }) {
+  const ref = useRef(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el || !live || !window.matchMedia(MQ.motion).matches) return undefined
+    let seen = false, raf = 0, last = 0
+    const t0 = performance.now()
+    const io = new IntersectionObserver(([e]) => { seen = e.isIntersecting })
+    io.observe(el)
+    const tick = (now) => {
+      raf = requestAnimationFrame(tick)
+      if (!seen || document.hidden || now - last < 120) return
+      last = now
+      el.textContent = asciiFor(slug, cols, rows, (now - t0) / 1000)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => { cancelAnimationFrame(raf); io.disconnect() }
+  }, [slug, cols, rows, live])
+  return <span className={`by-ascii ${className}`} style={{ '--cols': cols, '--rows': rows }} aria-hidden="true"><pre key={slug} ref={ref}>{asciiFor(slug, cols, rows, 0)}</pre></span>
+}
+
+const TINT = {
+  'wuthering-waves': '#7fc8ff', halo: '#9fe3b0', 'god-of-war': '#ff8a6b', 'assassins-creed': '#f2d7a2', warframe: '#b9a6ff',
+  'call-of-duty': '#c9d36b', doom: '#ff6a3d', 'ghost-of-tsushima': '#ffb0b0', 'resident-evil': '#9fc5a8', 'silent-hill': '#cfcfc4',
+  civilization: '#e8c46b', batman: '#ffd36b', 'spider-man': '#ff7b7b', 'elden-ring': '#ffd98a', 'the-last-of-us': '#a8d18c',
+}
+
+/* ─────────── 06 Play: a featured title, category pills, and the library as dark tiles, every scene in ASCII ─────────── */
 const CATS = ['All', 'Action', 'Shooter', 'RPG', 'Horror', 'Strategy']
 
 export function Play() {
@@ -312,8 +356,8 @@ export function Play() {
       <div className="container">
         <Head id="bx-h-play" k="06" label={`Chapter · ${GAMES.length} on the shelf`} g="Play" lede="One more save before bed." />
         <div className="by-play__board">
-          <div className="by-feat" data-by-card aria-live="polite">
-            {GAMES.map((x) => <img key={x.slug} className={x.slug === g.slug ? 'is-on' : ''} src={`/img/games/${x.slug}.webp`} alt="" loading="lazy" decoding="async" />)}
+          <div className="by-feat" data-by-card aria-live="polite" style={{ '--tint': TINT[g.slug] }}>
+            <GameArt slug={g.slug} cols={110} rows={44} live className="by-feat__art" />
             <div className="by-feat__copy">
               <span className="by-chip by-chip--glass">{cat === 'All' ? 'In my library' : cat}</span>
               <h3 key={g.slug}>{g.t}</h3>
@@ -337,7 +381,7 @@ export function Play() {
               {list.map((x) => (
                 <li key={x.slug} data-by-tile>
                   <button type="button" className={x.slug === g.slug ? 'is-on' : ''} aria-pressed={x.slug === g.slug} onClick={() => setSlug(x.slug)}>
-                    <span className="by-lib__art"><img src={`/img/games/${x.slug}.webp`} alt="" loading="lazy" decoding="async" /></span>
+                    <span className="by-lib__art" style={{ '--tint': TINT[x.slug] }}><GameArt slug={x.slug} cols={44} rows={22} /></span>
                     <span className="by-lib__t"><b>{x.t}</b><small>{x.c}</small></span>
                   </button>
                 </li>
@@ -345,7 +389,6 @@ export function Play() {
             </ul>
           </aside>
         </div>
-        <p className="by-note">Cover art is original and abstract, made for this page. No official artwork is used.</p>
       </div>
     </section>
   )
