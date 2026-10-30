@@ -1,11 +1,7 @@
-// One function, one event name per conversion step. It emits a DOM event (`oi:track`) and, if a tag manager has
-// created window.dataLayer, pushes to it. No provider is bundled: add one in index.html (and in the CSP) when chosen.
+// One function, one event name per conversion step. It only emits a DOM event (`oi:track`) on the page:
+// no analytics or tag-manager script is loaded or called.
 export function track(name, props = {}) {
   try {
-    const detail = { event: name, path: window.location.pathname, ...props }
-    if (Array.isArray(window.dataLayer)) window.dataLayer.push(detail)
-    if (typeof window.plausible === 'function') window.plausible(name, { props })
-    if (typeof window.gtag === 'function') window.gtag('event', name, props)
-    window.dispatchEvent(new CustomEvent('oi:track', { detail }))
+    window.dispatchEvent(new CustomEvent('oi:track', { detail: { event: name, path: window.location.pathname, ...props } }))
   } catch (e) { /* tracking must never break the page */ }
 }

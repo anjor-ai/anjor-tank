@@ -78,16 +78,16 @@ export const ALT = {
 /* Beyond work: what I read and watch. Only titles Anjor has named; add more here and the page grows with them. */
 // The shelf: O'Reilly titles across AI engineering, data science and data systems. Covers on the page are drawn, in one style.
 export const SHELF = [
-  { t: 'AI Engineering', s: 'Building Applications with Foundation Models', a: 'Chip Huyen', p: 'O’Reilly', k: 'AI engineering', c: '#22344a' },
-  { t: 'Designing Machine Learning Systems', s: 'An Iterative Process for Production-Ready Applications', a: 'Chip Huyen', p: 'O’Reilly', k: 'AI engineering', c: '#3a2a4f' },
-  { t: 'Hands-On Large Language Models', s: 'Language Understanding and Generation', a: 'Jay Alammar, Maarten Grootendorst', p: 'O’Reilly', k: 'AI engineering', c: '#1f3d3a' },
-  { t: 'Prompt Engineering for LLMs', s: 'The Art and Science of Building Large Language Model–Based Applications', a: 'John Berryman, Albert Ziegler', p: 'O’Reilly', k: 'AI engineering', c: '#4a2d22' },
-  { t: 'Natural Language Processing with Transformers', s: 'Building Language Applications with Hugging Face', a: 'Lewis Tunstall, Leandro von Werra, Thomas Wolf', p: 'O’Reilly', k: 'AI engineering', c: '#2d3350' },
-  { t: 'Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow', s: 'Concepts, Tools, and Techniques to Build Intelligent Systems', a: 'Aurélien Géron', p: 'O’Reilly', k: 'Data science', c: '#3d3a1f' },
-  { t: 'Practical Statistics for Data Scientists', s: '50+ Essential Concepts Using R and Python', a: 'Peter Bruce, Andrew Bruce, Peter Gedeck', p: 'O’Reilly', k: 'Data science', c: '#2a4030' },
-  { t: 'Data Science from Scratch', s: 'First Principles with Python', a: 'Joel Grus', p: 'O’Reilly', k: 'Data science', c: '#4a2238' },
-  { t: 'Designing Data-Intensive Applications', s: 'The Big Ideas Behind Reliable, Scalable, and Maintainable Systems', a: 'Martin Kleppmann', p: 'O’Reilly', k: 'Data systems', c: '#1e2f45' },
-  { t: 'Fundamentals of Data Engineering', s: 'Plan and Build Robust Data Systems', a: 'Joe Reis, Matt Housley', p: 'O’Reilly', k: 'Data systems', c: '#40301c' },
+  { t: 'AI Engineering', sp: 'AI Engineering', s: 'Building Applications with Foundation Models', a: 'Chip Huyen', p: 'O’Reilly', k: 'AI engineering', c: '#22344a' },
+  { t: 'Designing Machine Learning Systems', sp: 'Designing ML Systems', s: 'An Iterative Process for Production-Ready Applications', a: 'Chip Huyen', p: 'O’Reilly', k: 'AI engineering', c: '#3a2a4f' },
+  { t: 'Hands-On Large Language Models', sp: 'Hands-On LLMs', s: 'Language Understanding and Generation', a: 'Jay Alammar, Maarten Grootendorst', p: 'O’Reilly', k: 'AI engineering', c: '#1f3d3a' },
+  { t: 'Prompt Engineering for LLMs', sp: 'Prompt Engineering', s: 'The Art and Science of Building Large Language Model–Based Applications', a: 'John Berryman, Albert Ziegler', p: 'O’Reilly', k: 'AI engineering', c: '#4a2d22' },
+  { t: 'Natural Language Processing with Transformers', sp: 'NLP with Transformers', s: 'Building Language Applications with Hugging Face', a: 'Lewis Tunstall, Leandro von Werra, Thomas Wolf', p: 'O’Reilly', k: 'AI engineering', c: '#2d3350' },
+  { t: 'Hands-On Machine Learning with Scikit-Learn, Keras, and TensorFlow', sp: 'Hands-On ML', s: 'Concepts, Tools, and Techniques to Build Intelligent Systems', a: 'Aurélien Géron', p: 'O’Reilly', k: 'Data science', c: '#3d3a1f' },
+  { t: 'Practical Statistics for Data Scientists', sp: 'Practical Statistics', s: '50+ Essential Concepts Using R and Python', a: 'Peter Bruce, Andrew Bruce, Peter Gedeck', p: 'O’Reilly', k: 'Data science', c: '#2a4030' },
+  { t: 'Data Science from Scratch', sp: 'DS from Scratch', s: 'First Principles with Python', a: 'Joel Grus', p: 'O’Reilly', k: 'Data science', c: '#4a2238' },
+  { t: 'Designing Data-Intensive Applications', sp: 'Data-Intensive Apps', s: 'The Big Ideas Behind Reliable, Scalable, and Maintainable Systems', a: 'Martin Kleppmann', p: 'O’Reilly', k: 'Data systems', c: '#1e2f45' },
+  { t: 'Fundamentals of Data Engineering', sp: 'Data Engineering', s: 'Plan and Build Robust Data Systems', a: 'Joe Reis, Matt Housley', p: 'O’Reilly', k: 'Data systems', c: '#40301c' },
 ];
 export const WATCHLIST = [
   { t: 'Mobile Suit Gundam', k: 'Mecha', n: 'Franchise since 1979', st: 'Sunrise', y: '1979', tags: ['Mecha', 'Space opera', 'War drama'], art: 'orbit' },

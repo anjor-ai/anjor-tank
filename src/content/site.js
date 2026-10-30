@@ -17,7 +17,7 @@ export const site = {
   email: 'anjort2000@gmail.com',
   supportEmail: 'anjort2000@gmail.com',
   linkedin: 'https://www.linkedin.com/in/anjor-tank',
-  booking: 'https://calendly.com/anjort2000',
+  booking: 'https://calendly.com/anjort2000/30min',
   location: 'Mumbai, India',
   // Web3Forms access keys determine the receiving inbox. This key is public by design and is restricted to this domain.
   web3formsKey: 'e8ed6edd-5136-41b2-87cc-c57df384c2b0',

@@ -66,7 +66,6 @@ const VIEWS = [ChallengeView, DirectionView, BlueprintView]
 export function FlowHero() {
   const ref = useRef(null)
   const [i, pick] = useStep(3, 3400, ref)
-  const V = VIEWS[i]
   return (
     <div className="cs-hero" ref={ref}>
       <ol className="cs-hero__rail">
@@ -81,7 +80,9 @@ export function FlowHero() {
       </ol>
       <div className="cs-hero__win">
         <p className="cs-hero__bar"><span className="cs-dots" aria-hidden="true"><i /><i /><i /></span><b>{C.hero.flow[i].k}</b><em>{String(i + 1).padStart(2, '0')} / 03</em></p>
-        <div className="cs-hero__view" key={i}><V /></div>
+        <div className="u-stack">
+          {VIEWS.map((X, k) => (k === i ? <div className="cs-hero__view" key={`on${k}`}><X /></div> : <div className="cs-hero__view u-sizer" key={k} aria-hidden="true"><X /></div>))}
+        </div>
       </div>
     </div>
   )

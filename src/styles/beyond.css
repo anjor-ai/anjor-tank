@@ -420,20 +420,32 @@
 @media (min-width: 961px) and (min-height: 620px) { .by-mu__row .by-shot__in { aspect-ratio: auto; height: clamp(170px, calc(var(--by-stage) - 300px), 280px); } }
 @media (max-width: 860px) { .by-pl { grid-template-columns: minmax(0, 1fr); padding: 14px; } .by-pl__cv { height: 150px; } .by-pl__ctl { grid-auto-flow: column; justify-content: start; align-items: center; } .by-mu__row { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
-/* Read: the library. Area pills, a shelf of spines (the picked one pulled forward), the picked book's details. */
-.by-tabs--read { margin: clamp(18px, 2vw, 26px) 0 14px; }
-.by-spines { display: flex; align-items: flex-end; gap: 5px; height: clamp(150px, 14vw, 190px); margin: 0; padding: 0 4px; list-style: none; border-bottom: 6px solid color-mix(in srgb, var(--text) 16%, transparent); border-radius: 0 0 3px 3px; overflow-x: auto; overflow-y: hidden; scrollbar-width: none; }
+/* Read: the library. Area pills, ten spines standing on one plank (the picked one pulled up and forward),
+   books outside the area dimmed, the picked book's details below. */
+.by-tabs--read { margin: clamp(18px, 2vw, 26px) 0 18px; }
+.by-read__turn, .by-read__flip { display: grid; place-items: center; transform-style: preserve-3d; }
+@media (prefers-reduced-motion: no-preference) { .by-read__flip { animation: by-flip 0.7s var(--ease-out) both; } .by-read .by-book { animation: by-in 0.5s var(--ease-out) both; } }
+@keyframes by-flip { from { opacity: 0; transform: rotateY(-70deg) translateY(10px); } }
+.by-shelfrow { position: relative; margin-inline: -4px; }
+.by-spines { position: relative; z-index: 1; display: flex; align-items: flex-end; gap: 3px; height: clamp(190px, 16vw, 224px); margin: 0; padding: 22px 6px 0; list-style: none; overflow-x: auto; overflow-y: visible; scrollbar-width: none; overscroll-behavior-x: contain; }
 .by-spines::-webkit-scrollbar { display: none; }
-.by-spines li { flex: none; display: flex; align-items: flex-end; height: 100%; }
-.by-spines button { position: relative; display: grid; place-items: center; width: clamp(30px, 2.6vw, 38px); height: var(--h); padding: 10px 0; border: 0; border-radius: 3px 3px 1px 1px; background: linear-gradient(90deg, color-mix(in srgb, var(--bk) 70%, #000), var(--bk) 45%, color-mix(in srgb, var(--bk) 80%, #000)); color: rgba(238, 241, 245, 0.88); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.06); cursor: pointer; transition: transform 0.35s var(--ease-out), box-shadow 0.35s; overflow: hidden; }
-.by-spines button::after { content: ''; position: absolute; left: 0; right: 0; top: 12px; height: 3px; background: rgba(255, 255, 255, 0.22); }
-.by-spines button span { writing-mode: vertical-rl; transform: rotate(180deg); overflow: hidden; max-height: 100%; font: 500 11px/1 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; white-space: nowrap; text-overflow: ellipsis; }
-.by-spines button:hover { transform: translateY(-6px); }
-.by-spines button.is-on { transform: translateY(-14px); box-shadow: 0 0 0 2px var(--bg), 0 0 0 4px var(--accent); }
+.by-spines li { flex: none; display: flex; align-items: flex-end; height: 100%; transition: opacity 0.35s, filter 0.35s; }
+.by-spines li.is-out { opacity: 0.32; filter: saturate(0.3); }
+.by-spines button { position: relative; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; justify-items: center; gap: 8px; width: var(--sw); height: var(--sh); padding: 10px 0 10px; border: 0; border-radius: 4px 4px 2px 2px; background: linear-gradient(90deg, color-mix(in srgb, var(--bk) 62%, #000) 0 8%, var(--bk) 22% 70%, color-mix(in srgb, var(--bk) 78%, #000)); color: rgba(244, 241, 234, 0.92); cursor: pointer; transform-origin: 50% 100%; transition: transform 0.4s var(--ease-out), box-shadow 0.4s; }
+.by-spine__cap { width: 62%; height: 4px; border-radius: 2px; background: color-mix(in srgb, var(--bk) 30%, #f4e9cf); }
+.by-spines button span { align-self: center; max-height: 100%; overflow: hidden; writing-mode: vertical-rl; font: 600 10.5px/1.1 var(--font-display); letter-spacing: 0; letter-spacing: 0.01em; white-space: nowrap; text-overflow: ellipsis; }
+.by-spines button em { display: grid; place-items: center; width: calc(var(--sw) - 14px); max-width: 26px; aspect-ratio: 1; border-radius: 50%; background: color-mix(in srgb, var(--bk) 35%, #f4e9cf); color: var(--bk); font: 700 9.5px/1 var(--font-display); font-style: normal; }
+.by-spines button:hover { transform: translateY(-8px) rotate(-1.5deg); }
+.by-spines button.is-on { transform: translateY(-16px); box-shadow: 0 14px 22px -12px rgba(0, 0, 0, 0.55), 0 0 0 2px var(--bg), 0 0 0 4px var(--accent); }
 .by-spines button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.by-spines li:nth-last-child(2) button:not(.is-on):not(:hover) { transform: rotate(7deg); transform-origin: 0 100%; }
+.by-spines__end { width: 30px; margin-left: 10px; }
+.by-spines__end i { display: block; width: 26px; height: 58%; border-radius: 4px 4px 0 0; background: color-mix(in srgb, var(--text) 82%, var(--bg)); }
+.by-plank { position: relative; display: block; height: 14px; margin-top: -1px; border-radius: 3px 3px 8px 8px; background: color-mix(in srgb, #8a5a34 70%, var(--text) 10%); box-shadow: inset 0 3px 0 rgba(255, 255, 255, 0.18), 0 14px 18px -12px rgba(0, 0, 0, 0.45); }
 .by-read .by-book { margin-top: 22px; padding-top: 0; box-shadow: none; }
 .by-read .by-book .by-chip { justify-self: start; }
-@media (prefers-reduced-motion: reduce) { .by-spines button, .book__front { transition: none; } }
+@media (max-width: 560px) { .by-spines { height: 212px; } .by-spines button span { font-size: 10.5px; } }
+@media (prefers-reduced-motion: reduce) { .by-spines button, .by-spines li, .book__front { transition: none; } }
 
 /* Play: every scene is ASCII, tinted per game. */
 .by-ascii { position: relative; display: block; overflow: hidden; container-type: size; background: radial-gradient(120% 90% at 30% 20%, color-mix(in srgb, var(--tint, #9fb3c9) 12%, #0b0c10), #07080b 70%); }

@@ -45,7 +45,7 @@ export default function Beyond() {
         ScrollTrigger.create({ trigger: trk, start: 'top bottom', end: 'bottom top', onToggle: (st) => (st.isActive ? lap.play() : lap.pause()) })
       }
       // Read: the book turns as you pass it.
-      const book = q('.book--page')[0]
+      const book = q('.by-read__turn')[0]
       if (book) gsap.fromTo(book, { rotateY: -42, rotateX: 8 }, { rotateY: 18, rotateX: -4, ease: 'none', scrollTrigger: { trigger: '.by-read', start: 'top bottom', end: 'bottom top', scrub: 0.8 } })
     })
     return () => mm.revert()

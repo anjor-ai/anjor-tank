@@ -236,35 +236,47 @@ export function Music() {
   )
 }
 
-/* ─────────── 04 Read: the library. The picked book on a stage, the shelf of spines beside it ─────────── */
+/* ─────────── 04 Read: the library. The picked book turns on a stage; the shelf holds all ten spines on one baseline.
+   An area dims the books outside it instead of removing them, so the shelf never changes shape. ─────────── */
 const AREAS = ['All', ...new Set(SHELF.map((b) => b.k))]
+const initials = (a) => a.split(',')[0].trim().split(/\s+/).map((w) => w[0]).join('').slice(0, 2)
 
 export function Read() {
   const [area, setArea] = useState('All')
   const [pick, setPick] = useState(0)
-  const list = SHELF.map((b, i) => [b, i]).filter(([b]) => area === 'All' || b.k === area)
-  const b = SHELF[list.some(([, i]) => i === pick) ? pick : list[0][1]]
+  const b = SHELF[pick]
+  const inArea = (x) => area === 'All' || x.k === area
+  const choose = (a) => { setArea(a); if (a !== 'All' && SHELF[pick].k !== a) setPick(SHELF.findIndex((x) => x.k === a)) }
   return (
     <section id="scene-read" className="by-ch by-read" aria-labelledby="bx-h-read">
       <div className="container">
         <article className="by-read__card" data-by-card>
-          <div className="by-read__stage"><Book className="book--page" b={b} /><span className="by-read__shadow" aria-hidden="true" /></div>
+          <div className="by-read__stage">
+            <div className="by-read__turn"><div className="by-read__flip" key={b.t}><Book className="book--page" b={b} /></div></div>
+            <span className="by-read__shadow" aria-hidden="true" />
+          </div>
           <div className="by-read__copy">
             <p className="by-k"><b>04</b>Chapter · {SHELF.length} on the shelf</p>
             <h2 id="bx-h-read" className="bx-h by-h"><span>Read.</span> <em>AI engineering, data and the systems under them.</em></h2>
             <nav className="by-tabs by-tabs--read" aria-label="Filter books by area">
-              {AREAS.map((a) => <button key={a} type="button" aria-pressed={area === a} onClick={() => setArea(a)}>{a}<small>{a === 'All' ? SHELF.length : SHELF.filter((x) => x.k === a).length}</small></button>)}
+              {AREAS.map((a) => <button key={a} type="button" aria-pressed={area === a} onClick={() => choose(a)}>{a}<small>{a === 'All' ? SHELF.length : SHELF.filter((x) => x.k === a).length}</small></button>)}
             </nav>
-            <ul className="by-spines" aria-label="The shelf">
-              {list.map(([x, i]) => (
-                <li key={x.t}>
-                  <button type="button" className={x === b ? 'is-on' : ''} aria-pressed={x === b} onClick={() => setPick(i)} style={{ '--bk': x.c, '--h': `${78 + ((x.t.length * 7) % 22)}%` }}>
-                    <span>{x.t}</span>
-                  </button>
-                </li>
-              ))}
-            </ul>
-            <div className="by-book" aria-live="polite">
+            <div className="by-shelfrow">
+              <ul className="by-spines" aria-label="The shelf">
+                {SHELF.map((x, i) => (
+                  <li key={x.t} className={inArea(x) ? '' : 'is-out'} style={{ '--bk': x.c, '--sw': `${36 + Math.min(16, Math.round(x.t.length / 4))}px`, '--sh': `${88 + ((x.t.length * 7) % 13)}%` }}>
+                    <button type="button" className={i === pick ? 'is-on' : ''} aria-pressed={i === pick} onClick={() => setPick(i)} aria-label={`${x.t} by ${x.a}`}>
+                      <i className="by-spine__cap" aria-hidden="true" />
+                      <span>{x.sp || x.t}</span>
+                      <em aria-hidden="true">{initials(x.a)}</em>
+                    </button>
+                  </li>
+                ))}
+                <li className="by-spines__end" aria-hidden="true"><i /></li>
+              </ul>
+              <span className="by-plank" aria-hidden="true" />
+            </div>
+            <div className="by-book" aria-live="polite" key={`d${b.t}`}>
               <span className="by-chip">{b.k}</span>
               <h3>{b.t}</h3>
               <p>{b.s}</p>

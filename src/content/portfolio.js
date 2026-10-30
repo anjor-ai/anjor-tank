@@ -80,7 +80,6 @@ export const work = {
     eyebrow: 'Proof · Work',
     title: 'Six systems *I owned end to end.*',
     lead: 'Each project starts with a customer or business problem, moves through real decisions and operating logic, and ends with a measurable result.',
-    facts: ['Truemeds · Dec 2023 – Jul 2026', 'Two pods · 12 engineers', 'Five systems built 0-to-1'],
   },
 }
 

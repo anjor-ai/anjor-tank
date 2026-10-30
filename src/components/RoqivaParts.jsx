@@ -46,14 +46,13 @@ export function PartsRail() {
         return (
           <button key={p.id} type="button" className={`prl__p${on ? ' is-on' : ''}`} aria-expanded={on} onClick={() => pick(k)} onMouseEnter={() => pick(k)}>
             <span className="prl__top"><span className="prl__ic"><Icon name={PART_ICON[p.id]} size={15} /></span><em>0{k + 1}</em></span>
-            {on ? (
-              <span className="prl__open">
-                <span className="prl__art" aria-hidden="true"><Art art={PART_ART[p.id]} /></span>
-                <span className="prl__kind">{p.kind}</span>
-                <b className="prl__name">{p.name}</b>
-                <span className="prl__d">{p.d}</span>
-              </span>
-            ) : <span className="prl__v">{p.name}</span>}
+            <span className="prl__open">
+              <span className="prl__art" aria-hidden="true"><Art art={PART_ART[p.id]} /></span>
+              <span className="prl__kind">{p.kind}</span>
+              <b className="prl__name">{p.name}</b>
+              <span className="prl__d">{p.d}</span>
+            </span>
+            <span className="prl__v" aria-hidden="true">{p.name}</span>
           </button>
         )
       })}

@@ -53,14 +53,18 @@ export function MethodRun() {
         </ol>
         <article className="mt__view" aria-live="polite">
           <Screen scene={s.scene} className="mt__screen" />
-          <div className="mt__copy" key={s.k}>
-            <p className="mt__k"><span>Step {String(i + 1).padStart(2, '0')}</span>{s.k}</p>
-            <h3>{s.d}</h3>
-            <dl className="mt__facts">
-              <div><dt>Run by</dt><dd>{s.who.map((w) => <span key={w} className="mt__chip">{w}</span>)}</dd></div>
-              <div><dt>Hands on</dt><dd>{s.out}</dd></div>
-              {s.gate && <div><dt>Then</dt><dd>{s.gate}</dd></div>}
-            </dl>
+          <div className="u-stack">
+            {STEPS.map((x, k) => (
+              <div key={x.k} className={cx('mt__copy', k === i ? 'is-on' : 'u-sizer')} aria-hidden={k !== i || undefined}>
+                <p className="mt__k"><span>Step {String(k + 1).padStart(2, '0')}</span>{x.k}</p>
+                <h3>{x.d}</h3>
+                <dl className="mt__facts">
+                  <div><dt>Run by</dt><dd>{x.who.map((w) => <span key={w} className="mt__chip">{w}</span>)}</dd></div>
+                  <div><dt>Hands on</dt><dd>{x.out}</dd></div>
+                  {x.gate && <div><dt>Then</dt><dd>{x.gate}</dd></div>}
+                </dl>
+              </div>
+            ))}
           </div>
         </article>
       </div>

@@ -53,7 +53,13 @@ export default function Work() {
   return (
     <PageMotion routeKey="/work">
       <PageHead label={P.hero.eyebrow} title={P.hero.title} lead={P.hero.lead} visual={<Reel />} visualClass="b-ph__vis--reel">
-        <ul className="b-ph__facts">{P.hero.facts.map((f) => <li key={f}>{f}</li>)}</ul>
+        <a className="b-jnow" href="/journey#chapter-1"><i className="b-live" /><b>Truemeds · Associate Product Manager</b><em>Dec 2023 – Jul 2026 · two pods · 12 engineers</em><Icon name="arrow" size={16} /></a>
+        <nav className="b-jnav b-jnav--areas" aria-label="Cases by area">
+          {TAGS.filter((t) => t !== 'All').map((t) => {
+            const n = CASES.filter((c) => c.tag === t)
+            return <a key={t} href="#cases" onClick={() => setTag(t)}><b>{String(n.length).padStart(2, '0')}</b>{t}<em>{n.map((c) => c.metrics[0][0]).join(' · ')}</em><Icon name="arrow" size={14} /></a>
+          })}
+        </nav>
       </PageHead>
 
       <Sec id="cases" label="All six systems" tag="Product thinking to business outcome" title="Explore the ==decisions==" sub="behind the results." lead="Six real systems across conversion, growth, search, platform and operations. Each case maps the problem, trade-offs, requirements and measurable outcomes."

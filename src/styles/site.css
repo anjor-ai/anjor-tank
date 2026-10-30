@@ -318,8 +318,6 @@ mark.kin-hl { --hl: 1; color: var(--accent-h); background: linear-gradient(curre
 .b-crumbs a { color: var(--text-2); text-decoration: none; }
 .b-crumbs a:hover { color: var(--text); }
 .b-crumbs [aria-current] { color: var(--text); }
-.b-ph__facts { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
-.b-ph__facts li { padding: 7px 12px; border-radius: 999px; background: var(--tile-2); font: 500 13.5px/1.2 var(--font-display); }
 .b-ph__nums { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: var(--gap); margin: 0; padding: 0; list-style: none; }
 .b-ph__nums li { display: grid; gap: 6px; padding: 14px 16px; border-radius: var(--r-s); background: var(--tile-2); }
 .b-ph__nums b { font: 500 var(--fs-num)/1 var(--font-display); letter-spacing: -0.04em; }
@@ -652,7 +650,7 @@ body::before { content: none !important; }
   --panel: 0 0 0 1px rgba(14, 15, 13, 0.07), 0 1px 2px rgba(14, 15, 13, 0.04), 0 12px 28px -20px rgba(14, 15, 13, 0.22); }
 :root[data-theme='dark'] { --panel: 0 0 0 1px rgba(255, 255, 255, 0.07), 0 18px 40px -26px rgba(0, 0, 0, 0.9); }
 .b-tile:not(.b-tile--ink):not(.b-tile--accent), .b-next__a, .b-pic, .b-pn a, .b-list > li, .b-arch__parts li, .b-flow li, .b-stairs li:not(:last-child) { box-shadow: var(--panel); }
-.b-label, .b-pnum, .b-crumbs ol, .b-ph__facts li, .b-step__k { font-family: var(--font-mono) !important; font-size: 12.5px !important; letter-spacing: 0; }
+.b-label, .b-pnum, .b-crumbs ol, .b-step__k { font-family: var(--font-mono) !important; font-size: 12.5px !important; letter-spacing: 0; }
 .b-label span { color: var(--text); }
 .b-k { font: 500 13px/1.3 var(--font-mono); }
 
@@ -1437,7 +1435,7 @@ body::before { content: none !important; }
 .ja-rb__col--1 li { box-shadow: 0 0 0 1.5px var(--accent); }
 .ja-rb__col--2 li { grid-template-columns: minmax(0, 1fr) auto; align-items: center; box-shadow: inset 2px 0 0 #157a4f, 0 0 0 1px var(--line); }
 .ja-rb__tag { color: var(--text-3); font: 500 9.5px/1 var(--font-mono); }
-.ja-rb__col li b { display: -webkit-box; overflow: hidden; -webkit-box-orient: vertical; -webkit-line-clamp: 2; font: 500 11.5px/1.25 var(--font-display); }
+.ja-rb__col li b { display: -webkit-box; overflow: hidden; overflow-wrap: anywhere; -webkit-box-orient: vertical; -webkit-line-clamp: 2; font: 500 11.5px/1.25 var(--font-display); }
 .ja-rb__col li strong { color: #157a4f; font: 500 12.5px/1 var(--font-display); }
 .ja-rb__col--2 li b { display: none; }
 .ja-rb__chip { top: 0; right: 0; display: inline-flex; align-items: center; gap: 5px; padding: 8px 12px; border-radius: 999px; color: var(--text-2); font-size: 12px; animation: none; }
@@ -1561,3 +1559,49 @@ body::before { content: none !important; }
 @media (max-width: 860px) { .ct__head.s-head { grid-template-columns: minmax(0, 1fr); align-items: start; } }
 @media (max-width: 360px) { .ft__col a[href^="mailto:"] { overflow-wrap: anywhere; } }
 @media (max-width: 480px) { .ja-rb__col--2 li { grid-template-columns: minmax(0, 1fr); gap: 3px; } }
+/* Work head: the role card and the cases by area, in the Journey head's language. */
+.b-jnav--areas a { grid-template-columns: 36px minmax(0, 1fr) auto auto; }
+.b-jnav--areas em { color: var(--text-2); font: 500 13.5px/1 var(--font-display); font-style: normal; white-space: nowrap; }
+
+/* Wordmarks, set like the reference: every letter in a slot of the same width, so the word keeps its shape while
+   letters turn into screens. Nav: the mark and the word share one centre line, letters 2px apart.
+   Footer: the word runs exactly from the content's left edge to its right edge, letters evenly spaced. */
+.b-nav__brand { gap: 10px; align-items: center; }
+.b-nav__brand .rl--anjor { display: flex; align-items: center; gap: 2px; font: 700 17px/1 var(--font-display); letter-spacing: 0; }
+.b-nav__brand .rl__slot { display: grid; place-items: center; width: 0.74em; height: 1.08em; }
+.b-nav__brand .rl__ch { line-height: 1; }
+.b-nav__brand .rl--nav .rl__tile { inset: 0; border-radius: 3px; }
+.b-nav__brand .rl__sp { width: 0.34em; }
+@media (max-width: 420px) { .b-nav__brand .rl--anjor { font-size: 14.5px; gap: 1px; } .b-nav__brand { gap: 8px; } }
+.ft__name { container-type: inline-size; padding-inline: clamp(24px, 4vw, 64px); overflow: visible; }
+.ft__name .rl--anjor { display: flex; justify-content: space-between; align-items: center; gap: 0; font-size: calc(100cqw / 6.55); line-height: 0.86; letter-spacing: 0; }
+.ft__name .rl__slot { flex: none; height: 1em; display: grid; place-items: center; }
+.ft__name .rl__sp { flex: none; width: 0.28em; }
+.ft__name .rl__tile { inset: 3% -2%; }
+
+/* Cycling components keep one height: every state is laid out in the same cell, only the current one is visible,
+   so the box is always as tall as its tallest state and nothing below it moves. */
+.u-stack { display: grid; }
+.u-stack > * { grid-area: 1 / 1; min-width: 0; }
+.u-stack > .u-sizer { visibility: hidden; pointer-events: none; animation: none !important; }
+.u-stack > .u-sizer * { animation: none !important; transition: none !important; }
+/* Journey art: the run log always holds two rows; the release board's columns fit all six cards. */
+.ja-rn__log { min-height: 66px; align-content: start; }
+.ja-rb__col { min-height: 272px; }
+@media (max-width: 480px) { .ja-rb__col { min-height: 336px; } }
+/* ROQIVA parts: an accordion on wide screens (only the open part shows its card); on phones and tablets every part
+   is a card in a swipeable row, so nothing opens, closes or moves while you read. */
+.prl__p:not(.is-on) .prl__open, .prl__p.is-on .prl__v { display: none; }
+@media (max-width: 1080px) {
+  .prl { flex-direction: row; gap: 10px; height: auto; margin-inline: calc(var(--gutter) * -1); padding: 2px var(--gutter) 8px; scroll-padding-inline: var(--gutter); overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; overscroll-behavior-x: contain; }
+  .prl::-webkit-scrollbar { display: none; }
+  .prl__p, .prl__p.is-on { flex: 0 0 min(84%, 360px); flex-direction: column; align-items: stretch; gap: 0; padding: 16px; scroll-snap-align: start; background: rgba(255, 255, 255, 0.04); box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08); }
+  .prl__p .prl__top, .prl__p.is-on .prl__top { flex-direction: row; justify-content: space-between; }
+  .prl__p:not(.is-on) .prl__open { display: grid; }
+  .prl__p .prl__v { display: none; }
+  .prl__p .prl__ic { background: rgba(255, 255, 255, 0.07); color: #a8d3ff; }
+  .prl__open { grid-template-rows: 150px auto auto auto; min-width: 0; animation: none; }
+  .prl__art { height: 150px; }
+}
+.ja-rn__panel dd { min-height: 2.6em; }
+@media (max-width: 720px) { .cs-br__t { grid-template-rows: none; align-content: start; } .cs-br__out { margin-top: 4px; } .cs-con__c { padding: 16px 18px; gap: 8px; } }

@@ -373,3 +373,7 @@ html.rq-lock, html.rq-lock body { overflow: hidden; }
 .rqf--tall .rqf__skip { bottom: max(20px, env(safe-area-inset-bottom)); }
 .rqov__full { margin: 0 0 4px; font: 500 12.5px var(--font-mono); letter-spacing: 0.04em; color: #8fc2ff; }
 .rqov__full b { color: var(--text); font-weight: 600; letter-spacing: 0.08em; }
+/* Site film: the name keeps its word space, and on portrait screens it fits the central 1000px of the stage. */
+.sif__sp { display: block; flex: none; width: 0.28em; }
+.sif .rqf__word { font-size: 236px; }
+.sif.rqf--tall .rqf__word { font-size: 128px; }
